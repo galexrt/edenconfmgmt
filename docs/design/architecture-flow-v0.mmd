@@ -1,0 +1,60 @@
+sequenceDiagram
+participant User
+participant Server 1
+participant Server 2
+participant Server 3
+participant Server n
+
+User-->User: generate new SSH CA key
+User->>Server 1: Copy SSH CA key
+User->>Server 1: Install edenconfmgmt
+User->>Server 1: Start edenconfmgmt (listen on datastore port and api port)
+User->>Server 2: Install edenconfmgmt
+User->>Server 2: Instruct edenconfmgmt to talk to Server 1 (CA cert pining)
+Server 2->>Server 1: Send join request using API port
+Server 1->>Server 2: SSH into machine to verify key and place master CA.
+User->>Server 3: Install edenconfmgmt
+User->>Server 3: Instruct edenconfmgmt to talk to Server 1 or 2 (CA cert pining)
+alt Server 1 is first
+    Server 3->>Server 1: Send join request using API port
+    Server 1->>Server 3: SSH into machine to verify key and place master CA.
+    Server 1->>Server 1: Add Server 3 (gpg) public key to datastore
+else Server 2 is first
+    Server 3->>Server 2: Send join request using API port
+    Server 2->>Server 3: SSH into machine to verify key and place master CA.
+    Server 2->>Server 2: Add Server 3 (gpg) public key to datastore
+end
+loop datastore sync
+    Note over Server 1,Server 3: Until a failover is done
+    Server 1-->Server 2: Just datastore things
+    Server 1-->Server 3: Just datastore things
+end
+User->>Server n: Install edenconfmgmt
+Server n->>Server 2: agent talks to one of the existing servers
+alt Server 1 is first
+    Server n->>Server 1: Send join request using API port
+    Server 1->>Server n: SSH into machine to verify key and place master CA.
+    Server 1->>Server 1: Add Server n (gpg) public key to datastore
+else Server 2 is first
+    Server n->>Server 2: Send join request using API port
+    Server 2->>Server n: SSH into machine to verify key and place master CA.
+    Server 2->>Server 2: Add Server n (gpg) public key to datastore
+else Server 3 is first
+    Server n->>Server 3: Send join request using API port
+    Server 3->>Server n: SSH into machine to verify key and place master CA.
+    Server 3->>Server 3: Add Server n (gpg) public key to datastore
+end
+Note over Server 1,Server n: Server 1-4 are eligible to be a datastore host
+loop server failure case
+    Server 1-xServer 1: Fails or Is Deleted/Destroyed, Network cutoff
+    Note over Server 2,Server 3: "Detect" Server 1 failure<br>check if other servers are eligible<br>to be a datastore host<br>
+    Note over Server 2,Server 3: Server n has been selected as<br>a datastore host
+    Server 2->>Server n: Assign (internal) role datastore
+    Server n->>Server 2: datastore syncs itself
+    Server n->>Server 3: datastore syncs itself
+end
+loop datastore sync
+    Note over Server 2,Server n: Until a failover is done
+    Server 2-->Server 3: Just datastore things
+    Server 2-->Server n: Just datastore things
+end

@@ -52,4 +52,4 @@ The following list contains the primary goals of this project:
 
 ## Designs
 
-The design of components and most workflows can be found in the [design/](/design/) directory.
+The design of components and most workflows can be found in the [docs/design/](/docs/design/) directory.
