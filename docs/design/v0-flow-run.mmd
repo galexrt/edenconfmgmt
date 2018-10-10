@@ -1,0 +1,36 @@
+sequenceDiagram
+participant User
+participant Server 1
+participant Server 2
+participant Server 3
+participant Server 4
+participant Targeted Server
+
+User->>Server 1: Run edenctl to trigger run a certain module/state on Server 1-2
+Note over Server 2,Server 4: Optimize and deduplicate tasks which are for all (targeted) servers
+alt Server 2 first
+    Server 1->>Server 2: Send run request
+    Server 2->>Server 2: Find/List the Targeted Server
+    Server 2->>Server 2: Build dependency graph
+    Server 2->>Server 2: Add dependency graph to datastore
+    Server 2->>Server 2: Add task info to datastore/message queue for the servers
+else Server 3 first
+    Server 1->>Server 3: Send run request
+    Server 3->>Server 3: Find/List the Targeted Server
+    Server 3->>Server 3: Build dependency graph
+    Server 3->>Server 3: Add dependency graph to datastore
+    Server 3->>Server 3: Add task info to datastore/message queue for the servers
+else Server 4 first
+    Server 1->>Server 4: Send run request
+    Server 4->>Server 4: Find/List the Targeted Server
+    Server 4->>Server 4: Build dependency graph
+    Server 4->>Server 4: Add dependency graph to datastore
+    Server 4->>Server 4: Add task info to datastore/message queue for the servers
+end
+Note over Targeted Server: Not sure if datastore or message queue should be used/watched
+loop servers check for tasks
+    Server 1->>Server 1: ?? Find out about task(s) ??
+    Note over Targeted Server: If a state/module is missing, retrieve from internet
+    Targeted Server->>Targeted Server: Run states/modules.
+    Targeted Server->>Targeted Server: Publish event for each state/module run.
+end

@@ -6,23 +6,33 @@ participant Server 3
 participant Server n
 
 User-->User: generate new SSH CA key
+alt Server 1 setup
 User->>Server 1: Copy SSH CA key
 User->>Server 1: Install edenconfmgmt
-User->>Server 1: Start edenconfmgmt (listen on datastore port and api port)
+User->>Server 1: Start edenconfmgmt
+Server 1->>Server 1: Generate certificate and key for edenconfmgmt cluster
+Server 1->>Server 1: Generate CA for edenconfmgmt cluster
+end
+alt Server 1 setup
 User->>Server 2: Install edenconfmgmt
 User->>Server 2: Instruct edenconfmgmt to talk to Server 1 (CA cert pining)
+Server 2->>Server 2: Generate certificate and key
 Server 2->>Server 1: Send join request using API port
-Server 1->>Server 2: SSH into machine to verify key and place master CA.
+Server 1->>Server 2: SSH to verify key and place master CA
+end
+alt Server 3 setup
 User->>Server 3: Install edenconfmgmt
-User->>Server 3: Instruct edenconfmgmt to talk to Server 1 or 2 (CA cert pining)
+User->>Server 3: Instruct edenconfmgmt to talk to Server 1 and/or 2 (CA cert pining)
+end
+Note over Server 1,Server n: Server 1-3 are eligible to be a datastore host
 alt Server 1 is first
     Server 3->>Server 1: Send join request using API port
-    Server 1->>Server 3: SSH into machine to verify key and place master CA.
-    Server 1->>Server 1: Add Server 3 (gpg) public key to datastore
+    Server 1->>Server 3: SSH into machine to verify key and place master CA
+    Server 1->>Server 1: Add Server 3 certificate to datastore
 else Server 2 is first
     Server 3->>Server 2: Send join request using API port
-    Server 2->>Server 3: SSH into machine to verify key and place master CA.
-    Server 2->>Server 2: Add Server 3 (gpg) public key to datastore
+    Server 2->>Server 3: SSH into machine to verify key and place master CA
+    Server 2->>Server 2: Add Server 3 certificate to datastore
 end
 loop datastore sync
     Note over Server 1,Server 3: Until a failover is done
@@ -30,23 +40,24 @@ loop datastore sync
     Server 1-->Server 3: Just datastore things
 end
 User->>Server n: Install edenconfmgmt
+User->>Server n: Instruct edenconfmgmt to talk to Server 1-3 (CA cert pining)
 Server n->>Server 2: agent talks to one of the existing servers
 alt Server 1 is first
     Server n->>Server 1: Send join request using API port
-    Server 1->>Server n: SSH into machine to verify key and place master CA.
-    Server 1->>Server 1: Add Server n (gpg) public key to datastore
+    Server 1->>Server n: SSH into machine to verify key and place master CA
+    Server 1->>Server 1: Add Server n certificate to datastore
 else Server 2 is first
     Server n->>Server 2: Send join request using API port
-    Server 2->>Server n: SSH into machine to verify key and place master CA.
-    Server 2->>Server 2: Add Server n (gpg) public key to datastore
+    Server 2->>Server n: SSH into machine to verify key and place master CA
+    Server 2->>Server 2: Add Server n certificate to datastore
 else Server 3 is first
     Server n->>Server 3: Send join request using API port
-    Server 3->>Server n: SSH into machine to verify key and place master CA.
-    Server 3->>Server 3: Add Server n (gpg) public key to datastore
+    Server 3->>Server n: SSH into machine to verify key and place master CA
+    Server 3->>Server 3: Add Server n certificate to datastore
 end
-Note over Server 1,Server n: Server 1-4 are eligible to be a datastore host
+Note over Server 1,Server n: Server 1-3 and n are eligible to be a datastore host
 loop server failure case
-    Server 1-xServer 1: Fails or Is Deleted/Destroyed, Network cutoff
+    Server 1-xServer 1: Fails/Deleted/Destroyed, Network cutoff
     Note over Server 2,Server 3: "Detect" Server 1 failure<br>check if other servers are eligible<br>to be a datastore host<br>
     Note over Server 2,Server 3: Server n has been selected as<br>a datastore host
     Server 2->>Server n: Assign (internal) role datastore
@@ -58,3 +69,4 @@ loop datastore sync
     Server 2-->Server 3: Just datastore things
     Server 2-->Server n: Just datastore things
 end
+Note over Server 1,Server n: Server 1-4 and n are eligible to be a datastore host (by default)
