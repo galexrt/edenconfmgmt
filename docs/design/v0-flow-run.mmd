@@ -7,7 +7,7 @@ participant Server 4
 participant Targeted Server
 
 User->>Server 1: Run edenctl to trigger run a certain module/state on Server 1-2
-Note over Server 2,Server 4: Optimize and deduplicate tasks which are for all (targeted) servers
+Note over Server 2,Server 4: Server 2-4 are the current "masters"<br>Optimize and deduplicate tasks which are for all (targeted) servers
 alt Server 2 first
     Server 1->>Server 2: Send run request
     Server 2->>Server 2: Find/List the Targeted Server
