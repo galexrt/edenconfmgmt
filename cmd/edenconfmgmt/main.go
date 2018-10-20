@@ -18,17 +18,34 @@ package main
 
 import (
 	"os"
+	"os/signal"
+	"sync"
+	"syscall"
 
-	"github.com/coreos/pkg/capnslog"
+	"github.com/rs/zerolog"
 	"github.com/spf13/cobra"
 )
 
-var logger = capnslog.NewPackageLogger("github.com/galexrt/edenconfmgmt", "cmd/edenconfmgmt")
+type cmdLineOpts struct {
+	neighbors []string
+}
 
-// rootCmd represents the base command when called without any subcommands
-var rootCmd = &cobra.Command{
-	Use:   "edenconfmgmt",
-	Short: "Configuration management with automatic clustering, events and stuff.",
+var (
+	// rootCmd represents the base command when called without any subcommands
+	rootCmd = &cobra.Command{
+		Use:   "edenconfmgmt",
+		Short: "Configuration management with automatic clustering, events and stuff.",
+		RunE:  Run,
+	}
+
+	opts cmdLineOpts
+
+	logger = zerolog.New(os.Stderr).With().Timestamp().Logger()
+)
+
+func init() {
+	zerolog.TimeFieldFormat = ""
+	//rootCmd.PersistentFlags().StringSliceVarP(&opts.neighbors, "neighbors", "n", []string{}, "comma separated list of other neighbors")
 }
 
 func main() {
@@ -39,8 +56,30 @@ func main() {
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
-		logger.Fatal(err)
+		logger.Fatal().Err(err)
 		os.Exit(1)
 	}
 	os.Exit(0)
+}
+
+// Run runs all routines to start the work of edenconfmgmt application.
+func Run(cmd *cobra.Command, args []string) error {
+	stopCh := make(chan struct{})
+	sigCh := make(chan os.Signal)
+	signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM)
+
+	wg := sync.WaitGroup{}
+
+	/*wg.Add(1)
+	go func() {
+		defer wg.Done()
+		if err := nbs.Run(stopCh); err != nil {
+			logger.Error(err)
+		}
+	}()*/
+
+	<-sigCh
+	close(stopCh)
+	wg.Wait()
+	return nil
 }
