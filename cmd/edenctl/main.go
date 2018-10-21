@@ -17,10 +17,16 @@ limitations under the License.
 package main
 
 import (
+	"context"
+	"fmt"
+	"log"
 	"os"
+	"time"
 
 	"github.com/coreos/pkg/capnslog"
+	nodes_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/nodes/v1alpha"
 	"github.com/spf13/cobra"
+	"google.golang.org/grpc"
 )
 
 var logger = capnslog.NewPackageLogger("github.com/galexrt/edenconfmgmt", "cmd/edenctl")
@@ -29,6 +35,23 @@ var logger = capnslog.NewPackageLogger("github.com/galexrt/edenconfmgmt", "cmd/e
 var rootCmd = &cobra.Command{
 	Use:   "edenctl",
 	Short: "Configuration management with automatic clustering, events and stuff.",
+	RunE: func(cmd *cobra.Command, args []string) error {
+		opts := []grpc.DialOption{grpc.WithInsecure()}
+		cc, err := grpc.Dial("127.0.0.1:1337", opts...)
+		if err != nil {
+			log.Fatalf("fail to dial: %v", err)
+		}
+		defer cc.Close()
+		nsClient := nodes_v1alpha.NewNodesServiceClient(cc)
+
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+		versionRequest := &nodes_v1alpha.VersionRequest{}
+
+		versionResponse, err := nsClient.Version(ctx, versionRequest)
+		fmt.Printf("Version() Result: %+v - %+v\n", versionResponse, err)
+		return nil
+	},
 }
 
 func main() {

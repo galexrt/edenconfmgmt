@@ -17,18 +17,32 @@ limitations under the License.
 package main
 
 import (
+	"context"
+	"fmt"
+	"log"
+	"net"
+	"net/http"
 	"os"
 	"os/signal"
 	"sync"
 	"syscall"
+	"time"
 
+	nodes_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/nodes/v1alpha"
+	"github.com/grpc-ecosystem/go-grpc-prometheus"
+	"github.com/prometheus/client_golang/prometheus"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
+	"github.com/prometheus/common/version"
 	"github.com/rs/zerolog"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+	"google.golang.org/grpc"
 )
 
-type cmdLineOpts struct {
-	neighbors []string
-}
+const (
+	listenAddressGRPC = "listen-address-grpc"
+	listenAddressHTTP = "listen-address-http"
+)
 
 var (
 	// rootCmd represents the base command when called without any subcommands
@@ -37,15 +51,19 @@ var (
 		Short: "Configuration management with automatic clustering, events and stuff.",
 		RunE:  Run,
 	}
-
-	opts cmdLineOpts
-
 	logger = zerolog.New(os.Stderr).With().Timestamp().Logger()
 )
 
 func init() {
+	zerolog.SetGlobalLevel(zerolog.DebugLevel)
 	zerolog.TimeFieldFormat = ""
-	//rootCmd.PersistentFlags().StringSliceVarP(&opts.neighbors, "neighbors", "n", []string{}, "comma separated list of other neighbors")
+	rootCmd.PersistentFlags().String(listenAddressGRPC, ":1337", "grpc listen address")
+	rootCmd.PersistentFlags().String(listenAddressHTTP, ":1338", "http listen address")
+	//rootCmd.PersistentFlags().StringSliceVarP(&cmdOpts.neighbors, "neighbors", "n", []string{}, "comma separated list of other neighbors")
+	viper.BindPFlag(listenAddressGRPC, rootCmd.PersistentFlags().Lookup(listenAddressGRPC))
+	viper.BindPFlag(listenAddressHTTP, rootCmd.PersistentFlags().Lookup(listenAddressHTTP))
+	viper.SetDefault(listenAddressGRPC, ":1337")
+	viper.SetDefault(listenAddressHTTP, ":1338")
 }
 
 func main() {
@@ -64,11 +82,57 @@ func Execute() {
 
 // Run runs all routines to start the work of edenconfmgmt application.
 func Run(cmd *cobra.Command, args []string) error {
+	logger.Info().Msgf("starting %s (%s)", os.Args[0], version.Info())
+
 	stopCh := make(chan struct{})
 	sigCh := make(chan os.Signal)
 	signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM)
 
+	lis, err := net.Listen("tcp", viper.GetString(listenAddressGRPC))
+	if err != nil {
+		log.Fatalf("failed to listen: %v", err)
+	}
+
+	opts := []grpc.ServerOption{
+		grpc.StreamInterceptor(grpc_prometheus.StreamServerInterceptor),
+		grpc.UnaryInterceptor(grpc_prometheus.UnaryServerInterceptor),
+		// TODO Implement opentracing
+		//grpc.WithUnaryInterceptor(otgrpc.OpenTracingClientInterceptor(tracer)),
+		//grpc.WithStreamInterceptor(otgrpc.OpenTracingStreamClientInterceptor(tracer)),
+	}
+
+	grpcServer := grpc.NewServer(opts...)
+
+	// Register APIs to grpc server
+	registerAPIs(grpcServer)
+
+	reg := prometheus.NewRegistry()
+	grpcMetrics := grpc_prometheus.NewServerMetrics()
+	reg.MustRegister(grpcMetrics)
+	grpcMetrics.InitializeMetrics(grpcServer)
+
+	// Create a HTTP server for prometheus.
+	httpServer := &http.Server{
+		Handler: promhttp.HandlerFor(reg, promhttp.HandlerOpts{}),
+		Addr:    viper.GetString(listenAddressHTTP),
+	}
+
 	wg := sync.WaitGroup{}
+
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		if err = httpServer.ListenAndServe(); err != nil {
+			logger.Fatal().Err(err)
+		}
+	}()
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		if err = grpcServer.Serve(lis); err != nil {
+			logger.Fatal().Err(fmt.Errorf("Serve() returned non-nil error on GracefulStop: %v", err))
+		}
+	}()
 
 	/*wg.Add(1)
 	go func() {
@@ -79,7 +143,22 @@ func Run(cmd *cobra.Command, args []string) error {
 	}()*/
 
 	<-sigCh
+	logger.Info().Msg("signal received, shutting down ...")
 	close(stopCh)
+
+	// First shutdown grpc server
+	grpcServer.GracefulStop()
+
+	// Shutdown http server
+	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
+	defer cancel()
+	httpServer.Shutdown(ctx)
+
 	wg.Wait()
 	return nil
+}
+
+func registerAPIs(srv *grpc.Server) {
+	nodesServiceServer := nodes_v1alpha.NewServer()
+	nodes_v1alpha.RegisterNodesServiceServer(srv, nodesServiceServer)
 }
