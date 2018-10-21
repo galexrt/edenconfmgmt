@@ -31,6 +31,8 @@ option (gogoproto.goproto_unrecognized_all) = false;
 service NodesService {
     // Version returns the API version.
     rpc Version (VersionRequest) returns (VersionResponse);
+    // Get a Node.
+    rpc GetNode (Node) returns (Node);
     // Add a Node.
     rpc AddNode (Node) returns (AddNodeResponse);
     // Update a Node.
@@ -78,8 +80,8 @@ message UpdateNodeResponse {}
 message DeleteNodeResponse {}
 
 message NodeWatchResponse {
-    // Node for watch response.
-    Node node = 1;
     // Event info for watch response.
-    events.v1alpha.Event event = 2;
+    events.v1alpha.Event event = 1;
+    // Node for watch response.
+    Node node = 2;
 }

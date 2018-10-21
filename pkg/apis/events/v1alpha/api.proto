@@ -30,6 +30,10 @@ option (gogoproto.goproto_unrecognized_all) = false;
 service EventService {
     // Version returns the API version.
     rpc Version (VersionRequest) returns (VersionResponse);
+    // Get a Event.
+    rpc GetEvent (Event) returns (Event);
+    // Watch for Events.
+    rpc WatchEvents (Event) returns (WatchEventResponse);
 }
 
 message VersionRequest {}
@@ -48,8 +52,13 @@ message VersionResponse {
 }
 
 message Event {
-    // Type of the event
+    // Type of the Event.
     string type = 1;
-    // Summary of event.
+    // Summary of Event.
     string summary = 2;
+}
+
+message WatchEventResponse {
+    // Event info for watch response.
+    events.v1alpha.Event event = 1;
 }

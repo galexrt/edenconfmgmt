@@ -18,6 +18,7 @@ package jobs.v1alpha;
 option go_package = "v1alpha";
 
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha/api.proto";
 
 option (gogoproto.goproto_stringer_all) = false;
 option (gogoproto.stringer_all) =  true;
@@ -30,8 +31,16 @@ option (gogoproto.goproto_unrecognized_all) = false;
 service ActionsService {
     // Version returns the API version.
     rpc Version (VersionRequest) returns (VersionResponse);
+    // Get a Job.
+    rpc GetJob (Job) returns (Job);
     // Add a Job.
     rpc AddJob (Job) returns (AddJobResponse);
+    // Update a Job.
+    rpc UpdateJob (Job) returns (UpdateJobResponse);
+    // Delete a Job.
+    rpc DeleteJob (Job) returns (DeleteJobResponse);
+    // Watch a Job.
+    rpc WatchJob (Job) returns (stream WatchJobResponse);
 }
 
 message VersionRequest {}
@@ -63,3 +72,10 @@ message AddJobResponse {}
 message UpdateJobResponse {}
 
 message DeleteJobResponse {}
+
+message WatchJobResponse {
+    // Event info for watch response.
+    events.v1alpha.Event event = 1;
+    // Job for watch response.
+    Job job = 2;
+}
