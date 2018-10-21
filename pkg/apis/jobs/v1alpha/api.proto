@@ -18,6 +18,7 @@ package jobs.v1alpha;
 option go_package = "v1alpha";
 
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha/api.proto";
 import "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha/api.proto";
 
 option (gogoproto.goproto_stringer_all) = false;
@@ -30,7 +31,7 @@ option (gogoproto.goproto_unrecognized_all) = false;
 
 service ActionsService {
     // Version returns the API version.
-    rpc Version (VersionRequest) returns (VersionResponse);
+    rpc Version (core.v1alpha.VersionRequest) returns (core.v1alpha.VersionResponse);
     // Get a Job.
     rpc GetJob (Job) returns (Job);
     // Add a Job.
@@ -43,26 +44,14 @@ service ActionsService {
     rpc WatchJob (Job) returns (stream WatchJobResponse);
 }
 
-message VersionRequest {}
-
-message VersionResponse {
-    // Semversion compatible version number.
-    string version = 1;
-    // Semversion major number.
-    int64 major = 2;
-    // Semversion minor number.
-    int64 minor = 3;
-    // Semversion patch number.
-    int64 patch = 4;
-    // API state (e.g., alpha, beta, stable).
-    string state = 5;
+message Job {
+    // Metadata for Job object.
+    core.v1alpha.ObjectMetadata objectMetadata = 1;
+    // Spec for Job.
+    JobSpec spec = 2;
 }
 
-message Job {
-    // ID of Job.
-    string id = 1;
-    // Name of Job.
-    string name = 2;
+message JobSpec {
     // (Human readable) description for Job.
     string description = 3;
 }

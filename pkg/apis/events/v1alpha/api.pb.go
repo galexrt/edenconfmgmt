@@ -5,6 +5,7 @@ package v1alpha
 
 import (
 	fmt "fmt"
+	v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/golang/protobuf/proto"
 	context "golang.org/x/net/context"
@@ -23,128 +24,21 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
-type VersionRequest struct {
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *VersionRequest) Reset()         { *m = VersionRequest{} }
-func (m *VersionRequest) String() string { return proto.CompactTextString(m) }
-func (*VersionRequest) ProtoMessage()    {}
-func (*VersionRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_57c26361c2d00172, []int{0}
-}
-
-func (m *VersionRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_VersionRequest.Unmarshal(m, b)
-}
-func (m *VersionRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_VersionRequest.Marshal(b, m, deterministic)
-}
-func (m *VersionRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_VersionRequest.Merge(m, src)
-}
-func (m *VersionRequest) XXX_Size() int {
-	return xxx_messageInfo_VersionRequest.Size(m)
-}
-func (m *VersionRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_VersionRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_VersionRequest proto.InternalMessageInfo
-
-type VersionResponse struct {
-	// Semversion compatible version number.
-	Version string `protobuf:"bytes,1,opt,name=version,proto3" json:"version,omitempty"`
-	// Semversion major number.
-	Major int64 `protobuf:"varint,2,opt,name=major,proto3" json:"major,omitempty"`
-	// Semversion minor number.
-	Minor int64 `protobuf:"varint,3,opt,name=minor,proto3" json:"minor,omitempty"`
-	// Semversion patch number.
-	Patch int64 `protobuf:"varint,4,opt,name=patch,proto3" json:"patch,omitempty"`
-	// API state (e.g., alpha, beta, stable).
-	State                string   `protobuf:"bytes,5,opt,name=state,proto3" json:"state,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *VersionResponse) Reset()         { *m = VersionResponse{} }
-func (m *VersionResponse) String() string { return proto.CompactTextString(m) }
-func (*VersionResponse) ProtoMessage()    {}
-func (*VersionResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_57c26361c2d00172, []int{1}
-}
-
-func (m *VersionResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_VersionResponse.Unmarshal(m, b)
-}
-func (m *VersionResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_VersionResponse.Marshal(b, m, deterministic)
-}
-func (m *VersionResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_VersionResponse.Merge(m, src)
-}
-func (m *VersionResponse) XXX_Size() int {
-	return xxx_messageInfo_VersionResponse.Size(m)
-}
-func (m *VersionResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_VersionResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_VersionResponse proto.InternalMessageInfo
-
-func (m *VersionResponse) GetVersion() string {
-	if m != nil {
-		return m.Version
-	}
-	return ""
-}
-
-func (m *VersionResponse) GetMajor() int64 {
-	if m != nil {
-		return m.Major
-	}
-	return 0
-}
-
-func (m *VersionResponse) GetMinor() int64 {
-	if m != nil {
-		return m.Minor
-	}
-	return 0
-}
-
-func (m *VersionResponse) GetPatch() int64 {
-	if m != nil {
-		return m.Patch
-	}
-	return 0
-}
-
-func (m *VersionResponse) GetState() string {
-	if m != nil {
-		return m.State
-	}
-	return ""
-}
-
 type Event struct {
-	// Type of the Event.
-	Type string `protobuf:"bytes,1,opt,name=type,proto3" json:"type,omitempty"`
-	// Summary of Event.
-	Summary              string   `protobuf:"bytes,2,opt,name=summary,proto3" json:"summary,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	// Metadata for the Job object.
+	ObjectMetadata *v1alpha.ObjectMetadata `protobuf:"bytes,1,opt,name=objectMetadata,proto3" json:"objectMetadata,omitempty"`
+	// Spec for Event.
+	Spec                 *EventSpec `protobuf:"bytes,2,opt,name=spec,proto3" json:"spec,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
+	XXX_unrecognized     []byte     `json:"-"`
+	XXX_sizecache        int32      `json:"-"`
 }
 
 func (m *Event) Reset()         { *m = Event{} }
 func (m *Event) String() string { return proto.CompactTextString(m) }
 func (*Event) ProtoMessage()    {}
 func (*Event) Descriptor() ([]byte, []int) {
-	return fileDescriptor_57c26361c2d00172, []int{2}
+	return fileDescriptor_57c26361c2d00172, []int{0}
 }
 
 func (m *Event) XXX_Unmarshal(b []byte) error {
@@ -165,14 +59,63 @@ func (m *Event) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Event proto.InternalMessageInfo
 
-func (m *Event) GetType() string {
+func (m *Event) GetObjectMetadata() *v1alpha.ObjectMetadata {
+	if m != nil {
+		return m.ObjectMetadata
+	}
+	return nil
+}
+
+func (m *Event) GetSpec() *EventSpec {
+	if m != nil {
+		return m.Spec
+	}
+	return nil
+}
+
+type EventSpec struct {
+	// Type of the Event.
+	Type string `protobuf:"bytes,1,opt,name=type,proto3" json:"type,omitempty"`
+	// Summary of Event.
+	Summary              string   `protobuf:"bytes,2,opt,name=summary,proto3" json:"summary,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *EventSpec) Reset()         { *m = EventSpec{} }
+func (m *EventSpec) String() string { return proto.CompactTextString(m) }
+func (*EventSpec) ProtoMessage()    {}
+func (*EventSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_57c26361c2d00172, []int{1}
+}
+
+func (m *EventSpec) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_EventSpec.Unmarshal(m, b)
+}
+func (m *EventSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_EventSpec.Marshal(b, m, deterministic)
+}
+func (m *EventSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_EventSpec.Merge(m, src)
+}
+func (m *EventSpec) XXX_Size() int {
+	return xxx_messageInfo_EventSpec.Size(m)
+}
+func (m *EventSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_EventSpec.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_EventSpec proto.InternalMessageInfo
+
+func (m *EventSpec) GetType() string {
 	if m != nil {
 		return m.Type
 	}
 	return ""
 }
 
-func (m *Event) GetSummary() string {
+func (m *EventSpec) GetSummary() string {
 	if m != nil {
 		return m.Summary
 	}
@@ -191,7 +134,7 @@ func (m *WatchEventResponse) Reset()         { *m = WatchEventResponse{} }
 func (m *WatchEventResponse) String() string { return proto.CompactTextString(m) }
 func (*WatchEventResponse) ProtoMessage()    {}
 func (*WatchEventResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_57c26361c2d00172, []int{3}
+	return fileDescriptor_57c26361c2d00172, []int{2}
 }
 
 func (m *WatchEventResponse) XXX_Unmarshal(b []byte) error {
@@ -220,9 +163,8 @@ func (m *WatchEventResponse) GetEvent() *Event {
 }
 
 func init() {
-	proto.RegisterType((*VersionRequest)(nil), "events.v1alpha.VersionRequest")
-	proto.RegisterType((*VersionResponse)(nil), "events.v1alpha.VersionResponse")
 	proto.RegisterType((*Event)(nil), "events.v1alpha.Event")
+	proto.RegisterType((*EventSpec)(nil), "events.v1alpha.EventSpec")
 	proto.RegisterType((*WatchEventResponse)(nil), "events.v1alpha.WatchEventResponse")
 }
 
@@ -231,31 +173,32 @@ func init() {
 }
 
 var fileDescriptor_57c26361c2d00172 = []byte{
-	// 372 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x74, 0x92, 0x41, 0x4b, 0xc3, 0x30,
-	0x14, 0xc7, 0x17, 0xb7, 0x3a, 0x97, 0xc9, 0x94, 0xa0, 0x50, 0x76, 0x88, 0xa3, 0x20, 0x0c, 0xc4,
-	0x16, 0x27, 0x82, 0xd7, 0x09, 0xa2, 0x78, 0xac, 0xa0, 0xe0, 0x2d, 0xab, 0x59, 0x57, 0x5d, 0x9b,
-	0xda, 0xa4, 0xc5, 0xdd, 0x04, 0xbf, 0x80, 0x1f, 0x6b, 0x47, 0x8f, 0x9e, 0xc4, 0xd5, 0x2f, 0x22,
-	0x49, 0xba, 0xe9, 0xe6, 0x76, 0xeb, 0xff, 0xf7, 0xde, 0xff, 0xe5, 0xbd, 0x3f, 0x85, 0x5d, 0x3f,
-	0x10, 0x83, 0xb4, 0x67, 0x7b, 0x2c, 0x74, 0x7c, 0x32, 0xa4, 0xcf, 0x89, 0x70, 0xe8, 0x3d, 0x8d,
-	0x3c, 0x16, 0xf5, 0x43, 0x3f, 0x14, 0x4e, 0xfc, 0xe8, 0x3b, 0x24, 0x0e, 0xb8, 0x43, 0x33, 0x1a,
-	0x09, 0xee, 0x64, 0x47, 0x64, 0x18, 0x0f, 0x88, 0x64, 0x76, 0x9c, 0x30, 0xc1, 0x50, 0x43, 0x57,
-	0xec, 0xa2, 0xd2, 0x3c, 0xfc, 0x3b, 0x92, 0xf9, 0xcc, 0x51, 0x6d, 0xbd, 0xb4, 0xaf, 0x94, 0x12,
-	0xea, 0x4b, 0xdb, 0xad, 0x6d, 0xd8, 0xb8, 0xa1, 0x09, 0x0f, 0x58, 0xe4, 0xd2, 0xa7, 0x94, 0x72,
-	0x61, 0xbd, 0x02, 0xb8, 0x35, 0x43, 0x3c, 0x66, 0x11, 0xa7, 0xc8, 0x84, 0xd5, 0x4c, 0x23, 0x13,
-	0xb4, 0x40, 0xbb, 0xe6, 0x4e, 0x25, 0xda, 0x81, 0x46, 0x48, 0x1e, 0x58, 0x62, 0xae, 0xb5, 0x40,
-	0xbb, 0xec, 0x6a, 0xa1, 0x68, 0x10, 0xb1, 0xc4, 0x2c, 0x17, 0x54, 0x0a, 0x49, 0x63, 0x22, 0xbc,
-	0x81, 0x59, 0xd1, 0x54, 0x09, 0x49, 0xb9, 0x20, 0x82, 0x9a, 0x86, 0x9a, 0xac, 0x85, 0x75, 0x02,
-	0x8d, 0x73, 0x79, 0x18, 0x42, 0xb0, 0x22, 0x46, 0x31, 0x2d, 0xde, 0x55, 0xdf, 0x72, 0x1d, 0x9e,
-	0x86, 0x21, 0x49, 0x46, 0xea, 0xd9, 0x9a, 0x3b, 0x95, 0x56, 0x17, 0xa2, 0x5b, 0x39, 0x55, 0x79,
-	0x67, 0xeb, 0x1f, 0x40, 0x43, 0xa5, 0xa4, 0x86, 0xd4, 0x3b, 0xbb, 0xf6, 0x7c, 0x66, 0xb6, 0xee,
-	0xd6, 0x3d, 0x9d, 0x4f, 0x00, 0x37, 0x15, 0xb8, 0xa6, 0x49, 0x16, 0x78, 0x14, 0x5d, 0xc1, 0x6a,
-	0x91, 0x07, 0xc2, 0x8b, 0xce, 0xf9, 0xec, 0x9a, 0x7b, 0x2b, 0xeb, 0xc5, 0x26, 0xa7, 0x70, 0xe3,
-	0x82, 0x0a, 0x7d, 0xd9, 0xf2, 0x35, 0x9a, 0xcb, 0x31, 0xba, 0x84, 0xf5, 0xdf, 0xcb, 0xf8, 0x2a,
-	0xb3, 0xb5, 0x88, 0xff, 0xa7, 0x71, 0xb6, 0x3f, 0x9e, 0x60, 0xf0, 0x31, 0xc1, 0xa5, 0x97, 0x1c,
-	0x83, 0x71, 0x8e, 0xc1, 0x7b, 0x8e, 0xc1, 0x57, 0x8e, 0xc1, 0xdb, 0x37, 0x2e, 0xdd, 0x55, 0x0b,
-	0x67, 0x6f, 0x5d, 0xfd, 0x20, 0xc7, 0x3f, 0x01, 0x00, 0x00, 0xff, 0xff, 0x72, 0x80, 0x82, 0x30,
-	0xa4, 0x02, 0x00, 0x00,
+	// 400 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x92, 0xcd, 0x6a, 0xdb, 0x40,
+	0x14, 0x85, 0xad, 0xd6, 0xae, 0xeb, 0x71, 0xf1, 0x62, 0xa0, 0xe0, 0x8a, 0x56, 0x14, 0x41, 0xa1,
+	0x50, 0x2c, 0x51, 0x77, 0xd3, 0x90, 0x45, 0x70, 0x70, 0x7e, 0x36, 0x21, 0xa0, 0x90, 0x04, 0xb2,
+	0x1b, 0x8d, 0xae, 0x65, 0x25, 0x96, 0x66, 0xa2, 0x19, 0x99, 0x18, 0xb2, 0xc8, 0x13, 0x84, 0x3c,
+	0x96, 0x97, 0x59, 0x66, 0x19, 0x2b, 0x2f, 0x12, 0x34, 0x92, 0x93, 0xf8, 0x0f, 0x82, 0x77, 0x73,
+	0xcf, 0xbd, 0xdf, 0x9c, 0x33, 0xba, 0x42, 0x1d, 0x3f, 0x90, 0xfd, 0xc4, 0xb5, 0x28, 0x0b, 0x6d,
+	0x9f, 0x0c, 0xe0, 0x2a, 0x96, 0x36, 0x78, 0x10, 0x51, 0x16, 0xf5, 0x42, 0x3f, 0x94, 0x36, 0xbf,
+	0xf0, 0x6d, 0xc2, 0x03, 0x61, 0xc3, 0x10, 0x22, 0x29, 0xec, 0xe1, 0x5f, 0x32, 0xe0, 0x7d, 0x92,
+	0x69, 0x16, 0x8f, 0x99, 0x64, 0xb8, 0x91, 0x77, 0xac, 0xa2, 0xa3, 0xb7, 0xde, 0x5e, 0xc9, 0x7c,
+	0x66, 0xab, 0x31, 0x37, 0xe9, 0xa9, 0x4a, 0x15, 0xea, 0x94, 0xe3, 0xfa, 0xd6, 0xbb, 0x13, 0x50,
+	0x16, 0xc3, 0xa2, 0xbf, 0x79, 0x8d, 0x2a, 0x3b, 0x59, 0x02, 0xdc, 0x45, 0x0d, 0xe6, 0x9e, 0x03,
+	0x95, 0x07, 0x20, 0x89, 0x47, 0x24, 0x69, 0x6a, 0x3f, 0xb5, 0xdf, 0xf5, 0xf6, 0x77, 0x2b, 0x23,
+	0xa7, 0xf9, 0xac, 0xc3, 0x99, 0x19, 0x67, 0x8e, 0xc1, 0x2d, 0x54, 0x16, 0x1c, 0x68, 0xf3, 0x83,
+	0x62, 0xbf, 0x59, 0xb3, 0xaf, 0xb3, 0x94, 0xd5, 0x11, 0x07, 0xea, 0xa8, 0x31, 0x73, 0x03, 0xd5,
+	0x5e, 0x24, 0x8c, 0x51, 0x59, 0x8e, 0x38, 0x28, 0xdf, 0x9a, 0xa3, 0xce, 0xb8, 0x89, 0xaa, 0x22,
+	0x09, 0x43, 0x12, 0x8f, 0xd4, 0x95, 0x35, 0x67, 0x5a, 0x9a, 0x1d, 0x84, 0x4f, 0x89, 0xa4, 0x7d,
+	0xc5, 0x3b, 0x20, 0x38, 0x8b, 0x04, 0xe0, 0x3f, 0xa8, 0xa2, 0x2c, 0x8b, 0xf0, 0x5f, 0x97, 0x06,
+	0x70, 0xf2, 0x99, 0xf6, 0xed, 0x47, 0xf4, 0x25, 0xb7, 0x87, 0x78, 0x18, 0x50, 0xc0, 0xbb, 0xa8,
+	0x7a, 0x02, 0xb1, 0x08, 0x58, 0x84, 0xe7, 0x9e, 0x5d, 0xc8, 0x0e, 0x5c, 0x26, 0x20, 0xa4, 0xfe,
+	0x63, 0x45, 0xb7, 0x48, 0xf1, 0x1f, 0x7d, 0xde, 0x03, 0x99, 0x7f, 0xd7, 0xe5, 0x11, 0xf4, 0xe5,
+	0x72, 0x46, 0x76, 0x3c, 0x6f, 0x1d, 0x72, 0x13, 0xd5, 0x8f, 0xb9, 0x47, 0x24, 0xac, 0x09, 0x77,
+	0x61, 0x00, 0xeb, 0xc1, 0xfb, 0xa8, 0xfe, 0xba, 0x09, 0xb1, 0x0a, 0x36, 0xe7, 0xe5, 0xc5, 0xed,
+	0x6d, 0xff, 0x1a, 0x4f, 0x0c, 0xed, 0x61, 0x62, 0x94, 0x6e, 0x52, 0x43, 0x1b, 0xa7, 0x86, 0x76,
+	0x9f, 0x1a, 0xda, 0x63, 0x6a, 0x68, 0x77, 0x4f, 0x46, 0xe9, 0xac, 0x5a, 0x90, 0xee, 0x27, 0xf5,
+	0xeb, 0xfe, 0x7b, 0x0e, 0x00, 0x00, 0xff, 0xff, 0x4f, 0xbe, 0x83, 0xf9, 0x7f, 0x03, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -271,9 +214,15 @@ const _ = grpc.SupportPackageIsVersion4
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type EventServiceClient interface {
 	// Version returns the API version.
-	Version(ctx context.Context, in *VersionRequest, opts ...grpc.CallOption) (*VersionResponse, error)
+	Version(ctx context.Context, in *v1alpha.VersionRequest, opts ...grpc.CallOption) (*v1alpha.VersionResponse, error)
 	// Get a Event.
 	GetEvent(ctx context.Context, in *Event, opts ...grpc.CallOption) (*Event, error)
+	// Add a Event.
+	AddEvent(ctx context.Context, in *Event, opts ...grpc.CallOption) (*Event, error)
+	// Update a Event.
+	UpdateEvent(ctx context.Context, in *Event, opts ...grpc.CallOption) (*Event, error)
+	// Delete a Event.
+	DeleteEvent(ctx context.Context, in *Event, opts ...grpc.CallOption) (*Event, error)
 	// Watch for Events.
 	WatchEvents(ctx context.Context, in *Event, opts ...grpc.CallOption) (*WatchEventResponse, error)
 }
@@ -286,8 +235,8 @@ func NewEventServiceClient(cc *grpc.ClientConn) EventServiceClient {
 	return &eventServiceClient{cc}
 }
 
-func (c *eventServiceClient) Version(ctx context.Context, in *VersionRequest, opts ...grpc.CallOption) (*VersionResponse, error) {
-	out := new(VersionResponse)
+func (c *eventServiceClient) Version(ctx context.Context, in *v1alpha.VersionRequest, opts ...grpc.CallOption) (*v1alpha.VersionResponse, error) {
+	out := new(v1alpha.VersionResponse)
 	err := c.cc.Invoke(ctx, "/events.v1alpha.EventService/Version", in, out, opts...)
 	if err != nil {
 		return nil, err
@@ -298,6 +247,33 @@ func (c *eventServiceClient) Version(ctx context.Context, in *VersionRequest, op
 func (c *eventServiceClient) GetEvent(ctx context.Context, in *Event, opts ...grpc.CallOption) (*Event, error) {
 	out := new(Event)
 	err := c.cc.Invoke(ctx, "/events.v1alpha.EventService/GetEvent", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *eventServiceClient) AddEvent(ctx context.Context, in *Event, opts ...grpc.CallOption) (*Event, error) {
+	out := new(Event)
+	err := c.cc.Invoke(ctx, "/events.v1alpha.EventService/AddEvent", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *eventServiceClient) UpdateEvent(ctx context.Context, in *Event, opts ...grpc.CallOption) (*Event, error) {
+	out := new(Event)
+	err := c.cc.Invoke(ctx, "/events.v1alpha.EventService/UpdateEvent", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *eventServiceClient) DeleteEvent(ctx context.Context, in *Event, opts ...grpc.CallOption) (*Event, error) {
+	out := new(Event)
+	err := c.cc.Invoke(ctx, "/events.v1alpha.EventService/DeleteEvent", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -316,9 +292,15 @@ func (c *eventServiceClient) WatchEvents(ctx context.Context, in *Event, opts ..
 // EventServiceServer is the server API for EventService service.
 type EventServiceServer interface {
 	// Version returns the API version.
-	Version(context.Context, *VersionRequest) (*VersionResponse, error)
+	Version(context.Context, *v1alpha.VersionRequest) (*v1alpha.VersionResponse, error)
 	// Get a Event.
 	GetEvent(context.Context, *Event) (*Event, error)
+	// Add a Event.
+	AddEvent(context.Context, *Event) (*Event, error)
+	// Update a Event.
+	UpdateEvent(context.Context, *Event) (*Event, error)
+	// Delete a Event.
+	DeleteEvent(context.Context, *Event) (*Event, error)
 	// Watch for Events.
 	WatchEvents(context.Context, *Event) (*WatchEventResponse, error)
 }
@@ -328,7 +310,7 @@ func RegisterEventServiceServer(s *grpc.Server, srv EventServiceServer) {
 }
 
 func _EventService_Version_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(VersionRequest)
+	in := new(v1alpha.VersionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -340,7 +322,7 @@ func _EventService_Version_Handler(srv interface{}, ctx context.Context, dec fun
 		FullMethod: "/events.v1alpha.EventService/Version",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(EventServiceServer).Version(ctx, req.(*VersionRequest))
+		return srv.(EventServiceServer).Version(ctx, req.(*v1alpha.VersionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -359,6 +341,60 @@ func _EventService_GetEvent_Handler(srv interface{}, ctx context.Context, dec fu
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(EventServiceServer).GetEvent(ctx, req.(*Event))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _EventService_AddEvent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Event)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EventServiceServer).AddEvent(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/events.v1alpha.EventService/AddEvent",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EventServiceServer).AddEvent(ctx, req.(*Event))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _EventService_UpdateEvent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Event)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EventServiceServer).UpdateEvent(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/events.v1alpha.EventService/UpdateEvent",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EventServiceServer).UpdateEvent(ctx, req.(*Event))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _EventService_DeleteEvent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Event)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(EventServiceServer).DeleteEvent(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/events.v1alpha.EventService/DeleteEvent",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(EventServiceServer).DeleteEvent(ctx, req.(*Event))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -392,6 +428,18 @@ var _EventService_serviceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetEvent",
 			Handler:    _EventService_GetEvent_Handler,
+		},
+		{
+			MethodName: "AddEvent",
+			Handler:    _EventService_AddEvent_Handler,
+		},
+		{
+			MethodName: "UpdateEvent",
+			Handler:    _EventService_UpdateEvent_Handler,
+		},
+		{
+			MethodName: "DeleteEvent",
+			Handler:    _EventService_DeleteEvent_Handler,
 		},
 		{
 			MethodName: "WatchEvents",

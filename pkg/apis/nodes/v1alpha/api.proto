@@ -18,6 +18,7 @@ package nodes.v1alpha;
 option go_package = "v1alpha";
 
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha/api.proto";
 import "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha/api.proto";
 
 option (gogoproto.goproto_stringer_all) = false;
@@ -30,7 +31,7 @@ option (gogoproto.goproto_unrecognized_all) = false;
 
 service NodesService {
     // Version returns the API version.
-    rpc Version (VersionRequest) returns (VersionResponse);
+    rpc Version (core.v1alpha.VersionRequest) returns (core.v1alpha.VersionResponse);
     // Get a Node.
     rpc GetNode (Node) returns (Node);
     // Add a Node.
@@ -43,34 +44,18 @@ service NodesService {
     rpc WatchNode (Node) returns (stream NodeWatchResponse);
 }
 
-message VersionRequest {}
-
-message VersionResponse {
-    // Semversion compatible version number.
-    string version = 1;
-    // Semversion major number.
-    int64 major = 2;
-    // Semversion minor number.
-    int64 minor = 3;
-    // Semversion patch number.
-    int64 patch = 4;
-    // API state (e.g., alpha, beta, stable).
-    string state = 5;
+message Node {
+    // Metadata for Node object.
+    core.v1alpha.ObjectMetadata objectMetadata = 1;
+    // Spec for Node.
+    NodeSpec spec = 2;
 }
 
-message Node {
-    // ID of Node.
-    string id = 1;
-    // Name of Node.
-    string name = 2;
+message NodeSpec {
     // FQDN of Node.
     string fqdn = 3;
     // IP addresses of Node.
     repeated string addresses = 4;
-    // Labels of Node.
-    map<string, string> labels = 5;
-    // Annotations of Node.
-    map<string, string> annotations = 6;
 }
 
 message AddNodeResponse {}

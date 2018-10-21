@@ -14,11 +14,10 @@
 
 syntax = 'proto3';
 
-package events.v1alpha;
+package core.v1alpha;
 option go_package = "v1alpha";
 
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
-import "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha/api.proto";
 
 option (gogoproto.goproto_stringer_all) = false;
 option (gogoproto.stringer_all) =  true;
@@ -28,36 +27,28 @@ option (gogoproto.sizer_all) = true;
 option (gogoproto.unmarshaler_all) = true;
 option (gogoproto.goproto_unrecognized_all) = false;
 
-service EventService {
-    // Version returns the API version.
-    rpc Version (core.v1alpha.VersionRequest) returns (core.v1alpha.VersionResponse);
-    // Get a Event.
-    rpc GetEvent (Event) returns (Event);
-    // Add a Event.
-    rpc AddEvent (Event) returns (Event);
-    // Update a Event.
-    rpc UpdateEvent (Event) returns (Event);
-    // Delete a Event.
-    rpc DeleteEvent (Event) returns (Event);
-    // Watch for Events.
-    rpc WatchEvents (Event) returns (WatchEventResponse);
+message ObjectMetadata {
+    // ID of object.
+    string id = 1;
+    // Name of object.
+    string name = 2;
+    // Labels of object.
+    map<string, string> labels = 3;
+    // Annotations of object.
+    map<string, string> annotations = 4;
 }
 
-message Event {
-    // Metadata for the Job object.
-    core.v1alpha.ObjectMetadata objectMetadata = 1;
-    // Spec for Event.
-    EventSpec spec = 2;
-}
+message VersionRequest {}
 
-message EventSpec {
-    // Type of the Event.
-    string type = 1;
-    // Summary of Event.
-    string summary = 2;
-}
-
-message WatchEventResponse {
-    // Event info for watch response.
-    events.v1alpha.Event event = 1;
+message VersionResponse {
+    // Semversion compatible version number.
+    string version = 1;
+    // Semversion major number.
+    int64 major = 2;
+    // Semversion minor number.
+    int64 minor = 3;
+    // Semversion patch number.
+    int64 patch = 4;
+    // API state (e.g., alpha, beta, stable).
+    string state = 5;
 }
