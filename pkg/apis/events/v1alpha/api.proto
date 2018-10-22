@@ -15,7 +15,7 @@
 syntax = 'proto3';
 
 package events.v1alpha;
-option go_package = "v1alpha";
+option go_package = "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha";
 
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha/api.proto";
