@@ -29,10 +29,10 @@ type Job struct {
 	// Metadata for Job object.
 	ObjectMetadata *v1alpha.ObjectMetadata `protobuf:"bytes,1,opt,name=objectMetadata,proto3" json:"objectMetadata,omitempty"`
 	// Spec for Job.
-	Spec                 *JobSpec `protobuf:"bytes,2,opt,name=spec,proto3" json:"spec,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	Spec                 *v1alpha.Include `protobuf:"bytes,2,opt,name=spec,proto3" json:"spec,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_unrecognized     []byte           `json:"-"`
+	XXX_sizecache        int32            `json:"-"`
 }
 
 func (m *Job) Reset()         { *m = Job{} }
@@ -67,51 +67,11 @@ func (m *Job) GetObjectMetadata() *v1alpha.ObjectMetadata {
 	return nil
 }
 
-func (m *Job) GetSpec() *JobSpec {
+func (m *Job) GetSpec() *v1alpha.Include {
 	if m != nil {
 		return m.Spec
 	}
 	return nil
-}
-
-type JobSpec struct {
-	// (Human readable) description for Job.
-	Description          string   `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *JobSpec) Reset()         { *m = JobSpec{} }
-func (m *JobSpec) String() string { return proto.CompactTextString(m) }
-func (*JobSpec) ProtoMessage()    {}
-func (*JobSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f9062e228d6c6d51, []int{1}
-}
-
-func (m *JobSpec) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_JobSpec.Unmarshal(m, b)
-}
-func (m *JobSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_JobSpec.Marshal(b, m, deterministic)
-}
-func (m *JobSpec) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_JobSpec.Merge(m, src)
-}
-func (m *JobSpec) XXX_Size() int {
-	return xxx_messageInfo_JobSpec.Size(m)
-}
-func (m *JobSpec) XXX_DiscardUnknown() {
-	xxx_messageInfo_JobSpec.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_JobSpec proto.InternalMessageInfo
-
-func (m *JobSpec) GetDescription() string {
-	if m != nil {
-		return m.Description
-	}
-	return ""
 }
 
 type AddJobResponse struct {
@@ -124,7 +84,7 @@ func (m *AddJobResponse) Reset()         { *m = AddJobResponse{} }
 func (m *AddJobResponse) String() string { return proto.CompactTextString(m) }
 func (*AddJobResponse) ProtoMessage()    {}
 func (*AddJobResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f9062e228d6c6d51, []int{2}
+	return fileDescriptor_f9062e228d6c6d51, []int{1}
 }
 
 func (m *AddJobResponse) XXX_Unmarshal(b []byte) error {
@@ -155,7 +115,7 @@ func (m *UpdateJobResponse) Reset()         { *m = UpdateJobResponse{} }
 func (m *UpdateJobResponse) String() string { return proto.CompactTextString(m) }
 func (*UpdateJobResponse) ProtoMessage()    {}
 func (*UpdateJobResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f9062e228d6c6d51, []int{3}
+	return fileDescriptor_f9062e228d6c6d51, []int{2}
 }
 
 func (m *UpdateJobResponse) XXX_Unmarshal(b []byte) error {
@@ -186,7 +146,7 @@ func (m *DeleteJobResponse) Reset()         { *m = DeleteJobResponse{} }
 func (m *DeleteJobResponse) String() string { return proto.CompactTextString(m) }
 func (*DeleteJobResponse) ProtoMessage()    {}
 func (*DeleteJobResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f9062e228d6c6d51, []int{4}
+	return fileDescriptor_f9062e228d6c6d51, []int{3}
 }
 
 func (m *DeleteJobResponse) XXX_Unmarshal(b []byte) error {
@@ -221,7 +181,7 @@ func (m *WatchJobResponse) Reset()         { *m = WatchJobResponse{} }
 func (m *WatchJobResponse) String() string { return proto.CompactTextString(m) }
 func (*WatchJobResponse) ProtoMessage()    {}
 func (*WatchJobResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_f9062e228d6c6d51, []int{5}
+	return fileDescriptor_f9062e228d6c6d51, []int{4}
 }
 
 func (m *WatchJobResponse) XXX_Unmarshal(b []byte) error {
@@ -258,7 +218,6 @@ func (m *WatchJobResponse) GetJob() *Job {
 
 func init() {
 	proto.RegisterType((*Job)(nil), "jobs.v1alpha.Job")
-	proto.RegisterType((*JobSpec)(nil), "jobs.v1alpha.JobSpec")
 	proto.RegisterType((*AddJobResponse)(nil), "jobs.v1alpha.AddJobResponse")
 	proto.RegisterType((*UpdateJobResponse)(nil), "jobs.v1alpha.UpdateJobResponse")
 	proto.RegisterType((*DeleteJobResponse)(nil), "jobs.v1alpha.DeleteJobResponse")
@@ -270,36 +229,35 @@ func init() {
 }
 
 var fileDescriptor_f9062e228d6c6d51 = []byte{
-	// 458 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x93, 0xcf, 0x6b, 0x13, 0x41,
-	0x14, 0xc7, 0x3b, 0x46, 0x53, 0xfb, 0x2a, 0xa1, 0x1d, 0x29, 0x84, 0xa5, 0xae, 0x21, 0x5e, 0x2a,
-	0xc5, 0x59, 0xad, 0x78, 0xf0, 0x14, 0x22, 0x55, 0x21, 0x20, 0xc2, 0x06, 0x15, 0xbc, 0xcd, 0xcc,
-	0xbe, 0x6e, 0x36, 0x26, 0x3b, 0xe3, 0xce, 0x24, 0x78, 0xf4, 0xe4, 0xd9, 0x3f, 0xab, 0x47, 0x8f,
-	0x1e, 0x6d, 0xfc, 0x47, 0x64, 0x27, 0xdb, 0x90, 0xcd, 0xae, 0x10, 0x7a, 0xdb, 0xf7, 0xd9, 0xf7,
-	0xf3, 0xfb, 0x65, 0xa0, 0x17, 0x27, 0x76, 0x34, 0x13, 0x4c, 0xaa, 0x69, 0x10, 0xf3, 0x09, 0x7e,
-	0xcb, 0x6c, 0x80, 0x11, 0xa6, 0x52, 0xa5, 0x17, 0xd3, 0x78, 0x6a, 0x03, 0xfd, 0x25, 0x0e, 0xb8,
-	0x4e, 0x4c, 0x30, 0x56, 0xc2, 0x04, 0xf3, 0x67, 0x7c, 0xa2, 0x47, 0x3c, 0x27, 0x4c, 0x67, 0xca,
-	0x2a, 0x7a, 0x2f, 0xe7, 0xac, 0xe0, 0xde, 0x93, 0xf5, 0x76, 0x2a, 0x56, 0x81, 0x4b, 0x12, 0xb3,
-	0x0b, 0x17, 0xb9, 0xc0, 0x7d, 0x2d, 0x8b, 0xbd, 0xed, 0xa7, 0x4b, 0x95, 0x61, 0x75, 0xba, 0xd7,
-	0xdf, 0xba, 0x01, 0xce, 0x31, 0xb5, 0x35, 0x07, 0x74, 0xe7, 0xd0, 0x18, 0x28, 0x41, 0xcf, 0xa1,
-	0xa5, 0xc4, 0x18, 0xa5, 0x7d, 0x87, 0x96, 0x47, 0xdc, 0xf2, 0x36, 0xe9, 0x90, 0x93, 0xfd, 0xb3,
-	0x63, 0x96, 0x8f, 0xbe, 0x3e, 0x90, 0xbd, 0x2f, 0xe5, 0x84, 0x1b, 0x35, 0xf4, 0x31, 0xdc, 0x36,
-	0x1a, 0x65, 0xfb, 0x96, 0xab, 0x3d, 0x62, 0xeb, 0xe2, 0xb0, 0x81, 0x12, 0x43, 0x8d, 0x32, 0x74,
-	0x29, 0xdd, 0x53, 0xd8, 0x2d, 0x00, 0xed, 0xc0, 0x7e, 0x84, 0x46, 0x66, 0x89, 0xb6, 0x89, 0x4a,
-	0xdb, 0x8d, 0x0e, 0x39, 0xd9, 0x0b, 0xd7, 0x51, 0xf7, 0x00, 0x5a, 0xfd, 0x28, 0x1a, 0x28, 0x11,
-	0xa2, 0xd1, 0x2a, 0x35, 0xd8, 0xbd, 0x0f, 0x87, 0x1f, 0x74, 0xc4, 0x2d, 0x6e, 0xc0, 0x73, 0x9c,
-	0x60, 0x19, 0x46, 0x70, 0xf0, 0x89, 0x5b, 0x39, 0x5a, 0x63, 0xf4, 0x14, 0xee, 0x38, 0x41, 0x8a,
-	0x23, 0x8f, 0xd8, 0x52, 0x9e, 0xd5, 0xaa, 0xaf, 0xf3, 0x30, 0x5c, 0xe6, 0xd0, 0x47, 0xd0, 0x18,
-	0x2b, 0x51, 0xdc, 0x74, 0x58, 0xb9, 0x29, 0xcc, 0xff, 0x9e, 0xfd, 0x68, 0x40, 0xab, 0x2f, 0xf3,
-	0x65, 0xcd, 0x10, 0xb3, 0x79, 0x22, 0x91, 0xbe, 0x81, 0xdd, 0x8f, 0x98, 0x99, 0x44, 0xa5, 0x74,
-	0x43, 0xc5, 0x02, 0x87, 0xf8, 0x75, 0x86, 0xc6, 0x7a, 0x0f, 0xfe, 0xf3, 0xb7, 0x58, 0x96, 0x41,
-	0xf3, 0x2d, 0xda, 0xdc, 0xa4, 0xea, 0x70, 0xaf, 0x8a, 0xe8, 0x4b, 0x68, 0x2e, 0xc5, 0xaa, 0xcb,
-	0x3f, 0x2e, 0xa3, 0xb2, 0xaa, 0xb4, 0x07, 0x7b, 0x2b, 0x55, 0xeb, 0xaa, 0x1f, 0x96, 0x51, 0xc5,
-	0x81, 0xbc, 0xc1, 0xca, 0x81, 0x2d, 0x1a, 0x54, 0xdc, 0xa2, 0x3d, 0xb8, 0x7b, 0xed, 0x56, 0x5d,
-	0xbd, 0x5f, 0x46, 0x9b, 0xc6, 0x3e, 0x25, 0xaf, 0x86, 0x97, 0x57, 0x3e, 0xf9, 0x7d, 0xe5, 0xef,
-	0x7c, 0x5f, 0xf8, 0xe4, 0x72, 0xe1, 0x93, 0x5f, 0x0b, 0x9f, 0xfc, 0x59, 0xf8, 0xe4, 0xe7, 0x5f,
-	0x7f, 0xe7, 0xf3, 0x8b, 0x1b, 0xbd, 0x77, 0xd1, 0x74, 0x6f, 0xe5, 0xf9, 0xbf, 0x00, 0x00, 0x00,
-	0xff, 0xff, 0x33, 0x95, 0x58, 0x19, 0x2f, 0x04, 0x00, 0x00,
+	// 436 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x93, 0xcf, 0x6b, 0xd4, 0x40,
+	0x14, 0xc7, 0x3b, 0xae, 0xae, 0x3a, 0x95, 0xd2, 0x8e, 0x14, 0x4a, 0xa8, 0xa3, 0xac, 0x17, 0x45,
+	0x9c, 0x68, 0xc5, 0x83, 0xa7, 0xa5, 0x52, 0x15, 0x17, 0x44, 0x48, 0x51, 0xc1, 0xdb, 0xcc, 0xe4,
+	0x35, 0xbb, 0x6b, 0x36, 0x13, 0x33, 0x93, 0xe0, 0x51, 0xf0, 0x1f, 0xf0, 0xcf, 0xea, 0xd1, 0xa3,
+	0x47, 0x1b, 0xff, 0x11, 0x99, 0x49, 0x76, 0xd9, 0xfc, 0x10, 0x96, 0xde, 0xf6, 0x7d, 0xe6, 0x7d,
+	0xdf, 0x8f, 0xef, 0xdb, 0xe0, 0x71, 0x34, 0x33, 0xd3, 0x5c, 0x30, 0xa9, 0x16, 0x7e, 0xc4, 0x63,
+	0xf8, 0x96, 0x19, 0x1f, 0x42, 0x48, 0xa4, 0x4a, 0xce, 0x16, 0xd1, 0xc2, 0xf8, 0xe9, 0x97, 0xc8,
+	0xe7, 0xe9, 0x4c, 0xfb, 0x73, 0x25, 0xb4, 0x5f, 0x3c, 0xe5, 0x71, 0x3a, 0xe5, 0x96, 0xb0, 0x34,
+	0x53, 0x46, 0x91, 0x5b, 0x96, 0xb3, 0x9a, 0x7b, 0x8f, 0xd7, 0xcb, 0xa9, 0x48, 0xf9, 0x2e, 0x49,
+	0xe4, 0x67, 0x2e, 0x72, 0x81, 0xfb, 0x55, 0x89, 0xbd, 0xcd, 0xbb, 0x4b, 0x95, 0x41, 0xb7, 0xbb,
+	0x77, 0xbc, 0x71, 0x01, 0x28, 0x20, 0x31, 0x3d, 0x0b, 0x8c, 0x0a, 0x3c, 0x98, 0x28, 0x41, 0x4e,
+	0xf0, 0x8e, 0x12, 0x73, 0x90, 0xe6, 0x1d, 0x18, 0x1e, 0x72, 0xc3, 0x0f, 0xd0, 0x3d, 0xf4, 0x60,
+	0xfb, 0xe8, 0x90, 0xd9, 0xd6, 0xcb, 0x05, 0xd9, 0xfb, 0x46, 0x4e, 0xd0, 0xd2, 0x90, 0x87, 0xf8,
+	0xaa, 0x4e, 0x41, 0x1e, 0x5c, 0x71, 0xda, 0xfd, 0xa6, 0xf6, 0x6d, 0x22, 0xe3, 0x3c, 0x84, 0xc0,
+	0xa5, 0x8c, 0x76, 0xf1, 0xce, 0x71, 0x18, 0x4e, 0x94, 0x08, 0x40, 0xa7, 0x2a, 0xd1, 0x30, 0xba,
+	0x8d, 0xf7, 0x3e, 0xa4, 0x21, 0x37, 0xd0, 0x82, 0x27, 0x10, 0x43, 0x13, 0x86, 0x78, 0xf7, 0x13,
+	0x37, 0x72, 0xba, 0xc6, 0xc8, 0x23, 0x7c, 0xcd, 0xed, 0x58, 0xcf, 0xbd, 0xcf, 0xaa, 0x8d, 0x57,
+	0xdd, 0x5f, 0xd9, 0x30, 0xa8, 0x72, 0xc8, 0x7d, 0x3c, 0x98, 0x2b, 0x51, 0x8f, 0xb9, 0xc7, 0xd6,
+	0x6f, 0xc8, 0x6c, 0x51, 0xfb, 0x7a, 0xf4, 0x63, 0x80, 0xb7, 0x27, 0x4a, 0xe8, 0x53, 0xc8, 0x8a,
+	0x99, 0x04, 0xf2, 0x1a, 0x5f, 0xff, 0x08, 0x99, 0x9e, 0xa9, 0x84, 0xb4, 0x5c, 0xa9, 0x71, 0x00,
+	0x5f, 0x73, 0xd0, 0xc6, 0xbb, 0xf3, 0x9f, 0xd7, 0x7a, 0x52, 0x86, 0x87, 0x6f, 0xc0, 0x58, 0xd3,
+	0xbb, 0x9d, 0xbd, 0x2e, 0x22, 0x2f, 0xf0, 0xb0, 0x72, 0xaa, 0x2f, 0xff, 0xb0, 0x89, 0x9a, 0x96,
+	0x92, 0x31, 0xbe, 0xb9, 0xb2, 0xb4, 0x4f, 0x7d, 0xb7, 0x89, 0x3a, 0xf6, 0xdb, 0x02, 0x2b, 0xfb,
+	0x37, 0x28, 0xd0, 0x39, 0x15, 0x19, 0xe3, 0x1b, 0xcb, 0x53, 0xf5, 0xe9, 0x69, 0x13, 0xb5, 0xaf,
+	0xfa, 0x04, 0xbd, 0x3c, 0x3d, 0xbf, 0xa0, 0xe8, 0xf7, 0x05, 0xdd, 0xfa, 0x5e, 0x52, 0x74, 0x5e,
+	0x52, 0xf4, 0xab, 0xa4, 0xe8, 0x4f, 0x49, 0xd1, 0xcf, 0xbf, 0x74, 0xeb, 0xf3, 0xf3, 0x4b, 0x7d,
+	0xbf, 0x62, 0xe8, 0xfe, 0xfb, 0xcf, 0xfe, 0x05, 0x00, 0x00, 0xff, 0xff, 0x2e, 0xf5, 0x02, 0xed,
+	0xff, 0x03, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -310,10 +268,10 @@ var _ grpc.ClientConn
 // is compatible with the grpc package it is being compiled against.
 const _ = grpc.SupportPackageIsVersion4
 
-// ActionsServiceClient is the client API for ActionsService service.
+// JobsServiceClient is the client API for JobsService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type ActionsServiceClient interface {
+type JobsServiceClient interface {
 	// Version returns the API version.
 	Version(ctx context.Context, in *v1alpha.VersionRequest, opts ...grpc.CallOption) (*v1alpha.VersionResponse, error)
 	// Get a Job.
@@ -325,68 +283,68 @@ type ActionsServiceClient interface {
 	// Delete a Job.
 	DeleteJob(ctx context.Context, in *Job, opts ...grpc.CallOption) (*DeleteJobResponse, error)
 	// Watch a Job.
-	WatchJob(ctx context.Context, in *Job, opts ...grpc.CallOption) (ActionsService_WatchJobClient, error)
+	WatchJob(ctx context.Context, in *Job, opts ...grpc.CallOption) (JobsService_WatchJobClient, error)
 }
 
-type actionsServiceClient struct {
+type jobsServiceClient struct {
 	cc *grpc.ClientConn
 }
 
-func NewActionsServiceClient(cc *grpc.ClientConn) ActionsServiceClient {
-	return &actionsServiceClient{cc}
+func NewJobsServiceClient(cc *grpc.ClientConn) JobsServiceClient {
+	return &jobsServiceClient{cc}
 }
 
-func (c *actionsServiceClient) Version(ctx context.Context, in *v1alpha.VersionRequest, opts ...grpc.CallOption) (*v1alpha.VersionResponse, error) {
+func (c *jobsServiceClient) Version(ctx context.Context, in *v1alpha.VersionRequest, opts ...grpc.CallOption) (*v1alpha.VersionResponse, error) {
 	out := new(v1alpha.VersionResponse)
-	err := c.cc.Invoke(ctx, "/jobs.v1alpha.ActionsService/Version", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/jobs.v1alpha.JobsService/Version", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *actionsServiceClient) GetJob(ctx context.Context, in *Job, opts ...grpc.CallOption) (*Job, error) {
+func (c *jobsServiceClient) GetJob(ctx context.Context, in *Job, opts ...grpc.CallOption) (*Job, error) {
 	out := new(Job)
-	err := c.cc.Invoke(ctx, "/jobs.v1alpha.ActionsService/GetJob", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/jobs.v1alpha.JobsService/GetJob", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *actionsServiceClient) AddJob(ctx context.Context, in *Job, opts ...grpc.CallOption) (*AddJobResponse, error) {
+func (c *jobsServiceClient) AddJob(ctx context.Context, in *Job, opts ...grpc.CallOption) (*AddJobResponse, error) {
 	out := new(AddJobResponse)
-	err := c.cc.Invoke(ctx, "/jobs.v1alpha.ActionsService/AddJob", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/jobs.v1alpha.JobsService/AddJob", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *actionsServiceClient) UpdateJob(ctx context.Context, in *Job, opts ...grpc.CallOption) (*UpdateJobResponse, error) {
+func (c *jobsServiceClient) UpdateJob(ctx context.Context, in *Job, opts ...grpc.CallOption) (*UpdateJobResponse, error) {
 	out := new(UpdateJobResponse)
-	err := c.cc.Invoke(ctx, "/jobs.v1alpha.ActionsService/UpdateJob", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/jobs.v1alpha.JobsService/UpdateJob", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *actionsServiceClient) DeleteJob(ctx context.Context, in *Job, opts ...grpc.CallOption) (*DeleteJobResponse, error) {
+func (c *jobsServiceClient) DeleteJob(ctx context.Context, in *Job, opts ...grpc.CallOption) (*DeleteJobResponse, error) {
 	out := new(DeleteJobResponse)
-	err := c.cc.Invoke(ctx, "/jobs.v1alpha.ActionsService/DeleteJob", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/jobs.v1alpha.JobsService/DeleteJob", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *actionsServiceClient) WatchJob(ctx context.Context, in *Job, opts ...grpc.CallOption) (ActionsService_WatchJobClient, error) {
-	stream, err := c.cc.NewStream(ctx, &_ActionsService_serviceDesc.Streams[0], "/jobs.v1alpha.ActionsService/WatchJob", opts...)
+func (c *jobsServiceClient) WatchJob(ctx context.Context, in *Job, opts ...grpc.CallOption) (JobsService_WatchJobClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_JobsService_serviceDesc.Streams[0], "/jobs.v1alpha.JobsService/WatchJob", opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &actionsServiceWatchJobClient{stream}
+	x := &jobsServiceWatchJobClient{stream}
 	if err := x.ClientStream.SendMsg(in); err != nil {
 		return nil, err
 	}
@@ -396,16 +354,16 @@ func (c *actionsServiceClient) WatchJob(ctx context.Context, in *Job, opts ...gr
 	return x, nil
 }
 
-type ActionsService_WatchJobClient interface {
+type JobsService_WatchJobClient interface {
 	Recv() (*WatchJobResponse, error)
 	grpc.ClientStream
 }
 
-type actionsServiceWatchJobClient struct {
+type jobsServiceWatchJobClient struct {
 	grpc.ClientStream
 }
 
-func (x *actionsServiceWatchJobClient) Recv() (*WatchJobResponse, error) {
+func (x *jobsServiceWatchJobClient) Recv() (*WatchJobResponse, error) {
 	m := new(WatchJobResponse)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
@@ -413,8 +371,8 @@ func (x *actionsServiceWatchJobClient) Recv() (*WatchJobResponse, error) {
 	return m, nil
 }
 
-// ActionsServiceServer is the server API for ActionsService service.
-type ActionsServiceServer interface {
+// JobsServiceServer is the server API for JobsService service.
+type JobsServiceServer interface {
 	// Version returns the API version.
 	Version(context.Context, *v1alpha.VersionRequest) (*v1alpha.VersionResponse, error)
 	// Get a Job.
@@ -426,153 +384,153 @@ type ActionsServiceServer interface {
 	// Delete a Job.
 	DeleteJob(context.Context, *Job) (*DeleteJobResponse, error)
 	// Watch a Job.
-	WatchJob(*Job, ActionsService_WatchJobServer) error
+	WatchJob(*Job, JobsService_WatchJobServer) error
 }
 
-func RegisterActionsServiceServer(s *grpc.Server, srv ActionsServiceServer) {
-	s.RegisterService(&_ActionsService_serviceDesc, srv)
+func RegisterJobsServiceServer(s *grpc.Server, srv JobsServiceServer) {
+	s.RegisterService(&_JobsService_serviceDesc, srv)
 }
 
-func _ActionsService_Version_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _JobsService_Version_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(v1alpha.VersionRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ActionsServiceServer).Version(ctx, in)
+		return srv.(JobsServiceServer).Version(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/jobs.v1alpha.ActionsService/Version",
+		FullMethod: "/jobs.v1alpha.JobsService/Version",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ActionsServiceServer).Version(ctx, req.(*v1alpha.VersionRequest))
+		return srv.(JobsServiceServer).Version(ctx, req.(*v1alpha.VersionRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ActionsService_GetJob_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _JobsService_GetJob_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Job)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ActionsServiceServer).GetJob(ctx, in)
+		return srv.(JobsServiceServer).GetJob(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/jobs.v1alpha.ActionsService/GetJob",
+		FullMethod: "/jobs.v1alpha.JobsService/GetJob",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ActionsServiceServer).GetJob(ctx, req.(*Job))
+		return srv.(JobsServiceServer).GetJob(ctx, req.(*Job))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ActionsService_AddJob_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _JobsService_AddJob_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Job)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ActionsServiceServer).AddJob(ctx, in)
+		return srv.(JobsServiceServer).AddJob(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/jobs.v1alpha.ActionsService/AddJob",
+		FullMethod: "/jobs.v1alpha.JobsService/AddJob",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ActionsServiceServer).AddJob(ctx, req.(*Job))
+		return srv.(JobsServiceServer).AddJob(ctx, req.(*Job))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ActionsService_UpdateJob_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _JobsService_UpdateJob_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Job)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ActionsServiceServer).UpdateJob(ctx, in)
+		return srv.(JobsServiceServer).UpdateJob(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/jobs.v1alpha.ActionsService/UpdateJob",
+		FullMethod: "/jobs.v1alpha.JobsService/UpdateJob",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ActionsServiceServer).UpdateJob(ctx, req.(*Job))
+		return srv.(JobsServiceServer).UpdateJob(ctx, req.(*Job))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ActionsService_DeleteJob_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+func _JobsService_DeleteJob_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(Job)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(ActionsServiceServer).DeleteJob(ctx, in)
+		return srv.(JobsServiceServer).DeleteJob(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/jobs.v1alpha.ActionsService/DeleteJob",
+		FullMethod: "/jobs.v1alpha.JobsService/DeleteJob",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ActionsServiceServer).DeleteJob(ctx, req.(*Job))
+		return srv.(JobsServiceServer).DeleteJob(ctx, req.(*Job))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _ActionsService_WatchJob_Handler(srv interface{}, stream grpc.ServerStream) error {
+func _JobsService_WatchJob_Handler(srv interface{}, stream grpc.ServerStream) error {
 	m := new(Job)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}
-	return srv.(ActionsServiceServer).WatchJob(m, &actionsServiceWatchJobServer{stream})
+	return srv.(JobsServiceServer).WatchJob(m, &jobsServiceWatchJobServer{stream})
 }
 
-type ActionsService_WatchJobServer interface {
+type JobsService_WatchJobServer interface {
 	Send(*WatchJobResponse) error
 	grpc.ServerStream
 }
 
-type actionsServiceWatchJobServer struct {
+type jobsServiceWatchJobServer struct {
 	grpc.ServerStream
 }
 
-func (x *actionsServiceWatchJobServer) Send(m *WatchJobResponse) error {
+func (x *jobsServiceWatchJobServer) Send(m *WatchJobResponse) error {
 	return x.ServerStream.SendMsg(m)
 }
 
-var _ActionsService_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "jobs.v1alpha.ActionsService",
-	HandlerType: (*ActionsServiceServer)(nil),
+var _JobsService_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "jobs.v1alpha.JobsService",
+	HandlerType: (*JobsServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
 			MethodName: "Version",
-			Handler:    _ActionsService_Version_Handler,
+			Handler:    _JobsService_Version_Handler,
 		},
 		{
 			MethodName: "GetJob",
-			Handler:    _ActionsService_GetJob_Handler,
+			Handler:    _JobsService_GetJob_Handler,
 		},
 		{
 			MethodName: "AddJob",
-			Handler:    _ActionsService_AddJob_Handler,
+			Handler:    _JobsService_AddJob_Handler,
 		},
 		{
 			MethodName: "UpdateJob",
-			Handler:    _ActionsService_UpdateJob_Handler,
+			Handler:    _JobsService_UpdateJob_Handler,
 		},
 		{
 			MethodName: "DeleteJob",
-			Handler:    _ActionsService_DeleteJob_Handler,
+			Handler:    _JobsService_DeleteJob_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
 		{
 			StreamName:    "WatchJob",
-			Handler:       _ActionsService_WatchJob_Handler,
+			Handler:       _JobsService_WatchJob_Handler,
 			ServerStreams: true,
 		},
 	},

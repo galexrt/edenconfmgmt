@@ -14,8 +14,8 @@
 
 syntax = 'proto3';
 
-package jobs.v1alpha;
-option go_package = "github.com/galexrt/edenconfmgmt/pkg/apis/jobs/v1alpha";
+package config.v1alpha;
+option go_package = "github.com/galexrt/edenconfmgmt/pkg/apis/config/v1alpha";
 
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha/api.proto";
@@ -29,37 +29,51 @@ option (gogoproto.sizer_all) = true;
 option (gogoproto.unmarshaler_all) = true;
 option (gogoproto.goproto_unrecognized_all) = false;
 
-service JobsService {
+service ConfigsService {
     // Version returns the API version.
     rpc Version (core.v1alpha.VersionRequest) returns (core.v1alpha.VersionResponse);
-    // Get a Job.
-    rpc GetJob (Job) returns (Job);
-    // Add a Job.
-    rpc AddJob (Job) returns (AddJobResponse);
-    // Update a Job.
-    rpc UpdateJob (Job) returns (UpdateJobResponse);
-    // Delete a Job.
-    rpc DeleteJob (Job) returns (DeleteJobResponse);
-    // Watch a Job.
-    rpc WatchJob (Job) returns (stream WatchJobResponse);
+    // Get a Config.
+    rpc GetConfig (Config) returns (Config);
+    // Add a Config.
+    rpc AddConfig (Config) returns (AddConfigResponse);
+    // Update a Config.
+    rpc UpdateConfig (Config) returns (UpdateConfigResponse);
+    // Delete a Config.
+    rpc DeleteConfig (Config) returns (DeleteConfigResponse);
+    // Watch a Config.
+    rpc WatchConfig (Config) returns (stream WatchConfigResponse);
 }
 
-message Job {
-    // Metadata for Job object.
+// Config object base.
+message Config {
+    // Metadata for Config object.
     core.v1alpha.ObjectMetadata objectMetadata = 1;
-    // Spec for Job.
-    core.v1alpha.Include spec = 2;
+    // Spec for Config.
+    ConfigSpec spec = 2;
 }
 
-message AddJobResponse {}
+message ConfigSpec {
+    // DataStore.
+    DataStore dataStore = 1;
+}
 
-message UpdateJobResponse {}
+// DataStore config for the data store
+message DataStore {
+    // Type.
+    string type = 1;
+    // Count.
+    int64 count = 2;
+}
 
-message DeleteJobResponse {}
+message AddConfigResponse {}
 
-message WatchJobResponse {
+message UpdateConfigResponse {}
+
+message DeleteConfigResponse {}
+
+message WatchConfigResponse {
     // Event info for watch response.
     events.v1alpha.Event event = 1;
-    // Job for watch response.
-    Job job = 2;
+    // Config for watch response.
+    Config Config = 2;
 }

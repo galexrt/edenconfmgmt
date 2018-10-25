@@ -14,10 +14,11 @@
 
 syntax = 'proto3';
 
-package jobs.v1alpha;
-option go_package = "github.com/galexrt/edenconfmgmt/pkg/apis/jobs/v1alpha";
+package variables.v1alpha;
+option go_package = "github.com/galexrt/edenconfmgmt/pkg/apis/variables/v1alpha";
 
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "google/protobuf/any.proto";
 import "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha/api.proto";
 import "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha/api.proto";
 
@@ -29,37 +30,43 @@ option (gogoproto.sizer_all) = true;
 option (gogoproto.unmarshaler_all) = true;
 option (gogoproto.goproto_unrecognized_all) = false;
 
-service JobsService {
+service VariablesService {
     // Version returns the API version.
     rpc Version (core.v1alpha.VersionRequest) returns (core.v1alpha.VersionResponse);
-    // Get a Job.
-    rpc GetJob (Job) returns (Job);
-    // Add a Job.
-    rpc AddJob (Job) returns (AddJobResponse);
-    // Update a Job.
-    rpc UpdateJob (Job) returns (UpdateJobResponse);
-    // Delete a Job.
-    rpc DeleteJob (Job) returns (DeleteJobResponse);
-    // Watch a Job.
-    rpc WatchJob (Job) returns (stream WatchJobResponse);
+    // Get a Variable.
+    rpc GetVariable (Variable) returns (Variable);
+    // Add a Variable.
+    rpc AddVariable (Variable) returns (AddVariableResponse);
+    // Update a Variable.
+    rpc UpdateVariable (Variable) returns (UpdateVariableResponse);
+    // Delete a Variable.
+    rpc DeleteVariable (Variable) returns (DeleteVariableResponse);
+    // Watch a Variable.
+    rpc WatchVariable (Variable) returns (stream WatchVariableResponse);
 }
 
-message Job {
-    // Metadata for Job object.
+message Variable {
     core.v1alpha.ObjectMetadata objectMetadata = 1;
-    // Spec for Job.
-    core.v1alpha.Include spec = 2;
+    VariableSpec spec = 2;
 }
 
-message AddJobResponse {}
+// Variables variables file structure. This covers the "Variables File" and "'From Host' Static Variable File".
+message VariableSpec {
+    // Type.
+    string type = 1;
+    // Variables.
+    map<string, google.protobuf.Any> variables = 2;
+}
 
-message UpdateJobResponse {}
+message AddVariableResponse {}
 
-message DeleteJobResponse {}
+message UpdateVariableResponse {}
 
-message WatchJobResponse {
+message DeleteVariableResponse {}
+
+message WatchVariableResponse {
     // Event info for watch response.
     events.v1alpha.Event event = 1;
-    // Job for watch response.
-    Job job = 2;
+    // Variable for watch response.
+    Variable variable = 2;
 }

@@ -14,15 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package config
+package tasks
 
-// Config config file structure
-type Config struct {
-	DataStore DataStore `yaml:"dataStore"`
-}
-
-// DataStore config for the data store
-type DataStore struct {
-	Type  string `yaml:"type"`
-	Count int64  `yaml:"count"`
-}
+const (
+	// APIName the name of the API.
+	APIName = "tasks"
+)

@@ -18,6 +18,7 @@ package core.v1alpha;
 option go_package = "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha";
 
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "google/protobuf/duration.proto";
 
 option (gogoproto.goproto_stringer_all) = false;
 option (gogoproto.stringer_all) =  true;
@@ -51,4 +52,28 @@ message VersionResponse {
     int64 patch = 4;
     // API state (e.g., alpha, beta, stable).
     string state = 5;
+}
+
+message Include {
+    // Name of include (if no paths are given, will be used as file name/path).
+    string name = 1;
+    // List of paths.
+    repeated string paths = 2;
+}
+
+message Conditions {
+    // `when` condition.
+    Condition when = 1;
+    // `success` condition.
+    Condition success = 2;
+}
+
+message Condition {
+    string condition = 1;
+    Retry retry = 2;
+}
+
+message Retry {
+    google.protobuf.Duration interval = 1;
+    int64 limit = 2;
 }

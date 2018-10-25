@@ -14,11 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package jobs
+package config
 
-import (
-	"github.com/galexrt/edenconfmgmt/pkg/models/common"
+const (
+	// APIName the name of the API.
+	APIName = "config"
 )
-
-// Jobs list of jobs structure.
-type Jobs map[string]common.Base

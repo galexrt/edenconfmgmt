@@ -14,13 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package templatemacros
+package core
 
-// TemplateMacros map of TemplateMacro.
-type TemplateMacros map[string]TemplateMacro
-
-// TemplateMacro containing info about a user defined function/template expression.
-type TemplateMacro struct {
-	Action     string                   `yaml:"action"`
-	Parameters []map[string]interface{} `yaml:"parameters"`
-}
+const (
+	// APIName the name of the API.
+	APIName = "core"
+)

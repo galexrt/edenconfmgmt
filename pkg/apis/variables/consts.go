@@ -16,5 +16,7 @@ limitations under the License.
 
 package variables
 
-// Variables variables file structure. This covers the "Variables File" and "'From Host' Static Variable File".
-type Variables map[string]interface{}
+const (
+	// APIName the name of the API.
+	APIName = "variables"
+)

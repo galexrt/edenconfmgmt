@@ -14,10 +14,11 @@
 
 syntax = 'proto3';
 
-package jobs.v1alpha;
-option go_package = "github.com/galexrt/edenconfmgmt/pkg/apis/jobs/v1alpha";
+package templatemacros.v1alpha;
+option go_package = "github.com/galexrt/edenconfmgmt/pkg/apis/templatemacros/v1alpha";
 
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "google/protobuf/any.proto";
 import "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha/api.proto";
 import "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha/api.proto";
 
@@ -29,37 +30,49 @@ option (gogoproto.sizer_all) = true;
 option (gogoproto.unmarshaler_all) = true;
 option (gogoproto.goproto_unrecognized_all) = false;
 
-service JobsService {
+service TemplateMacrossService {
     // Version returns the API version.
     rpc Version (core.v1alpha.VersionRequest) returns (core.v1alpha.VersionResponse);
-    // Get a Job.
-    rpc GetJob (Job) returns (Job);
-    // Add a Job.
-    rpc AddJob (Job) returns (AddJobResponse);
-    // Update a Job.
-    rpc UpdateJob (Job) returns (UpdateJobResponse);
-    // Delete a Job.
-    rpc DeleteJob (Job) returns (DeleteJobResponse);
-    // Watch a Job.
-    rpc WatchJob (Job) returns (stream WatchJobResponse);
+    // Get a TemplateMacros.
+    rpc GetTemplateMacros (TemplateMacros) returns (TemplateMacros);
+    // Add a TemplateMacros.
+    rpc AddTemplateMacros (TemplateMacros) returns (AddTemplateMacrosResponse);
+    // Update a TemplateMacros.
+    rpc UpdateTemplateMacros (TemplateMacros) returns (UpdateTemplateMacrosResponse);
+    // Delete a TemplateMacros.
+    rpc DeleteTemplateMacros (TemplateMacros) returns (DeleteTemplateMacrosResponse);
+    // Watch a TemplateMacros.
+    rpc WatchTemplateMacros (TemplateMacros) returns (stream WatchTemplateMacrosResponse);
 }
 
-message Job {
-    // Metadata for Job object.
+// DataStore templatemacros for the data store.
+message TemplateMacros {
+    // Metadata for TemplateMacros object.
     core.v1alpha.ObjectMetadata objectMetadata = 1;
-    // Spec for Job.
-    core.v1alpha.Include spec = 2;
+    // Spec for TemplateMacros.
+    TemplateMacrosSpec spec = 2;
 }
 
-message AddJobResponse {}
+message TemplateMacrosSpec {
+    repeated TemplateMacro templateMacros = 1;
+}
 
-message UpdateJobResponse {}
+message TemplateMacro {
+    // Action.
+    string Action = 1;
+    // Parameters.
+    repeated google.protobuf.Any parameters = 2;
+}
 
-message DeleteJobResponse {}
+message AddTemplateMacrosResponse {}
 
-message WatchJobResponse {
+message UpdateTemplateMacrosResponse {}
+
+message DeleteTemplateMacrosResponse {}
+
+message WatchTemplateMacrosResponse {
     // Event info for watch response.
     events.v1alpha.Event event = 1;
-    // Job for watch response.
-    Job job = 2;
+    // TemplateMacros for watch response.
+    TemplateMacros TemplateMacros = 2;
 }
