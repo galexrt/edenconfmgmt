@@ -59,7 +59,7 @@ message TemplateMacrosSpec {
 
 message TemplateMacro {
     // Action.
-    string Action = 1;
+    string action = 1;
     // Parameters.
     repeated google.protobuf.Any parameters = 2;
 }
