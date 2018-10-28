@@ -73,8 +73,8 @@ message RunOptions {
 message Serialize {
     // Count.
     int64 count = 1;
-    // FailAfterAllTargets.
-    bool failAfterAllTargets = 2;
+    // FailAfterAllTargetsRan.
+    bool failAfterAllTargetsRan = 2;
 }
 
 message Target {

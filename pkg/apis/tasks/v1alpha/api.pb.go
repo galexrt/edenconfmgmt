@@ -230,7 +230,7 @@ type Serialize struct {
 	// Count.
 	Count int64 `protobuf:"varint,1,opt,name=count,proto3" json:"count,omitempty"`
 	// FailAfterAllTargets.
-	FailAfterAllTargets  bool     `protobuf:"varint,2,opt,name=failAfterAllTargets,proto3" json:"failAfterAllTargets,omitempty"`
+	FailAfterAllTargets  bool     `protobuf:"varint,2,opt,name=failAfterAllTargetsRan,proto3" json:"failAfterAllTargetsRan,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_unrecognized     []byte   `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
