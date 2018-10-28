@@ -18,9 +18,11 @@ package v1alpha
 
 import (
 	"context"
+
+	core_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha"
 )
 
-// NodesService
+// NodesService handler for node events.
 type NodesService struct {
 	NodesServiceServer
 }
@@ -30,14 +32,14 @@ func NewServer() NodesServiceServer {
 	return &NodesService{}
 }
 
-// Version
-func (n *NodesService) Version(context.Context, *VersionRequest) (*VersionResponse, error) {
-	return &VersionResponse{
+// Version return core_v1alpha.VersionResponse.
+func (n *NodesService) Version(context.Context, *core_v1alpha.VersionRequest) (*core_v1alpha.VersionResponse, error) {
+	return &core_v1alpha.VersionResponse{
 		Version: "1",
 	}, nil
 }
 
-// AddNode
+// AddNode add a node.
 func (n *NodesService) AddNode(context.Context, *Node) (*AddNodeResponse, error) {
 	return &AddNodeResponse{}, nil
 }
