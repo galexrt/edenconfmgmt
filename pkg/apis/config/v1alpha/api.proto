@@ -47,7 +47,7 @@ service ConfigsService {
 // Config object base.
 message Config {
     // Metadata for Config object.
-    core.v1alpha.ObjectMetadata objectMetadata = 1;
+    core.v1alpha.ObjectMetadata metadata = 1;
     // Spec for Config.
     ConfigSpec spec = 2;
 }

@@ -29,14 +29,18 @@ option (gogoproto.unmarshaler_all) = true;
 option (gogoproto.goproto_unrecognized_all) = false;
 
 message ObjectMetadata {
-    // ID of object.
-    string id = 1;
+    // APIVersion of object.
+    string apiVersion = 1;
+    // Kind of object.
+    string kind = 2;
+    // UUID of object.
+    string uuid = 3;
     // Name of object.
-    string name = 2;
+    string name = 4;
     // Labels of object.
-    map<string, string> labels = 3;
+    map<string, string> labels = 5;
     // Annotations of object.
-    map<string, string> annotations = 4;
+    map<string, string> annotations = 6;
 }
 
 message VersionRequest {}

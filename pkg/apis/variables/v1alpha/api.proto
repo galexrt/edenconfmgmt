@@ -46,16 +46,18 @@ service VariablesService {
 }
 
 message Variable {
-    core.v1alpha.ObjectMetadata objectMetadata = 1;
+    // Metadata for Variable object.
+    core.v1alpha.ObjectMetadata metadata = 1;
+    // Spec for Variable.
     VariableSpec spec = 2;
 }
 
 // Variables variables file structure. This covers the "Variables File" and "'From Host' Static Variable File".
 message VariableSpec {
-    // Type.
-    string type = 1;
     // Variables.
-    map<string, google.protobuf.Any> variables = 2;
+    map<string, google.protobuf.Any> variables = 1;
+    // Type of variable.
+    string type = 2;
 }
 
 message AddVariableResponse {}

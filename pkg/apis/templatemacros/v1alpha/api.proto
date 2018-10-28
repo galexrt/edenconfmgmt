@@ -48,7 +48,7 @@ service TemplateMacrossService {
 // DataStore templatemacros for the data store.
 message TemplateMacros {
     // Metadata for TemplateMacros object.
-    core.v1alpha.ObjectMetadata objectMetadata = 1;
+    core.v1alpha.ObjectMetadata metadata = 1;
     // Spec for TemplateMacros.
     TemplateMacrosSpec spec = 2;
 }

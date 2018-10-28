@@ -48,7 +48,7 @@ service EventReactorsService {
 // EventReactor Reaction to certain events.
 message EventReactor {
     // Metadata for EventReactor object.
-    core.v1alpha.ObjectMetadata objectMetadata = 1;
+    core.v1alpha.ObjectMetadata metadata = 1;
     // Spec for EventReactor.
     EventReactorSpec spec = 2;
 }

@@ -46,7 +46,7 @@ service JobsService {
 
 message Job {
     // Metadata for Job object.
-    core.v1alpha.ObjectMetadata objectMetadata = 1;
+    core.v1alpha.ObjectMetadata metadata = 1;
     // Spec for Job.
     core.v1alpha.Include spec = 2;
 }

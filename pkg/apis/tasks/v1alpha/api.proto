@@ -47,7 +47,7 @@ service TasksService {
 
 message Task {
     // Metadata for Task object.
-    core.v1alpha.ObjectMetadata objectMetadata = 1;
+    core.v1alpha.ObjectMetadata metadata = 1;
     // Spec for Task.
     TaskSpec spec = 2;
 }

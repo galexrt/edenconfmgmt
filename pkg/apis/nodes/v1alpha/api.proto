@@ -46,7 +46,7 @@ service NodesService {
 
 message Node {
     // Metadata for Node object.
-    core.v1alpha.ObjectMetadata objectMetadata = 1;
+    core.v1alpha.ObjectMetadata metadata = 1;
     // Spec for Node.
     NodeSpec spec = 2;
 }

@@ -45,7 +45,7 @@ service EventService {
 
 message Event {
     // Metadata for the Job object.
-    core.v1alpha.ObjectMetadata objectMetadata = 1;
+    core.v1alpha.ObjectMetadata metadata = 1;
     // Spec for Event.
     EventSpec spec = 2;
 }
