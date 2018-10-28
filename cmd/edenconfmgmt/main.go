@@ -19,7 +19,7 @@ package main
 import (
 	"context"
 	"fmt"
-	"log"
+	"io"
 	"net"
 	"net/http"
 	"os"
@@ -30,12 +30,17 @@ import (
 
 	nodes_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/nodes/v1alpha"
 	"github.com/grpc-ecosystem/go-grpc-prometheus"
+	"github.com/grpc-ecosystem/grpc-opentracing/go/otgrpc"
+	opentracing "github.com/opentracing/opentracing-go"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/prometheus/common/version"
 	"github.com/rs/zerolog"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	jaeger "github.com/uber/jaeger-client-go"
+	"github.com/uber/jaeger-client-go/config"
+	jaeger_prometheus "github.com/uber/jaeger-lib/metrics/prometheus"
 	"google.golang.org/grpc"
 )
 
@@ -70,6 +75,22 @@ func main() {
 	Execute()
 }
 
+// initJaeger returns an instance of Jaeger Tracer that samples 100% of traces and logs all spans to stdout.
+func initJaeger(service string) (opentracing.Tracer, io.Closer, error) {
+	metricsFactory := jaeger_prometheus.New()
+
+	cfg := &config.Configuration{
+		Sampler: &config.SamplerConfig{
+			Type:  "const",
+			Param: 0.01,
+		},
+		Reporter: &config.ReporterConfig{
+			LogSpans: true,
+		},
+	}
+	return cfg.New(service, config.Logger(jaeger.StdLogger), config.Metrics(metricsFactory))
+}
+
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
@@ -90,15 +111,29 @@ func Run(cmd *cobra.Command, args []string) error {
 
 	lis, err := net.Listen("tcp", viper.GetString(listenAddressGRPC))
 	if err != nil {
-		log.Fatalf("failed to listen: %v", err)
+		logger.Fatal().Err(fmt.Errorf("failed to listen: %v", err))
 	}
+
+	var (
+		tracer opentracing.Tracer
+		closer io.Closer
+	)
+	if false {
+		tracer, closer, err = initJaeger("edenconfmgmt")
+		if err != nil {
+			logger.Fatal().Err(err)
+		}
+	} else {
+		tracer = opentracing.NoopTracer{}
+	}
+
+	opentracing.SetGlobalTracer(tracer)
 
 	opts := []grpc.ServerOption{
 		grpc.StreamInterceptor(grpc_prometheus.StreamServerInterceptor),
 		grpc.UnaryInterceptor(grpc_prometheus.UnaryServerInterceptor),
-		// TODO Implement opentracing
-		//grpc.WithUnaryInterceptor(otgrpc.OpenTracingClientInterceptor(tracer)),
-		//grpc.WithStreamInterceptor(otgrpc.OpenTracingStreamClientInterceptor(tracer)),
+		grpc.UnaryInterceptor(otgrpc.OpenTracingServerInterceptor(opentracing.GlobalTracer())),
+		grpc.StreamInterceptor(otgrpc.OpenTracingStreamServerInterceptor(opentracing.GlobalTracer())),
 	}
 
 	grpcServer := grpc.NewServer(opts...)
@@ -134,13 +169,13 @@ func Run(cmd *cobra.Command, args []string) error {
 		}
 	}()
 
-	/*wg.Add(1)
+	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		if err := nbs.Run(stopCh); err != nil {
-			logger.Error(err)
+		if err := magicRun(stopCh); err != nil {
+			logger.Error().Err(err)
 		}
-	}()*/
+	}()
 
 	<-sigCh
 	logger.Info().Msg("signal received, shutting down ...")
@@ -155,6 +190,7 @@ func Run(cmd *cobra.Command, args []string) error {
 	httpServer.Shutdown(ctx)
 
 	wg.Wait()
+	closer.Close()
 	return nil
 }
 
