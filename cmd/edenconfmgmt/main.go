@@ -29,8 +29,13 @@ import (
 	"time"
 
 	nodes_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/nodes/v1alpha"
-	"github.com/grpc-ecosystem/go-grpc-prometheus"
-	"github.com/grpc-ecosystem/grpc-opentracing/go/otgrpc"
+	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
+	grpc_auth "github.com/grpc-ecosystem/go-grpc-middleware/auth"
+	grpc_zap "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
+	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
+	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
+	grpc_opentracing "github.com/grpc-ecosystem/go-grpc-middleware/tracing/opentracing"
+	grpc_prometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
 	opentracing "github.com/opentracing/opentracing-go"
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
@@ -41,6 +46,7 @@ import (
 	jaeger "github.com/uber/jaeger-client-go"
 	"github.com/uber/jaeger-client-go/config"
 	jaeger_prometheus "github.com/uber/jaeger-lib/metrics/prometheus"
+	"go.uber.org/zap"
 	"google.golang.org/grpc"
 )
 
@@ -56,7 +62,7 @@ var (
 		Short: "Configuration management with automatic clustering, events and stuff.",
 		RunE:  Run,
 	}
-	logger = zerolog.New(os.Stderr).With().Timestamp().Logger()
+	logger *zap.Logger
 )
 
 func init() {
@@ -72,6 +78,12 @@ func init() {
 }
 
 func main() {
+	var err error
+	logger, err = zap.NewProduction()
+	if err != nil {
+		fmt.Printf("failed to create zap logger. %+v\n", err)
+		os.Exit(1)
+	}
 	Execute()
 }
 
@@ -95,7 +107,7 @@ func initJaeger(service string) (opentracing.Tracer, io.Closer, error) {
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
-		logger.Fatal().Err(err)
+		logger.Fatal("failed to execute root cmd", zap.Error(err))
 		os.Exit(1)
 	}
 	os.Exit(0)
@@ -103,7 +115,9 @@ func Execute() {
 
 // Run runs all routines to start the work of edenconfmgmt application.
 func Run(cmd *cobra.Command, args []string) error {
-	logger.Info().Msgf("starting %s (%s)", os.Args[0], version.Info())
+	grpc_zap.ReplaceGrpcLogger(logger)
+	defer logger.Sync()
+	logger.Info("starting", zap.String("command", os.Args[0]), zap.String("versionInfo", version.Info()))
 
 	stopCh := make(chan struct{})
 	sigCh := make(chan os.Signal)
@@ -111,35 +125,46 @@ func Run(cmd *cobra.Command, args []string) error {
 
 	lis, err := net.Listen("tcp", viper.GetString(listenAddressGRPC))
 	if err != nil {
-		logger.Fatal().Err(fmt.Errorf("failed to listen: %v", err))
+		logger.Fatal("failed to listen", zap.Error(err))
 	}
 
-	var (
-		tracer opentracing.Tracer
-		closer io.Closer
-	)
+	var tracer opentracing.Tracer
 	if false {
+		var closer io.Closer
 		tracer, closer, err = initJaeger("edenconfmgmt")
 		if err != nil {
-			logger.Fatal().Err(err)
+			logger.Fatal("failed to init jaeger", zap.Error(err))
 		}
+		defer closer.Close()
 	} else {
 		tracer = opentracing.NoopTracer{}
 	}
 
+	// grpc_opentracing automatically uses the global tracer so we set it.
 	opentracing.SetGlobalTracer(tracer)
 
 	opts := []grpc.ServerOption{
-		grpc.StreamInterceptor(grpc_prometheus.StreamServerInterceptor),
-		grpc.UnaryInterceptor(grpc_prometheus.UnaryServerInterceptor),
-		grpc.UnaryInterceptor(otgrpc.OpenTracingServerInterceptor(opentracing.GlobalTracer())),
-		grpc.StreamInterceptor(otgrpc.OpenTracingStreamServerInterceptor(opentracing.GlobalTracer())),
+		grpc.StreamInterceptor(grpc_middleware.ChainStreamServer(
+			grpc_ctxtags.StreamServerInterceptor(),
+			grpc_opentracing.StreamServerInterceptor(),
+			grpc_prometheus.StreamServerInterceptor,
+			grpc_zap.StreamServerInterceptor(logger),
+			grpc_auth.StreamServerInterceptor(AuthFunc),
+			grpc_recovery.StreamServerInterceptor(),
+		)),
+		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
+			grpc_ctxtags.UnaryServerInterceptor(),
+			grpc_opentracing.UnaryServerInterceptor(),
+			grpc_prometheus.UnaryServerInterceptor,
+			grpc_zap.UnaryServerInterceptor(logger),
+			grpc_auth.UnaryServerInterceptor(AuthFunc),
+			grpc_recovery.UnaryServerInterceptor(),
+		)),
 	}
-
 	grpcServer := grpc.NewServer(opts...)
 
 	// Register APIs to grpc server
-	registerAPIs(grpcServer)
+	registerGRPCAPIs(grpcServer)
 
 	reg := prometheus.NewRegistry()
 	grpcMetrics := grpc_prometheus.NewServerMetrics()
@@ -158,14 +183,14 @@ func Run(cmd *cobra.Command, args []string) error {
 	go func() {
 		defer wg.Done()
 		if err = httpServer.ListenAndServe(); err != nil {
-			logger.Fatal().Err(err)
+			logger.Error("failed to listen and serve http server", zap.Error(err))
 		}
 	}()
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
 		if err = grpcServer.Serve(lis); err != nil {
-			logger.Fatal().Err(fmt.Errorf("Serve() returned non-nil error on GracefulStop: %v", err))
+			logger.Error("grpcServer.Serve() returned non-nil error on GracefulStop", zap.Error(err))
 		}
 	}()
 
@@ -173,12 +198,12 @@ func Run(cmd *cobra.Command, args []string) error {
 	go func() {
 		defer wg.Done()
 		if err := magicRun(stopCh); err != nil {
-			logger.Error().Err(err)
+			logger.Error("magic run returned error", zap.Error(err))
 		}
 	}()
 
 	<-sigCh
-	logger.Info().Msg("signal received, shutting down ...")
+	logger.Info("signal received, shutting down ...")
 	close(stopCh)
 
 	// First shutdown grpc server
@@ -187,14 +212,15 @@ func Run(cmd *cobra.Command, args []string) error {
 	// Shutdown http server
 	ctx, cancel := context.WithTimeout(context.Background(), 15*time.Second)
 	defer cancel()
-	httpServer.Shutdown(ctx)
+	if err := httpServer.Shutdown(ctx); err != nil {
+		logger.Error("http server graceful shutdown failed", zap.Error(err))
+	}
 
 	wg.Wait()
-	closer.Close()
 	return nil
 }
 
-func registerAPIs(srv *grpc.Server) {
+func registerGRPCAPIs(srv *grpc.Server) {
 	nodesServiceServer := nodes_v1alpha.NewServer()
 	nodes_v1alpha.RegisterNodesServiceServer(srv, nodesServiceServer)
 }

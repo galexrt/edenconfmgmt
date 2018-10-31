@@ -16,6 +16,10 @@ limitations under the License.
 
 package main
 
+import (
+	"context"
+)
+
 func magicRun(stopCh chan struct{}) error {
 	// TODO
 	/*select {
@@ -23,4 +27,9 @@ func magicRun(stopCh chan struct{}) error {
 		return nil
 	}*/
 	return nil
+}
+
+func AuthFunc(ctx context.Context) (context.Context, error) {
+	// Nil
+	return ctx, nil
 }

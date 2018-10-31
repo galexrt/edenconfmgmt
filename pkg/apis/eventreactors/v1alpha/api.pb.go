@@ -81,7 +81,7 @@ type EventReactorSpec struct {
 	Reaction *Reaction `protobuf:"bytes,1,opt,name=reaction,proto3" json:"reaction,omitempty"`
 	// Conditions.
 	Task *v1alpha.Conditions `protobuf:"bytes,2,opt,name=task,proto3" json:"task,omitempty"`
-	// TriggerLimiter.
+	//TriggerLimiter.
 	TriggerLimiter       *TriggerLimiter `protobuf:"bytes,3,opt,name=triggerLimiter,proto3" json:"triggerLimiter,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
 	XXX_unrecognized     []byte          `json:"-"`
