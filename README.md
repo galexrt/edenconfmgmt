@@ -1,6 +1,6 @@
 # edenconfmgmt
 
-Configuration management with automatic clustering, events and stuff.
+WIP Configuration management with automatic clustering, events and stuff.
 
 Inspired by [mgmt](https://github.com/purpleidea/mgmt), [Ansible](https://www.ansible.com/) and [Salt](https://www.saltstack.com/).
 
