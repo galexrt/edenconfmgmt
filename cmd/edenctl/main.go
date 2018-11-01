@@ -24,6 +24,7 @@ import (
 	"time"
 
 	"github.com/coreos/pkg/capnslog"
+	core_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha"
 	nodes_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/nodes/v1alpha"
 	"github.com/spf13/cobra"
 	"google.golang.org/grpc"
@@ -46,7 +47,7 @@ var rootCmd = &cobra.Command{
 
 		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 		defer cancel()
-		versionRequest := &nodes_v1alpha.VersionRequest{}
+		versionRequest := &core_v1alpha.VersionRequest{}
 
 		versionResponse, err := nsClient.Version(ctx, versionRequest)
 		fmt.Printf("Version() Result: %+v - %+v\n", versionResponse, err)

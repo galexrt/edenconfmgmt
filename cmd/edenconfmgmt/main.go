@@ -29,8 +29,8 @@ import (
 	"time"
 
 	nodes_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/nodes/v1alpha"
+	"github.com/galexrt/edenconfmgmt/pkg/auth"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
-	grpc_auth "github.com/grpc-ecosystem/go-grpc-middleware/auth"
 	grpc_zap "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
 	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
 	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
@@ -40,7 +40,6 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/prometheus/common/version"
-	"github.com/rs/zerolog"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	jaeger "github.com/uber/jaeger-client-go"
@@ -66,8 +65,6 @@ var (
 )
 
 func init() {
-	zerolog.SetGlobalLevel(zerolog.DebugLevel)
-	zerolog.TimeFieldFormat = ""
 	rootCmd.PersistentFlags().String(listenAddressGRPC, ":1337", "grpc listen address")
 	rootCmd.PersistentFlags().String(listenAddressHTTP, ":1338", "http listen address")
 	//rootCmd.PersistentFlags().StringSliceVarP(&cmdOpts.neighbors, "neighbors", "n", []string{}, "comma separated list of other neighbors")
@@ -79,11 +76,13 @@ func init() {
 
 func main() {
 	var err error
-	logger, err = zap.NewProduction()
+	//logger, err = zap.NewProduction()
+	logger, err = zap.NewDevelopment()
 	if err != nil {
 		fmt.Printf("failed to create zap logger. %+v\n", err)
 		os.Exit(1)
 	}
+	defer logger.Sync()
 	Execute()
 }
 
@@ -115,8 +114,6 @@ func Execute() {
 
 // Run runs all routines to start the work of edenconfmgmt application.
 func Run(cmd *cobra.Command, args []string) error {
-	grpc_zap.ReplaceGrpcLogger(logger)
-	defer logger.Sync()
 	logger.Info("starting", zap.String("command", os.Args[0]), zap.String("versionInfo", version.Info()))
 
 	stopCh := make(chan struct{})
@@ -143,13 +140,16 @@ func Run(cmd *cobra.Command, args []string) error {
 	// grpc_opentracing automatically uses the global tracer so we set it.
 	opentracing.SetGlobalTracer(tracer)
 
+	// Auth
+	authProvider := auth.New()
+
 	opts := []grpc.ServerOption{
 		grpc.StreamInterceptor(grpc_middleware.ChainStreamServer(
 			grpc_ctxtags.StreamServerInterceptor(),
 			grpc_opentracing.StreamServerInterceptor(),
 			grpc_prometheus.StreamServerInterceptor,
 			grpc_zap.StreamServerInterceptor(logger),
-			grpc_auth.StreamServerInterceptor(AuthFunc),
+			authProvider.StreamInterceptor,
 			grpc_recovery.StreamServerInterceptor(),
 		)),
 		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
@@ -157,11 +157,12 @@ func Run(cmd *cobra.Command, args []string) error {
 			grpc_opentracing.UnaryServerInterceptor(),
 			grpc_prometheus.UnaryServerInterceptor,
 			grpc_zap.UnaryServerInterceptor(logger),
-			grpc_auth.UnaryServerInterceptor(AuthFunc),
+			authProvider.UnaryInterceptor,
 			grpc_recovery.UnaryServerInterceptor(),
 		)),
 	}
 	grpcServer := grpc.NewServer(opts...)
+	grpc_zap.ReplaceGrpcLogger(logger)
 
 	// Register APIs to grpc server
 	registerGRPCAPIs(grpcServer)

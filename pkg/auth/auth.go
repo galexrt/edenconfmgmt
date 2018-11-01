@@ -14,13 +14,15 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package main
+package auth
 
-func magicRun(stopCh chan struct{}) error {
-	// TODO
-	/*select {
-	case <-stopCh:
-		return nil
-	}*/
-	return nil
+// Auth
+type Auth struct {
+	StreamAuthorizeFuncs []StreamAuthorizeFunc
+	UnaryAuthorizeFuncs  []UnaryAuthorizeFunc
+}
+
+// New return new Auth
+func New() *Auth {
+	return &Auth{}
 }
