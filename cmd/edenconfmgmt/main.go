@@ -50,8 +50,9 @@ import (
 )
 
 const (
-	listenAddressGRPC = "listen-address-grpc"
-	listenAddressHTTP = "listen-address-http"
+	flagProductionMode    = "production"
+	flagListenAddressGRPC = "listen-address-grpc"
+	flagListenAddressHTTP = "listen-address-http"
 )
 
 var (
@@ -59,30 +60,44 @@ var (
 	rootCmd = &cobra.Command{
 		Use:   "edenconfmgmt",
 		Short: "Configuration management with automatic clustering, events and stuff.",
-		RunE:  Run,
+		PersistentPreRun: func(cmd *cobra.Command, args []string) {
+			var err error
+			if viper.GetBool(flagProductionMode) {
+				logger, err = zap.NewProduction()
+			} else {
+				logger, err = zap.NewDevelopment()
+			}
+			if err != nil {
+				fmt.Printf("failed to create zap logger. %+v\n", err)
+				os.Exit(1)
+			}
+		},
+		RunE: Run,
 	}
+	// Logger for logging.
 	logger *zap.Logger
+	// Prometheus metrics registry.
+	promReg = prometheus.NewRegistry()
+	// grpc prometheus server metrics.
+	grpcMetrics = grpc_prometheus.NewServerMetrics()
 )
 
 func init() {
-	rootCmd.PersistentFlags().String(listenAddressGRPC, ":1337", "grpc listen address")
-	rootCmd.PersistentFlags().String(listenAddressHTTP, ":1338", "http listen address")
+	promReg.MustRegister(grpcMetrics)
+
+	rootCmd.PersistentFlags().Bool(flagProductionMode, true, "production mode (logger will use different output format)")
+	rootCmd.PersistentFlags().String(flagListenAddressGRPC, ":1337", "grpc listen address")
+	rootCmd.PersistentFlags().String(flagListenAddressHTTP, ":1338", "http listen address")
 	//rootCmd.PersistentFlags().StringSliceVarP(&cmdOpts.neighbors, "neighbors", "n", []string{}, "comma separated list of other neighbors")
-	viper.BindPFlag(listenAddressGRPC, rootCmd.PersistentFlags().Lookup(listenAddressGRPC))
-	viper.BindPFlag(listenAddressHTTP, rootCmd.PersistentFlags().Lookup(listenAddressHTTP))
-	viper.SetDefault(listenAddressGRPC, ":1337")
-	viper.SetDefault(listenAddressHTTP, ":1338")
+	viper.BindPFlag(flagProductionMode, rootCmd.PersistentFlags().Lookup(flagProductionMode))
+	viper.BindPFlag(flagListenAddressGRPC, rootCmd.PersistentFlags().Lookup(flagListenAddressGRPC))
+	viper.BindPFlag(flagListenAddressHTTP, rootCmd.PersistentFlags().Lookup(flagListenAddressHTTP))
+	viper.SetDefault(flagProductionMode, true)
+	viper.SetDefault(flagListenAddressGRPC, ":1337")
+	viper.SetDefault(flagListenAddressHTTP, ":1338")
 }
 
 func main() {
-	var err error
-	//logger, err = zap.NewProduction()
-	logger, err = zap.NewDevelopment()
-	if err != nil {
-		fmt.Printf("failed to create zap logger. %+v\n", err)
-		os.Exit(1)
-	}
-	defer logger.Sync()
 	Execute()
 }
 
@@ -114,13 +129,15 @@ func Execute() {
 
 // Run runs all routines to start the work of edenconfmgmt application.
 func Run(cmd *cobra.Command, args []string) error {
+	defer logger.Sync()
 	logger.Info("starting", zap.String("command", os.Args[0]), zap.String("versionInfo", version.Info()))
 
 	stopCh := make(chan struct{})
 	sigCh := make(chan os.Signal)
 	signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM)
 
-	lis, err := net.Listen("tcp", viper.GetString(listenAddressGRPC))
+	// TODO Implement TLS
+	lis, err := net.Listen("tcp", viper.GetString(flagListenAddressGRPC))
 	if err != nil {
 		logger.Fatal("failed to listen", zap.Error(err))
 	}
@@ -141,13 +158,16 @@ func Run(cmd *cobra.Command, args []string) error {
 	opentracing.SetGlobalTracer(tracer)
 
 	// Auth
-	authProvider := auth.New()
+	authProvider, err := auth.New()
+	if err != nil {
+		logger.Fatal("failed to init auth", zap.Error(err))
+	}
 
 	opts := []grpc.ServerOption{
 		grpc.StreamInterceptor(grpc_middleware.ChainStreamServer(
 			grpc_ctxtags.StreamServerInterceptor(),
 			grpc_opentracing.StreamServerInterceptor(),
-			grpc_prometheus.StreamServerInterceptor,
+			grpcMetrics.StreamServerInterceptor(),
 			grpc_zap.StreamServerInterceptor(logger),
 			authProvider.StreamInterceptor,
 			grpc_recovery.StreamServerInterceptor(),
@@ -155,7 +175,7 @@ func Run(cmd *cobra.Command, args []string) error {
 		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
 			grpc_ctxtags.UnaryServerInterceptor(),
 			grpc_opentracing.UnaryServerInterceptor(),
-			grpc_prometheus.UnaryServerInterceptor,
+			grpcMetrics.UnaryServerInterceptor(),
 			grpc_zap.UnaryServerInterceptor(logger),
 			authProvider.UnaryInterceptor,
 			grpc_recovery.UnaryServerInterceptor(),
@@ -167,15 +187,13 @@ func Run(cmd *cobra.Command, args []string) error {
 	// Register APIs to grpc server
 	registerGRPCAPIs(grpcServer)
 
-	reg := prometheus.NewRegistry()
-	grpcMetrics := grpc_prometheus.NewServerMetrics()
-	reg.MustRegister(grpcMetrics)
+	// Initialize Prometheus GRPC metrics.
 	grpcMetrics.InitializeMetrics(grpcServer)
 
 	// Create a HTTP server for prometheus.
 	httpServer := &http.Server{
-		Handler: promhttp.HandlerFor(reg, promhttp.HandlerOpts{}),
-		Addr:    viper.GetString(listenAddressHTTP),
+		Handler: promhttp.HandlerFor(promReg, promhttp.HandlerOpts{}),
+		Addr:    viper.GetString(flagListenAddressHTTP),
 	}
 
 	wg := sync.WaitGroup{}

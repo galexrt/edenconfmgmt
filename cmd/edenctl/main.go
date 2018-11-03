@@ -23,37 +23,41 @@ import (
 	"os"
 	"time"
 
-	"github.com/coreos/pkg/capnslog"
 	core_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha"
 	nodes_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/nodes/v1alpha"
 	"github.com/spf13/cobra"
+	"go.uber.org/zap"
 	"google.golang.org/grpc"
 )
 
-var logger = capnslog.NewPackageLogger("github.com/galexrt/edenconfmgmt", "cmd/edenctl")
-
 // rootCmd represents the base command when called without any subcommands
-var rootCmd = &cobra.Command{
-	Use:   "edenctl",
-	Short: "Configuration management with automatic clustering, events and stuff.",
-	RunE: func(cmd *cobra.Command, args []string) error {
-		opts := []grpc.DialOption{grpc.WithInsecure()}
-		cc, err := grpc.Dial("127.0.0.1:1337", opts...)
-		if err != nil {
-			log.Fatalf("fail to dial: %v", err)
-		}
-		defer cc.Close()
-		nsClient := nodes_v1alpha.NewNodesServiceClient(cc)
+var (
+	rootCmd = &cobra.Command{
+		Use:   "edenctl",
+		Short: "Configuration management with automatic clustering, events and stuff.",
+		RunE: func(cmd *cobra.Command, args []string) error {
+			opts := []grpc.DialOption{
+				grpc.WithInsecure(),
+			}
+			cc, err := grpc.Dial("127.0.0.1:1337", opts...)
+			if err != nil {
+				log.Fatalf("fail to dial: %v", err)
+			}
+			defer cc.Close()
+			nsClient := nodes_v1alpha.NewNodesServiceClient(cc)
 
-		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-		defer cancel()
-		versionRequest := &core_v1alpha.VersionRequest{}
+			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+			defer cancel()
+			versionRequest := &core_v1alpha.VersionRequest{}
 
-		versionResponse, err := nsClient.Version(ctx, versionRequest)
-		fmt.Printf("Version() Result: %+v - %+v\n", versionResponse, err)
-		return nil
-	},
-}
+			versionResponse, err := nsClient.Version(ctx, versionRequest)
+			fmt.Printf("Version() Result: %+v - %+v\n", versionResponse, err)
+			return nil
+		},
+	}
+	// Logger for logging.
+	logger *zap.Logger
+)
 
 func main() {
 	Execute()
@@ -63,7 +67,7 @@ func main() {
 // This is called by main.main(). It only needs to happen once to the rootCmd.
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
-		logger.Fatal(err)
+		logger.Fatal("failed to execute root cmd", zap.Error(err))
 		os.Exit(1)
 	}
 	os.Exit(0)

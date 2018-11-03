@@ -16,13 +16,13 @@ limitations under the License.
 
 package auth
 
-// Auth
+// Auth auth handler
 type Auth struct {
 	StreamAuthorizeFuncs []StreamAuthorizeFunc
 	UnaryAuthorizeFuncs  []UnaryAuthorizeFunc
 }
 
 // New return new Auth
-func New() *Auth {
-	return &Auth{}
+func New() (*Auth, error) {
+	return &Auth{}, nil
 }
