@@ -28,23 +28,23 @@ option (gogoproto.sizer_all) = true;
 option (gogoproto.unmarshaler_all) = true;
 option (gogoproto.goproto_unrecognized_all) = false;
 
-service EventService {
-    // Version returns the API version.
-    rpc Version (core.v1alpha.VersionRequest) returns (core.v1alpha.VersionResponse);
+service EventsService {
     // Get a Event.
-    rpc GetEvent (Event) returns (Event);
+    rpc Get (GetRequest) returns (GetResponse);
+    // List Events.
+    rpc List (ListRequest) returns (ListResponse);
     // Add a Event.
-    rpc AddEvent (Event) returns (Event);
+    rpc Add (AddRequest) returns (AddResponse);
     // Update a Event.
-    rpc UpdateEvent (Event) returns (Event);
+    rpc Update (UpdateRequest) returns (UpdateResponse);
     // Delete a Event.
-    rpc DeleteEvent (Event) returns (Event);
+    rpc Delete (DeleteRequest) returns (DeleteResponse);
     // Watch for Events.
-    rpc WatchEvents (Event) returns (WatchEventResponse);
+    rpc Watch (WatchRequest) returns (stream WatchResponse);
 }
 
 message Event {
-    // Metadata for the Job object.
+    // Metadata for the Event object.
     core.v1alpha.ObjectMetadata metadata = 1;
     // Spec for Event.
     EventSpec spec = 2;
@@ -57,7 +57,65 @@ message EventSpec {
     string summary = 2;
 }
 
-message WatchEventResponse {
-    // Event info for watch response.
-    events.v1alpha.Event event = 1;
+// Get
+message GetRequest {
+    core.v1alpha.GetOptions getOptions = 1;
+}
+
+message GetResponse {
+    // Event object.
+    Event event = 1;
+}
+
+// List
+message ListRequest {
+    core.v1alpha.ListOptions listOptions = 1;
+}
+
+message ListResponse {
+    // Event list.
+    repeated Event events = 1;
+}
+
+// Add
+message AddRequest {
+    // Event object.
+    Event event = 1;
+}
+
+message AddResponse {
+    // Event object.
+    Event event = 1;
+}
+
+// Update
+message UpdateRequest {
+    // Event object.
+    Event event = 1;
+}
+
+message UpdateResponse {
+    // Event object.
+    Event event = 1;
+}
+
+// Delete
+message DeleteRequest {
+    // Event object.
+    Event event = 1;
+}
+
+message DeleteResponse {
+    // Event object.
+    Event event = 1;
+}
+
+// Watch
+message WatchRequest {
+    core.v1alpha.WatchOptions watchOptions = 1;
+}
+
+message WatchResponse {
+    // Event for watch stream.
+    Event event = 1;
 }

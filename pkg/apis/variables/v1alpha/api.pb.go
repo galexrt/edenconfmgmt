@@ -125,101 +125,451 @@ func (m *VariableSpec) GetType() string {
 	return ""
 }
 
-type AddVariableResponse struct {
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+// Get
+type GetRequest struct {
+	GetOptions           *v1alpha.GetOptions `protobuf:"bytes,1,opt,name=getOptions,proto3" json:"getOptions,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}            `json:"-"`
+	XXX_unrecognized     []byte              `json:"-"`
+	XXX_sizecache        int32               `json:"-"`
 }
 
-func (m *AddVariableResponse) Reset()         { *m = AddVariableResponse{} }
-func (m *AddVariableResponse) String() string { return proto.CompactTextString(m) }
-func (*AddVariableResponse) ProtoMessage()    {}
-func (*AddVariableResponse) Descriptor() ([]byte, []int) {
+func (m *GetRequest) Reset()         { *m = GetRequest{} }
+func (m *GetRequest) String() string { return proto.CompactTextString(m) }
+func (*GetRequest) ProtoMessage()    {}
+func (*GetRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_6d9255d344b41b48, []int{2}
 }
 
-func (m *AddVariableResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_AddVariableResponse.Unmarshal(m, b)
+func (m *GetRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetRequest.Unmarshal(m, b)
 }
-func (m *AddVariableResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_AddVariableResponse.Marshal(b, m, deterministic)
+func (m *GetRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetRequest.Marshal(b, m, deterministic)
 }
-func (m *AddVariableResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AddVariableResponse.Merge(m, src)
+func (m *GetRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetRequest.Merge(m, src)
 }
-func (m *AddVariableResponse) XXX_Size() int {
-	return xxx_messageInfo_AddVariableResponse.Size(m)
+func (m *GetRequest) XXX_Size() int {
+	return xxx_messageInfo_GetRequest.Size(m)
 }
-func (m *AddVariableResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_AddVariableResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_AddVariableResponse proto.InternalMessageInfo
-
-type UpdateVariableResponse struct {
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+func (m *GetRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetRequest.DiscardUnknown(m)
 }
 
-func (m *UpdateVariableResponse) Reset()         { *m = UpdateVariableResponse{} }
-func (m *UpdateVariableResponse) String() string { return proto.CompactTextString(m) }
-func (*UpdateVariableResponse) ProtoMessage()    {}
-func (*UpdateVariableResponse) Descriptor() ([]byte, []int) {
+var xxx_messageInfo_GetRequest proto.InternalMessageInfo
+
+func (m *GetRequest) GetGetOptions() *v1alpha.GetOptions {
+	if m != nil {
+		return m.GetOptions
+	}
+	return nil
+}
+
+type GetResponse struct {
+	// Variable object.
+	Variable             *Variable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_unrecognized     []byte    `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
+}
+
+func (m *GetResponse) Reset()         { *m = GetResponse{} }
+func (m *GetResponse) String() string { return proto.CompactTextString(m) }
+func (*GetResponse) ProtoMessage()    {}
+func (*GetResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_6d9255d344b41b48, []int{3}
 }
 
-func (m *UpdateVariableResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_UpdateVariableResponse.Unmarshal(m, b)
+func (m *GetResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetResponse.Unmarshal(m, b)
 }
-func (m *UpdateVariableResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_UpdateVariableResponse.Marshal(b, m, deterministic)
+func (m *GetResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetResponse.Marshal(b, m, deterministic)
 }
-func (m *UpdateVariableResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UpdateVariableResponse.Merge(m, src)
+func (m *GetResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetResponse.Merge(m, src)
 }
-func (m *UpdateVariableResponse) XXX_Size() int {
-	return xxx_messageInfo_UpdateVariableResponse.Size(m)
+func (m *GetResponse) XXX_Size() int {
+	return xxx_messageInfo_GetResponse.Size(m)
 }
-func (m *UpdateVariableResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_UpdateVariableResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_UpdateVariableResponse proto.InternalMessageInfo
-
-type DeleteVariableResponse struct {
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+func (m *GetResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetResponse.DiscardUnknown(m)
 }
 
-func (m *DeleteVariableResponse) Reset()         { *m = DeleteVariableResponse{} }
-func (m *DeleteVariableResponse) String() string { return proto.CompactTextString(m) }
-func (*DeleteVariableResponse) ProtoMessage()    {}
-func (*DeleteVariableResponse) Descriptor() ([]byte, []int) {
+var xxx_messageInfo_GetResponse proto.InternalMessageInfo
+
+func (m *GetResponse) GetVariable() *Variable {
+	if m != nil {
+		return m.Variable
+	}
+	return nil
+}
+
+// List
+type ListRequest struct {
+	ListOptions          *v1alpha.ListOptions `protobuf:"bytes,1,opt,name=listOptions,proto3" json:"listOptions,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}             `json:"-"`
+	XXX_unrecognized     []byte               `json:"-"`
+	XXX_sizecache        int32                `json:"-"`
+}
+
+func (m *ListRequest) Reset()         { *m = ListRequest{} }
+func (m *ListRequest) String() string { return proto.CompactTextString(m) }
+func (*ListRequest) ProtoMessage()    {}
+func (*ListRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_6d9255d344b41b48, []int{4}
 }
 
-func (m *DeleteVariableResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_DeleteVariableResponse.Unmarshal(m, b)
+func (m *ListRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ListRequest.Unmarshal(m, b)
 }
-func (m *DeleteVariableResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_DeleteVariableResponse.Marshal(b, m, deterministic)
+func (m *ListRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ListRequest.Marshal(b, m, deterministic)
 }
-func (m *DeleteVariableResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeleteVariableResponse.Merge(m, src)
+func (m *ListRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListRequest.Merge(m, src)
 }
-func (m *DeleteVariableResponse) XXX_Size() int {
-	return xxx_messageInfo_DeleteVariableResponse.Size(m)
+func (m *ListRequest) XXX_Size() int {
+	return xxx_messageInfo_ListRequest.Size(m)
 }
-func (m *DeleteVariableResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_DeleteVariableResponse.DiscardUnknown(m)
+func (m *ListRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_ListRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_DeleteVariableResponse proto.InternalMessageInfo
+var xxx_messageInfo_ListRequest proto.InternalMessageInfo
 
-type WatchVariableResponse struct {
-	// Event info for watch response.
+func (m *ListRequest) GetListOptions() *v1alpha.ListOptions {
+	if m != nil {
+		return m.ListOptions
+	}
+	return nil
+}
+
+type ListResponse struct {
+	// Variable list.
+	Variables            []*Variable `protobuf:"bytes,1,rep,name=variables,proto3" json:"variables,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
+	XXX_unrecognized     []byte      `json:"-"`
+	XXX_sizecache        int32       `json:"-"`
+}
+
+func (m *ListResponse) Reset()         { *m = ListResponse{} }
+func (m *ListResponse) String() string { return proto.CompactTextString(m) }
+func (*ListResponse) ProtoMessage()    {}
+func (*ListResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6d9255d344b41b48, []int{5}
+}
+
+func (m *ListResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ListResponse.Unmarshal(m, b)
+}
+func (m *ListResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ListResponse.Marshal(b, m, deterministic)
+}
+func (m *ListResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListResponse.Merge(m, src)
+}
+func (m *ListResponse) XXX_Size() int {
+	return xxx_messageInfo_ListResponse.Size(m)
+}
+func (m *ListResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_ListResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ListResponse proto.InternalMessageInfo
+
+func (m *ListResponse) GetVariables() []*Variable {
+	if m != nil {
+		return m.Variables
+	}
+	return nil
+}
+
+// Add
+type AddRequest struct {
+	// Variable object.
+	Variable             *Variable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_unrecognized     []byte    `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
+}
+
+func (m *AddRequest) Reset()         { *m = AddRequest{} }
+func (m *AddRequest) String() string { return proto.CompactTextString(m) }
+func (*AddRequest) ProtoMessage()    {}
+func (*AddRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6d9255d344b41b48, []int{6}
+}
+
+func (m *AddRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_AddRequest.Unmarshal(m, b)
+}
+func (m *AddRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_AddRequest.Marshal(b, m, deterministic)
+}
+func (m *AddRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AddRequest.Merge(m, src)
+}
+func (m *AddRequest) XXX_Size() int {
+	return xxx_messageInfo_AddRequest.Size(m)
+}
+func (m *AddRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_AddRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AddRequest proto.InternalMessageInfo
+
+func (m *AddRequest) GetVariable() *Variable {
+	if m != nil {
+		return m.Variable
+	}
+	return nil
+}
+
+type AddResponse struct {
+	// Variable object.
+	Variable             *Variable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_unrecognized     []byte    `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
+}
+
+func (m *AddResponse) Reset()         { *m = AddResponse{} }
+func (m *AddResponse) String() string { return proto.CompactTextString(m) }
+func (*AddResponse) ProtoMessage()    {}
+func (*AddResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6d9255d344b41b48, []int{7}
+}
+
+func (m *AddResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_AddResponse.Unmarshal(m, b)
+}
+func (m *AddResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_AddResponse.Marshal(b, m, deterministic)
+}
+func (m *AddResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AddResponse.Merge(m, src)
+}
+func (m *AddResponse) XXX_Size() int {
+	return xxx_messageInfo_AddResponse.Size(m)
+}
+func (m *AddResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_AddResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AddResponse proto.InternalMessageInfo
+
+func (m *AddResponse) GetVariable() *Variable {
+	if m != nil {
+		return m.Variable
+	}
+	return nil
+}
+
+// Update
+type UpdateRequest struct {
+	// Variable object.
+	Variable             *Variable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_unrecognized     []byte    `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
+}
+
+func (m *UpdateRequest) Reset()         { *m = UpdateRequest{} }
+func (m *UpdateRequest) String() string { return proto.CompactTextString(m) }
+func (*UpdateRequest) ProtoMessage()    {}
+func (*UpdateRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6d9255d344b41b48, []int{8}
+}
+
+func (m *UpdateRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UpdateRequest.Unmarshal(m, b)
+}
+func (m *UpdateRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UpdateRequest.Marshal(b, m, deterministic)
+}
+func (m *UpdateRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateRequest.Merge(m, src)
+}
+func (m *UpdateRequest) XXX_Size() int {
+	return xxx_messageInfo_UpdateRequest.Size(m)
+}
+func (m *UpdateRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpdateRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UpdateRequest proto.InternalMessageInfo
+
+func (m *UpdateRequest) GetVariable() *Variable {
+	if m != nil {
+		return m.Variable
+	}
+	return nil
+}
+
+type UpdateResponse struct {
+	// Variable object.
+	Variable             *Variable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_unrecognized     []byte    `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
+}
+
+func (m *UpdateResponse) Reset()         { *m = UpdateResponse{} }
+func (m *UpdateResponse) String() string { return proto.CompactTextString(m) }
+func (*UpdateResponse) ProtoMessage()    {}
+func (*UpdateResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6d9255d344b41b48, []int{9}
+}
+
+func (m *UpdateResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UpdateResponse.Unmarshal(m, b)
+}
+func (m *UpdateResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UpdateResponse.Marshal(b, m, deterministic)
+}
+func (m *UpdateResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateResponse.Merge(m, src)
+}
+func (m *UpdateResponse) XXX_Size() int {
+	return xxx_messageInfo_UpdateResponse.Size(m)
+}
+func (m *UpdateResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpdateResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UpdateResponse proto.InternalMessageInfo
+
+func (m *UpdateResponse) GetVariable() *Variable {
+	if m != nil {
+		return m.Variable
+	}
+	return nil
+}
+
+// Delete
+type DeleteRequest struct {
+	// Variable object.
+	Variable             *Variable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_unrecognized     []byte    `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
+}
+
+func (m *DeleteRequest) Reset()         { *m = DeleteRequest{} }
+func (m *DeleteRequest) String() string { return proto.CompactTextString(m) }
+func (*DeleteRequest) ProtoMessage()    {}
+func (*DeleteRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6d9255d344b41b48, []int{10}
+}
+
+func (m *DeleteRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_DeleteRequest.Unmarshal(m, b)
+}
+func (m *DeleteRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_DeleteRequest.Marshal(b, m, deterministic)
+}
+func (m *DeleteRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteRequest.Merge(m, src)
+}
+func (m *DeleteRequest) XXX_Size() int {
+	return xxx_messageInfo_DeleteRequest.Size(m)
+}
+func (m *DeleteRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_DeleteRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DeleteRequest proto.InternalMessageInfo
+
+func (m *DeleteRequest) GetVariable() *Variable {
+	if m != nil {
+		return m.Variable
+	}
+	return nil
+}
+
+type DeleteResponse struct {
+	// Variable object.
+	Variable             *Variable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_unrecognized     []byte    `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
+}
+
+func (m *DeleteResponse) Reset()         { *m = DeleteResponse{} }
+func (m *DeleteResponse) String() string { return proto.CompactTextString(m) }
+func (*DeleteResponse) ProtoMessage()    {}
+func (*DeleteResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6d9255d344b41b48, []int{11}
+}
+
+func (m *DeleteResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_DeleteResponse.Unmarshal(m, b)
+}
+func (m *DeleteResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_DeleteResponse.Marshal(b, m, deterministic)
+}
+func (m *DeleteResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteResponse.Merge(m, src)
+}
+func (m *DeleteResponse) XXX_Size() int {
+	return xxx_messageInfo_DeleteResponse.Size(m)
+}
+func (m *DeleteResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_DeleteResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DeleteResponse proto.InternalMessageInfo
+
+func (m *DeleteResponse) GetVariable() *Variable {
+	if m != nil {
+		return m.Variable
+	}
+	return nil
+}
+
+// Watch
+type WatchRequest struct {
+	WatchOptions         *v1alpha.WatchOptions `protobuf:"bytes,1,opt,name=watchOptions,proto3" json:"watchOptions,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}              `json:"-"`
+	XXX_unrecognized     []byte                `json:"-"`
+	XXX_sizecache        int32                 `json:"-"`
+}
+
+func (m *WatchRequest) Reset()         { *m = WatchRequest{} }
+func (m *WatchRequest) String() string { return proto.CompactTextString(m) }
+func (*WatchRequest) ProtoMessage()    {}
+func (*WatchRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6d9255d344b41b48, []int{12}
+}
+
+func (m *WatchRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_WatchRequest.Unmarshal(m, b)
+}
+func (m *WatchRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_WatchRequest.Marshal(b, m, deterministic)
+}
+func (m *WatchRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_WatchRequest.Merge(m, src)
+}
+func (m *WatchRequest) XXX_Size() int {
+	return xxx_messageInfo_WatchRequest.Size(m)
+}
+func (m *WatchRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_WatchRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_WatchRequest proto.InternalMessageInfo
+
+func (m *WatchRequest) GetWatchOptions() *v1alpha.WatchOptions {
+	if m != nil {
+		return m.WatchOptions
+	}
+	return nil
+}
+
+type WatchResponse struct {
+	// Variable info for watch response.
 	Event *v1alpha1.Event `protobuf:"bytes,1,opt,name=event,proto3" json:"event,omitempty"`
 	// Variable for watch response.
 	Variable             *Variable `protobuf:"bytes,2,opt,name=variable,proto3" json:"variable,omitempty"`
@@ -228,39 +578,39 @@ type WatchVariableResponse struct {
 	XXX_sizecache        int32     `json:"-"`
 }
 
-func (m *WatchVariableResponse) Reset()         { *m = WatchVariableResponse{} }
-func (m *WatchVariableResponse) String() string { return proto.CompactTextString(m) }
-func (*WatchVariableResponse) ProtoMessage()    {}
-func (*WatchVariableResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6d9255d344b41b48, []int{5}
+func (m *WatchResponse) Reset()         { *m = WatchResponse{} }
+func (m *WatchResponse) String() string { return proto.CompactTextString(m) }
+func (*WatchResponse) ProtoMessage()    {}
+func (*WatchResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6d9255d344b41b48, []int{13}
 }
 
-func (m *WatchVariableResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_WatchVariableResponse.Unmarshal(m, b)
+func (m *WatchResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_WatchResponse.Unmarshal(m, b)
 }
-func (m *WatchVariableResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_WatchVariableResponse.Marshal(b, m, deterministic)
+func (m *WatchResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_WatchResponse.Marshal(b, m, deterministic)
 }
-func (m *WatchVariableResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_WatchVariableResponse.Merge(m, src)
+func (m *WatchResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_WatchResponse.Merge(m, src)
 }
-func (m *WatchVariableResponse) XXX_Size() int {
-	return xxx_messageInfo_WatchVariableResponse.Size(m)
+func (m *WatchResponse) XXX_Size() int {
+	return xxx_messageInfo_WatchResponse.Size(m)
 }
-func (m *WatchVariableResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_WatchVariableResponse.DiscardUnknown(m)
+func (m *WatchResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_WatchResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_WatchVariableResponse proto.InternalMessageInfo
+var xxx_messageInfo_WatchResponse proto.InternalMessageInfo
 
-func (m *WatchVariableResponse) GetEvent() *v1alpha1.Event {
+func (m *WatchResponse) GetEvent() *v1alpha1.Event {
 	if m != nil {
 		return m.Event
 	}
 	return nil
 }
 
-func (m *WatchVariableResponse) GetVariable() *Variable {
+func (m *WatchResponse) GetVariable() *Variable {
 	if m != nil {
 		return m.Variable
 	}
@@ -271,10 +621,18 @@ func init() {
 	proto.RegisterType((*Variable)(nil), "variables.v1alpha.Variable")
 	proto.RegisterType((*VariableSpec)(nil), "variables.v1alpha.VariableSpec")
 	proto.RegisterMapType((map[string]*any.Any)(nil), "variables.v1alpha.VariableSpec.VariablesEntry")
-	proto.RegisterType((*AddVariableResponse)(nil), "variables.v1alpha.AddVariableResponse")
-	proto.RegisterType((*UpdateVariableResponse)(nil), "variables.v1alpha.UpdateVariableResponse")
-	proto.RegisterType((*DeleteVariableResponse)(nil), "variables.v1alpha.DeleteVariableResponse")
-	proto.RegisterType((*WatchVariableResponse)(nil), "variables.v1alpha.WatchVariableResponse")
+	proto.RegisterType((*GetRequest)(nil), "variables.v1alpha.GetRequest")
+	proto.RegisterType((*GetResponse)(nil), "variables.v1alpha.GetResponse")
+	proto.RegisterType((*ListRequest)(nil), "variables.v1alpha.ListRequest")
+	proto.RegisterType((*ListResponse)(nil), "variables.v1alpha.ListResponse")
+	proto.RegisterType((*AddRequest)(nil), "variables.v1alpha.AddRequest")
+	proto.RegisterType((*AddResponse)(nil), "variables.v1alpha.AddResponse")
+	proto.RegisterType((*UpdateRequest)(nil), "variables.v1alpha.UpdateRequest")
+	proto.RegisterType((*UpdateResponse)(nil), "variables.v1alpha.UpdateResponse")
+	proto.RegisterType((*DeleteRequest)(nil), "variables.v1alpha.DeleteRequest")
+	proto.RegisterType((*DeleteResponse)(nil), "variables.v1alpha.DeleteResponse")
+	proto.RegisterType((*WatchRequest)(nil), "variables.v1alpha.WatchRequest")
+	proto.RegisterType((*WatchResponse)(nil), "variables.v1alpha.WatchResponse")
 }
 
 func init() {
@@ -282,41 +640,49 @@ func init() {
 }
 
 var fileDescriptor_6d9255d344b41b48 = []byte{
-	// 540 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0x54, 0x41, 0x6f, 0xd3, 0x4c,
-	0x10, 0xed, 0xb6, 0xe9, 0xf7, 0x25, 0x13, 0xa8, 0xca, 0x42, 0x50, 0x30, 0x60, 0xaa, 0x1c, 0x50,
-	0x00, 0xb1, 0x86, 0xf4, 0x40, 0xd5, 0x0b, 0x0a, 0x6a, 0xe9, 0x05, 0x84, 0xb4, 0x15, 0x25, 0xe2,
-	0xb6, 0x71, 0xa6, 0x4e, 0xa8, 0xe3, 0x35, 0xf6, 0x26, 0xc2, 0x07, 0x24, 0x2e, 0xdc, 0xf9, 0x51,
-	0x1c, 0x7a, 0xe4, 0xc8, 0x91, 0x86, 0x3f, 0x82, 0xb2, 0xb1, 0xdd, 0xa4, 0x5d, 0x4c, 0xe1, 0xb6,
-	0xb3, 0xef, 0xed, 0xf3, 0xbc, 0x79, 0x93, 0xc0, 0x8e, 0x37, 0x50, 0xfd, 0x51, 0x97, 0xb9, 0x72,
-	0xe8, 0x78, 0xc2, 0xc7, 0x0f, 0x91, 0x72, 0xb0, 0x87, 0x81, 0x2b, 0x83, 0xc3, 0xa1, 0x37, 0x54,
-	0x4e, 0x78, 0xe4, 0x39, 0x22, 0x1c, 0xc4, 0xce, 0x58, 0x44, 0x03, 0xd1, 0xf5, 0x31, 0x76, 0xc6,
-	0x8f, 0x85, 0x1f, 0xf6, 0xc5, 0xf4, 0x9a, 0x85, 0x91, 0x54, 0x92, 0x5e, 0xc9, 0x41, 0x96, 0x82,
-	0xd6, 0xc3, 0x79, 0x61, 0xe9, 0x49, 0x47, 0x33, 0xbb, 0xa3, 0x43, 0x5d, 0xe9, 0x42, 0x9f, 0x66,
-	0x0a, 0xd6, 0x0d, 0x4f, 0x4a, 0xcf, 0xc7, 0x53, 0x96, 0x08, 0x92, 0x14, 0x7a, 0x7a, 0xe1, 0x16,
-	0x5d, 0x19, 0xe1, 0xf9, 0xee, 0xac, 0xf6, 0x85, 0x05, 0x70, 0x8c, 0x81, 0x32, 0x18, 0x6c, 0x24,
-	0x50, 0x3e, 0x48, 0x2d, 0xd2, 0x2d, 0x28, 0x0f, 0x51, 0x89, 0x9e, 0x50, 0xa2, 0x4e, 0x36, 0x48,
-	0xb3, 0xda, 0xba, 0xc5, 0xa6, 0x5f, 0xce, 0xac, 0xb3, 0x57, 0xdd, 0x77, 0xe8, 0xaa, 0x97, 0x29,
-	0x87, 0xe7, 0x6c, 0xba, 0x09, 0xa5, 0x38, 0x44, 0xb7, 0xbe, 0xac, 0x5f, 0xdd, 0x61, 0xe7, 0xa6,
-	0xc6, 0xb2, 0x8f, 0xec, 0x87, 0xe8, 0x72, 0x4d, 0x6e, 0x7c, 0x25, 0x70, 0x69, 0xfe, 0x9a, 0xbe,
-	0x80, 0x4a, 0xfe, 0xb0, 0x4e, 0x36, 0x56, 0x9a, 0xd5, 0x16, 0xfb, 0x83, 0x54, 0x5e, 0xc4, 0xbb,
-	0x81, 0x8a, 0x12, 0x7e, 0x2a, 0x40, 0x29, 0x94, 0x54, 0x12, 0xa2, 0xee, 0xa9, 0xc2, 0xf5, 0xd9,
-	0xe2, 0xb0, 0xb6, 0xf8, 0x80, 0xae, 0xc3, 0xca, 0x11, 0x26, 0xda, 0x6e, 0x85, 0x4f, 0x8f, 0xf4,
-	0x3e, 0xac, 0x8e, 0x85, 0x3f, 0xc2, 0xd4, 0xcc, 0x35, 0x36, 0x0b, 0x90, 0x65, 0x01, 0xb2, 0x76,
-	0x90, 0xf0, 0x19, 0x65, 0x7b, 0x79, 0x8b, 0x34, 0x6a, 0x70, 0xb5, 0xdd, 0xeb, 0x65, 0xb2, 0x1c,
-	0xe3, 0x50, 0x06, 0x31, 0x36, 0xea, 0x70, 0xfd, 0x75, 0xd8, 0x13, 0x0a, 0x4d, 0xc8, 0x0e, 0xfa,
-	0x68, 0x40, 0x3e, 0x42, 0xed, 0x8d, 0x50, 0x6e, 0xff, 0x2c, 0x40, 0x1f, 0xc0, 0xaa, 0x4e, 0x30,
-	0x8d, 0xa5, 0xc6, 0x66, 0x79, 0xe6, 0x23, 0xd9, 0x9d, 0x96, 0x7c, 0xc6, 0xa1, 0x4f, 0xa0, 0x9c,
-	0x4d, 0x21, 0xf5, 0x70, 0xb3, 0x60, 0x8a, 0x3c, 0x27, 0xb7, 0x3e, 0x97, 0x60, 0x3d, 0x1f, 0xcf,
-	0x3e, 0x46, 0xe3, 0x81, 0x8b, 0xf4, 0x39, 0xfc, 0x7f, 0x80, 0x51, 0x3c, 0x90, 0x01, 0x3d, 0xb3,
-	0x0d, 0xe9, 0x35, 0xc7, 0xf7, 0x23, 0x8c, 0x95, 0x75, 0xfb, 0x37, 0x68, 0x6a, 0x61, 0x0f, 0xaa,
-	0x7b, 0xa8, 0xf2, 0x5d, 0x2b, 0x6a, 0xc9, 0x2a, 0x02, 0x29, 0x87, 0xea, 0xdc, 0xbc, 0x8b, 0x85,
-	0xee, 0x1a, 0x40, 0x43, 0x58, 0xb4, 0x03, 0x6b, 0x8b, 0x61, 0x15, 0xcb, 0xde, 0x33, 0x80, 0xe6,
-	0xb0, 0xa7, 0xca, 0x8b, 0x61, 0xff, 0xbd, 0xb2, 0x79, 0x59, 0x68, 0x07, 0x2e, 0x2f, 0x2c, 0x4b,
-	0xb1, 0x70, 0xd3, 0x00, 0x1a, 0x77, 0xed, 0x11, 0x79, 0xd6, 0x39, 0x3e, 0xb1, 0xc9, 0xf7, 0x13,
-	0x7b, 0xe9, 0xd3, 0xc4, 0x26, 0xc7, 0x13, 0x9b, 0x7c, 0x9b, 0xd8, 0xe4, 0xc7, 0xc4, 0x26, 0x5f,
-	0x7e, 0xda, 0x4b, 0x6f, 0xb7, 0xff, 0xfd, 0x8f, 0xb5, 0xfb, 0x9f, 0xfe, 0x11, 0x6d, 0xfe, 0x0a,
-	0x00, 0x00, 0xff, 0xff, 0x0f, 0x6a, 0xcd, 0x70, 0x9d, 0x05, 0x00, 0x00,
+	// 670 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x96, 0xdf, 0x4f, 0xd3, 0x50,
+	0x14, 0xc7, 0x29, 0x03, 0x02, 0x67, 0x83, 0xe0, 0x8d, 0x26, 0xa3, 0x6a, 0x99, 0x7d, 0x22, 0x1a,
+	0x5b, 0x85, 0x07, 0x11, 0x13, 0xcd, 0xcc, 0x60, 0x62, 0x86, 0x24, 0x25, 0x8a, 0xf1, 0xed, 0xae,
+	0x3d, 0x94, 0x4a, 0xd7, 0xd6, 0xf5, 0x6e, 0xba, 0x37, 0xff, 0x04, 0xff, 0x28, 0x1f, 0x78, 0x34,
+	0xf1, 0xc5, 0x47, 0x99, 0xff, 0x88, 0xd9, 0xed, 0xed, 0x2f, 0x28, 0x88, 0x8c, 0xb7, 0x7b, 0x77,
+	0xbe, 0xf7, 0xd3, 0xef, 0x39, 0xf7, 0x9c, 0x9b, 0x41, 0xc3, 0x76, 0xd8, 0x61, 0xaf, 0xad, 0x99,
+	0x7e, 0x47, 0xb7, 0xa9, 0x8b, 0x5f, 0xba, 0x4c, 0x47, 0x0b, 0x3d, 0xd3, 0xf7, 0x0e, 0x3a, 0x76,
+	0x87, 0xe9, 0xc1, 0x91, 0xad, 0xd3, 0xc0, 0x09, 0xf5, 0x3e, 0xed, 0x3a, 0xb4, 0xed, 0x62, 0xa8,
+	0xf7, 0x1f, 0x53, 0x37, 0x38, 0xa4, 0xa3, 0x9f, 0xb5, 0xa0, 0xeb, 0x33, 0x9f, 0xdc, 0x48, 0x82,
+	0x9a, 0x08, 0xca, 0x0f, 0xb3, 0x60, 0xdf, 0xf6, 0x75, 0xae, 0x6c, 0xf7, 0x0e, 0xf8, 0x8e, 0x6f,
+	0xf8, 0x2a, 0x22, 0xc8, 0x4b, 0xb6, 0xef, 0xdb, 0x2e, 0xa6, 0x2a, 0xea, 0x0d, 0x44, 0xe8, 0xc5,
+	0xa5, 0x2d, 0x9a, 0x7e, 0x17, 0xcf, 0xba, 0x93, 0xeb, 0x97, 0x06, 0x60, 0x1f, 0x3d, 0x56, 0x90,
+	0xa0, 0x3a, 0x80, 0xd9, 0x77, 0x22, 0x45, 0xb2, 0x0e, 0xb3, 0x1d, 0x64, 0xd4, 0xa2, 0x8c, 0x56,
+	0xa5, 0x9a, 0xb4, 0x52, 0x5e, 0xbd, 0xa3, 0x8d, 0xbe, 0x1c, 0xa7, 0xae, 0xed, 0xb6, 0x3f, 0xa2,
+	0xc9, 0x76, 0x84, 0xc6, 0x48, 0xd4, 0x64, 0x0d, 0xa6, 0xc2, 0x00, 0xcd, 0xea, 0x24, 0x3f, 0xb5,
+	0xac, 0x9d, 0xa9, 0x9a, 0x16, 0x7f, 0x64, 0x2f, 0x40, 0xd3, 0xe0, 0x62, 0xf5, 0xbb, 0x04, 0x95,
+	0xec, 0xcf, 0xa4, 0x05, 0x73, 0xc9, 0xc1, 0xaa, 0x54, 0x2b, 0xad, 0x94, 0x57, 0xb5, 0x7f, 0xa0,
+	0x92, 0x4d, 0xb8, 0xe9, 0xb1, 0xee, 0xc0, 0x48, 0x01, 0x84, 0xc0, 0x14, 0x1b, 0x04, 0xc8, 0x3d,
+	0xcd, 0x19, 0x7c, 0x2d, 0x1b, 0xb0, 0x90, 0x3f, 0x40, 0x16, 0xa1, 0x74, 0x84, 0x03, 0x9e, 0xee,
+	0x9c, 0x31, 0x5a, 0x92, 0xfb, 0x30, 0xdd, 0xa7, 0x6e, 0x0f, 0x45, 0x32, 0x37, 0xb5, 0xe8, 0x02,
+	0xb5, 0xf8, 0x02, 0xb5, 0xba, 0x37, 0x30, 0x22, 0xc9, 0xc6, 0xe4, 0xba, 0xa4, 0x6e, 0x01, 0x34,
+	0x91, 0x19, 0xf8, 0xa9, 0x87, 0x21, 0x23, 0xeb, 0x00, 0x36, 0xb2, 0xdd, 0x80, 0x39, 0xbe, 0x17,
+	0x8a, 0x2a, 0x56, 0xf3, 0x55, 0x6c, 0x26, 0x71, 0x23, 0xa3, 0x55, 0xb7, 0xa0, 0xcc, 0x39, 0x61,
+	0xe0, 0x7b, 0x21, 0x92, 0x27, 0x30, 0x1b, 0xe7, 0x22, 0x30, 0xb7, 0x2f, 0xa8, 0x85, 0x91, 0x88,
+	0xd5, 0xd7, 0x50, 0x6e, 0x39, 0x61, 0x62, 0xe8, 0x19, 0x94, 0x5d, 0x27, 0x3c, 0xe5, 0x68, 0x29,
+	0xef, 0xa8, 0x95, 0x0a, 0x8c, 0xac, 0x5a, 0xdd, 0x86, 0x4a, 0xc4, 0x12, 0xa6, 0x9e, 0x9e, 0xbd,
+	0xa1, 0x0b, 0x5d, 0xa5, 0x6a, 0x75, 0x13, 0xa0, 0x6e, 0x59, 0xb1, 0xab, 0x2b, 0x67, 0xb7, 0x05,
+	0x65, 0x8e, 0x19, 0xb7, 0x4a, 0xaf, 0x60, 0xfe, 0x6d, 0x60, 0x51, 0x86, 0x63, 0x3b, 0xda, 0x86,
+	0x85, 0x98, 0x74, 0x0d, 0xa6, 0x1a, 0xe8, 0xe2, 0xf5, 0x98, 0x8a, 0x49, 0xe3, 0x9a, 0x7a, 0x03,
+	0x95, 0x7d, 0xca, 0xcc, 0xc3, 0xd8, 0xd3, 0x73, 0xa8, 0x7c, 0x1e, 0xed, 0xf3, 0x1d, 0x25, 0xe7,
+	0x3b, 0x6a, 0x3f, 0xa3, 0x30, 0x72, 0x7a, 0xb5, 0x07, 0xf3, 0x82, 0x27, 0x9c, 0x3d, 0x80, 0x69,
+	0xfe, 0x3c, 0x09, 0xd2, 0x2d, 0x2d, 0x7a, 0xac, 0x12, 0xd6, 0xe6, 0x68, 0x6b, 0x44, 0x9a, 0x5c,
+	0x1a, 0x93, 0xff, 0x91, 0xc6, 0xea, 0xcf, 0x12, 0x2c, 0x26, 0xb3, 0xbf, 0x87, 0xdd, 0xbe, 0x63,
+	0x22, 0x69, 0x40, 0xa9, 0x89, 0x8c, 0xdc, 0x2d, 0x40, 0xa4, 0x33, 0x2d, 0x2b, 0xe7, 0x85, 0x45,
+	0x02, 0x4d, 0x98, 0x1a, 0x4d, 0x09, 0x29, 0xd2, 0x65, 0x46, 0x51, 0x5e, 0x3e, 0x37, 0x2e, 0x40,
+	0x0d, 0x28, 0xd5, 0x2d, 0xab, 0xd0, 0x4e, 0x3a, 0x3b, 0x85, 0x76, 0xb2, 0x33, 0xb1, 0x03, 0x33,
+	0x51, 0x43, 0x92, 0x5a, 0x81, 0x32, 0xd7, 0xf5, 0xf2, 0xbd, 0x0b, 0x14, 0x29, 0x2e, 0x6a, 0xa5,
+	0x42, 0x5c, 0xae, 0x5f, 0x0b, 0x71, 0xa7, 0xfa, 0xb0, 0x05, 0xd3, 0xfc, 0xfa, 0x49, 0x51, 0x35,
+	0xb2, 0x8d, 0x26, 0xd7, 0xce, 0x17, 0x44, 0xac, 0x47, 0xd2, 0xcb, 0xf7, 0xc7, 0x27, 0x8a, 0xf4,
+	0xeb, 0x44, 0x99, 0xf8, 0x3a, 0x54, 0xa4, 0xe3, 0xa1, 0x22, 0xfd, 0x18, 0x2a, 0xd2, 0xef, 0xa1,
+	0x22, 0x7d, 0xfb, 0xa3, 0x4c, 0x7c, 0xd8, 0xb8, 0xfa, 0x7f, 0x80, 0xf6, 0x0c, 0x7f, 0xef, 0xd7,
+	0xfe, 0x06, 0x00, 0x00, 0xff, 0xff, 0x99, 0x66, 0xa3, 0x95, 0x48, 0x08, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -331,18 +697,18 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type VariablesServiceClient interface {
-	// Version returns the API version.
-	Version(ctx context.Context, in *v1alpha.VersionRequest, opts ...grpc.CallOption) (*v1alpha.VersionResponse, error)
 	// Get a Variable.
-	GetVariable(ctx context.Context, in *Variable, opts ...grpc.CallOption) (*Variable, error)
+	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
+	// List Variable.
+	List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
 	// Add a Variable.
-	AddVariable(ctx context.Context, in *Variable, opts ...grpc.CallOption) (*AddVariableResponse, error)
+	Add(ctx context.Context, in *AddRequest, opts ...grpc.CallOption) (*AddResponse, error)
 	// Update a Variable.
-	UpdateVariable(ctx context.Context, in *Variable, opts ...grpc.CallOption) (*UpdateVariableResponse, error)
+	Update(ctx context.Context, in *UpdateRequest, opts ...grpc.CallOption) (*UpdateResponse, error)
 	// Delete a Variable.
-	DeleteVariable(ctx context.Context, in *Variable, opts ...grpc.CallOption) (*DeleteVariableResponse, error)
-	// Watch a Variable.
-	WatchVariable(ctx context.Context, in *Variable, opts ...grpc.CallOption) (VariablesService_WatchVariableClient, error)
+	Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*DeleteResponse, error)
+	// Watch Variable.
+	Watch(ctx context.Context, in *WatchRequest, opts ...grpc.CallOption) (VariablesService_WatchClient, error)
 }
 
 type variablesServiceClient struct {
@@ -353,57 +719,57 @@ func NewVariablesServiceClient(cc *grpc.ClientConn) VariablesServiceClient {
 	return &variablesServiceClient{cc}
 }
 
-func (c *variablesServiceClient) Version(ctx context.Context, in *v1alpha.VersionRequest, opts ...grpc.CallOption) (*v1alpha.VersionResponse, error) {
-	out := new(v1alpha.VersionResponse)
-	err := c.cc.Invoke(ctx, "/variables.v1alpha.VariablesService/Version", in, out, opts...)
+func (c *variablesServiceClient) Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error) {
+	out := new(GetResponse)
+	err := c.cc.Invoke(ctx, "/variables.v1alpha.VariablesService/Get", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *variablesServiceClient) GetVariable(ctx context.Context, in *Variable, opts ...grpc.CallOption) (*Variable, error) {
-	out := new(Variable)
-	err := c.cc.Invoke(ctx, "/variables.v1alpha.VariablesService/GetVariable", in, out, opts...)
+func (c *variablesServiceClient) List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error) {
+	out := new(ListResponse)
+	err := c.cc.Invoke(ctx, "/variables.v1alpha.VariablesService/List", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *variablesServiceClient) AddVariable(ctx context.Context, in *Variable, opts ...grpc.CallOption) (*AddVariableResponse, error) {
-	out := new(AddVariableResponse)
-	err := c.cc.Invoke(ctx, "/variables.v1alpha.VariablesService/AddVariable", in, out, opts...)
+func (c *variablesServiceClient) Add(ctx context.Context, in *AddRequest, opts ...grpc.CallOption) (*AddResponse, error) {
+	out := new(AddResponse)
+	err := c.cc.Invoke(ctx, "/variables.v1alpha.VariablesService/Add", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *variablesServiceClient) UpdateVariable(ctx context.Context, in *Variable, opts ...grpc.CallOption) (*UpdateVariableResponse, error) {
-	out := new(UpdateVariableResponse)
-	err := c.cc.Invoke(ctx, "/variables.v1alpha.VariablesService/UpdateVariable", in, out, opts...)
+func (c *variablesServiceClient) Update(ctx context.Context, in *UpdateRequest, opts ...grpc.CallOption) (*UpdateResponse, error) {
+	out := new(UpdateResponse)
+	err := c.cc.Invoke(ctx, "/variables.v1alpha.VariablesService/Update", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *variablesServiceClient) DeleteVariable(ctx context.Context, in *Variable, opts ...grpc.CallOption) (*DeleteVariableResponse, error) {
-	out := new(DeleteVariableResponse)
-	err := c.cc.Invoke(ctx, "/variables.v1alpha.VariablesService/DeleteVariable", in, out, opts...)
+func (c *variablesServiceClient) Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*DeleteResponse, error) {
+	out := new(DeleteResponse)
+	err := c.cc.Invoke(ctx, "/variables.v1alpha.VariablesService/Delete", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *variablesServiceClient) WatchVariable(ctx context.Context, in *Variable, opts ...grpc.CallOption) (VariablesService_WatchVariableClient, error) {
-	stream, err := c.cc.NewStream(ctx, &_VariablesService_serviceDesc.Streams[0], "/variables.v1alpha.VariablesService/WatchVariable", opts...)
+func (c *variablesServiceClient) Watch(ctx context.Context, in *WatchRequest, opts ...grpc.CallOption) (VariablesService_WatchClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_VariablesService_serviceDesc.Streams[0], "/variables.v1alpha.VariablesService/Watch", opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &variablesServiceWatchVariableClient{stream}
+	x := &variablesServiceWatchClient{stream}
 	if err := x.ClientStream.SendMsg(in); err != nil {
 		return nil, err
 	}
@@ -413,17 +779,17 @@ func (c *variablesServiceClient) WatchVariable(ctx context.Context, in *Variable
 	return x, nil
 }
 
-type VariablesService_WatchVariableClient interface {
-	Recv() (*WatchVariableResponse, error)
+type VariablesService_WatchClient interface {
+	Recv() (*WatchResponse, error)
 	grpc.ClientStream
 }
 
-type variablesServiceWatchVariableClient struct {
+type variablesServiceWatchClient struct {
 	grpc.ClientStream
 }
 
-func (x *variablesServiceWatchVariableClient) Recv() (*WatchVariableResponse, error) {
-	m := new(WatchVariableResponse)
+func (x *variablesServiceWatchClient) Recv() (*WatchResponse, error) {
+	m := new(WatchResponse)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
@@ -432,132 +798,132 @@ func (x *variablesServiceWatchVariableClient) Recv() (*WatchVariableResponse, er
 
 // VariablesServiceServer is the server API for VariablesService service.
 type VariablesServiceServer interface {
-	// Version returns the API version.
-	Version(context.Context, *v1alpha.VersionRequest) (*v1alpha.VersionResponse, error)
 	// Get a Variable.
-	GetVariable(context.Context, *Variable) (*Variable, error)
+	Get(context.Context, *GetRequest) (*GetResponse, error)
+	// List Variable.
+	List(context.Context, *ListRequest) (*ListResponse, error)
 	// Add a Variable.
-	AddVariable(context.Context, *Variable) (*AddVariableResponse, error)
+	Add(context.Context, *AddRequest) (*AddResponse, error)
 	// Update a Variable.
-	UpdateVariable(context.Context, *Variable) (*UpdateVariableResponse, error)
+	Update(context.Context, *UpdateRequest) (*UpdateResponse, error)
 	// Delete a Variable.
-	DeleteVariable(context.Context, *Variable) (*DeleteVariableResponse, error)
-	// Watch a Variable.
-	WatchVariable(*Variable, VariablesService_WatchVariableServer) error
+	Delete(context.Context, *DeleteRequest) (*DeleteResponse, error)
+	// Watch Variable.
+	Watch(*WatchRequest, VariablesService_WatchServer) error
 }
 
 func RegisterVariablesServiceServer(s *grpc.Server, srv VariablesServiceServer) {
 	s.RegisterService(&_VariablesService_serviceDesc, srv)
 }
 
-func _VariablesService_Version_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(v1alpha.VersionRequest)
+func _VariablesService_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(VariablesServiceServer).Version(ctx, in)
+		return srv.(VariablesServiceServer).Get(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/variables.v1alpha.VariablesService/Version",
+		FullMethod: "/variables.v1alpha.VariablesService/Get",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(VariablesServiceServer).Version(ctx, req.(*v1alpha.VersionRequest))
+		return srv.(VariablesServiceServer).Get(ctx, req.(*GetRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _VariablesService_GetVariable_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Variable)
+func _VariablesService_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(VariablesServiceServer).GetVariable(ctx, in)
+		return srv.(VariablesServiceServer).List(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/variables.v1alpha.VariablesService/GetVariable",
+		FullMethod: "/variables.v1alpha.VariablesService/List",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(VariablesServiceServer).GetVariable(ctx, req.(*Variable))
+		return srv.(VariablesServiceServer).List(ctx, req.(*ListRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _VariablesService_AddVariable_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Variable)
+func _VariablesService_Add_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(VariablesServiceServer).AddVariable(ctx, in)
+		return srv.(VariablesServiceServer).Add(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/variables.v1alpha.VariablesService/AddVariable",
+		FullMethod: "/variables.v1alpha.VariablesService/Add",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(VariablesServiceServer).AddVariable(ctx, req.(*Variable))
+		return srv.(VariablesServiceServer).Add(ctx, req.(*AddRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _VariablesService_UpdateVariable_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Variable)
+func _VariablesService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(VariablesServiceServer).UpdateVariable(ctx, in)
+		return srv.(VariablesServiceServer).Update(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/variables.v1alpha.VariablesService/UpdateVariable",
+		FullMethod: "/variables.v1alpha.VariablesService/Update",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(VariablesServiceServer).UpdateVariable(ctx, req.(*Variable))
+		return srv.(VariablesServiceServer).Update(ctx, req.(*UpdateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _VariablesService_DeleteVariable_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(Variable)
+func _VariablesService_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(VariablesServiceServer).DeleteVariable(ctx, in)
+		return srv.(VariablesServiceServer).Delete(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/variables.v1alpha.VariablesService/DeleteVariable",
+		FullMethod: "/variables.v1alpha.VariablesService/Delete",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(VariablesServiceServer).DeleteVariable(ctx, req.(*Variable))
+		return srv.(VariablesServiceServer).Delete(ctx, req.(*DeleteRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _VariablesService_WatchVariable_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(Variable)
+func _VariablesService_Watch_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(WatchRequest)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}
-	return srv.(VariablesServiceServer).WatchVariable(m, &variablesServiceWatchVariableServer{stream})
+	return srv.(VariablesServiceServer).Watch(m, &variablesServiceWatchServer{stream})
 }
 
-type VariablesService_WatchVariableServer interface {
-	Send(*WatchVariableResponse) error
+type VariablesService_WatchServer interface {
+	Send(*WatchResponse) error
 	grpc.ServerStream
 }
 
-type variablesServiceWatchVariableServer struct {
+type variablesServiceWatchServer struct {
 	grpc.ServerStream
 }
 
-func (x *variablesServiceWatchVariableServer) Send(m *WatchVariableResponse) error {
+func (x *variablesServiceWatchServer) Send(m *WatchResponse) error {
 	return x.ServerStream.SendMsg(m)
 }
 
@@ -566,30 +932,30 @@ var _VariablesService_serviceDesc = grpc.ServiceDesc{
 	HandlerType: (*VariablesServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Version",
-			Handler:    _VariablesService_Version_Handler,
+			MethodName: "Get",
+			Handler:    _VariablesService_Get_Handler,
 		},
 		{
-			MethodName: "GetVariable",
-			Handler:    _VariablesService_GetVariable_Handler,
+			MethodName: "List",
+			Handler:    _VariablesService_List_Handler,
 		},
 		{
-			MethodName: "AddVariable",
-			Handler:    _VariablesService_AddVariable_Handler,
+			MethodName: "Add",
+			Handler:    _VariablesService_Add_Handler,
 		},
 		{
-			MethodName: "UpdateVariable",
-			Handler:    _VariablesService_UpdateVariable_Handler,
+			MethodName: "Update",
+			Handler:    _VariablesService_Update_Handler,
 		},
 		{
-			MethodName: "DeleteVariable",
-			Handler:    _VariablesService_DeleteVariable_Handler,
+			MethodName: "Delete",
+			Handler:    _VariablesService_Delete_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
 		{
-			StreamName:    "WatchVariable",
-			Handler:       _VariablesService_WatchVariable_Handler,
+			StreamName:    "Watch",
+			Handler:       _VariablesService_Watch_Handler,
 			ServerStreams: true,
 		},
 	},

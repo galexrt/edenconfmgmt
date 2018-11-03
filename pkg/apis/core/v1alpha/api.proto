@@ -81,3 +81,22 @@ message Retry {
     google.protobuf.Duration interval = 1;
     int64 limit = 2;
 }
+
+message GetOptions {
+    // Name used for listing.
+    string name = 1;
+    // Label selector in string form.
+    repeated string labelSelectors = 2;
+}
+
+message ListOptions {
+    // Label selector in string form.
+    repeated string labelSelectors = 2;
+}
+
+message WatchOptions {
+    // Name used for listing.
+    string name = 1;
+    // Label selector in string form.
+    repeated string labelSelectors = 2;
+}

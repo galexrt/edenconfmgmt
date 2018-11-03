@@ -30,41 +30,93 @@ option (gogoproto.unmarshaler_all) = true;
 option (gogoproto.goproto_unrecognized_all) = false;
 
 service NodesService {
-    // Version returns the API version.
-    rpc Version (core.v1alpha.VersionRequest) returns (core.v1alpha.VersionResponse);
     // Get a Node.
-    rpc GetNode (Node) returns (Node);
+    rpc Get (GetRequest) returns (GetResponse);
+    // List Nodes.
+    rpc List (ListRequest) returns (ListResponse);
     // Add a Node.
-    rpc AddNode (Node) returns (AddNodeResponse);
+    rpc Add (AddRequest) returns (AddResponse);
     // Update a Node.
-    rpc UpdateNode (Node) returns (UpdateNodeResponse);
+    rpc Update (UpdateRequest) returns (UpdateResponse);
     // Delete a Node.
-    rpc DeleteNode (Node) returns (DeleteNodeResponse);
-    // Watch a Node.
-    rpc WatchNode (Node) returns (stream NodeWatchResponse);
+    rpc Delete (DeleteRequest) returns (DeleteResponse);
+    // Watch Node.
+    rpc Watch (WatchRequest) returns (stream WatchResponse);
 }
 
 message Node {
     // Metadata for Node object.
     core.v1alpha.ObjectMetadata metadata = 1;
     // Spec for Node.
-    NodeSpec spec = 2;
+    Spec spec = 2;
 }
 
-message NodeSpec {
+message Spec {
     // FQDN of Node.
     string fqdn = 3;
     // IP addresses of Node.
     repeated string addresses = 4;
 }
 
-message AddNodeResponse {}
+// Get
+message GetRequest {
+    core.v1alpha.GetOptions getOptions = 1;
+}
 
-message UpdateNodeResponse {}
+message GetResponse {
+    // Node object.
+    Node node = 1;
+}
 
-message DeleteNodeResponse {}
+// List
+message ListRequest {
+    core.v1alpha.ListOptions listOptions = 1;
+}
 
-message NodeWatchResponse {
+message ListResponse {
+    // Node list.
+    repeated Node nodes = 1;
+}
+
+// Add
+message AddRequest {
+    // Node object.
+    Node node = 1;
+}
+
+message AddResponse {
+    // Node object.
+    Node node = 1;
+}
+
+// Update
+message UpdateRequest {
+    // Node object.
+    Node node = 1;
+}
+
+message UpdateResponse {
+    // Node object.
+    Node node = 1;
+}
+
+// Delete
+message DeleteRequest {
+    // Node object.
+    Node node = 1;
+}
+
+message DeleteResponse {
+    // Node object.
+    Node node = 1;
+}
+
+// Watch
+message WatchRequest {
+    core.v1alpha.WatchOptions watchOptions = 1;
+}
+
+message WatchResponse {
     // Event info for watch response.
     events.v1alpha.Event event = 1;
     // Node for watch response.

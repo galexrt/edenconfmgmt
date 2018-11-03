@@ -28,7 +28,14 @@ import (
 	"syscall"
 	"time"
 
+	configs_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/configs/v1alpha"
+	eventreactors_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/eventreactors/v1alpha"
+	events_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha"
+	jobs_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/jobs/v1alpha"
 	nodes_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/nodes/v1alpha"
+	tasks_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/tasks/v1alpha"
+	templatemacros_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/templatemacros/v1alpha"
+	variables_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/variables/v1alpha"
 	"github.com/galexrt/edenconfmgmt/pkg/auth"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	grpc_zap "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
@@ -240,6 +247,28 @@ func Run(cmd *cobra.Command, args []string) error {
 }
 
 func registerGRPCAPIs(srv *grpc.Server) {
+	// Configs
+	configServiceServer := configs_v1alpha.NewServer()
+	configs_v1alpha.RegisterConfigsServiceServer(srv, configServiceServer)
+	// EventReactors
+	eventReactorsServiceServer := eventreactors_v1alpha.NewServer()
+	eventreactors_v1alpha.RegisterEventReactorsServiceServer(srv, eventReactorsServiceServer)
+	// Events
+	eventsServiceServer := events_v1alpha.NewServer()
+	events_v1alpha.RegisterEventsServiceServer(srv, eventsServiceServer)
+	// Jobs
+	jobsServiceServer := jobs_v1alpha.NewServer()
+	jobs_v1alpha.RegisterJobsServiceServer(srv, jobsServiceServer)
+	// Nodes
 	nodesServiceServer := nodes_v1alpha.NewServer()
 	nodes_v1alpha.RegisterNodesServiceServer(srv, nodesServiceServer)
+	// Tasks
+	tasksServiceServer := tasks_v1alpha.NewServer()
+	tasks_v1alpha.RegisterTasksServiceServer(srv, tasksServiceServer)
+	// TemplateMacros
+	templateMacrosServiceServer := templatemacros_v1alpha.NewServer()
+	templatemacros_v1alpha.RegisterTemplateMacrosServiceServer(srv, templateMacrosServiceServer)
+	// Variables
+	variablesServiceServer := variables_v1alpha.NewServer()
+	variables_v1alpha.RegisterVariablesServiceServer(srv, variablesServiceServer)
 }

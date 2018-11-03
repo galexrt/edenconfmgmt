@@ -18,11 +18,9 @@ package v1alpha
 
 import (
 	"context"
-
-	core_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha"
 )
 
-// NodesService handler for node events.
+// NodesService handler for config events.
 type NodesService struct {
 	NodesServiceServer
 }
@@ -32,14 +30,32 @@ func NewServer() NodesServiceServer {
 	return &NodesService{}
 }
 
-// Version return core_v1alpha.VersionResponse.
-func (n *NodesService) Version(context.Context, *core_v1alpha.VersionRequest) (*core_v1alpha.VersionResponse, error) {
-	return &core_v1alpha.VersionResponse{
-		Version: "1",
-	}, nil
+// Get get a Node.
+func (n *NodesService) Get(context.Context, *GetRequest) (*GetResponse, error) {
+	return &GetResponse{}, nil
 }
 
-// AddNode add a node.
-func (n *NodesService) AddNode(context.Context, *Node) (*AddNodeResponse, error) {
-	return &AddNodeResponse{}, nil
+// List list Nodes.
+func (n *NodesService) List(context.Context, *ListRequest) (*ListResponse, error) {
+	return &ListResponse{}, nil
+}
+
+// Add add a Node.
+func (n *NodesService) Add(context.Context, *AddRequest) (*AddResponse, error) {
+	return &AddResponse{}, nil
+}
+
+// Update update a Node.
+func (n *NodesService) Update(context.Context, *UpdateRequest) (*UpdateResponse, error) {
+	return &UpdateResponse{}, nil
+}
+
+// Delete delete a Node.
+func (n *NodesService) Delete(context.Context, *DeleteRequest) (*DeleteResponse, error) {
+	return &DeleteResponse{}, nil
+}
+
+// Watch Watch Nodes.
+func (n *NodesService) Watch(*WatchRequest, NodesService_WatchServer) error {
+	return nil
 }

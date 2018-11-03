@@ -31,18 +31,18 @@ option (gogoproto.unmarshaler_all) = true;
 option (gogoproto.goproto_unrecognized_all) = false;
 
 service VariablesService {
-    // Version returns the API version.
-    rpc Version (core.v1alpha.VersionRequest) returns (core.v1alpha.VersionResponse);
     // Get a Variable.
-    rpc GetVariable (Variable) returns (Variable);
+    rpc Get (GetRequest) returns (GetResponse);
+    // List Variable.
+    rpc List (ListRequest) returns (ListResponse);
     // Add a Variable.
-    rpc AddVariable (Variable) returns (AddVariableResponse);
+    rpc Add (AddRequest) returns (AddResponse);
     // Update a Variable.
-    rpc UpdateVariable (Variable) returns (UpdateVariableResponse);
+    rpc Update (UpdateRequest) returns (UpdateResponse);
     // Delete a Variable.
-    rpc DeleteVariable (Variable) returns (DeleteVariableResponse);
-    // Watch a Variable.
-    rpc WatchVariable (Variable) returns (stream WatchVariableResponse);
+    rpc Delete (DeleteRequest) returns (DeleteResponse);
+    // Watch Variable.
+    rpc Watch (WatchRequest) returns (stream WatchResponse);
 }
 
 message Variable {
@@ -60,14 +60,66 @@ message VariableSpec {
     string type = 2;
 }
 
-message AddVariableResponse {}
+// Get
+message GetRequest {
+    core.v1alpha.GetOptions getOptions = 1;
+}
 
-message UpdateVariableResponse {}
+message GetResponse {
+    // Variable object.
+    Variable variable = 1;
+}
 
-message DeleteVariableResponse {}
+// List
+message ListRequest {
+    core.v1alpha.ListOptions listOptions = 1;
+}
 
-message WatchVariableResponse {
-    // Event info for watch response.
+message ListResponse {
+    // Variable list.
+    repeated Variable variables = 1;
+}
+
+// Add
+message AddRequest {
+    // Variable object.
+    Variable variable = 1;
+}
+
+message AddResponse {
+    // Variable object.
+    Variable variable = 1;
+}
+
+// Update
+message UpdateRequest {
+    // Variable object.
+    Variable variable = 1;
+}
+
+message UpdateResponse {
+    // Variable object.
+    Variable variable = 1;
+}
+
+// Delete
+message DeleteRequest {
+    // Variable object.
+    Variable variable = 1;
+}
+
+message DeleteResponse {
+    // Variable object.
+    Variable variable = 1;
+}
+
+// Watch
+message WatchRequest {
+    core.v1alpha.WatchOptions watchOptions = 1;
+}
+
+message WatchResponse {
+    // Variable info for watch response.
     events.v1alpha.Event event = 1;
     // Variable for watch response.
     Variable variable = 2;

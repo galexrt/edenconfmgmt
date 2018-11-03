@@ -81,7 +81,7 @@ type EventReactorSpec struct {
 	Reaction *Reaction `protobuf:"bytes,1,opt,name=reaction,proto3" json:"reaction,omitempty"`
 	// Conditions.
 	Task *v1alpha.Conditions `protobuf:"bytes,2,opt,name=task,proto3" json:"task,omitempty"`
-	//TriggerLimiter.
+	// TriggerLimiter.
 	TriggerLimiter       *TriggerLimiter `protobuf:"bytes,3,opt,name=triggerLimiter,proto3" json:"triggerLimiter,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
 	XXX_unrecognized     []byte          `json:"-"`
@@ -275,100 +275,450 @@ func (m *WaitForMore) GetResetTimeoutOnMore() bool {
 	return false
 }
 
-type AddEventReactorResponse struct {
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+// Get
+type GetRequest struct {
+	GetOptions           *v1alpha.GetOptions `protobuf:"bytes,1,opt,name=getOptions,proto3" json:"getOptions,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}            `json:"-"`
+	XXX_unrecognized     []byte              `json:"-"`
+	XXX_sizecache        int32               `json:"-"`
 }
 
-func (m *AddEventReactorResponse) Reset()         { *m = AddEventReactorResponse{} }
-func (m *AddEventReactorResponse) String() string { return proto.CompactTextString(m) }
-func (*AddEventReactorResponse) ProtoMessage()    {}
-func (*AddEventReactorResponse) Descriptor() ([]byte, []int) {
+func (m *GetRequest) Reset()         { *m = GetRequest{} }
+func (m *GetRequest) String() string { return proto.CompactTextString(m) }
+func (*GetRequest) ProtoMessage()    {}
+func (*GetRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_92ae376702498914, []int{5}
 }
 
-func (m *AddEventReactorResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_AddEventReactorResponse.Unmarshal(m, b)
+func (m *GetRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetRequest.Unmarshal(m, b)
 }
-func (m *AddEventReactorResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_AddEventReactorResponse.Marshal(b, m, deterministic)
+func (m *GetRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetRequest.Marshal(b, m, deterministic)
 }
-func (m *AddEventReactorResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AddEventReactorResponse.Merge(m, src)
+func (m *GetRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetRequest.Merge(m, src)
 }
-func (m *AddEventReactorResponse) XXX_Size() int {
-	return xxx_messageInfo_AddEventReactorResponse.Size(m)
+func (m *GetRequest) XXX_Size() int {
+	return xxx_messageInfo_GetRequest.Size(m)
 }
-func (m *AddEventReactorResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_AddEventReactorResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_AddEventReactorResponse proto.InternalMessageInfo
-
-type UpdateEventReactorResponse struct {
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+func (m *GetRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetRequest.DiscardUnknown(m)
 }
 
-func (m *UpdateEventReactorResponse) Reset()         { *m = UpdateEventReactorResponse{} }
-func (m *UpdateEventReactorResponse) String() string { return proto.CompactTextString(m) }
-func (*UpdateEventReactorResponse) ProtoMessage()    {}
-func (*UpdateEventReactorResponse) Descriptor() ([]byte, []int) {
+var xxx_messageInfo_GetRequest proto.InternalMessageInfo
+
+func (m *GetRequest) GetGetOptions() *v1alpha.GetOptions {
+	if m != nil {
+		return m.GetOptions
+	}
+	return nil
+}
+
+type GetResponse struct {
+	// EventReactor object.
+	EventReactor         *EventReactor `protobuf:"bytes,1,opt,name=eventReactor,proto3" json:"eventReactor,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
+	XXX_unrecognized     []byte        `json:"-"`
+	XXX_sizecache        int32         `json:"-"`
+}
+
+func (m *GetResponse) Reset()         { *m = GetResponse{} }
+func (m *GetResponse) String() string { return proto.CompactTextString(m) }
+func (*GetResponse) ProtoMessage()    {}
+func (*GetResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_92ae376702498914, []int{6}
 }
 
-func (m *UpdateEventReactorResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_UpdateEventReactorResponse.Unmarshal(m, b)
+func (m *GetResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetResponse.Unmarshal(m, b)
 }
-func (m *UpdateEventReactorResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_UpdateEventReactorResponse.Marshal(b, m, deterministic)
+func (m *GetResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetResponse.Marshal(b, m, deterministic)
 }
-func (m *UpdateEventReactorResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UpdateEventReactorResponse.Merge(m, src)
+func (m *GetResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetResponse.Merge(m, src)
 }
-func (m *UpdateEventReactorResponse) XXX_Size() int {
-	return xxx_messageInfo_UpdateEventReactorResponse.Size(m)
+func (m *GetResponse) XXX_Size() int {
+	return xxx_messageInfo_GetResponse.Size(m)
 }
-func (m *UpdateEventReactorResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_UpdateEventReactorResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_UpdateEventReactorResponse proto.InternalMessageInfo
-
-type DeleteEventReactorResponse struct {
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+func (m *GetResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetResponse.DiscardUnknown(m)
 }
 
-func (m *DeleteEventReactorResponse) Reset()         { *m = DeleteEventReactorResponse{} }
-func (m *DeleteEventReactorResponse) String() string { return proto.CompactTextString(m) }
-func (*DeleteEventReactorResponse) ProtoMessage()    {}
-func (*DeleteEventReactorResponse) Descriptor() ([]byte, []int) {
+var xxx_messageInfo_GetResponse proto.InternalMessageInfo
+
+func (m *GetResponse) GetEventReactor() *EventReactor {
+	if m != nil {
+		return m.EventReactor
+	}
+	return nil
+}
+
+// List
+type ListRequest struct {
+	ListOptions          *v1alpha.ListOptions `protobuf:"bytes,1,opt,name=listOptions,proto3" json:"listOptions,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}             `json:"-"`
+	XXX_unrecognized     []byte               `json:"-"`
+	XXX_sizecache        int32                `json:"-"`
+}
+
+func (m *ListRequest) Reset()         { *m = ListRequest{} }
+func (m *ListRequest) String() string { return proto.CompactTextString(m) }
+func (*ListRequest) ProtoMessage()    {}
+func (*ListRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_92ae376702498914, []int{7}
 }
 
-func (m *DeleteEventReactorResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_DeleteEventReactorResponse.Unmarshal(m, b)
+func (m *ListRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ListRequest.Unmarshal(m, b)
 }
-func (m *DeleteEventReactorResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_DeleteEventReactorResponse.Marshal(b, m, deterministic)
+func (m *ListRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ListRequest.Marshal(b, m, deterministic)
 }
-func (m *DeleteEventReactorResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeleteEventReactorResponse.Merge(m, src)
+func (m *ListRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListRequest.Merge(m, src)
 }
-func (m *DeleteEventReactorResponse) XXX_Size() int {
-	return xxx_messageInfo_DeleteEventReactorResponse.Size(m)
+func (m *ListRequest) XXX_Size() int {
+	return xxx_messageInfo_ListRequest.Size(m)
 }
-func (m *DeleteEventReactorResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_DeleteEventReactorResponse.DiscardUnknown(m)
+func (m *ListRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_ListRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_DeleteEventReactorResponse proto.InternalMessageInfo
+var xxx_messageInfo_ListRequest proto.InternalMessageInfo
 
-type WatchEventReactorResponse struct {
+func (m *ListRequest) GetListOptions() *v1alpha.ListOptions {
+	if m != nil {
+		return m.ListOptions
+	}
+	return nil
+}
+
+type ListResponse struct {
+	// EventReactor list.
+	EventReactors        []*EventReactor `protobuf:"bytes,1,rep,name=eventReactors,proto3" json:"eventReactors,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
+	XXX_unrecognized     []byte          `json:"-"`
+	XXX_sizecache        int32           `json:"-"`
+}
+
+func (m *ListResponse) Reset()         { *m = ListResponse{} }
+func (m *ListResponse) String() string { return proto.CompactTextString(m) }
+func (*ListResponse) ProtoMessage()    {}
+func (*ListResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_92ae376702498914, []int{8}
+}
+
+func (m *ListResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ListResponse.Unmarshal(m, b)
+}
+func (m *ListResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ListResponse.Marshal(b, m, deterministic)
+}
+func (m *ListResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListResponse.Merge(m, src)
+}
+func (m *ListResponse) XXX_Size() int {
+	return xxx_messageInfo_ListResponse.Size(m)
+}
+func (m *ListResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_ListResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ListResponse proto.InternalMessageInfo
+
+func (m *ListResponse) GetEventReactors() []*EventReactor {
+	if m != nil {
+		return m.EventReactors
+	}
+	return nil
+}
+
+// Add
+type AddRequest struct {
+	// EventReactor object.
+	EventReactor         *EventReactor `protobuf:"bytes,1,opt,name=eventReactor,proto3" json:"eventReactor,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
+	XXX_unrecognized     []byte        `json:"-"`
+	XXX_sizecache        int32         `json:"-"`
+}
+
+func (m *AddRequest) Reset()         { *m = AddRequest{} }
+func (m *AddRequest) String() string { return proto.CompactTextString(m) }
+func (*AddRequest) ProtoMessage()    {}
+func (*AddRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_92ae376702498914, []int{9}
+}
+
+func (m *AddRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_AddRequest.Unmarshal(m, b)
+}
+func (m *AddRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_AddRequest.Marshal(b, m, deterministic)
+}
+func (m *AddRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AddRequest.Merge(m, src)
+}
+func (m *AddRequest) XXX_Size() int {
+	return xxx_messageInfo_AddRequest.Size(m)
+}
+func (m *AddRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_AddRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AddRequest proto.InternalMessageInfo
+
+func (m *AddRequest) GetEventReactor() *EventReactor {
+	if m != nil {
+		return m.EventReactor
+	}
+	return nil
+}
+
+type AddResponse struct {
+	// EventReactor object.
+	EventReactor         *EventReactor `protobuf:"bytes,1,opt,name=eventReactor,proto3" json:"eventReactor,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
+	XXX_unrecognized     []byte        `json:"-"`
+	XXX_sizecache        int32         `json:"-"`
+}
+
+func (m *AddResponse) Reset()         { *m = AddResponse{} }
+func (m *AddResponse) String() string { return proto.CompactTextString(m) }
+func (*AddResponse) ProtoMessage()    {}
+func (*AddResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_92ae376702498914, []int{10}
+}
+
+func (m *AddResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_AddResponse.Unmarshal(m, b)
+}
+func (m *AddResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_AddResponse.Marshal(b, m, deterministic)
+}
+func (m *AddResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AddResponse.Merge(m, src)
+}
+func (m *AddResponse) XXX_Size() int {
+	return xxx_messageInfo_AddResponse.Size(m)
+}
+func (m *AddResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_AddResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AddResponse proto.InternalMessageInfo
+
+func (m *AddResponse) GetEventReactor() *EventReactor {
+	if m != nil {
+		return m.EventReactor
+	}
+	return nil
+}
+
+// Update
+type UpdateRequest struct {
+	// EventReactor object.
+	EventReactor         *EventReactor `protobuf:"bytes,1,opt,name=eventReactor,proto3" json:"eventReactor,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
+	XXX_unrecognized     []byte        `json:"-"`
+	XXX_sizecache        int32         `json:"-"`
+}
+
+func (m *UpdateRequest) Reset()         { *m = UpdateRequest{} }
+func (m *UpdateRequest) String() string { return proto.CompactTextString(m) }
+func (*UpdateRequest) ProtoMessage()    {}
+func (*UpdateRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_92ae376702498914, []int{11}
+}
+
+func (m *UpdateRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UpdateRequest.Unmarshal(m, b)
+}
+func (m *UpdateRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UpdateRequest.Marshal(b, m, deterministic)
+}
+func (m *UpdateRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateRequest.Merge(m, src)
+}
+func (m *UpdateRequest) XXX_Size() int {
+	return xxx_messageInfo_UpdateRequest.Size(m)
+}
+func (m *UpdateRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpdateRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UpdateRequest proto.InternalMessageInfo
+
+func (m *UpdateRequest) GetEventReactor() *EventReactor {
+	if m != nil {
+		return m.EventReactor
+	}
+	return nil
+}
+
+type UpdateResponse struct {
+	// EventReactor object.
+	EventReactor         *EventReactor `protobuf:"bytes,1,opt,name=eventReactor,proto3" json:"eventReactor,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
+	XXX_unrecognized     []byte        `json:"-"`
+	XXX_sizecache        int32         `json:"-"`
+}
+
+func (m *UpdateResponse) Reset()         { *m = UpdateResponse{} }
+func (m *UpdateResponse) String() string { return proto.CompactTextString(m) }
+func (*UpdateResponse) ProtoMessage()    {}
+func (*UpdateResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_92ae376702498914, []int{12}
+}
+
+func (m *UpdateResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UpdateResponse.Unmarshal(m, b)
+}
+func (m *UpdateResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UpdateResponse.Marshal(b, m, deterministic)
+}
+func (m *UpdateResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateResponse.Merge(m, src)
+}
+func (m *UpdateResponse) XXX_Size() int {
+	return xxx_messageInfo_UpdateResponse.Size(m)
+}
+func (m *UpdateResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpdateResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UpdateResponse proto.InternalMessageInfo
+
+func (m *UpdateResponse) GetEventReactor() *EventReactor {
+	if m != nil {
+		return m.EventReactor
+	}
+	return nil
+}
+
+// Delete
+type DeleteRequest struct {
+	// EventReactor object.
+	EventReactor         *EventReactor `protobuf:"bytes,1,opt,name=eventReactor,proto3" json:"eventReactor,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
+	XXX_unrecognized     []byte        `json:"-"`
+	XXX_sizecache        int32         `json:"-"`
+}
+
+func (m *DeleteRequest) Reset()         { *m = DeleteRequest{} }
+func (m *DeleteRequest) String() string { return proto.CompactTextString(m) }
+func (*DeleteRequest) ProtoMessage()    {}
+func (*DeleteRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_92ae376702498914, []int{13}
+}
+
+func (m *DeleteRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_DeleteRequest.Unmarshal(m, b)
+}
+func (m *DeleteRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_DeleteRequest.Marshal(b, m, deterministic)
+}
+func (m *DeleteRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteRequest.Merge(m, src)
+}
+func (m *DeleteRequest) XXX_Size() int {
+	return xxx_messageInfo_DeleteRequest.Size(m)
+}
+func (m *DeleteRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_DeleteRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DeleteRequest proto.InternalMessageInfo
+
+func (m *DeleteRequest) GetEventReactor() *EventReactor {
+	if m != nil {
+		return m.EventReactor
+	}
+	return nil
+}
+
+type DeleteResponse struct {
+	// EventReactor object.
+	EventReactor         *EventReactor `protobuf:"bytes,1,opt,name=eventReactor,proto3" json:"eventReactor,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
+	XXX_unrecognized     []byte        `json:"-"`
+	XXX_sizecache        int32         `json:"-"`
+}
+
+func (m *DeleteResponse) Reset()         { *m = DeleteResponse{} }
+func (m *DeleteResponse) String() string { return proto.CompactTextString(m) }
+func (*DeleteResponse) ProtoMessage()    {}
+func (*DeleteResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_92ae376702498914, []int{14}
+}
+
+func (m *DeleteResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_DeleteResponse.Unmarshal(m, b)
+}
+func (m *DeleteResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_DeleteResponse.Marshal(b, m, deterministic)
+}
+func (m *DeleteResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteResponse.Merge(m, src)
+}
+func (m *DeleteResponse) XXX_Size() int {
+	return xxx_messageInfo_DeleteResponse.Size(m)
+}
+func (m *DeleteResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_DeleteResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DeleteResponse proto.InternalMessageInfo
+
+func (m *DeleteResponse) GetEventReactor() *EventReactor {
+	if m != nil {
+		return m.EventReactor
+	}
+	return nil
+}
+
+// Watch
+type WatchRequest struct {
+	WatchOptions         *v1alpha.WatchOptions `protobuf:"bytes,1,opt,name=watchOptions,proto3" json:"watchOptions,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}              `json:"-"`
+	XXX_unrecognized     []byte                `json:"-"`
+	XXX_sizecache        int32                 `json:"-"`
+}
+
+func (m *WatchRequest) Reset()         { *m = WatchRequest{} }
+func (m *WatchRequest) String() string { return proto.CompactTextString(m) }
+func (*WatchRequest) ProtoMessage()    {}
+func (*WatchRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_92ae376702498914, []int{15}
+}
+
+func (m *WatchRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_WatchRequest.Unmarshal(m, b)
+}
+func (m *WatchRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_WatchRequest.Marshal(b, m, deterministic)
+}
+func (m *WatchRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_WatchRequest.Merge(m, src)
+}
+func (m *WatchRequest) XXX_Size() int {
+	return xxx_messageInfo_WatchRequest.Size(m)
+}
+func (m *WatchRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_WatchRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_WatchRequest proto.InternalMessageInfo
+
+func (m *WatchRequest) GetWatchOptions() *v1alpha.WatchOptions {
+	if m != nil {
+		return m.WatchOptions
+	}
+	return nil
+}
+
+type WatchResponse struct {
 	// Event info for watch response.
 	Event *v1alpha1.Event `protobuf:"bytes,1,opt,name=event,proto3" json:"event,omitempty"`
 	// EventReactor for watch response.
@@ -378,39 +728,39 @@ type WatchEventReactorResponse struct {
 	XXX_sizecache        int32         `json:"-"`
 }
 
-func (m *WatchEventReactorResponse) Reset()         { *m = WatchEventReactorResponse{} }
-func (m *WatchEventReactorResponse) String() string { return proto.CompactTextString(m) }
-func (*WatchEventReactorResponse) ProtoMessage()    {}
-func (*WatchEventReactorResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_92ae376702498914, []int{8}
+func (m *WatchResponse) Reset()         { *m = WatchResponse{} }
+func (m *WatchResponse) String() string { return proto.CompactTextString(m) }
+func (*WatchResponse) ProtoMessage()    {}
+func (*WatchResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_92ae376702498914, []int{16}
 }
 
-func (m *WatchEventReactorResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_WatchEventReactorResponse.Unmarshal(m, b)
+func (m *WatchResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_WatchResponse.Unmarshal(m, b)
 }
-func (m *WatchEventReactorResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_WatchEventReactorResponse.Marshal(b, m, deterministic)
+func (m *WatchResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_WatchResponse.Marshal(b, m, deterministic)
 }
-func (m *WatchEventReactorResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_WatchEventReactorResponse.Merge(m, src)
+func (m *WatchResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_WatchResponse.Merge(m, src)
 }
-func (m *WatchEventReactorResponse) XXX_Size() int {
-	return xxx_messageInfo_WatchEventReactorResponse.Size(m)
+func (m *WatchResponse) XXX_Size() int {
+	return xxx_messageInfo_WatchResponse.Size(m)
 }
-func (m *WatchEventReactorResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_WatchEventReactorResponse.DiscardUnknown(m)
+func (m *WatchResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_WatchResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_WatchEventReactorResponse proto.InternalMessageInfo
+var xxx_messageInfo_WatchResponse proto.InternalMessageInfo
 
-func (m *WatchEventReactorResponse) GetEvent() *v1alpha1.Event {
+func (m *WatchResponse) GetEvent() *v1alpha1.Event {
 	if m != nil {
 		return m.Event
 	}
 	return nil
 }
 
-func (m *WatchEventReactorResponse) GetEventReactor() *EventReactor {
+func (m *WatchResponse) GetEventReactor() *EventReactor {
 	if m != nil {
 		return m.EventReactor
 	}
@@ -423,10 +773,18 @@ func init() {
 	proto.RegisterType((*Reaction)(nil), "eventreactors.v1alpha.Reaction")
 	proto.RegisterType((*TriggerLimiter)(nil), "eventreactors.v1alpha.TriggerLimiter")
 	proto.RegisterType((*WaitForMore)(nil), "eventreactors.v1alpha.WaitForMore")
-	proto.RegisterType((*AddEventReactorResponse)(nil), "eventreactors.v1alpha.AddEventReactorResponse")
-	proto.RegisterType((*UpdateEventReactorResponse)(nil), "eventreactors.v1alpha.UpdateEventReactorResponse")
-	proto.RegisterType((*DeleteEventReactorResponse)(nil), "eventreactors.v1alpha.DeleteEventReactorResponse")
-	proto.RegisterType((*WatchEventReactorResponse)(nil), "eventreactors.v1alpha.WatchEventReactorResponse")
+	proto.RegisterType((*GetRequest)(nil), "eventreactors.v1alpha.GetRequest")
+	proto.RegisterType((*GetResponse)(nil), "eventreactors.v1alpha.GetResponse")
+	proto.RegisterType((*ListRequest)(nil), "eventreactors.v1alpha.ListRequest")
+	proto.RegisterType((*ListResponse)(nil), "eventreactors.v1alpha.ListResponse")
+	proto.RegisterType((*AddRequest)(nil), "eventreactors.v1alpha.AddRequest")
+	proto.RegisterType((*AddResponse)(nil), "eventreactors.v1alpha.AddResponse")
+	proto.RegisterType((*UpdateRequest)(nil), "eventreactors.v1alpha.UpdateRequest")
+	proto.RegisterType((*UpdateResponse)(nil), "eventreactors.v1alpha.UpdateResponse")
+	proto.RegisterType((*DeleteRequest)(nil), "eventreactors.v1alpha.DeleteRequest")
+	proto.RegisterType((*DeleteResponse)(nil), "eventreactors.v1alpha.DeleteResponse")
+	proto.RegisterType((*WatchRequest)(nil), "eventreactors.v1alpha.WatchRequest")
+	proto.RegisterType((*WatchResponse)(nil), "eventreactors.v1alpha.WatchResponse")
 }
 
 func init() {
@@ -434,48 +792,57 @@ func init() {
 }
 
 var fileDescriptor_92ae376702498914 = []byte{
-	// 650 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x95, 0xcf, 0x6e, 0xd3, 0x40,
-	0x10, 0xc6, 0x6b, 0x5a, 0x68, 0x34, 0x2d, 0x2d, 0xac, 0xa8, 0x48, 0xa3, 0x62, 0x90, 0x01, 0x81,
-	0x04, 0xd8, 0xfd, 0x73, 0x41, 0xaa, 0x00, 0x15, 0x42, 0xcb, 0x81, 0xa8, 0xd2, 0xb6, 0x50, 0x09,
-	0xb8, 0x6c, 0xec, 0xa9, 0x6b, 0xea, 0x78, 0xcd, 0x7a, 0x53, 0xe0, 0xc6, 0x85, 0x3b, 0x3c, 0x0f,
-	0x2f, 0xd0, 0x03, 0x07, 0x8e, 0x1c, 0x69, 0x38, 0xf3, 0x0e, 0xc8, 0x9b, 0x4d, 0x1b, 0x27, 0x59,
-	0x64, 0xd4, 0x5b, 0x76, 0xe7, 0x37, 0x3b, 0xf3, 0xed, 0x7c, 0x1b, 0xc3, 0xb3, 0x30, 0x92, 0x7b,
-	0xed, 0xa6, 0xeb, 0xf3, 0x96, 0x17, 0xb2, 0x18, 0x3f, 0x08, 0xe9, 0x61, 0x80, 0x89, 0xcf, 0x93,
-	0xdd, 0x56, 0xd8, 0x92, 0x5e, 0xba, 0x1f, 0x7a, 0x2c, 0x8d, 0x32, 0x0f, 0x0f, 0x30, 0x91, 0x02,
-	0x99, 0x2f, 0xb9, 0xc8, 0xbc, 0x83, 0x25, 0x16, 0xa7, 0x7b, 0x2c, 0x0f, 0xb9, 0xa9, 0xe0, 0x92,
-	0x93, 0xb9, 0x02, 0xe0, 0x6a, 0xa0, 0x76, 0xaf, 0xbf, 0x00, 0x0f, 0xb9, 0xa7, 0xe8, 0x66, 0x7b,
-	0x57, 0xad, 0xd4, 0x42, 0xfd, 0xea, 0x9e, 0x52, 0xb3, 0x43, 0xce, 0xc3, 0x18, 0x4f, 0xa8, 0xa0,
-	0x2d, 0x98, 0x8c, 0x78, 0xa2, 0xe3, 0x8f, 0x4a, 0xf7, 0xeb, 0x73, 0x81, 0xc3, 0x6d, 0xd6, 0xd6,
-	0xfe, 0x4f, 0xf0, 0x08, 0xa5, 0xce, 0x67, 0x0b, 0xa6, 0x9f, 0xe6, 0x41, 0xda, 0x15, 0x4b, 0xee,
-	0x43, 0xa5, 0x85, 0x92, 0x05, 0x4c, 0xb2, 0xaa, 0x75, 0xcd, 0xba, 0x3d, 0xb5, 0xbc, 0xe0, 0xe6,
-	0xe5, 0x7b, 0x97, 0xe0, 0x6e, 0x36, 0xdf, 0xa2, 0x2f, 0x1b, 0x9a, 0xa1, 0xc7, 0x34, 0x59, 0x85,
-	0x89, 0x2c, 0x45, 0xbf, 0x7a, 0x46, 0x65, 0xdd, 0x72, 0x47, 0xde, 0xa1, 0xdb, 0x5f, 0x6c, 0x2b,
-	0x45, 0x9f, 0xaa, 0x24, 0xe7, 0xbb, 0x05, 0x17, 0x06, 0x43, 0x64, 0x15, 0x2a, 0x2a, 0x3f, 0xe2,
-	0x89, 0xee, 0xe5, 0xaa, 0xe1, 0x54, 0xaa, 0x31, 0x7a, 0x9c, 0x40, 0xee, 0xc2, 0x84, 0x64, 0xd9,
-	0xbe, 0x6e, 0xa7, 0x5a, 0x14, 0xf1, 0x84, 0x27, 0x41, 0x94, 0x63, 0x19, 0x55, 0x14, 0x69, 0xc0,
-	0x8c, 0x14, 0x51, 0x18, 0xa2, 0x78, 0x1e, 0xb5, 0x22, 0x89, 0xa2, 0x3a, 0xae, 0xf2, 0x6e, 0x1a,
-	0x0a, 0x6e, 0x17, 0x60, 0x3a, 0x90, 0xec, 0x00, 0x54, 0x7a, 0x2d, 0x39, 0xdf, 0x2c, 0x98, 0x29,
-	0xe2, 0xe4, 0x06, 0x9c, 0x6f, 0x44, 0xc9, 0xa6, 0xef, 0xb7, 0x05, 0x26, 0x3e, 0x66, 0x4a, 0xdd,
-	0x38, 0x2d, 0x6e, 0x92, 0x07, 0x30, 0x2d, 0x50, 0x1d, 0x53, 0xc7, 0x98, 0x7d, 0xd4, 0x4a, 0xe6,
-	0xdd, 0xae, 0xad, 0xdc, 0x9e, 0xad, 0xdc, 0xba, 0xb6, 0x15, 0x2d, 0xe0, 0xa4, 0x0e, 0x53, 0xef,
-	0x59, 0x24, 0xd7, 0xb9, 0x68, 0x70, 0x81, 0x5a, 0x8f, 0x63, 0xd0, 0xb3, 0x73, 0x42, 0xd2, 0xfe,
-	0x34, 0x47, 0xc0, 0x54, 0x5f, 0x8c, 0xac, 0xc0, 0xa4, 0x8c, 0x5a, 0xc8, 0xdb, 0x52, 0x4f, 0xe4,
-	0x1f, 0xed, 0xf4, 0x48, 0xe2, 0x02, 0x11, 0x98, 0xa1, 0xdc, 0xee, 0xae, 0x37, 0x13, 0xd5, 0x50,
-	0x2e, 0xa7, 0x42, 0x47, 0x44, 0x9c, 0x79, 0xb8, 0xbc, 0x16, 0x04, 0xfd, 0x76, 0xa0, 0x98, 0xa5,
-	0x3c, 0xc9, 0xd0, 0x59, 0x80, 0xda, 0x8b, 0x34, 0x60, 0x12, 0x4d, 0xd1, 0x3a, 0xc6, 0x68, 0x88,
-	0x7e, 0xb5, 0x60, 0x7e, 0x87, 0x49, 0x7f, 0x6f, 0x54, 0x94, 0xdc, 0x81, 0xb3, 0xea, 0x6a, 0xb4,
-	0xae, 0xb9, 0xee, 0x45, 0x0d, 0x1a, 0xb7, 0xcb, 0x90, 0x8d, 0xe2, 0xab, 0xd1, 0xa3, 0xb9, 0x5e,
-	0xc2, 0xf3, 0xb4, 0x90, 0xb8, 0xfc, 0x67, 0x02, 0x2e, 0xf5, 0x6f, 0x64, 0x5b, 0x28, 0x0e, 0x22,
-	0x1f, 0xc9, 0x3a, 0x4c, 0xbe, 0x44, 0x91, 0xe5, 0x4e, 0x1e, 0x78, 0x80, 0x7a, 0x9b, 0xe2, 0xbb,
-	0x36, 0x66, 0xb2, 0x76, 0xc5, 0x10, 0xd5, 0xb2, 0x5e, 0xc3, 0xec, 0x06, 0xca, 0xc2, 0x13, 0x2f,
-	0xd3, 0x66, 0xad, 0x0c, 0x44, 0x76, 0x61, 0x76, 0x60, 0x50, 0xe5, 0x0e, 0x77, 0x0d, 0x90, 0x61,
-	0xea, 0x24, 0x06, 0x32, 0x3c, 0xf5, 0x72, 0xa5, 0x96, 0x0c, 0x90, 0xd9, 0x45, 0x79, 0xb5, 0x61,
-	0x17, 0x9d, 0xae, 0x9a, 0xd9, 0x95, 0x24, 0x86, 0x8b, 0x43, 0xa6, 0x2c, 0x57, 0x6c, 0xd1, 0xf8,
-	0x96, 0x0d, 0x1e, 0x5f, 0xb4, 0x1e, 0xbf, 0x39, 0x3c, 0xb2, 0xad, 0x9f, 0x47, 0xf6, 0xd8, 0xa7,
-	0x8e, 0x6d, 0x1d, 0x76, 0x6c, 0xeb, 0x47, 0xc7, 0xb6, 0x7e, 0x75, 0x6c, 0xeb, 0xcb, 0x6f, 0x7b,
-	0xec, 0xd5, 0xc3, 0xd3, 0x7d, 0x41, 0x9b, 0xe7, 0xd4, 0x9f, 0xc0, 0xca, 0xdf, 0x00, 0x00, 0x00,
-	0xff, 0xff, 0xf1, 0x32, 0xef, 0x0d, 0x8a, 0x07, 0x00, 0x00,
+	// 788 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x96, 0xcf, 0x6e, 0xeb, 0x44,
+	0x14, 0xc6, 0x6b, 0x92, 0x96, 0xe8, 0x24, 0xa9, 0xd0, 0x88, 0x4a, 0xa9, 0x85, 0x0c, 0xb8, 0xad,
+	0x40, 0x02, 0x1c, 0x68, 0x37, 0x95, 0x2a, 0x8a, 0x0a, 0xa1, 0x01, 0x94, 0x10, 0x69, 0xfa, 0x8f,
+	0x22, 0x36, 0x8e, 0x7d, 0xea, 0x9a, 0x26, 0x1e, 0x33, 0x9e, 0xb4, 0xb0, 0x63, 0x83, 0xd8, 0xf2,
+	0x3e, 0xbc, 0x40, 0x17, 0x2c, 0x58, 0xb2, 0xa4, 0xb9, 0x2f, 0x72, 0xe5, 0xf1, 0x38, 0xb1, 0x73,
+	0xeb, 0xdc, 0x5c, 0xdd, 0x74, 0x97, 0xf1, 0xfc, 0xce, 0x77, 0xbe, 0xcf, 0x3e, 0x63, 0x07, 0xbe,
+	0xf1, 0x7c, 0x71, 0x3d, 0xea, 0x5b, 0x0e, 0x1b, 0x36, 0x3d, 0x7b, 0x80, 0xbf, 0x72, 0xd1, 0x44,
+	0x17, 0x03, 0x87, 0x05, 0x57, 0x43, 0x6f, 0x28, 0x9a, 0xe1, 0x8d, 0xd7, 0xb4, 0x43, 0x3f, 0x6a,
+	0xe2, 0x2d, 0x06, 0x82, 0xa3, 0xed, 0x08, 0xc6, 0xa3, 0xe6, 0xed, 0x67, 0xf6, 0x20, 0xbc, 0xb6,
+	0xe3, 0x2d, 0x2b, 0xe4, 0x4c, 0x30, 0xb2, 0x91, 0x03, 0x2c, 0x05, 0xe8, 0x9f, 0x64, 0x1b, 0x30,
+	0x8f, 0x35, 0x25, 0xdd, 0x1f, 0x5d, 0xc9, 0x95, 0x5c, 0xc8, 0x5f, 0x89, 0x8a, 0x6e, 0x78, 0x8c,
+	0x79, 0x03, 0x9c, 0x52, 0xee, 0x88, 0xdb, 0xc2, 0x67, 0x81, 0xda, 0xff, 0x62, 0x61, 0xbf, 0x0e,
+	0xe3, 0xf8, 0xa2, 0x4d, 0xfd, 0xe8, 0xd5, 0x02, 0x3f, 0x92, 0xd4, 0xfc, 0x43, 0x83, 0xda, 0xd7,
+	0xf1, 0x26, 0x4d, 0xc2, 0x92, 0x7d, 0xa8, 0x0c, 0x51, 0xd8, 0xae, 0x2d, 0xec, 0x86, 0xf6, 0x9e,
+	0xf6, 0x61, 0x75, 0xf7, 0x1d, 0x2b, 0x6e, 0x9f, 0xde, 0x04, 0xab, 0xd7, 0xff, 0x19, 0x1d, 0xd1,
+	0x55, 0x0c, 0x9d, 0xd0, 0xe4, 0x00, 0xca, 0x51, 0x88, 0x4e, 0xe3, 0x0d, 0x59, 0xf5, 0x81, 0xf5,
+	0xe8, 0x3d, 0xb4, 0xb2, 0xcd, 0x4e, 0x42, 0x74, 0xa8, 0x2c, 0x32, 0xff, 0xd1, 0xe0, 0xad, 0xd9,
+	0x2d, 0x72, 0x00, 0x15, 0x59, 0xef, 0xb3, 0x40, 0x79, 0x79, 0xb7, 0x40, 0x95, 0x2a, 0x8c, 0x4e,
+	0x0a, 0xc8, 0xc7, 0x50, 0x16, 0x76, 0x74, 0xa3, 0xec, 0x34, 0xf2, 0x21, 0xbe, 0x62, 0x81, 0xeb,
+	0xc7, 0x58, 0x44, 0x25, 0x45, 0xba, 0xb0, 0x2e, 0xb8, 0xef, 0x79, 0xc8, 0x3b, 0xfe, 0xd0, 0x17,
+	0xc8, 0x1b, 0x25, 0x59, 0xb7, 0x53, 0xd0, 0xf0, 0x34, 0x07, 0xd3, 0x99, 0x62, 0x13, 0xa0, 0x92,
+	0x5a, 0x32, 0xff, 0xd6, 0x60, 0x3d, 0x8f, 0x93, 0x6d, 0xa8, 0x77, 0xfd, 0xa0, 0xe7, 0x38, 0x23,
+	0x8e, 0x81, 0x83, 0x91, 0x4c, 0x57, 0xa2, 0xf9, 0x8b, 0xe4, 0x73, 0xa8, 0x71, 0x94, 0x32, 0x2d,
+	0x1c, 0xd8, 0xbf, 0xa9, 0x24, 0x9b, 0x56, 0x32, 0x56, 0x56, 0x3a, 0x56, 0x56, 0x4b, 0x8d, 0x15,
+	0xcd, 0xe1, 0xa4, 0x05, 0xd5, 0x3b, 0xdb, 0x17, 0xc7, 0x8c, 0x77, 0x19, 0x47, 0x95, 0xc7, 0x2c,
+	0xc8, 0x73, 0x31, 0x25, 0x69, 0xb6, 0xcc, 0xe4, 0x50, 0xcd, 0xec, 0x91, 0x3d, 0x78, 0x53, 0xf8,
+	0x43, 0x64, 0x23, 0xa1, 0x9e, 0xc8, 0x1c, 0x3b, 0x29, 0x49, 0x2c, 0x20, 0x1c, 0x23, 0x14, 0xa7,
+	0xc9, 0xba, 0x17, 0x48, 0x43, 0x71, 0x9c, 0x0a, 0x7d, 0x64, 0xc7, 0x3c, 0x06, 0x68, 0xa3, 0xa0,
+	0xf8, 0xcb, 0x08, 0x23, 0x41, 0xf6, 0x01, 0x3c, 0x14, 0xbd, 0x50, 0x3e, 0x2e, 0xd5, 0x75, 0xe6,
+	0x71, 0xb6, 0x27, 0xfb, 0x34, 0xc3, 0x9a, 0xe7, 0x50, 0x95, 0x3a, 0x51, 0xc8, 0x82, 0x08, 0x49,
+	0x1b, 0x6a, 0x98, 0x19, 0x31, 0x25, 0xb5, 0xb5, 0xc0, 0xa0, 0xd2, 0x5c, 0xa1, 0xf9, 0x1d, 0x54,
+	0x3b, 0x7e, 0x34, 0x31, 0x78, 0x00, 0xd5, 0x81, 0x1f, 0xcd, 0x38, 0xdc, 0xcc, 0x3b, 0xec, 0x4c,
+	0x01, 0x9a, 0xa5, 0xcd, 0x4b, 0xa8, 0x25, 0x5a, 0xca, 0xe4, 0xb7, 0x50, 0xcf, 0xf6, 0x8a, 0xe5,
+	0x4a, 0x8b, 0xba, 0xcc, 0x57, 0x9a, 0x67, 0x00, 0x47, 0xae, 0x9b, 0xba, 0x5c, 0x5a, 0xfa, 0x73,
+	0xa8, 0x4a, 0xd9, 0x65, 0xdf, 0xd5, 0x1f, 0xa0, 0x7e, 0x16, 0xba, 0xb6, 0xc0, 0xa5, 0x3b, 0xbe,
+	0x84, 0xf5, 0x54, 0xf9, 0x09, 0x4c, 0xb7, 0x70, 0x80, 0x4f, 0x63, 0x3a, 0x55, 0x5e, 0xb6, 0xe9,
+	0xef, 0xa1, 0x76, 0x61, 0x0b, 0xe7, 0x3a, 0xf5, 0x7c, 0x08, 0xb5, 0xbb, 0x78, 0x9d, 0x9f, 0x60,
+	0x3d, 0x3f, 0xc1, 0x17, 0x19, 0x82, 0xe6, 0xf8, 0xf8, 0x23, 0x52, 0x57, 0x82, 0xca, 0xea, 0x47,
+	0xb0, 0x2a, 0x3b, 0x2a, 0xa9, 0x8d, 0xc4, 0xe3, 0xac, 0xb9, 0x84, 0x89, 0x73, 0x65, 0xcd, 0xaa,
+	0xf7, 0xdc, 0x62, 0xb9, 0xb2, 0xab, 0xdd, 0x3f, 0xcb, 0xf0, 0x76, 0xf6, 0x42, 0x74, 0x82, 0xfc,
+	0xd6, 0x77, 0x90, 0x74, 0xa0, 0xd4, 0x46, 0x41, 0xde, 0x2f, 0x90, 0x9c, 0xbe, 0x6c, 0x74, 0x73,
+	0x1e, 0xa2, 0xc2, 0xf5, 0xa0, 0x1c, 0x1f, 0x59, 0x52, 0xc4, 0x66, 0xde, 0x0d, 0xfa, 0xd6, 0x5c,
+	0x46, 0x09, 0x76, 0xa0, 0x74, 0xe4, 0xba, 0x85, 0xf6, 0xa6, 0x87, 0xb8, 0xd0, 0x5e, 0xf6, 0x40,
+	0x9e, 0xc1, 0x5a, 0x32, 0xed, 0x64, 0xbb, 0x80, 0xce, 0x1d, 0x33, 0x7d, 0xe7, 0x25, 0xd4, 0x54,
+	0x36, 0x99, 0xc7, 0x42, 0xd9, 0xdc, 0x41, 0x28, 0x94, 0x9d, 0x19, 0xea, 0x53, 0x58, 0x95, 0xa3,
+	0x43, 0xb6, 0x0a, 0xbf, 0x4c, 0xd3, 0x49, 0xd5, 0xb7, 0xe7, 0x43, 0x89, 0xe6, 0xa7, 0xda, 0x97,
+	0x3f, 0xdd, 0x3f, 0x18, 0xda, 0x7f, 0x0f, 0xc6, 0xca, 0xef, 0x63, 0x43, 0xbb, 0x1f, 0x1b, 0xda,
+	0xbf, 0x63, 0x43, 0xfb, 0x7f, 0x6c, 0x68, 0x7f, 0x3d, 0x33, 0x56, 0x7e, 0x3c, 0x7c, 0xbd, 0x3f,
+	0x8a, 0xfd, 0x35, 0xf9, 0xad, 0xdb, 0x7b, 0x1e, 0x00, 0x00, 0xff, 0xff, 0x01, 0xfe, 0x0d, 0x68,
+	0x71, 0x0a, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -490,18 +857,18 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type EventReactorsServiceClient interface {
-	// Version returns the API version.
-	Version(ctx context.Context, in *v1alpha.VersionRequest, opts ...grpc.CallOption) (*v1alpha.VersionResponse, error)
 	// Get a EventReactor.
-	GetEventReactor(ctx context.Context, in *EventReactor, opts ...grpc.CallOption) (*EventReactor, error)
+	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
+	// List EventReactors.
+	List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
 	// Add a EventReactor.
-	AddEventReactor(ctx context.Context, in *EventReactor, opts ...grpc.CallOption) (*AddEventReactorResponse, error)
+	Add(ctx context.Context, in *AddRequest, opts ...grpc.CallOption) (*AddResponse, error)
 	// Update a EventReactor.
-	UpdateEventReactor(ctx context.Context, in *EventReactor, opts ...grpc.CallOption) (*UpdateEventReactorResponse, error)
+	Update(ctx context.Context, in *UpdateRequest, opts ...grpc.CallOption) (*UpdateResponse, error)
 	// Delete a EventReactor.
-	DeleteEventReactor(ctx context.Context, in *EventReactor, opts ...grpc.CallOption) (*DeleteEventReactorResponse, error)
-	// Watch a EventReactor.
-	WatchEventReactor(ctx context.Context, in *EventReactor, opts ...grpc.CallOption) (EventReactorsService_WatchEventReactorClient, error)
+	Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*DeleteResponse, error)
+	// Watch EventReactor.
+	Watch(ctx context.Context, in *WatchRequest, opts ...grpc.CallOption) (EventReactorsService_WatchClient, error)
 }
 
 type eventReactorsServiceClient struct {
@@ -512,57 +879,57 @@ func NewEventReactorsServiceClient(cc *grpc.ClientConn) EventReactorsServiceClie
 	return &eventReactorsServiceClient{cc}
 }
 
-func (c *eventReactorsServiceClient) Version(ctx context.Context, in *v1alpha.VersionRequest, opts ...grpc.CallOption) (*v1alpha.VersionResponse, error) {
-	out := new(v1alpha.VersionResponse)
-	err := c.cc.Invoke(ctx, "/eventreactors.v1alpha.EventReactorsService/Version", in, out, opts...)
+func (c *eventReactorsServiceClient) Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error) {
+	out := new(GetResponse)
+	err := c.cc.Invoke(ctx, "/eventreactors.v1alpha.EventReactorsService/Get", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *eventReactorsServiceClient) GetEventReactor(ctx context.Context, in *EventReactor, opts ...grpc.CallOption) (*EventReactor, error) {
-	out := new(EventReactor)
-	err := c.cc.Invoke(ctx, "/eventreactors.v1alpha.EventReactorsService/GetEventReactor", in, out, opts...)
+func (c *eventReactorsServiceClient) List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error) {
+	out := new(ListResponse)
+	err := c.cc.Invoke(ctx, "/eventreactors.v1alpha.EventReactorsService/List", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *eventReactorsServiceClient) AddEventReactor(ctx context.Context, in *EventReactor, opts ...grpc.CallOption) (*AddEventReactorResponse, error) {
-	out := new(AddEventReactorResponse)
-	err := c.cc.Invoke(ctx, "/eventreactors.v1alpha.EventReactorsService/AddEventReactor", in, out, opts...)
+func (c *eventReactorsServiceClient) Add(ctx context.Context, in *AddRequest, opts ...grpc.CallOption) (*AddResponse, error) {
+	out := new(AddResponse)
+	err := c.cc.Invoke(ctx, "/eventreactors.v1alpha.EventReactorsService/Add", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *eventReactorsServiceClient) UpdateEventReactor(ctx context.Context, in *EventReactor, opts ...grpc.CallOption) (*UpdateEventReactorResponse, error) {
-	out := new(UpdateEventReactorResponse)
-	err := c.cc.Invoke(ctx, "/eventreactors.v1alpha.EventReactorsService/UpdateEventReactor", in, out, opts...)
+func (c *eventReactorsServiceClient) Update(ctx context.Context, in *UpdateRequest, opts ...grpc.CallOption) (*UpdateResponse, error) {
+	out := new(UpdateResponse)
+	err := c.cc.Invoke(ctx, "/eventreactors.v1alpha.EventReactorsService/Update", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *eventReactorsServiceClient) DeleteEventReactor(ctx context.Context, in *EventReactor, opts ...grpc.CallOption) (*DeleteEventReactorResponse, error) {
-	out := new(DeleteEventReactorResponse)
-	err := c.cc.Invoke(ctx, "/eventreactors.v1alpha.EventReactorsService/DeleteEventReactor", in, out, opts...)
+func (c *eventReactorsServiceClient) Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*DeleteResponse, error) {
+	out := new(DeleteResponse)
+	err := c.cc.Invoke(ctx, "/eventreactors.v1alpha.EventReactorsService/Delete", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *eventReactorsServiceClient) WatchEventReactor(ctx context.Context, in *EventReactor, opts ...grpc.CallOption) (EventReactorsService_WatchEventReactorClient, error) {
-	stream, err := c.cc.NewStream(ctx, &_EventReactorsService_serviceDesc.Streams[0], "/eventreactors.v1alpha.EventReactorsService/WatchEventReactor", opts...)
+func (c *eventReactorsServiceClient) Watch(ctx context.Context, in *WatchRequest, opts ...grpc.CallOption) (EventReactorsService_WatchClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_EventReactorsService_serviceDesc.Streams[0], "/eventreactors.v1alpha.EventReactorsService/Watch", opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &eventReactorsServiceWatchEventReactorClient{stream}
+	x := &eventReactorsServiceWatchClient{stream}
 	if err := x.ClientStream.SendMsg(in); err != nil {
 		return nil, err
 	}
@@ -572,17 +939,17 @@ func (c *eventReactorsServiceClient) WatchEventReactor(ctx context.Context, in *
 	return x, nil
 }
 
-type EventReactorsService_WatchEventReactorClient interface {
-	Recv() (*WatchEventReactorResponse, error)
+type EventReactorsService_WatchClient interface {
+	Recv() (*WatchResponse, error)
 	grpc.ClientStream
 }
 
-type eventReactorsServiceWatchEventReactorClient struct {
+type eventReactorsServiceWatchClient struct {
 	grpc.ClientStream
 }
 
-func (x *eventReactorsServiceWatchEventReactorClient) Recv() (*WatchEventReactorResponse, error) {
-	m := new(WatchEventReactorResponse)
+func (x *eventReactorsServiceWatchClient) Recv() (*WatchResponse, error) {
+	m := new(WatchResponse)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
@@ -591,132 +958,132 @@ func (x *eventReactorsServiceWatchEventReactorClient) Recv() (*WatchEventReactor
 
 // EventReactorsServiceServer is the server API for EventReactorsService service.
 type EventReactorsServiceServer interface {
-	// Version returns the API version.
-	Version(context.Context, *v1alpha.VersionRequest) (*v1alpha.VersionResponse, error)
 	// Get a EventReactor.
-	GetEventReactor(context.Context, *EventReactor) (*EventReactor, error)
+	Get(context.Context, *GetRequest) (*GetResponse, error)
+	// List EventReactors.
+	List(context.Context, *ListRequest) (*ListResponse, error)
 	// Add a EventReactor.
-	AddEventReactor(context.Context, *EventReactor) (*AddEventReactorResponse, error)
+	Add(context.Context, *AddRequest) (*AddResponse, error)
 	// Update a EventReactor.
-	UpdateEventReactor(context.Context, *EventReactor) (*UpdateEventReactorResponse, error)
+	Update(context.Context, *UpdateRequest) (*UpdateResponse, error)
 	// Delete a EventReactor.
-	DeleteEventReactor(context.Context, *EventReactor) (*DeleteEventReactorResponse, error)
-	// Watch a EventReactor.
-	WatchEventReactor(*EventReactor, EventReactorsService_WatchEventReactorServer) error
+	Delete(context.Context, *DeleteRequest) (*DeleteResponse, error)
+	// Watch EventReactor.
+	Watch(*WatchRequest, EventReactorsService_WatchServer) error
 }
 
 func RegisterEventReactorsServiceServer(s *grpc.Server, srv EventReactorsServiceServer) {
 	s.RegisterService(&_EventReactorsService_serviceDesc, srv)
 }
 
-func _EventReactorsService_Version_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(v1alpha.VersionRequest)
+func _EventReactorsService_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(EventReactorsServiceServer).Version(ctx, in)
+		return srv.(EventReactorsServiceServer).Get(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/eventreactors.v1alpha.EventReactorsService/Version",
+		FullMethod: "/eventreactors.v1alpha.EventReactorsService/Get",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(EventReactorsServiceServer).Version(ctx, req.(*v1alpha.VersionRequest))
+		return srv.(EventReactorsServiceServer).Get(ctx, req.(*GetRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _EventReactorsService_GetEventReactor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(EventReactor)
+func _EventReactorsService_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(EventReactorsServiceServer).GetEventReactor(ctx, in)
+		return srv.(EventReactorsServiceServer).List(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/eventreactors.v1alpha.EventReactorsService/GetEventReactor",
+		FullMethod: "/eventreactors.v1alpha.EventReactorsService/List",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(EventReactorsServiceServer).GetEventReactor(ctx, req.(*EventReactor))
+		return srv.(EventReactorsServiceServer).List(ctx, req.(*ListRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _EventReactorsService_AddEventReactor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(EventReactor)
+func _EventReactorsService_Add_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(EventReactorsServiceServer).AddEventReactor(ctx, in)
+		return srv.(EventReactorsServiceServer).Add(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/eventreactors.v1alpha.EventReactorsService/AddEventReactor",
+		FullMethod: "/eventreactors.v1alpha.EventReactorsService/Add",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(EventReactorsServiceServer).AddEventReactor(ctx, req.(*EventReactor))
+		return srv.(EventReactorsServiceServer).Add(ctx, req.(*AddRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _EventReactorsService_UpdateEventReactor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(EventReactor)
+func _EventReactorsService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(EventReactorsServiceServer).UpdateEventReactor(ctx, in)
+		return srv.(EventReactorsServiceServer).Update(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/eventreactors.v1alpha.EventReactorsService/UpdateEventReactor",
+		FullMethod: "/eventreactors.v1alpha.EventReactorsService/Update",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(EventReactorsServiceServer).UpdateEventReactor(ctx, req.(*EventReactor))
+		return srv.(EventReactorsServiceServer).Update(ctx, req.(*UpdateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _EventReactorsService_DeleteEventReactor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(EventReactor)
+func _EventReactorsService_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(EventReactorsServiceServer).DeleteEventReactor(ctx, in)
+		return srv.(EventReactorsServiceServer).Delete(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/eventreactors.v1alpha.EventReactorsService/DeleteEventReactor",
+		FullMethod: "/eventreactors.v1alpha.EventReactorsService/Delete",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(EventReactorsServiceServer).DeleteEventReactor(ctx, req.(*EventReactor))
+		return srv.(EventReactorsServiceServer).Delete(ctx, req.(*DeleteRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _EventReactorsService_WatchEventReactor_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(EventReactor)
+func _EventReactorsService_Watch_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(WatchRequest)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}
-	return srv.(EventReactorsServiceServer).WatchEventReactor(m, &eventReactorsServiceWatchEventReactorServer{stream})
+	return srv.(EventReactorsServiceServer).Watch(m, &eventReactorsServiceWatchServer{stream})
 }
 
-type EventReactorsService_WatchEventReactorServer interface {
-	Send(*WatchEventReactorResponse) error
+type EventReactorsService_WatchServer interface {
+	Send(*WatchResponse) error
 	grpc.ServerStream
 }
 
-type eventReactorsServiceWatchEventReactorServer struct {
+type eventReactorsServiceWatchServer struct {
 	grpc.ServerStream
 }
 
-func (x *eventReactorsServiceWatchEventReactorServer) Send(m *WatchEventReactorResponse) error {
+func (x *eventReactorsServiceWatchServer) Send(m *WatchResponse) error {
 	return x.ServerStream.SendMsg(m)
 }
 
@@ -725,30 +1092,30 @@ var _EventReactorsService_serviceDesc = grpc.ServiceDesc{
 	HandlerType: (*EventReactorsServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Version",
-			Handler:    _EventReactorsService_Version_Handler,
+			MethodName: "Get",
+			Handler:    _EventReactorsService_Get_Handler,
 		},
 		{
-			MethodName: "GetEventReactor",
-			Handler:    _EventReactorsService_GetEventReactor_Handler,
+			MethodName: "List",
+			Handler:    _EventReactorsService_List_Handler,
 		},
 		{
-			MethodName: "AddEventReactor",
-			Handler:    _EventReactorsService_AddEventReactor_Handler,
+			MethodName: "Add",
+			Handler:    _EventReactorsService_Add_Handler,
 		},
 		{
-			MethodName: "UpdateEventReactor",
-			Handler:    _EventReactorsService_UpdateEventReactor_Handler,
+			MethodName: "Update",
+			Handler:    _EventReactorsService_Update_Handler,
 		},
 		{
-			MethodName: "DeleteEventReactor",
-			Handler:    _EventReactorsService_DeleteEventReactor_Handler,
+			MethodName: "Delete",
+			Handler:    _EventReactorsService_Delete_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
 		{
-			StreamName:    "WatchEventReactor",
-			Handler:       _EventReactorsService_WatchEventReactor_Handler,
+			StreamName:    "Watch",
+			Handler:       _EventReactorsService_Watch_Handler,
 			ServerStreams: true,
 		},
 	},

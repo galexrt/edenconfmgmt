@@ -31,18 +31,18 @@ option (gogoproto.unmarshaler_all) = true;
 option (gogoproto.goproto_unrecognized_all) = false;
 
 service EventReactorsService {
-    // Version returns the API version.
-    rpc Version (core.v1alpha.VersionRequest) returns (core.v1alpha.VersionResponse);
     // Get a EventReactor.
-    rpc GetEventReactor (EventReactor) returns (EventReactor);
+    rpc Get (GetRequest) returns (GetResponse);
+    // List EventReactors.
+    rpc List (ListRequest) returns (ListResponse);
     // Add a EventReactor.
-    rpc AddEventReactor (EventReactor) returns (AddEventReactorResponse);
+    rpc Add (AddRequest) returns (AddResponse);
     // Update a EventReactor.
-    rpc UpdateEventReactor (EventReactor) returns (UpdateEventReactorResponse);
+    rpc Update (UpdateRequest) returns (UpdateResponse);
     // Delete a EventReactor.
-    rpc DeleteEventReactor (EventReactor) returns (DeleteEventReactorResponse);
-    // Watch a EventReactor.
-    rpc WatchEventReactor (EventReactor) returns (stream WatchEventReactorResponse);
+    rpc Delete (DeleteRequest) returns (DeleteResponse);
+    // Watch EventReactor.
+    rpc Watch (WatchRequest) returns (stream WatchResponse);
 }
 
 // EventReactor Reaction to certain events.
@@ -88,13 +88,65 @@ message WaitForMore {
     bool resetTimeoutOnMore = 2;
 }
 
-message AddEventReactorResponse {}
+// Get
+message GetRequest {
+    core.v1alpha.GetOptions getOptions = 1;
+}
 
-message UpdateEventReactorResponse {}
+message GetResponse {
+    // EventReactor object.
+    EventReactor eventReactor = 1;
+}
 
-message DeleteEventReactorResponse {}
+// List
+message ListRequest {
+    core.v1alpha.ListOptions listOptions = 1;
+}
 
-message WatchEventReactorResponse {
+message ListResponse {
+    // EventReactor list.
+    repeated EventReactor eventReactors = 1;
+}
+
+// Add
+message AddRequest {
+    // EventReactor object.
+    EventReactor eventReactor = 1;
+}
+
+message AddResponse {
+    // EventReactor object.
+    EventReactor eventReactor = 1;
+}
+
+// Update
+message UpdateRequest {
+    // EventReactor object.
+    EventReactor eventReactor = 1;
+}
+
+message UpdateResponse {
+    // EventReactor object.
+    EventReactor eventReactor = 1;
+}
+
+// Delete
+message DeleteRequest {
+    // EventReactor object.
+    EventReactor eventReactor = 1;
+}
+
+message DeleteResponse {
+    // EventReactor object.
+    EventReactor eventReactor = 1;
+}
+
+// Watch
+message WatchRequest {
+    core.v1alpha.WatchOptions watchOptions = 1;
+}
+
+message WatchResponse {
     // Event info for watch response.
     events.v1alpha.Event event = 1;
     // EventReactor for watch response.

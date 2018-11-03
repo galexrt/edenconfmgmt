@@ -164,142 +164,492 @@ func (m *TemplateMacro) GetParameters() []*any.Any {
 	return nil
 }
 
-type AddTemplateMacrosResponse struct {
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+// Get
+type GetRequest struct {
+	GetOptions           *v1alpha.GetOptions `protobuf:"bytes,1,opt,name=getOptions,proto3" json:"getOptions,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}            `json:"-"`
+	XXX_unrecognized     []byte              `json:"-"`
+	XXX_sizecache        int32               `json:"-"`
 }
 
-func (m *AddTemplateMacrosResponse) Reset()         { *m = AddTemplateMacrosResponse{} }
-func (m *AddTemplateMacrosResponse) String() string { return proto.CompactTextString(m) }
-func (*AddTemplateMacrosResponse) ProtoMessage()    {}
-func (*AddTemplateMacrosResponse) Descriptor() ([]byte, []int) {
+func (m *GetRequest) Reset()         { *m = GetRequest{} }
+func (m *GetRequest) String() string { return proto.CompactTextString(m) }
+func (*GetRequest) ProtoMessage()    {}
+func (*GetRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_ab6f457176fb6fb5, []int{3}
 }
 
-func (m *AddTemplateMacrosResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_AddTemplateMacrosResponse.Unmarshal(m, b)
+func (m *GetRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetRequest.Unmarshal(m, b)
 }
-func (m *AddTemplateMacrosResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_AddTemplateMacrosResponse.Marshal(b, m, deterministic)
+func (m *GetRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetRequest.Marshal(b, m, deterministic)
 }
-func (m *AddTemplateMacrosResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AddTemplateMacrosResponse.Merge(m, src)
+func (m *GetRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetRequest.Merge(m, src)
 }
-func (m *AddTemplateMacrosResponse) XXX_Size() int {
-	return xxx_messageInfo_AddTemplateMacrosResponse.Size(m)
+func (m *GetRequest) XXX_Size() int {
+	return xxx_messageInfo_GetRequest.Size(m)
 }
-func (m *AddTemplateMacrosResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_AddTemplateMacrosResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_AddTemplateMacrosResponse proto.InternalMessageInfo
-
-type UpdateTemplateMacrosResponse struct {
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+func (m *GetRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetRequest.DiscardUnknown(m)
 }
 
-func (m *UpdateTemplateMacrosResponse) Reset()         { *m = UpdateTemplateMacrosResponse{} }
-func (m *UpdateTemplateMacrosResponse) String() string { return proto.CompactTextString(m) }
-func (*UpdateTemplateMacrosResponse) ProtoMessage()    {}
-func (*UpdateTemplateMacrosResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ab6f457176fb6fb5, []int{4}
+var xxx_messageInfo_GetRequest proto.InternalMessageInfo
+
+func (m *GetRequest) GetGetOptions() *v1alpha.GetOptions {
+	if m != nil {
+		return m.GetOptions
+	}
+	return nil
 }
 
-func (m *UpdateTemplateMacrosResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_UpdateTemplateMacrosResponse.Unmarshal(m, b)
-}
-func (m *UpdateTemplateMacrosResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_UpdateTemplateMacrosResponse.Marshal(b, m, deterministic)
-}
-func (m *UpdateTemplateMacrosResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_UpdateTemplateMacrosResponse.Merge(m, src)
-}
-func (m *UpdateTemplateMacrosResponse) XXX_Size() int {
-	return xxx_messageInfo_UpdateTemplateMacrosResponse.Size(m)
-}
-func (m *UpdateTemplateMacrosResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_UpdateTemplateMacrosResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_UpdateTemplateMacrosResponse proto.InternalMessageInfo
-
-type DeleteTemplateMacrosResponse struct {
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *DeleteTemplateMacrosResponse) Reset()         { *m = DeleteTemplateMacrosResponse{} }
-func (m *DeleteTemplateMacrosResponse) String() string { return proto.CompactTextString(m) }
-func (*DeleteTemplateMacrosResponse) ProtoMessage()    {}
-func (*DeleteTemplateMacrosResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_ab6f457176fb6fb5, []int{5}
-}
-
-func (m *DeleteTemplateMacrosResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_DeleteTemplateMacrosResponse.Unmarshal(m, b)
-}
-func (m *DeleteTemplateMacrosResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_DeleteTemplateMacrosResponse.Marshal(b, m, deterministic)
-}
-func (m *DeleteTemplateMacrosResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_DeleteTemplateMacrosResponse.Merge(m, src)
-}
-func (m *DeleteTemplateMacrosResponse) XXX_Size() int {
-	return xxx_messageInfo_DeleteTemplateMacrosResponse.Size(m)
-}
-func (m *DeleteTemplateMacrosResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_DeleteTemplateMacrosResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_DeleteTemplateMacrosResponse proto.InternalMessageInfo
-
-type WatchTemplateMacrosResponse struct {
-	// Event info for watch response.
-	Event *v1alpha1.Event `protobuf:"bytes,1,opt,name=event,proto3" json:"event,omitempty"`
-	// TemplateMacros for watch response.
-	TemplateMacros       *TemplateMacros `protobuf:"bytes,2,opt,name=TemplateMacros,proto3" json:"TemplateMacros,omitempty"`
+type GetResponse struct {
+	// TemplateMacros object.
+	TemplateMacros       *TemplateMacros `protobuf:"bytes,1,opt,name=templateMacros,proto3" json:"templateMacros,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
 	XXX_unrecognized     []byte          `json:"-"`
 	XXX_sizecache        int32           `json:"-"`
 }
 
-func (m *WatchTemplateMacrosResponse) Reset()         { *m = WatchTemplateMacrosResponse{} }
-func (m *WatchTemplateMacrosResponse) String() string { return proto.CompactTextString(m) }
-func (*WatchTemplateMacrosResponse) ProtoMessage()    {}
-func (*WatchTemplateMacrosResponse) Descriptor() ([]byte, []int) {
+func (m *GetResponse) Reset()         { *m = GetResponse{} }
+func (m *GetResponse) String() string { return proto.CompactTextString(m) }
+func (*GetResponse) ProtoMessage()    {}
+func (*GetResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ab6f457176fb6fb5, []int{4}
+}
+
+func (m *GetResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GetResponse.Unmarshal(m, b)
+}
+func (m *GetResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GetResponse.Marshal(b, m, deterministic)
+}
+func (m *GetResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GetResponse.Merge(m, src)
+}
+func (m *GetResponse) XXX_Size() int {
+	return xxx_messageInfo_GetResponse.Size(m)
+}
+func (m *GetResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_GetResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GetResponse proto.InternalMessageInfo
+
+func (m *GetResponse) GetTemplateMacros() *TemplateMacros {
+	if m != nil {
+		return m.TemplateMacros
+	}
+	return nil
+}
+
+// List
+type ListRequest struct {
+	ListOptions          *v1alpha.ListOptions `protobuf:"bytes,1,opt,name=listOptions,proto3" json:"listOptions,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}             `json:"-"`
+	XXX_unrecognized     []byte               `json:"-"`
+	XXX_sizecache        int32                `json:"-"`
+}
+
+func (m *ListRequest) Reset()         { *m = ListRequest{} }
+func (m *ListRequest) String() string { return proto.CompactTextString(m) }
+func (*ListRequest) ProtoMessage()    {}
+func (*ListRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ab6f457176fb6fb5, []int{5}
+}
+
+func (m *ListRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ListRequest.Unmarshal(m, b)
+}
+func (m *ListRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ListRequest.Marshal(b, m, deterministic)
+}
+func (m *ListRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListRequest.Merge(m, src)
+}
+func (m *ListRequest) XXX_Size() int {
+	return xxx_messageInfo_ListRequest.Size(m)
+}
+func (m *ListRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_ListRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ListRequest proto.InternalMessageInfo
+
+func (m *ListRequest) GetListOptions() *v1alpha.ListOptions {
+	if m != nil {
+		return m.ListOptions
+	}
+	return nil
+}
+
+type ListResponse struct {
+	// TemplateMacro list.
+	TemplateMacross      []*TemplateMacros `protobuf:"bytes,1,rep,name=templateMacross,proto3" json:"templateMacross,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
+	XXX_unrecognized     []byte            `json:"-"`
+	XXX_sizecache        int32             `json:"-"`
+}
+
+func (m *ListResponse) Reset()         { *m = ListResponse{} }
+func (m *ListResponse) String() string { return proto.CompactTextString(m) }
+func (*ListResponse) ProtoMessage()    {}
+func (*ListResponse) Descriptor() ([]byte, []int) {
 	return fileDescriptor_ab6f457176fb6fb5, []int{6}
 }
 
-func (m *WatchTemplateMacrosResponse) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_WatchTemplateMacrosResponse.Unmarshal(m, b)
+func (m *ListResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ListResponse.Unmarshal(m, b)
 }
-func (m *WatchTemplateMacrosResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_WatchTemplateMacrosResponse.Marshal(b, m, deterministic)
+func (m *ListResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ListResponse.Marshal(b, m, deterministic)
 }
-func (m *WatchTemplateMacrosResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_WatchTemplateMacrosResponse.Merge(m, src)
+func (m *ListResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ListResponse.Merge(m, src)
 }
-func (m *WatchTemplateMacrosResponse) XXX_Size() int {
-	return xxx_messageInfo_WatchTemplateMacrosResponse.Size(m)
+func (m *ListResponse) XXX_Size() int {
+	return xxx_messageInfo_ListResponse.Size(m)
 }
-func (m *WatchTemplateMacrosResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_WatchTemplateMacrosResponse.DiscardUnknown(m)
+func (m *ListResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_ListResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_WatchTemplateMacrosResponse proto.InternalMessageInfo
+var xxx_messageInfo_ListResponse proto.InternalMessageInfo
 
-func (m *WatchTemplateMacrosResponse) GetEvent() *v1alpha1.Event {
+func (m *ListResponse) GetTemplateMacross() []*TemplateMacros {
+	if m != nil {
+		return m.TemplateMacross
+	}
+	return nil
+}
+
+// Add
+type AddRequest struct {
+	// TemplateMacros object.
+	TemplateMacros       *TemplateMacros `protobuf:"bytes,1,opt,name=templateMacros,proto3" json:"templateMacros,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
+	XXX_unrecognized     []byte          `json:"-"`
+	XXX_sizecache        int32           `json:"-"`
+}
+
+func (m *AddRequest) Reset()         { *m = AddRequest{} }
+func (m *AddRequest) String() string { return proto.CompactTextString(m) }
+func (*AddRequest) ProtoMessage()    {}
+func (*AddRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ab6f457176fb6fb5, []int{7}
+}
+
+func (m *AddRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_AddRequest.Unmarshal(m, b)
+}
+func (m *AddRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_AddRequest.Marshal(b, m, deterministic)
+}
+func (m *AddRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AddRequest.Merge(m, src)
+}
+func (m *AddRequest) XXX_Size() int {
+	return xxx_messageInfo_AddRequest.Size(m)
+}
+func (m *AddRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_AddRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AddRequest proto.InternalMessageInfo
+
+func (m *AddRequest) GetTemplateMacros() *TemplateMacros {
+	if m != nil {
+		return m.TemplateMacros
+	}
+	return nil
+}
+
+type AddResponse struct {
+	// TemplateMacros object.
+	TemplateMacros       *TemplateMacros `protobuf:"bytes,1,opt,name=templateMacros,proto3" json:"templateMacros,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
+	XXX_unrecognized     []byte          `json:"-"`
+	XXX_sizecache        int32           `json:"-"`
+}
+
+func (m *AddResponse) Reset()         { *m = AddResponse{} }
+func (m *AddResponse) String() string { return proto.CompactTextString(m) }
+func (*AddResponse) ProtoMessage()    {}
+func (*AddResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ab6f457176fb6fb5, []int{8}
+}
+
+func (m *AddResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_AddResponse.Unmarshal(m, b)
+}
+func (m *AddResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_AddResponse.Marshal(b, m, deterministic)
+}
+func (m *AddResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AddResponse.Merge(m, src)
+}
+func (m *AddResponse) XXX_Size() int {
+	return xxx_messageInfo_AddResponse.Size(m)
+}
+func (m *AddResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_AddResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AddResponse proto.InternalMessageInfo
+
+func (m *AddResponse) GetTemplateMacros() *TemplateMacros {
+	if m != nil {
+		return m.TemplateMacros
+	}
+	return nil
+}
+
+// Update
+type UpdateRequest struct {
+	// TemplateMacros object.
+	TemplateMacros       *TemplateMacros `protobuf:"bytes,1,opt,name=templateMacros,proto3" json:"templateMacros,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
+	XXX_unrecognized     []byte          `json:"-"`
+	XXX_sizecache        int32           `json:"-"`
+}
+
+func (m *UpdateRequest) Reset()         { *m = UpdateRequest{} }
+func (m *UpdateRequest) String() string { return proto.CompactTextString(m) }
+func (*UpdateRequest) ProtoMessage()    {}
+func (*UpdateRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ab6f457176fb6fb5, []int{9}
+}
+
+func (m *UpdateRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UpdateRequest.Unmarshal(m, b)
+}
+func (m *UpdateRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UpdateRequest.Marshal(b, m, deterministic)
+}
+func (m *UpdateRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateRequest.Merge(m, src)
+}
+func (m *UpdateRequest) XXX_Size() int {
+	return xxx_messageInfo_UpdateRequest.Size(m)
+}
+func (m *UpdateRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpdateRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UpdateRequest proto.InternalMessageInfo
+
+func (m *UpdateRequest) GetTemplateMacros() *TemplateMacros {
+	if m != nil {
+		return m.TemplateMacros
+	}
+	return nil
+}
+
+type UpdateResponse struct {
+	// TemplateMacros object.
+	TemplateMacros       *TemplateMacros `protobuf:"bytes,1,opt,name=templateMacros,proto3" json:"templateMacros,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
+	XXX_unrecognized     []byte          `json:"-"`
+	XXX_sizecache        int32           `json:"-"`
+}
+
+func (m *UpdateResponse) Reset()         { *m = UpdateResponse{} }
+func (m *UpdateResponse) String() string { return proto.CompactTextString(m) }
+func (*UpdateResponse) ProtoMessage()    {}
+func (*UpdateResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ab6f457176fb6fb5, []int{10}
+}
+
+func (m *UpdateResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UpdateResponse.Unmarshal(m, b)
+}
+func (m *UpdateResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UpdateResponse.Marshal(b, m, deterministic)
+}
+func (m *UpdateResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateResponse.Merge(m, src)
+}
+func (m *UpdateResponse) XXX_Size() int {
+	return xxx_messageInfo_UpdateResponse.Size(m)
+}
+func (m *UpdateResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpdateResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UpdateResponse proto.InternalMessageInfo
+
+func (m *UpdateResponse) GetTemplateMacros() *TemplateMacros {
+	if m != nil {
+		return m.TemplateMacros
+	}
+	return nil
+}
+
+// Delete
+type DeleteRequest struct {
+	// TemplateMacros object.
+	TemplateMacros       *TemplateMacros `protobuf:"bytes,1,opt,name=templateMacros,proto3" json:"templateMacros,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
+	XXX_unrecognized     []byte          `json:"-"`
+	XXX_sizecache        int32           `json:"-"`
+}
+
+func (m *DeleteRequest) Reset()         { *m = DeleteRequest{} }
+func (m *DeleteRequest) String() string { return proto.CompactTextString(m) }
+func (*DeleteRequest) ProtoMessage()    {}
+func (*DeleteRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ab6f457176fb6fb5, []int{11}
+}
+
+func (m *DeleteRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_DeleteRequest.Unmarshal(m, b)
+}
+func (m *DeleteRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_DeleteRequest.Marshal(b, m, deterministic)
+}
+func (m *DeleteRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteRequest.Merge(m, src)
+}
+func (m *DeleteRequest) XXX_Size() int {
+	return xxx_messageInfo_DeleteRequest.Size(m)
+}
+func (m *DeleteRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_DeleteRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DeleteRequest proto.InternalMessageInfo
+
+func (m *DeleteRequest) GetTemplateMacros() *TemplateMacros {
+	if m != nil {
+		return m.TemplateMacros
+	}
+	return nil
+}
+
+type DeleteResponse struct {
+	// TemplateMacros object.
+	TemplateMacros       *TemplateMacros `protobuf:"bytes,1,opt,name=templateMacros,proto3" json:"templateMacros,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
+	XXX_unrecognized     []byte          `json:"-"`
+	XXX_sizecache        int32           `json:"-"`
+}
+
+func (m *DeleteResponse) Reset()         { *m = DeleteResponse{} }
+func (m *DeleteResponse) String() string { return proto.CompactTextString(m) }
+func (*DeleteResponse) ProtoMessage()    {}
+func (*DeleteResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ab6f457176fb6fb5, []int{12}
+}
+
+func (m *DeleteResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_DeleteResponse.Unmarshal(m, b)
+}
+func (m *DeleteResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_DeleteResponse.Marshal(b, m, deterministic)
+}
+func (m *DeleteResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteResponse.Merge(m, src)
+}
+func (m *DeleteResponse) XXX_Size() int {
+	return xxx_messageInfo_DeleteResponse.Size(m)
+}
+func (m *DeleteResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_DeleteResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DeleteResponse proto.InternalMessageInfo
+
+func (m *DeleteResponse) GetTemplateMacros() *TemplateMacros {
+	if m != nil {
+		return m.TemplateMacros
+	}
+	return nil
+}
+
+// Watch
+type WatchRequest struct {
+	WatchOptions         *v1alpha.WatchOptions `protobuf:"bytes,1,opt,name=watchOptions,proto3" json:"watchOptions,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}              `json:"-"`
+	XXX_unrecognized     []byte                `json:"-"`
+	XXX_sizecache        int32                 `json:"-"`
+}
+
+func (m *WatchRequest) Reset()         { *m = WatchRequest{} }
+func (m *WatchRequest) String() string { return proto.CompactTextString(m) }
+func (*WatchRequest) ProtoMessage()    {}
+func (*WatchRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ab6f457176fb6fb5, []int{13}
+}
+
+func (m *WatchRequest) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_WatchRequest.Unmarshal(m, b)
+}
+func (m *WatchRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_WatchRequest.Marshal(b, m, deterministic)
+}
+func (m *WatchRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_WatchRequest.Merge(m, src)
+}
+func (m *WatchRequest) XXX_Size() int {
+	return xxx_messageInfo_WatchRequest.Size(m)
+}
+func (m *WatchRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_WatchRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_WatchRequest proto.InternalMessageInfo
+
+func (m *WatchRequest) GetWatchOptions() *v1alpha.WatchOptions {
+	if m != nil {
+		return m.WatchOptions
+	}
+	return nil
+}
+
+type WatchResponse struct {
+	// TemplateMacros info for watch response.
+	Event *v1alpha1.Event `protobuf:"bytes,1,opt,name=event,proto3" json:"event,omitempty"`
+	// TemplateMacros for watch response.
+	TemplateMacros       *TemplateMacros `protobuf:"bytes,2,opt,name=templateMacros,proto3" json:"templateMacros,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
+	XXX_unrecognized     []byte          `json:"-"`
+	XXX_sizecache        int32           `json:"-"`
+}
+
+func (m *WatchResponse) Reset()         { *m = WatchResponse{} }
+func (m *WatchResponse) String() string { return proto.CompactTextString(m) }
+func (*WatchResponse) ProtoMessage()    {}
+func (*WatchResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_ab6f457176fb6fb5, []int{14}
+}
+
+func (m *WatchResponse) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_WatchResponse.Unmarshal(m, b)
+}
+func (m *WatchResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_WatchResponse.Marshal(b, m, deterministic)
+}
+func (m *WatchResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_WatchResponse.Merge(m, src)
+}
+func (m *WatchResponse) XXX_Size() int {
+	return xxx_messageInfo_WatchResponse.Size(m)
+}
+func (m *WatchResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_WatchResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_WatchResponse proto.InternalMessageInfo
+
+func (m *WatchResponse) GetEvent() *v1alpha1.Event {
 	if m != nil {
 		return m.Event
 	}
 	return nil
 }
 
-func (m *WatchTemplateMacrosResponse) GetTemplateMacros() *TemplateMacros {
+func (m *WatchResponse) GetTemplateMacros() *TemplateMacros {
 	if m != nil {
 		return m.TemplateMacros
 	}
@@ -310,10 +660,18 @@ func init() {
 	proto.RegisterType((*TemplateMacros)(nil), "templatemacros.v1alpha.TemplateMacros")
 	proto.RegisterType((*TemplateMacrosSpec)(nil), "templatemacros.v1alpha.TemplateMacrosSpec")
 	proto.RegisterType((*TemplateMacro)(nil), "templatemacros.v1alpha.TemplateMacro")
-	proto.RegisterType((*AddTemplateMacrosResponse)(nil), "templatemacros.v1alpha.AddTemplateMacrosResponse")
-	proto.RegisterType((*UpdateTemplateMacrosResponse)(nil), "templatemacros.v1alpha.UpdateTemplateMacrosResponse")
-	proto.RegisterType((*DeleteTemplateMacrosResponse)(nil), "templatemacros.v1alpha.DeleteTemplateMacrosResponse")
-	proto.RegisterType((*WatchTemplateMacrosResponse)(nil), "templatemacros.v1alpha.WatchTemplateMacrosResponse")
+	proto.RegisterType((*GetRequest)(nil), "templatemacros.v1alpha.GetRequest")
+	proto.RegisterType((*GetResponse)(nil), "templatemacros.v1alpha.GetResponse")
+	proto.RegisterType((*ListRequest)(nil), "templatemacros.v1alpha.ListRequest")
+	proto.RegisterType((*ListResponse)(nil), "templatemacros.v1alpha.ListResponse")
+	proto.RegisterType((*AddRequest)(nil), "templatemacros.v1alpha.AddRequest")
+	proto.RegisterType((*AddResponse)(nil), "templatemacros.v1alpha.AddResponse")
+	proto.RegisterType((*UpdateRequest)(nil), "templatemacros.v1alpha.UpdateRequest")
+	proto.RegisterType((*UpdateResponse)(nil), "templatemacros.v1alpha.UpdateResponse")
+	proto.RegisterType((*DeleteRequest)(nil), "templatemacros.v1alpha.DeleteRequest")
+	proto.RegisterType((*DeleteResponse)(nil), "templatemacros.v1alpha.DeleteResponse")
+	proto.RegisterType((*WatchRequest)(nil), "templatemacros.v1alpha.WatchRequest")
+	proto.RegisterType((*WatchResponse)(nil), "templatemacros.v1alpha.WatchResponse")
 }
 
 func init() {
@@ -321,41 +679,49 @@ func init() {
 }
 
 var fileDescriptor_ab6f457176fb6fb5 = []byte{
-	// 536 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xa4, 0x55, 0x4d, 0x6f, 0xd3, 0x40,
-	0x10, 0xed, 0x16, 0x5a, 0x60, 0x2a, 0x2a, 0x75, 0x29, 0x51, 0x9a, 0x16, 0xab, 0xb2, 0x04, 0xaa,
-	0x40, 0xac, 0x69, 0xda, 0x03, 0x27, 0xaa, 0x20, 0x3e, 0xc4, 0x21, 0x20, 0xb9, 0x7c, 0x48, 0x48,
-	0x3d, 0x6c, 0xd6, 0x53, 0x27, 0x60, 0x7b, 0x17, 0x7b, 0x13, 0xd1, 0x1b, 0x67, 0x4e, 0xdc, 0x90,
-	0xf8, 0x45, 0x3d, 0x72, 0xe4, 0x48, 0xc3, 0x1f, 0x41, 0xde, 0xb8, 0x1f, 0x76, 0xec, 0xc8, 0x52,
-	0x6f, 0x9e, 0x9d, 0x37, 0xfb, 0x66, 0xe6, 0x3d, 0xdb, 0xf0, 0xca, 0x1f, 0xe8, 0xfe, 0xb0, 0xc7,
-	0x84, 0x0c, 0x1d, 0x9f, 0x07, 0xf8, 0x35, 0xd6, 0x0e, 0x7a, 0x18, 0x09, 0x19, 0x1d, 0x86, 0x7e,
-	0xa8, 0x1d, 0xf5, 0xd9, 0x77, 0xb8, 0x1a, 0x24, 0x8e, 0xc6, 0x50, 0x05, 0x5c, 0x63, 0xc8, 0x45,
-	0x2c, 0x13, 0x67, 0xb4, 0xcd, 0x03, 0xd5, 0xe7, 0x69, 0x8e, 0xa9, 0x58, 0x6a, 0x49, 0x1b, 0x79,
-	0x04, 0xcb, 0x10, 0xad, 0x87, 0x17, 0x29, 0xa4, 0x2f, 0x1d, 0x03, 0xef, 0x0d, 0x0f, 0x4d, 0x64,
-	0x02, 0xf3, 0x34, 0xb9, 0xa6, 0xb5, 0xe6, 0x4b, 0xe9, 0x07, 0x78, 0x8e, 0xe2, 0xd1, 0x51, 0x96,
-	0xda, 0xab, 0xdd, 0xac, 0x90, 0x31, 0x4e, 0xb7, 0xd8, 0xea, 0xd4, 0xbe, 0x00, 0x47, 0x18, 0xe9,
-	0x92, 0x29, 0xed, 0xef, 0x04, 0x96, 0xdf, 0x66, 0x83, 0x76, 0xcd, 0xa0, 0xf4, 0x31, 0x5c, 0x0f,
-	0x51, 0x73, 0x8f, 0x6b, 0xde, 0x24, 0x9b, 0x64, 0x6b, 0xa9, 0xbd, 0xc1, 0xd2, 0x06, 0x4e, 0x37,
-	0xc0, 0xde, 0xf4, 0x3e, 0xa1, 0xd0, 0xdd, 0x0c, 0xe3, 0x9e, 0xa1, 0xe9, 0x13, 0xb8, 0x9a, 0x28,
-	0x14, 0xcd, 0x79, 0x53, 0x75, 0x9f, 0x95, 0x6f, 0x90, 0xe5, 0xf9, 0xf6, 0x15, 0x0a, 0xd7, 0xd4,
-	0xd9, 0x02, 0xe8, 0x74, 0x8e, 0x76, 0x61, 0x59, 0xe7, 0x4e, 0x9b, 0x64, 0xf3, 0xca, 0xd6, 0x52,
-	0xfb, 0x6e, 0xad, 0xfb, 0xdd, 0x42, 0xb1, 0x7d, 0x00, 0x37, 0x73, 0x00, 0xda, 0x80, 0x45, 0x2e,
-	0xf4, 0x40, 0x46, 0x66, 0xda, 0x1b, 0x6e, 0x16, 0xd1, 0x5d, 0x00, 0xc5, 0x63, 0x1e, 0xa2, 0xc6,
-	0x38, 0x69, 0xce, 0x1b, 0xce, 0x55, 0x36, 0x91, 0x93, 0x9d, 0xca, 0xc9, 0x3a, 0xd1, 0x91, 0x7b,
-	0x01, 0x67, 0xaf, 0xc3, 0x5a, 0xc7, 0xf3, 0xf2, 0x63, 0xb8, 0x98, 0x28, 0x19, 0x25, 0x68, 0x5b,
-	0xb0, 0xf1, 0x4e, 0x79, 0x5c, 0x63, 0x75, 0xfe, 0x19, 0x06, 0x58, 0x99, 0xff, 0x45, 0x60, 0xfd,
-	0x03, 0xd7, 0xa2, 0x5f, 0x9e, 0xa7, 0x0f, 0x60, 0xc1, 0x28, 0x9d, 0xe9, 0x76, 0x9b, 0x4d, 0x74,
-	0x3f, 0xdb, 0xcc, 0xf3, 0x34, 0x74, 0x27, 0x18, 0xfa, 0xba, 0xa8, 0x7c, 0xa6, 0xdb, 0xbd, 0x7a,
-	0xba, 0xb9, 0x85, 0xea, 0xf6, 0xcf, 0x05, 0x68, 0xe4, 0x8f, 0x92, 0x7d, 0x8c, 0x47, 0x03, 0x81,
-	0xf4, 0x05, 0x5c, 0x7b, 0x8f, 0x71, 0x92, 0x6e, 0xb5, 0xe0, 0xa5, 0xec, 0xd8, 0xc5, 0x2f, 0x43,
-	0x4c, 0x74, 0xeb, 0x4e, 0x45, 0x36, 0x9b, 0x4f, 0xc0, 0xca, 0x4b, 0xd4, 0x05, 0xbf, 0xd6, 0xec,
-	0xb7, 0x55, 0x13, 0x47, 0x23, 0x58, 0x99, 0x52, 0xb0, 0x36, 0xc9, 0x76, 0x15, 0xae, 0xd2, 0x14,
-	0x54, 0xc3, 0x6a, 0x99, 0x29, 0x6a, 0x53, 0xee, 0x56, 0xe1, 0x66, 0x59, 0x2d, 0x65, 0x2d, 0xb3,
-	0xda, 0xe5, 0x59, 0x67, 0x19, 0x98, 0x6a, 0xb8, 0x55, 0xe2, 0xdf, 0xda, 0xa4, 0x3b, 0x55, 0xb8,
-	0x19, 0x2f, 0xc5, 0x23, 0xf2, 0xf4, 0xe0, 0xf8, 0xc4, 0x22, 0x7f, 0x4e, 0xac, 0xb9, 0x6f, 0x63,
-	0x8b, 0x1c, 0x8f, 0x2d, 0xf2, 0x7b, 0x6c, 0x91, 0xbf, 0x63, 0x8b, 0xfc, 0xf8, 0x67, 0xcd, 0x7d,
-	0xdc, 0xbb, 0xe4, 0x3f, 0xa3, 0xb7, 0x68, 0x3e, 0x06, 0x3b, 0xff, 0x03, 0x00, 0x00, 0xff, 0xff,
-	0xf6, 0x89, 0xc4, 0xdc, 0x7d, 0x06, 0x00, 0x00,
+	// 668 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x56, 0x5d, 0x4f, 0xd4, 0x40,
+	0x14, 0xa5, 0x7c, 0x45, 0xef, 0x02, 0x26, 0x13, 0x21, 0x4b, 0x63, 0x1a, 0x52, 0x85, 0x10, 0x8d,
+	0xad, 0xa2, 0x0f, 0x24, 0x26, 0x90, 0x35, 0x2a, 0xd1, 0xf0, 0xa1, 0xf5, 0x83, 0xc4, 0xb8, 0x91,
+	0xd9, 0xf6, 0x52, 0x56, 0xdb, 0x4e, 0x6d, 0x07, 0x94, 0x37, 0x9f, 0x8d, 0x0f, 0x3e, 0xf8, 0xa3,
+	0x78, 0xf4, 0xd1, 0x47, 0x59, 0xff, 0x88, 0xe9, 0xb4, 0xdd, 0xed, 0xec, 0x6e, 0x61, 0x13, 0xdc,
+	0x37, 0x86, 0x39, 0x73, 0xee, 0x39, 0x67, 0xee, 0x9d, 0x2e, 0x3c, 0x75, 0x9b, 0xfc, 0xe0, 0xb0,
+	0x61, 0xd8, 0xcc, 0x37, 0x5d, 0xea, 0xe1, 0x97, 0x88, 0x9b, 0xe8, 0x60, 0x60, 0xb3, 0x60, 0xdf,
+	0x77, 0x7d, 0x6e, 0x86, 0x1f, 0x5d, 0x93, 0x86, 0xcd, 0xd8, 0xe4, 0xe8, 0x87, 0x1e, 0xe5, 0xe8,
+	0x53, 0x3b, 0x62, 0xb1, 0x79, 0x74, 0x97, 0x7a, 0xe1, 0x01, 0x4d, 0xf6, 0x8c, 0x30, 0x62, 0x9c,
+	0x91, 0x39, 0x19, 0x61, 0x64, 0x08, 0xf5, 0x76, 0xb1, 0x04, 0x73, 0x99, 0x29, 0xe0, 0x8d, 0xc3,
+	0x7d, 0xb1, 0x12, 0x0b, 0xf1, 0x57, 0x4a, 0xa3, 0xce, 0xbb, 0x8c, 0xb9, 0x1e, 0x76, 0x50, 0x34,
+	0x38, 0xce, 0xb6, 0xd6, 0x07, 0x16, 0x6b, 0xb3, 0x08, 0x7b, 0x25, 0xaa, 0xb5, 0x81, 0x09, 0xf0,
+	0x08, 0x03, 0xde, 0xc7, 0xa5, 0xfe, 0x4d, 0x81, 0x99, 0x57, 0x99, 0xd1, 0x2d, 0x61, 0x94, 0xac,
+	0xc2, 0x25, 0x1f, 0x39, 0x75, 0x28, 0xa7, 0x55, 0x65, 0x41, 0x59, 0xae, 0xac, 0x5c, 0x33, 0x12,
+	0x01, 0x79, 0x02, 0xc6, 0x4e, 0xe3, 0x03, 0xda, 0x7c, 0x2b, 0xc3, 0x58, 0x6d, 0x34, 0x59, 0x83,
+	0xf1, 0x38, 0x44, 0xbb, 0x3a, 0x2a, 0x4e, 0xdd, 0x34, 0xfa, 0x27, 0x68, 0xc8, 0xf5, 0x5e, 0x86,
+	0x68, 0x5b, 0xe2, 0x9c, 0x6e, 0x03, 0xe9, 0xdd, 0x23, 0x5b, 0x30, 0xc3, 0xa5, 0xff, 0x56, 0x95,
+	0x85, 0xb1, 0xe5, 0xca, 0xca, 0xe2, 0x40, 0xfc, 0x56, 0xd7, 0x61, 0xbd, 0x0e, 0xd3, 0x12, 0x80,
+	0xcc, 0xc1, 0x24, 0xb5, 0x79, 0x93, 0x05, 0xc2, 0xed, 0x65, 0x2b, 0x5b, 0x91, 0xfb, 0x00, 0x21,
+	0x8d, 0xa8, 0x8f, 0x1c, 0xa3, 0xb8, 0x3a, 0x2a, 0x6a, 0x5e, 0x35, 0xd2, 0xeb, 0x34, 0xf2, 0xeb,
+	0x34, 0x6a, 0xc1, 0xb1, 0x55, 0xc0, 0xe9, 0x4f, 0x00, 0x36, 0x90, 0x5b, 0xf8, 0xe9, 0x10, 0x63,
+	0x4e, 0x56, 0x01, 0x5c, 0xe4, 0x3b, 0x61, 0x42, 0x18, 0x67, 0x69, 0x56, 0xe5, 0x34, 0x37, 0xda,
+	0xfb, 0x56, 0x01, 0xab, 0xd7, 0xa1, 0x22, 0x78, 0xe2, 0x90, 0x05, 0x31, 0x92, 0xed, 0x3e, 0x21,
+	0x24, 0x64, 0x4b, 0x83, 0x85, 0xdc, 0x93, 0xc2, 0x33, 0xa8, 0x6c, 0x36, 0xe3, 0xb6, 0xce, 0x07,
+	0x50, 0xf1, 0x9a, 0x71, 0x97, 0xd0, 0x79, 0x59, 0xe8, 0x66, 0x07, 0x60, 0x15, 0xd1, 0xfa, 0x1e,
+	0x4c, 0xa5, 0x5c, 0x99, 0xd6, 0xe7, 0x70, 0x45, 0xae, 0x96, 0xdf, 0xd8, 0xa0, 0x62, 0xbb, 0x8f,
+	0xeb, 0xef, 0x00, 0x6a, 0x8e, 0x93, 0x8b, 0xfd, 0xdf, 0x59, 0xd4, 0xa1, 0x22, 0xd8, 0x87, 0x14,
+	0xf5, 0x7b, 0x98, 0x7e, 0x1d, 0x3a, 0x94, 0xe3, 0xb0, 0xf4, 0xef, 0xc1, 0x4c, 0x5e, 0x60, 0x78,
+	0x16, 0x1e, 0xa1, 0x87, 0x43, 0xb5, 0x90, 0x17, 0x18, 0x92, 0x85, 0x6d, 0x98, 0xda, 0xa5, 0xdc,
+	0x3e, 0xc8, 0x1d, 0xac, 0xc1, 0xd4, 0xe7, 0x64, 0x2d, 0xb7, 0xbc, 0x2a, 0xb7, 0xfc, 0x6e, 0x01,
+	0x61, 0x49, 0x78, 0xfd, 0xbb, 0x02, 0xd3, 0x19, 0x61, 0xa6, 0xf8, 0x16, 0x4c, 0x88, 0x67, 0x36,
+	0xa3, 0x9a, 0x35, 0xd2, 0x47, 0xb7, 0x4d, 0xf6, 0x38, 0x59, 0x5a, 0x29, 0xa6, 0x8f, 0xbd, 0xd1,
+	0x8b, 0xd8, 0x5b, 0xf9, 0x39, 0x0e, 0xb3, 0x5d, 0x6f, 0x27, 0x46, 0x47, 0x4d, 0x3b, 0x09, 0x72,
+	0x6c, 0x03, 0x39, 0xd1, 0xcb, 0x88, 0x3b, 0xaf, 0x95, 0x7a, 0xfd, 0x4c, 0x4c, 0x66, 0xf3, 0x05,
+	0x8c, 0x27, 0xd3, 0x4e, 0x4a, 0xc1, 0x85, 0x77, 0x45, 0xbd, 0x71, 0x36, 0xa8, 0x7d, 0xd7, 0x63,
+	0x35, 0xc7, 0x29, 0x97, 0xd8, 0x99, 0xfd, 0x72, 0x89, 0xc5, 0x09, 0xde, 0x85, 0xc9, 0x74, 0x20,
+	0x48, 0xe9, 0x37, 0x42, 0x9a, 0x48, 0x75, 0xe9, 0x3c, 0x58, 0x87, 0x38, 0x6d, 0xd3, 0x72, 0x62,
+	0x69, 0x4e, 0xca, 0x89, 0xbb, 0xba, 0xfd, 0x0d, 0x4c, 0x88, 0x66, 0x22, 0xa5, 0x81, 0x15, 0x9b,
+	0x57, 0x5d, 0x3c, 0x07, 0x95, 0xb2, 0xde, 0x51, 0x1e, 0xd6, 0x4f, 0x4e, 0x35, 0xe5, 0xf7, 0xa9,
+	0x36, 0xf2, 0xb5, 0xa5, 0x29, 0x27, 0x2d, 0x4d, 0xf9, 0xd5, 0xd2, 0x94, 0x3f, 0x2d, 0x4d, 0xf9,
+	0xf1, 0x57, 0x1b, 0x79, 0xbb, 0x7e, 0xc1, 0x5f, 0x4b, 0x8d, 0x49, 0xf1, 0x19, 0xbc, 0xf7, 0x2f,
+	0x00, 0x00, 0xff, 0xff, 0xde, 0xc3, 0x5a, 0x48, 0x77, 0x09, 0x00, 0x00,
 }
 
 // Reference imports to suppress errors if they are not otherwise used.
@@ -366,83 +732,83 @@ var _ grpc.ClientConn
 // is compatible with the grpc package it is being compiled against.
 const _ = grpc.SupportPackageIsVersion4
 
-// TemplateMacrossServiceClient is the client API for TemplateMacrossService service.
+// TemplateMacrosServiceClient is the client API for TemplateMacrosService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type TemplateMacrossServiceClient interface {
-	// Version returns the API version.
-	Version(ctx context.Context, in *v1alpha.VersionRequest, opts ...grpc.CallOption) (*v1alpha.VersionResponse, error)
+type TemplateMacrosServiceClient interface {
 	// Get a TemplateMacros.
-	GetTemplateMacros(ctx context.Context, in *TemplateMacros, opts ...grpc.CallOption) (*TemplateMacros, error)
+	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
+	// List TemplateMacros.
+	List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
 	// Add a TemplateMacros.
-	AddTemplateMacros(ctx context.Context, in *TemplateMacros, opts ...grpc.CallOption) (*AddTemplateMacrosResponse, error)
+	Add(ctx context.Context, in *AddRequest, opts ...grpc.CallOption) (*AddResponse, error)
 	// Update a TemplateMacros.
-	UpdateTemplateMacros(ctx context.Context, in *TemplateMacros, opts ...grpc.CallOption) (*UpdateTemplateMacrosResponse, error)
+	Update(ctx context.Context, in *UpdateRequest, opts ...grpc.CallOption) (*UpdateResponse, error)
 	// Delete a TemplateMacros.
-	DeleteTemplateMacros(ctx context.Context, in *TemplateMacros, opts ...grpc.CallOption) (*DeleteTemplateMacrosResponse, error)
-	// Watch a TemplateMacros.
-	WatchTemplateMacros(ctx context.Context, in *TemplateMacros, opts ...grpc.CallOption) (TemplateMacrossService_WatchTemplateMacrosClient, error)
+	Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*DeleteResponse, error)
+	// Watch TemplateMacros.
+	Watch(ctx context.Context, in *WatchRequest, opts ...grpc.CallOption) (TemplateMacrosService_WatchClient, error)
 }
 
-type templateMacrossServiceClient struct {
+type templateMacrosServiceClient struct {
 	cc *grpc.ClientConn
 }
 
-func NewTemplateMacrossServiceClient(cc *grpc.ClientConn) TemplateMacrossServiceClient {
-	return &templateMacrossServiceClient{cc}
+func NewTemplateMacrosServiceClient(cc *grpc.ClientConn) TemplateMacrosServiceClient {
+	return &templateMacrosServiceClient{cc}
 }
 
-func (c *templateMacrossServiceClient) Version(ctx context.Context, in *v1alpha.VersionRequest, opts ...grpc.CallOption) (*v1alpha.VersionResponse, error) {
-	out := new(v1alpha.VersionResponse)
-	err := c.cc.Invoke(ctx, "/templatemacros.v1alpha.TemplateMacrossService/Version", in, out, opts...)
+func (c *templateMacrosServiceClient) Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error) {
+	out := new(GetResponse)
+	err := c.cc.Invoke(ctx, "/templatemacros.v1alpha.TemplateMacrosService/Get", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *templateMacrossServiceClient) GetTemplateMacros(ctx context.Context, in *TemplateMacros, opts ...grpc.CallOption) (*TemplateMacros, error) {
-	out := new(TemplateMacros)
-	err := c.cc.Invoke(ctx, "/templatemacros.v1alpha.TemplateMacrossService/GetTemplateMacros", in, out, opts...)
+func (c *templateMacrosServiceClient) List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error) {
+	out := new(ListResponse)
+	err := c.cc.Invoke(ctx, "/templatemacros.v1alpha.TemplateMacrosService/List", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *templateMacrossServiceClient) AddTemplateMacros(ctx context.Context, in *TemplateMacros, opts ...grpc.CallOption) (*AddTemplateMacrosResponse, error) {
-	out := new(AddTemplateMacrosResponse)
-	err := c.cc.Invoke(ctx, "/templatemacros.v1alpha.TemplateMacrossService/AddTemplateMacros", in, out, opts...)
+func (c *templateMacrosServiceClient) Add(ctx context.Context, in *AddRequest, opts ...grpc.CallOption) (*AddResponse, error) {
+	out := new(AddResponse)
+	err := c.cc.Invoke(ctx, "/templatemacros.v1alpha.TemplateMacrosService/Add", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *templateMacrossServiceClient) UpdateTemplateMacros(ctx context.Context, in *TemplateMacros, opts ...grpc.CallOption) (*UpdateTemplateMacrosResponse, error) {
-	out := new(UpdateTemplateMacrosResponse)
-	err := c.cc.Invoke(ctx, "/templatemacros.v1alpha.TemplateMacrossService/UpdateTemplateMacros", in, out, opts...)
+func (c *templateMacrosServiceClient) Update(ctx context.Context, in *UpdateRequest, opts ...grpc.CallOption) (*UpdateResponse, error) {
+	out := new(UpdateResponse)
+	err := c.cc.Invoke(ctx, "/templatemacros.v1alpha.TemplateMacrosService/Update", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *templateMacrossServiceClient) DeleteTemplateMacros(ctx context.Context, in *TemplateMacros, opts ...grpc.CallOption) (*DeleteTemplateMacrosResponse, error) {
-	out := new(DeleteTemplateMacrosResponse)
-	err := c.cc.Invoke(ctx, "/templatemacros.v1alpha.TemplateMacrossService/DeleteTemplateMacros", in, out, opts...)
+func (c *templateMacrosServiceClient) Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*DeleteResponse, error) {
+	out := new(DeleteResponse)
+	err := c.cc.Invoke(ctx, "/templatemacros.v1alpha.TemplateMacrosService/Delete", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *templateMacrossServiceClient) WatchTemplateMacros(ctx context.Context, in *TemplateMacros, opts ...grpc.CallOption) (TemplateMacrossService_WatchTemplateMacrosClient, error) {
-	stream, err := c.cc.NewStream(ctx, &_TemplateMacrossService_serviceDesc.Streams[0], "/templatemacros.v1alpha.TemplateMacrossService/WatchTemplateMacros", opts...)
+func (c *templateMacrosServiceClient) Watch(ctx context.Context, in *WatchRequest, opts ...grpc.CallOption) (TemplateMacrosService_WatchClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_TemplateMacrosService_serviceDesc.Streams[0], "/templatemacros.v1alpha.TemplateMacrosService/Watch", opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &templateMacrossServiceWatchTemplateMacrosClient{stream}
+	x := &templateMacrosServiceWatchClient{stream}
 	if err := x.ClientStream.SendMsg(in); err != nil {
 		return nil, err
 	}
@@ -452,183 +818,183 @@ func (c *templateMacrossServiceClient) WatchTemplateMacros(ctx context.Context, 
 	return x, nil
 }
 
-type TemplateMacrossService_WatchTemplateMacrosClient interface {
-	Recv() (*WatchTemplateMacrosResponse, error)
+type TemplateMacrosService_WatchClient interface {
+	Recv() (*WatchResponse, error)
 	grpc.ClientStream
 }
 
-type templateMacrossServiceWatchTemplateMacrosClient struct {
+type templateMacrosServiceWatchClient struct {
 	grpc.ClientStream
 }
 
-func (x *templateMacrossServiceWatchTemplateMacrosClient) Recv() (*WatchTemplateMacrosResponse, error) {
-	m := new(WatchTemplateMacrosResponse)
+func (x *templateMacrosServiceWatchClient) Recv() (*WatchResponse, error) {
+	m := new(WatchResponse)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
 	}
 	return m, nil
 }
 
-// TemplateMacrossServiceServer is the server API for TemplateMacrossService service.
-type TemplateMacrossServiceServer interface {
-	// Version returns the API version.
-	Version(context.Context, *v1alpha.VersionRequest) (*v1alpha.VersionResponse, error)
+// TemplateMacrosServiceServer is the server API for TemplateMacrosService service.
+type TemplateMacrosServiceServer interface {
 	// Get a TemplateMacros.
-	GetTemplateMacros(context.Context, *TemplateMacros) (*TemplateMacros, error)
+	Get(context.Context, *GetRequest) (*GetResponse, error)
+	// List TemplateMacros.
+	List(context.Context, *ListRequest) (*ListResponse, error)
 	// Add a TemplateMacros.
-	AddTemplateMacros(context.Context, *TemplateMacros) (*AddTemplateMacrosResponse, error)
+	Add(context.Context, *AddRequest) (*AddResponse, error)
 	// Update a TemplateMacros.
-	UpdateTemplateMacros(context.Context, *TemplateMacros) (*UpdateTemplateMacrosResponse, error)
+	Update(context.Context, *UpdateRequest) (*UpdateResponse, error)
 	// Delete a TemplateMacros.
-	DeleteTemplateMacros(context.Context, *TemplateMacros) (*DeleteTemplateMacrosResponse, error)
-	// Watch a TemplateMacros.
-	WatchTemplateMacros(*TemplateMacros, TemplateMacrossService_WatchTemplateMacrosServer) error
+	Delete(context.Context, *DeleteRequest) (*DeleteResponse, error)
+	// Watch TemplateMacros.
+	Watch(*WatchRequest, TemplateMacrosService_WatchServer) error
 }
 
-func RegisterTemplateMacrossServiceServer(s *grpc.Server, srv TemplateMacrossServiceServer) {
-	s.RegisterService(&_TemplateMacrossService_serviceDesc, srv)
+func RegisterTemplateMacrosServiceServer(s *grpc.Server, srv TemplateMacrosServiceServer) {
+	s.RegisterService(&_TemplateMacrosService_serviceDesc, srv)
 }
 
-func _TemplateMacrossService_Version_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(v1alpha.VersionRequest)
+func _TemplateMacrosService_Get_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TemplateMacrossServiceServer).Version(ctx, in)
+		return srv.(TemplateMacrosServiceServer).Get(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/templatemacros.v1alpha.TemplateMacrossService/Version",
+		FullMethod: "/templatemacros.v1alpha.TemplateMacrosService/Get",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TemplateMacrossServiceServer).Version(ctx, req.(*v1alpha.VersionRequest))
+		return srv.(TemplateMacrosServiceServer).Get(ctx, req.(*GetRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TemplateMacrossService_GetTemplateMacros_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(TemplateMacros)
+func _TemplateMacrosService_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TemplateMacrossServiceServer).GetTemplateMacros(ctx, in)
+		return srv.(TemplateMacrosServiceServer).List(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/templatemacros.v1alpha.TemplateMacrossService/GetTemplateMacros",
+		FullMethod: "/templatemacros.v1alpha.TemplateMacrosService/List",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TemplateMacrossServiceServer).GetTemplateMacros(ctx, req.(*TemplateMacros))
+		return srv.(TemplateMacrosServiceServer).List(ctx, req.(*ListRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TemplateMacrossService_AddTemplateMacros_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(TemplateMacros)
+func _TemplateMacrosService_Add_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TemplateMacrossServiceServer).AddTemplateMacros(ctx, in)
+		return srv.(TemplateMacrosServiceServer).Add(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/templatemacros.v1alpha.TemplateMacrossService/AddTemplateMacros",
+		FullMethod: "/templatemacros.v1alpha.TemplateMacrosService/Add",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TemplateMacrossServiceServer).AddTemplateMacros(ctx, req.(*TemplateMacros))
+		return srv.(TemplateMacrosServiceServer).Add(ctx, req.(*AddRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TemplateMacrossService_UpdateTemplateMacros_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(TemplateMacros)
+func _TemplateMacrosService_Update_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TemplateMacrossServiceServer).UpdateTemplateMacros(ctx, in)
+		return srv.(TemplateMacrosServiceServer).Update(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/templatemacros.v1alpha.TemplateMacrossService/UpdateTemplateMacros",
+		FullMethod: "/templatemacros.v1alpha.TemplateMacrosService/Update",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TemplateMacrossServiceServer).UpdateTemplateMacros(ctx, req.(*TemplateMacros))
+		return srv.(TemplateMacrosServiceServer).Update(ctx, req.(*UpdateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TemplateMacrossService_DeleteTemplateMacros_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(TemplateMacros)
+func _TemplateMacrosService_Delete_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TemplateMacrossServiceServer).DeleteTemplateMacros(ctx, in)
+		return srv.(TemplateMacrosServiceServer).Delete(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/templatemacros.v1alpha.TemplateMacrossService/DeleteTemplateMacros",
+		FullMethod: "/templatemacros.v1alpha.TemplateMacrosService/Delete",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TemplateMacrossServiceServer).DeleteTemplateMacros(ctx, req.(*TemplateMacros))
+		return srv.(TemplateMacrosServiceServer).Delete(ctx, req.(*DeleteRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TemplateMacrossService_WatchTemplateMacros_Handler(srv interface{}, stream grpc.ServerStream) error {
-	m := new(TemplateMacros)
+func _TemplateMacrosService_Watch_Handler(srv interface{}, stream grpc.ServerStream) error {
+	m := new(WatchRequest)
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}
-	return srv.(TemplateMacrossServiceServer).WatchTemplateMacros(m, &templateMacrossServiceWatchTemplateMacrosServer{stream})
+	return srv.(TemplateMacrosServiceServer).Watch(m, &templateMacrosServiceWatchServer{stream})
 }
 
-type TemplateMacrossService_WatchTemplateMacrosServer interface {
-	Send(*WatchTemplateMacrosResponse) error
+type TemplateMacrosService_WatchServer interface {
+	Send(*WatchResponse) error
 	grpc.ServerStream
 }
 
-type templateMacrossServiceWatchTemplateMacrosServer struct {
+type templateMacrosServiceWatchServer struct {
 	grpc.ServerStream
 }
 
-func (x *templateMacrossServiceWatchTemplateMacrosServer) Send(m *WatchTemplateMacrosResponse) error {
+func (x *templateMacrosServiceWatchServer) Send(m *WatchResponse) error {
 	return x.ServerStream.SendMsg(m)
 }
 
-var _TemplateMacrossService_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "templatemacros.v1alpha.TemplateMacrossService",
-	HandlerType: (*TemplateMacrossServiceServer)(nil),
+var _TemplateMacrosService_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "templatemacros.v1alpha.TemplateMacrosService",
+	HandlerType: (*TemplateMacrosServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Version",
-			Handler:    _TemplateMacrossService_Version_Handler,
+			MethodName: "Get",
+			Handler:    _TemplateMacrosService_Get_Handler,
 		},
 		{
-			MethodName: "GetTemplateMacros",
-			Handler:    _TemplateMacrossService_GetTemplateMacros_Handler,
+			MethodName: "List",
+			Handler:    _TemplateMacrosService_List_Handler,
 		},
 		{
-			MethodName: "AddTemplateMacros",
-			Handler:    _TemplateMacrossService_AddTemplateMacros_Handler,
+			MethodName: "Add",
+			Handler:    _TemplateMacrosService_Add_Handler,
 		},
 		{
-			MethodName: "UpdateTemplateMacros",
-			Handler:    _TemplateMacrossService_UpdateTemplateMacros_Handler,
+			MethodName: "Update",
+			Handler:    _TemplateMacrosService_Update_Handler,
 		},
 		{
-			MethodName: "DeleteTemplateMacros",
-			Handler:    _TemplateMacrossService_DeleteTemplateMacros_Handler,
+			MethodName: "Delete",
+			Handler:    _TemplateMacrosService_Delete_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
 		{
-			StreamName:    "WatchTemplateMacros",
-			Handler:       _TemplateMacrossService_WatchTemplateMacros_Handler,
+			StreamName:    "Watch",
+			Handler:       _TemplateMacrosService_Watch_Handler,
 			ServerStreams: true,
 		},
 	},

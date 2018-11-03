@@ -30,19 +30,19 @@ option (gogoproto.sizer_all) = true;
 option (gogoproto.unmarshaler_all) = true;
 option (gogoproto.goproto_unrecognized_all) = false;
 
-service TemplateMacrossService {
-    // Version returns the API version.
-    rpc Version (core.v1alpha.VersionRequest) returns (core.v1alpha.VersionResponse);
+service TemplateMacrosService {
     // Get a TemplateMacros.
-    rpc GetTemplateMacros (TemplateMacros) returns (TemplateMacros);
+    rpc Get (GetRequest) returns (GetResponse);
+    // List TemplateMacros.
+    rpc List (ListRequest) returns (ListResponse);
     // Add a TemplateMacros.
-    rpc AddTemplateMacros (TemplateMacros) returns (AddTemplateMacrosResponse);
+    rpc Add (AddRequest) returns (AddResponse);
     // Update a TemplateMacros.
-    rpc UpdateTemplateMacros (TemplateMacros) returns (UpdateTemplateMacrosResponse);
+    rpc Update (UpdateRequest) returns (UpdateResponse);
     // Delete a TemplateMacros.
-    rpc DeleteTemplateMacros (TemplateMacros) returns (DeleteTemplateMacrosResponse);
-    // Watch a TemplateMacros.
-    rpc WatchTemplateMacros (TemplateMacros) returns (stream WatchTemplateMacrosResponse);
+    rpc Delete (DeleteRequest) returns (DeleteResponse);
+    // Watch TemplateMacros.
+    rpc Watch (WatchRequest) returns (stream WatchResponse);
 }
 
 // DataStore templatemacros for the data store.
@@ -64,15 +64,67 @@ message TemplateMacro {
     repeated google.protobuf.Any parameters = 2;
 }
 
-message AddTemplateMacrosResponse {}
+// Get
+message GetRequest {
+    core.v1alpha.GetOptions getOptions = 1;
+}
 
-message UpdateTemplateMacrosResponse {}
+message GetResponse {
+    // TemplateMacros object.
+    TemplateMacros templateMacros = 1;
+}
 
-message DeleteTemplateMacrosResponse {}
+// List
+message ListRequest {
+    core.v1alpha.ListOptions listOptions = 1;
+}
 
-message WatchTemplateMacrosResponse {
-    // Event info for watch response.
+message ListResponse {
+    // TemplateMacro list.
+    repeated TemplateMacros templateMacross = 1;
+}
+
+// Add
+message AddRequest {
+    // TemplateMacros object.
+    TemplateMacros templateMacros = 1;
+}
+
+message AddResponse {
+    // TemplateMacros object.
+    TemplateMacros templateMacros = 1;
+}
+
+// Update
+message UpdateRequest {
+    // TemplateMacros object.
+    TemplateMacros templateMacros = 1;
+}
+
+message UpdateResponse {
+    // TemplateMacros object.
+    TemplateMacros templateMacros = 1;
+}
+
+// Delete
+message DeleteRequest {
+    // TemplateMacros object.
+    TemplateMacros templateMacros = 1;
+}
+
+message DeleteResponse {
+    // TemplateMacros object.
+    TemplateMacros templateMacros = 1;
+}
+
+// Watch
+message WatchRequest {
+    core.v1alpha.WatchOptions watchOptions = 1;
+}
+
+message WatchResponse {
+    // TemplateMacros info for watch response.
     events.v1alpha.Event event = 1;
     // TemplateMacros for watch response.
-    TemplateMacros TemplateMacros = 2;
+    TemplateMacros templateMacros = 2;
 }

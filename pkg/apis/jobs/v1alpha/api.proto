@@ -30,18 +30,18 @@ option (gogoproto.unmarshaler_all) = true;
 option (gogoproto.goproto_unrecognized_all) = false;
 
 service JobsService {
-    // Version returns the API version.
-    rpc Version (core.v1alpha.VersionRequest) returns (core.v1alpha.VersionResponse);
     // Get a Job.
-    rpc GetJob (Job) returns (Job);
+    rpc Get (GetRequest) returns (GetResponse);
+    // List Jobs.
+    rpc List (ListRequest) returns (ListResponse);
     // Add a Job.
-    rpc AddJob (Job) returns (AddJobResponse);
+    rpc Add (AddRequest) returns (AddResponse);
     // Update a Job.
-    rpc UpdateJob (Job) returns (UpdateJobResponse);
+    rpc Update (UpdateRequest) returns (UpdateResponse);
     // Delete a Job.
-    rpc DeleteJob (Job) returns (DeleteJobResponse);
-    // Watch a Job.
-    rpc WatchJob (Job) returns (stream WatchJobResponse);
+    rpc Delete (DeleteRequest) returns (DeleteResponse);
+    // Watch Job.
+    rpc Watch (WatchRequest) returns (stream WatchResponse);
 }
 
 message Job {
@@ -51,13 +51,65 @@ message Job {
     core.v1alpha.Include spec = 2;
 }
 
-message AddJobResponse {}
+// Get
+message GetRequest {
+    core.v1alpha.GetOptions getOptions = 1;
+}
 
-message UpdateJobResponse {}
+message GetResponse {
+    // Job object.
+    Job job = 1;
+}
 
-message DeleteJobResponse {}
+// List
+message ListRequest {
+    core.v1alpha.ListOptions listOptions = 1;
+}
 
-message WatchJobResponse {
+message ListResponse {
+    // Config list.
+    repeated Job jobs = 1;
+}
+
+// Add
+message AddRequest {
+    // Job object.
+    Job job = 1;
+}
+
+message AddResponse {
+    // Job object.
+    Job job = 1;
+}
+
+// Update
+message UpdateRequest {
+    // Job object.
+    Job job = 1;
+}
+
+message UpdateResponse {
+    // Job object.
+    Job job = 1;
+}
+
+// Delete
+message DeleteRequest {
+    // Job object.
+    Job job = 1;
+}
+
+message DeleteResponse {
+    // Job object.
+    Job job = 1;
+}
+
+// Watch
+message WatchRequest {
+    core.v1alpha.WatchOptions watchOptions = 1;
+}
+
+message WatchResponse {
     // Event info for watch response.
     events.v1alpha.Event event = 1;
     // Job for watch response.

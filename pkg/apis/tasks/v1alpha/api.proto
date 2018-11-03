@@ -31,18 +31,18 @@ option (gogoproto.unmarshaler_all) = true;
 option (gogoproto.goproto_unrecognized_all) = false;
 
 service TasksService {
-    // Version returns the API version.
-    rpc Version (core.v1alpha.VersionRequest) returns (core.v1alpha.VersionResponse);
     // Get a Task.
-    rpc GetTask (Task) returns (Task);
+    rpc Get (GetRequest) returns (GetResponse);
+    // List Tasks.
+    rpc List (ListRequest) returns (ListResponse);
     // Add a Task.
-    rpc AddTask (Task) returns (AddTaskResponse);
+    rpc Add (AddRequest) returns (AddResponse);
     // Update a Task.
-    rpc UpdateTask (Task) returns (UpdateTaskResponse);
+    rpc Update (UpdateRequest) returns (UpdateResponse);
     // Delete a Task.
-    rpc DeleteTask (Task) returns (DeleteTaskResponse);
-    // Watch a Task.
-    rpc WatchTask (Task) returns (stream WatchTaskResponse);
+    rpc Delete (DeleteRequest) returns (DeleteResponse);
+    // Watch Task.
+    rpc Watch (WatchRequest) returns (stream WatchResponse);
 }
 
 message Task {
@@ -95,14 +95,66 @@ message Action {
     repeated google.protobuf.Any parameters = 4;
 }
 
-message AddTaskResponse {}
+// Get
+message GetRequest {
+    core.v1alpha.GetOptions getOptions = 1;
+}
 
-message UpdateTaskResponse {}
+message GetResponse {
+    // Task object.
+    Task task = 1;
+}
 
-message DeleteTaskResponse {}
+// List
+message ListRequest {
+    core.v1alpha.ListOptions listOptions = 1;
+}
 
-message WatchTaskResponse {
-    // Event info for watch response.
+message ListResponse {
+    // Task list.
+    repeated Task tasks = 1;
+}
+
+// Add
+message AddRequest {
+    // Task object.
+    Task task = 1;
+}
+
+message AddResponse {
+    // Task object.
+    Task task = 1;
+}
+
+// Update
+message UpdateRequest {
+    // Task object.
+    Task task = 1;
+}
+
+message UpdateResponse {
+    // Task object.
+    Task task = 1;
+}
+
+// Delete
+message DeleteRequest {
+    // Task object.
+    Task task = 1;
+}
+
+message DeleteResponse {
+    // Task object.
+    Task task = 1;
+}
+
+// Watch
+message WatchRequest {
+    core.v1alpha.WatchOptions watchOptions = 1;
+}
+
+message WatchResponse {
+    // Task info for watch response.
     events.v1alpha.Event event = 1;
     // Task for watch response.
     Task task = 2;

@@ -30,18 +30,18 @@ option (gogoproto.unmarshaler_all) = true;
 option (gogoproto.goproto_unrecognized_all) = false;
 
 service ConfigsService {
-    // Version returns the API version.
-    rpc Version (core.v1alpha.VersionRequest) returns (core.v1alpha.VersionResponse);
     // Get a Config.
-    rpc GetConfig (Config) returns (Config);
+    rpc Get (GetRequest) returns (GetResponse);
+    // List Configs.
+    rpc List (ListRequest) returns (ListResponse);
     // Add a Config.
-    rpc AddConfig (Config) returns (AddConfigResponse);
+    rpc Add (AddRequest) returns (AddResponse);
     // Update a Config.
-    rpc UpdateConfig (Config) returns (UpdateConfigResponse);
+    rpc Update (UpdateRequest) returns (UpdateResponse);
     // Delete a Config.
-    rpc DeleteConfig (Config) returns (DeleteConfigResponse);
-    // Watch a Config.
-    rpc WatchConfig (Config) returns (stream WatchConfigResponse);
+    rpc Delete (DeleteRequest) returns (DeleteResponse);
+    // Watch Config.
+    rpc Watch (WatchRequest) returns (stream WatchResponse);
 }
 
 // Config object base.
@@ -65,15 +65,67 @@ message DataStore {
     int64 count = 2;
 }
 
-message AddConfigResponse {}
+// Get
+message GetRequest {
+    core.v1alpha.GetOptions getOptions = 1;
+}
 
-message UpdateConfigResponse {}
+message GetResponse {
+    // Config object.
+    Config config = 1;
+}
 
-message DeleteConfigResponse {}
+// List
+message ListRequest {
+    core.v1alpha.ListOptions listOptions = 1;
+}
 
-message WatchConfigResponse {
+message ListResponse {
+    // Config list.
+    repeated Config configs = 1;
+}
+
+// Add
+message AddRequest {
+    // Config object.
+    Config config = 1;
+}
+
+message AddResponse {
+    // Config object.
+    Config config = 1;
+}
+
+// Update
+message UpdateRequest {
+    // Config object.
+    Config config = 1;
+}
+
+message UpdateResponse {
+    // Config object.
+    Config config = 1;
+}
+
+// Delete
+message DeleteRequest {
+    // Config object.
+    Config config = 1;
+}
+
+message DeleteResponse {
+    // Config object.
+    Config config = 1;
+}
+
+// Watch
+message WatchRequest {
+    core.v1alpha.WatchOptions watchOptions = 1;
+}
+
+message WatchResponse {
     // Event info for watch response.
     events.v1alpha.Event event = 1;
-    // Config for watch response.
-    Config Config = 2;
+    // Config object.
+    Config config = 2;
 }
