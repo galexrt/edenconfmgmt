@@ -23,8 +23,8 @@ import (
 	"os"
 	"time"
 
-	core_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha"
 	nodes_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/nodes/v1alpha"
+	"github.com/galexrt/edenconfmgmt/pkg/common"
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
@@ -35,6 +35,9 @@ var (
 	rootCmd = &cobra.Command{
 		Use:   "edenctl",
 		Short: "Configuration management with automatic clustering, events and stuff.",
+		PersistentPreRun: func(cmd *cobra.Command, args []string) {
+			logger = common.GetLogger()
+		},
 		RunE: func(cmd *cobra.Command, args []string) error {
 			opts := []grpc.DialOption{
 				grpc.WithInsecure(),
@@ -48,10 +51,10 @@ var (
 
 			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 			defer cancel()
-			versionRequest := &core_v1alpha.VersionRequest{}
 
-			versionResponse, err := nsClient.Version(ctx, versionRequest)
-			fmt.Printf("Version() Result: %+v - %+v\n", versionResponse, err)
+			in := &nodes_v1alpha.ListRequest{}
+			listResponse, err := nsClient.List(ctx, in)
+			fmt.Printf("Nodes.List(): %+v - %+v\n", listResponse, err)
 			return nil
 		},
 	}

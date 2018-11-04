@@ -18,7 +18,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"io"
 	"net"
 	"net/http"
@@ -37,6 +36,7 @@ import (
 	templatemacros_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/templatemacros/v1alpha"
 	variables_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/variables/v1alpha"
 	"github.com/galexrt/edenconfmgmt/pkg/auth"
+	"github.com/galexrt/edenconfmgmt/pkg/common"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	grpc_zap "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
 	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
@@ -68,16 +68,7 @@ var (
 		Use:   "edenconfmgmt",
 		Short: "Configuration management with automatic clustering, events and stuff.",
 		PersistentPreRun: func(cmd *cobra.Command, args []string) {
-			var err error
-			if viper.GetBool(flagProductionMode) {
-				logger, err = zap.NewProduction()
-			} else {
-				logger, err = zap.NewDevelopment()
-			}
-			if err != nil {
-				fmt.Printf("failed to create zap logger. %+v\n", err)
-				os.Exit(1)
-			}
+			logger = common.GetLogger()
 		},
 		RunE: Run,
 	}
