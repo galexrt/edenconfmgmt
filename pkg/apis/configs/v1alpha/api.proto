@@ -63,6 +63,13 @@ message DataStore {
     string type = 1;
     // Count.
     int64 count = 2;
+    // ETCD config options.
+    ETCD etcd = 3;
+}
+
+message ETCD {
+    // List of endpoints if running your own ETCD server (should only be used for testing).
+    string endpoints = 1;
 }
 
 // Get
