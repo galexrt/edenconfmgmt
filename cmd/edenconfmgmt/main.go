@@ -112,6 +112,7 @@ func initJaeger(service string) (opentracing.Tracer, io.Closer, error) {
 			LogSpans: true,
 		},
 	}
+
 	return cfg.New(service, config.Logger(jaeger.StdLogger), config.Metrics(metricsFactory))
 }
 
@@ -167,7 +168,6 @@ func Run(cmd *cobra.Command, args []string) error {
 			grpc_opentracing.StreamServerInterceptor(),
 			grpcMetrics.StreamServerInterceptor(),
 			grpc_zap.StreamServerInterceptor(logger),
-			//healthProvider.StreamInterceptor,
 			authProvider.StreamInterceptor,
 			grpc_recovery.StreamServerInterceptor(),
 		)),
@@ -176,7 +176,6 @@ func Run(cmd *cobra.Command, args []string) error {
 			grpc_opentracing.UnaryServerInterceptor(),
 			grpcMetrics.UnaryServerInterceptor(),
 			grpc_zap.UnaryServerInterceptor(logger),
-			//healthProvider.UnaryInterceptor,
 			authProvider.UnaryInterceptor,
 			grpc_recovery.UnaryServerInterceptor(),
 		)),
@@ -195,6 +194,9 @@ func Run(cmd *cobra.Command, args []string) error {
 		Handler: promhttp.HandlerFor(promReg, promhttp.HandlerOpts{}),
 		Addr:    viper.GetString(flagListenAddressHTTP),
 	}
+
+	// TODO Create a "mesh" proxy.
+	// Each daemon is a possible way for another dameon to access one of the masters.
 
 	wg := sync.WaitGroup{}
 

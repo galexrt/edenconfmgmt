@@ -22,12 +22,6 @@ import (
 	"google.golang.org/grpc"
 )
 
-// StreamAuthorizeFunc
-type StreamAuthorizeFunc func(srv interface{}, stream grpc.ServerStream, info *grpc.StreamServerInfo, handler grpc.StreamHandler) error
-
-// UnaryAuthorizeFunc
-type UnaryAuthorizeFunc func(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (interface{}, error)
-
 // StreamInterceptor GRPC stream intercepter
 func (a *Auth) StreamInterceptor(srv interface{}, stream grpc.ServerStream, info *grpc.StreamServerInfo, handler grpc.StreamHandler) error {
 	// TODO do actual authentication

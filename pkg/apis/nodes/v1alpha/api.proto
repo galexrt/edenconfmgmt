@@ -52,10 +52,26 @@ message Node {
 }
 
 message Spec {
+    // Network specifications of Node.
+    Network network = 1;
+}
+
+message Network {
+    // Ports of edenconfmgmt daemon (should only be two right now, 1. GRPC, 2. HTTP).
+    repeated Port daemonPorts = 1;
     // FQDN of Node.
-    string fqdn = 3;
+    string fqdn = 2;
     // IP addresses of Node.
-    repeated string addresses = 4;
+    repeated string addresses = 3;
+}
+
+message Port {
+    // Name of port.
+    string name = 1;
+    // Port number.
+    int32 port = 2;
+    // Protocol name.
+    string protocol = 3;
 }
 
 // Get

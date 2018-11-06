@@ -14,18 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package auth
+package handlers
 
 import (
-	"github.com/galexrt/edenconfmgmt/pkg/auth/handlers"
+	"context"
+
+	"google.golang.org/grpc"
 )
 
-// Auth auth handler
-type Auth struct {
-	Handlers []handlers.Handler
+// Handler auth handler interface
+type Handler interface {
+	// StreamAuth stream grpc authorize function
+	StreamAuth(srv interface{}, stream grpc.ServerStream, info *grpc.StreamServerInfo, handler grpc.StreamHandler) (bool, error)
+	// UnaryAuth unary grpc authorize function
+	UnaryAuth(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (bool, interface{}, error)
 }
 
-// New return new Auth
-func New() (*Auth, error) {
-	return &Auth{}, nil
+// Options for auth handler.
+type Options interface {
 }

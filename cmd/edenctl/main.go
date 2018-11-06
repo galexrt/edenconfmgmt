@@ -47,13 +47,13 @@ var (
 				log.Fatalf("fail to dial: %v", err)
 			}
 			defer cc.Close()
-			nsClient := nodes_v1alpha.NewNodesServiceClient(cc)
+			nodesClient := nodes_v1alpha.NewNodesServiceClient(cc)
 
 			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 			defer cancel()
 
 			in := &nodes_v1alpha.ListRequest{}
-			listResponse, err := nsClient.List(ctx, in)
+			listResponse, err := nodesClient.List(ctx, in)
 			fmt.Printf("Nodes.List(): %+v - %+v\n", listResponse, err)
 			return nil
 		},
