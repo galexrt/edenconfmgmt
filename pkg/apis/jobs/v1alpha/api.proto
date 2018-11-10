@@ -29,7 +29,7 @@ option (gogoproto.sizer_all) = true;
 option (gogoproto.unmarshaler_all) = true;
 option (gogoproto.goproto_unrecognized_all) = false;
 
-service JobsService {
+service Jobs {
     // Get a Job.
     rpc Get (GetRequest) returns (GetResponse);
     // List Jobs.

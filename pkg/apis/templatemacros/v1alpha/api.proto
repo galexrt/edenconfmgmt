@@ -30,34 +30,34 @@ option (gogoproto.sizer_all) = true;
 option (gogoproto.unmarshaler_all) = true;
 option (gogoproto.goproto_unrecognized_all) = false;
 
-service TemplateMacrosService {
-    // Get a TemplateMacros.
+service TemplateMacros {
+    // Get a TemplateMacro.
     rpc Get (GetRequest) returns (GetResponse);
     // List TemplateMacros.
     rpc List (ListRequest) returns (ListResponse);
-    // Add a TemplateMacros.
+    // Add a TemplateMacro.
     rpc Add (AddRequest) returns (AddResponse);
-    // Update a TemplateMacros.
+    // Update a TemplateMacro.
     rpc Update (UpdateRequest) returns (UpdateResponse);
-    // Delete a TemplateMacros.
+    // Delete a TemplateMacro.
     rpc Delete (DeleteRequest) returns (DeleteResponse);
     // Watch TemplateMacros.
     rpc Watch (WatchRequest) returns (stream WatchResponse);
 }
 
 // DataStore templatemacros for the data store.
-message TemplateMacros {
-    // Metadata for TemplateMacros object.
-    core.v1alpha.ObjectMetadata metadata = 1;
-    // Spec for TemplateMacros.
-    TemplateMacrosSpec spec = 2;
-}
-
-message TemplateMacrosSpec {
-    repeated TemplateMacro templateMacros = 1;
-}
-
 message TemplateMacro {
+    // Metadata for TemplateMacro object.
+    core.v1alpha.ObjectMetadata metadata = 1;
+    // Spec for TemplateMacro.
+    TemplateMacroSpec spec = 2;
+}
+
+message TemplateMacroSpec {
+    repeated TemplateMacroItem templateMacros = 1;
+}
+
+message TemplateMacroItem {
     // Action.
     string action = 1;
     // Parameters.
@@ -71,7 +71,7 @@ message GetRequest {
 
 message GetResponse {
     // TemplateMacros object.
-    TemplateMacros templateMacros = 1;
+    TemplateMacro TemplateMacro = 1;
 }
 
 // List
@@ -81,40 +81,40 @@ message ListRequest {
 
 message ListResponse {
     // TemplateMacro list.
-    repeated TemplateMacros templateMacross = 1;
+    repeated TemplateMacro TemplateMacros = 1;
 }
 
 // Add
 message AddRequest {
-    // TemplateMacros object.
-    TemplateMacros templateMacros = 1;
+    // TemplateMacro object.
+    TemplateMacro TemplateMacro = 1;
 }
 
 message AddResponse {
-    // TemplateMacros object.
-    TemplateMacros templateMacros = 1;
+    // TemplateMacro object.
+    TemplateMacro TemplateMacro = 1;
 }
 
 // Update
 message UpdateRequest {
-    // TemplateMacros object.
-    TemplateMacros templateMacros = 1;
+    // TemplateMacro object.
+    TemplateMacro TemplateMacro = 1;
 }
 
 message UpdateResponse {
-    // TemplateMacros object.
-    TemplateMacros templateMacros = 1;
+    // TemplateMacro object.
+    TemplateMacro TemplateMacro = 1;
 }
 
 // Delete
 message DeleteRequest {
-    // TemplateMacros object.
-    TemplateMacros templateMacros = 1;
+    // TemplateMacro object.
+    TemplateMacro TemplateMacro = 1;
 }
 
 message DeleteResponse {
-    // TemplateMacros object.
-    TemplateMacros templateMacros = 1;
+    // TemplateMacro object.
+    TemplateMacro TemplateMacro = 1;
 }
 
 // Watch
@@ -123,8 +123,8 @@ message WatchRequest {
 }
 
 message WatchResponse {
-    // TemplateMacros info for watch response.
+    // TemplateMacro info for watch response.
     events.v1alpha.Event event = 1;
-    // TemplateMacros for watch response.
-    TemplateMacros templateMacros = 2;
+    // TemplateMacro for watch response.
+    TemplateMacro TemplateMacro = 2;
 }

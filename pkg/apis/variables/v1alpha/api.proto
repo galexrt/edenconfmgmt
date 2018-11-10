@@ -30,7 +30,7 @@ option (gogoproto.sizer_all) = true;
 option (gogoproto.unmarshaler_all) = true;
 option (gogoproto.goproto_unrecognized_all) = false;
 
-service VariablesService {
+service Variables {
     // Get a Variable.
     rpc Get (GetRequest) returns (GetResponse);
     // List Variable.

@@ -42,12 +42,12 @@ var (
 			opts := []grpc.DialOption{
 				grpc.WithInsecure(),
 			}
-			cc, err := grpc.Dial("127.0.0.1:1337", opts...)
+			grpcClient, err := grpc.Dial("127.0.0.1:1337", opts...)
 			if err != nil {
 				log.Fatalf("fail to dial: %v", err)
 			}
-			defer cc.Close()
-			nodesClient := nodes_v1alpha.NewNodesServiceClient(cc)
+			defer grpcClient.Close()
+			nodesClient := nodes_v1alpha.NewNodesClient(grpcClient)
 
 			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 			defer cancel()

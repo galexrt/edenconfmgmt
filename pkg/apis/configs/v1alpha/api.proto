@@ -14,8 +14,8 @@
 
 syntax = 'proto3';
 
-package config.v1alpha;
-option go_package = "github.com/galexrt/edenconfmgmt/pkg/apis/config/v1alpha";
+package configs.v1alpha;
+option go_package = "github.com/galexrt/edenconfmgmt/pkg/apis/configs/v1alpha";
 
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha/api.proto";
@@ -29,7 +29,7 @@ option (gogoproto.sizer_all) = true;
 option (gogoproto.unmarshaler_all) = true;
 option (gogoproto.goproto_unrecognized_all) = false;
 
-service ConfigsService {
+service Configs {
     // Get a Config.
     rpc Get (GetRequest) returns (GetResponse);
     // List Configs.

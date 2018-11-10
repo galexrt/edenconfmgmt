@@ -26,7 +26,7 @@ type TasksService struct {
 }
 
 // NewServer returns a TasksService
-func NewServer() TasksServiceServer {
+func New() TasksServiceServer {
 	return &TasksService{}
 }
 

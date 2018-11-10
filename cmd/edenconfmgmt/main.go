@@ -195,10 +195,10 @@ func Run(cmd *cobra.Command, args []string) error {
 		Addr:    viper.GetString(flagListenAddressHTTP),
 	}
 
-	// TODO Create a "mesh" proxy.
-	// Each daemon is a possible way for another dameon to access one of the masters.
-
 	wg := sync.WaitGroup{}
+
+	// TODO Create a "mesh" proxy.
+	// Would be cool if each daemon can tell other servers where the masters are or even proxy to them.
 
 	wg.Add(1)
 	go func() {
@@ -214,7 +214,6 @@ func Run(cmd *cobra.Command, args []string) error {
 			logger.Error("grpcServer.Serve() returned non-nil error on GracefulStop", zap.Error(err))
 		}
 	}()
-
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
@@ -243,27 +242,27 @@ func Run(cmd *cobra.Command, args []string) error {
 
 func registerGRPCAPIs(srv *grpc.Server) {
 	// Configs
-	configServiceServer := configs_v1alpha.NewServer()
-	configs_v1alpha.RegisterConfigsServiceServer(srv, configServiceServer)
+	configServer := configs_v1alpha.New()
+	configs_v1alpha.RegisterConfigsServer(srv, configServer)
 	// EventReactors
-	eventReactorsServiceServer := eventreactors_v1alpha.NewServer()
-	eventreactors_v1alpha.RegisterEventReactorsServiceServer(srv, eventReactorsServiceServer)
+	eventReactorsServer := eventreactors_v1alpha.New()
+	eventreactors_v1alpha.RegisterEventReactorsServer(srv, eventReactorsServer)
 	// Events
-	eventsServiceServer := events_v1alpha.NewServer()
-	events_v1alpha.RegisterEventsServiceServer(srv, eventsServiceServer)
+	eventsServer := events_v1alpha.New()
+	events_v1alpha.RegisterEventsServer(srv, eventsServer)
 	// Jobs
-	jobsServiceServer := jobs_v1alpha.NewServer()
-	jobs_v1alpha.RegisterJobsServiceServer(srv, jobsServiceServer)
+	jobsServer := jobs_v1alpha.New()
+	jobs_v1alpha.RegisterJobsServer(srv, jobsServer)
 	// Nodes
-	nodesServiceServer := nodes_v1alpha.NewServer()
-	nodes_v1alpha.RegisterNodesServiceServer(srv, nodesServiceServer)
+	nodesServer := nodes_v1alpha.New()
+	nodes_v1alpha.RegisterNodesServer(srv, nodesServer)
 	// Tasks
-	tasksServiceServer := tasks_v1alpha.NewServer()
-	tasks_v1alpha.RegisterTasksServiceServer(srv, tasksServiceServer)
+	tasksServer := tasks_v1alpha.New()
+	tasks_v1alpha.RegisterTasksServer(srv, tasksServer)
 	// TemplateMacros
-	templateMacrosServiceServer := templatemacros_v1alpha.NewServer()
-	templatemacros_v1alpha.RegisterTemplateMacrosServiceServer(srv, templateMacrosServiceServer)
+	templateMacrosServer := templatemacros_v1alpha.New()
+	templatemacros_v1alpha.RegisterTemplateMacrosServer(srv, templateMacrosServer)
 	// Variables
-	variablesServiceServer := variables_v1alpha.NewServer()
-	variables_v1alpha.RegisterVariablesServiceServer(srv, variablesServiceServer)
+	variablesServer := variables_v1alpha.New()
+	variables_v1alpha.RegisterVariablesServer(srv, variablesServer)
 }

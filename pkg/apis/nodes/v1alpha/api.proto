@@ -29,7 +29,7 @@ option (gogoproto.sizer_all) = true;
 option (gogoproto.unmarshaler_all) = true;
 option (gogoproto.goproto_unrecognized_all) = false;
 
-service NodesService {
+service Nodes {
     // Get a Node.
     rpc Get (GetRequest) returns (GetResponse);
     // List Nodes.

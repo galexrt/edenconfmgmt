@@ -26,7 +26,7 @@ type ConfigsService struct {
 }
 
 // NewServer returns a ConfigsService
-func NewServer() ConfigsServiceServer {
+func New() ConfigsServiceServer {
 	return &ConfigsService{}
 }
 

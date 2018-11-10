@@ -26,7 +26,7 @@ type EventsService struct {
 }
 
 // NewServer returns a EventsService
-func NewServer() EventsServiceServer {
+func New() EventsServiceServer {
 	return &EventsService{}
 }
 

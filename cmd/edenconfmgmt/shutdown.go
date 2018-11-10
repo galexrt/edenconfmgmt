@@ -69,7 +69,7 @@ func Shutdown(cmd *cobra.Command, args []string) error {
 		log.Fatalf("fail to dial: %v", err)
 	}
 	defer cc.Close()
-	nodesClient := nodes_v1alpha.NewNodesServiceClient(cc)
+	nodesClient := nodes_v1alpha.NewNodesClient(cc)
 
 	hostname, err := os.Hostname()
 	if err != nil {

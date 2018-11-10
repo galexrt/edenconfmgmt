@@ -26,7 +26,7 @@ type NodesService struct {
 }
 
 // NewServer returns a NodesService
-func NewServer() NodesServiceServer {
+func New() NodesServiceServer {
 	return &NodesService{}
 }
 

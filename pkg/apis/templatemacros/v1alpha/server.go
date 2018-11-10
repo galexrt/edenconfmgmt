@@ -26,7 +26,7 @@ type TemplateMacrosService struct {
 }
 
 // NewServer returns a TemplateMacrosService
-func NewServer() TemplateMacrosServiceServer {
+func New() TemplateMacrosServiceServer {
 	return &TemplateMacrosService{}
 }
 

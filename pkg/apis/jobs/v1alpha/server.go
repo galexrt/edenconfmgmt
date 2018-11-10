@@ -26,7 +26,7 @@ type JobsService struct {
 }
 
 // NewServer returns a JobsService
-func NewServer() JobsServiceServer {
+func New() JobsServiceServer {
 	return &JobsService{}
 }
 

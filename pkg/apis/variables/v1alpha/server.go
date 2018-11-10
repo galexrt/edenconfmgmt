@@ -26,7 +26,7 @@ type VariablesService struct {
 }
 
 // NewServer returns a VariablesService
-func NewServer() VariablesServiceServer {
+func New() VariablesServiceServer {
 	return &VariablesService{}
 }
 

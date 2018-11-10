@@ -1,0 +1,9 @@
+graph TD
+    HTTPServer --> Metrics[/metrics]
+    GRPCServer --> TaskAPI
+    GRPCServer --> OtherAPIs
+    HealthProvider --> CircuitBreak((Circuit Breaker))
+    CircuitBreak --> GRPCServer
+    TaskScheduler --> CircuitBreak
+    TaskScheduler --> TaskExecutor
+    TaskAPI --> TaskExecutor
