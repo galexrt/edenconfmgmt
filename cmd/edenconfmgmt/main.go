@@ -60,6 +60,7 @@ const (
 	flagProductionMode    = "production"
 	flagListenAddressGRPC = "listen-address-grpc"
 	flagListenAddressHTTP = "listen-address-http"
+	flagNeighbors         = "neighbors"
 )
 
 var (
@@ -86,7 +87,7 @@ func init() {
 	rootCmd.PersistentFlags().Bool(flagProductionMode, true, "production mode (logger will use different output format)")
 	rootCmd.PersistentFlags().String(flagListenAddressGRPC, ":1337", "grpc listen address")
 	rootCmd.PersistentFlags().String(flagListenAddressHTTP, ":1338", "http listen address")
-	//rootCmd.PersistentFlags().StringSliceVarP(&cmdOpts.neighbors, "neighbors", "n", []string{}, "comma separated list of other neighbors")
+	rootCmd.PersistentFlags().StringSlice(flagNeighbors, []string{}, "list of other neighbors (one neighbor per flag)")
 	viper.BindPFlag(flagProductionMode, rootCmd.PersistentFlags().Lookup(flagProductionMode))
 	viper.BindPFlag(flagListenAddressGRPC, rootCmd.PersistentFlags().Lookup(flagListenAddressGRPC))
 	viper.BindPFlag(flagListenAddressHTTP, rootCmd.PersistentFlags().Lookup(flagListenAddressHTTP))
