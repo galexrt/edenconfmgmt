@@ -22,11 +22,11 @@ import (
 
 // JobsService handler for config events.
 type JobsService struct {
-	JobsServiceServer
+	JobsServer
 }
 
 // NewServer returns a JobsService
-func New() JobsServiceServer {
+func New() JobsServer {
 	return &JobsService{}
 }
 
@@ -56,6 +56,6 @@ func (n *JobsService) Delete(context.Context, *DeleteRequest) (*DeleteResponse, 
 }
 
 // Watch Watch Jobs.
-func (n *JobsService) Watch(*WatchRequest, JobsService_WatchServer) error {
+func (n *JobsService) Watch(*WatchRequest, Jobs_WatchServer) error {
 	return nil
 }

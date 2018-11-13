@@ -22,11 +22,11 @@ import (
 
 // EventReactorsService handler for config events.
 type EventReactorsService struct {
-	EventReactorsServiceServer
+	EventReactorsServer
 }
 
 // NewServer returns a EventReactorsService
-func New() EventReactorsServiceServer {
+func New() EventReactorsServer {
 	return &EventReactorsService{}
 }
 
@@ -56,6 +56,6 @@ func (n *EventReactorsService) Delete(context.Context, *DeleteRequest) (*DeleteR
 }
 
 // Watch Watch EventReactors.
-func (n *EventReactorsService) Watch(*WatchRequest, EventReactorsService_WatchServer) error {
+func (n *EventReactorsService) Watch(*WatchRequest, EventReactors_WatchServer) error {
 	return nil
 }

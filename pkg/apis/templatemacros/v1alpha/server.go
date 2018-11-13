@@ -22,11 +22,11 @@ import (
 
 // TemplateMacrosService handler for config events.
 type TemplateMacrosService struct {
-	TemplateMacrosServiceServer
+	TemplateMacrosServer
 }
 
 // NewServer returns a TemplateMacrosService
-func New() TemplateMacrosServiceServer {
+func New() TemplateMacrosServer {
 	return &TemplateMacrosService{}
 }
 
@@ -56,6 +56,6 @@ func (n *TemplateMacrosService) Delete(context.Context, *DeleteRequest) (*Delete
 }
 
 // Watch Watch TemplateMacros.
-func (n *TemplateMacrosService) Watch(*WatchRequest, TemplateMacrosService_WatchServer) error {
+func (n *TemplateMacrosService) Watch(*WatchRequest, TemplateMacros_WatchServer) error {
 	return nil
 }

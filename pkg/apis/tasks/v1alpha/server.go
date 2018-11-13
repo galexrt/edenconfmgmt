@@ -22,11 +22,11 @@ import (
 
 // TasksService handler for config events.
 type TasksService struct {
-	TasksServiceServer
+	TasksServer
 }
 
 // NewServer returns a TasksService
-func New() TasksServiceServer {
+func New() TasksServer {
 	return &TasksService{}
 }
 
@@ -56,6 +56,6 @@ func (n *TasksService) Delete(context.Context, *DeleteRequest) (*DeleteResponse,
 }
 
 // Watch Watch Tasks.
-func (n *TasksService) Watch(*WatchRequest, TasksService_WatchServer) error {
+func (n *TasksService) Watch(*WatchRequest, Tasks_WatchServer) error {
 	return nil
 }

@@ -22,11 +22,11 @@ import (
 
 // EventsService handler for config events.
 type EventsService struct {
-	EventsServiceServer
+	EventsServer
 }
 
 // NewServer returns a EventsService
-func New() EventsServiceServer {
+func New() EventsServer {
 	return &EventsService{}
 }
 
@@ -56,6 +56,6 @@ func (n *EventsService) Delete(context.Context, *DeleteRequest) (*DeleteResponse
 }
 
 // Watch Watch Events.
-func (n *EventsService) Watch(*WatchRequest, EventsService_WatchServer) error {
+func (n *EventsService) Watch(*WatchRequest, Events_WatchServer) error {
 	return nil
 }

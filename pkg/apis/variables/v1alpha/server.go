@@ -22,11 +22,11 @@ import (
 
 // VariablesService handler for config events.
 type VariablesService struct {
-	VariablesServiceServer
+	VariablesServer
 }
 
 // NewServer returns a VariablesService
-func New() VariablesServiceServer {
+func New() VariablesServer {
 	return &VariablesService{}
 }
 
@@ -56,6 +56,6 @@ func (n *VariablesService) Delete(context.Context, *DeleteRequest) (*DeleteRespo
 }
 
 // Watch Watch Variables.
-func (n *VariablesService) Watch(*WatchRequest, VariablesService_WatchServer) error {
+func (n *VariablesService) Watch(*WatchRequest, Variables_WatchServer) error {
 	return nil
 }
