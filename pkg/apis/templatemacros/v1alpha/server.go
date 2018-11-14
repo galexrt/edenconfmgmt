@@ -25,37 +25,37 @@ type TemplateMacrosService struct {
 	TemplateMacrosServer
 }
 
-// NewServer returns a TemplateMacrosService
+// New returns a TemplateMacrosService
 func New() TemplateMacrosServer {
 	return &TemplateMacrosService{}
 }
 
 // Get get a TemplateMacro.
-func (n *TemplateMacrosService) Get(context.Context, *GetRequest) (*GetResponse, error) {
+func (n *TemplateMacrosService) Get(ctx context.Context, req *GetRequest) (*GetResponse, error) {
 	return &GetResponse{}, nil
 }
 
 // List list TemplateMacros.
-func (n *TemplateMacrosService) List(context.Context, *ListRequest) (*ListResponse, error) {
+func (n *TemplateMacrosService) List(ctx context.Context, req *ListRequest) (*ListResponse, error) {
 	return &ListResponse{}, nil
 }
 
 // Add add a TemplateMacro.
-func (n *TemplateMacrosService) Add(context.Context, *AddRequest) (*AddResponse, error) {
+func (n *TemplateMacrosService) Add(ctx context.Context, req *AddRequest) (*AddResponse, error) {
 	return &AddResponse{}, nil
 }
 
 // Update update a TemplateMacro.
-func (n *TemplateMacrosService) Update(context.Context, *UpdateRequest) (*UpdateResponse, error) {
+func (n *TemplateMacrosService) Update(ctx context.Context, req *UpdateRequest) (*UpdateResponse, error) {
 	return &UpdateResponse{}, nil
 }
 
 // Delete delete a TemplateMacro.
-func (n *TemplateMacrosService) Delete(context.Context, *DeleteRequest) (*DeleteResponse, error) {
+func (n *TemplateMacrosService) Delete(ctx context.Context, req *DeleteRequest) (*DeleteResponse, error) {
 	return &DeleteResponse{}, nil
 }
 
 // Watch Watch TemplateMacros.
-func (n *TemplateMacrosService) Watch(*WatchRequest, TemplateMacros_WatchServer) error {
+func (n *TemplateMacrosService) Watch(req *WatchRequest, watch TemplateMacros_WatchServer) error {
 	return nil
 }

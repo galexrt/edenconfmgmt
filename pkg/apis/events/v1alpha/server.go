@@ -25,37 +25,37 @@ type EventsService struct {
 	EventsServer
 }
 
-// NewServer returns a EventsService
+// New returns a EventsService
 func New() EventsServer {
 	return &EventsService{}
 }
 
 // Get get a Event.
-func (n *EventsService) Get(context.Context, *GetRequest) (*GetResponse, error) {
+func (n *EventsService) Get(ctx context.Context, req *GetRequest) (*GetResponse, error) {
 	return &GetResponse{}, nil
 }
 
 // List list Events.
-func (n *EventsService) List(context.Context, *ListRequest) (*ListResponse, error) {
+func (n *EventsService) List(ctx context.Context, req *ListRequest) (*ListResponse, error) {
 	return &ListResponse{}, nil
 }
 
 // Add add a Event.
-func (n *EventsService) Add(context.Context, *AddRequest) (*AddResponse, error) {
+func (n *EventsService) Add(ctx context.Context, req *AddRequest) (*AddResponse, error) {
 	return &AddResponse{}, nil
 }
 
 // Update update a Event.
-func (n *EventsService) Update(context.Context, *UpdateRequest) (*UpdateResponse, error) {
+func (n *EventsService) Update(ctx context.Context, req *UpdateRequest) (*UpdateResponse, error) {
 	return &UpdateResponse{}, nil
 }
 
 // Delete delete a Event.
-func (n *EventsService) Delete(context.Context, *DeleteRequest) (*DeleteResponse, error) {
+func (n *EventsService) Delete(ctx context.Context, req *DeleteRequest) (*DeleteResponse, error) {
 	return &DeleteResponse{}, nil
 }
 
 // Watch Watch Events.
-func (n *EventsService) Watch(*WatchRequest, Events_WatchServer) error {
+func (n *EventsService) Watch(req *WatchRequest, watch Events_WatchServer) error {
 	return nil
 }

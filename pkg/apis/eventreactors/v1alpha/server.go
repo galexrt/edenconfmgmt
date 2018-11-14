@@ -25,37 +25,37 @@ type EventReactorsService struct {
 	EventReactorsServer
 }
 
-// NewServer returns a EventReactorsService
+// New returns a EventReactorsService
 func New() EventReactorsServer {
 	return &EventReactorsService{}
 }
 
 // Get get a EventReactor.
-func (n *EventReactorsService) Get(context.Context, *GetRequest) (*GetResponse, error) {
+func (n *EventReactorsService) Get(ctx context.Context, req *GetRequest) (*GetResponse, error) {
 	return &GetResponse{}, nil
 }
 
 // List list EventReactors.
-func (n *EventReactorsService) List(context.Context, *ListRequest) (*ListResponse, error) {
+func (n *EventReactorsService) List(ctx context.Context, req *ListRequest) (*ListResponse, error) {
 	return &ListResponse{}, nil
 }
 
 // Add add a EventReactor.
-func (n *EventReactorsService) Add(context.Context, *AddRequest) (*AddResponse, error) {
+func (n *EventReactorsService) Add(ctx context.Context, req *AddRequest) (*AddResponse, error) {
 	return &AddResponse{}, nil
 }
 
 // Update update a EventReactor.
-func (n *EventReactorsService) Update(context.Context, *UpdateRequest) (*UpdateResponse, error) {
+func (n *EventReactorsService) Update(ctx context.Context, req *UpdateRequest) (*UpdateResponse, error) {
 	return &UpdateResponse{}, nil
 }
 
 // Delete delete a EventReactor.
-func (n *EventReactorsService) Delete(context.Context, *DeleteRequest) (*DeleteResponse, error) {
+func (n *EventReactorsService) Delete(ctx context.Context, req *DeleteRequest) (*DeleteResponse, error) {
 	return &DeleteResponse{}, nil
 }
 
 // Watch Watch EventReactors.
-func (n *EventReactorsService) Watch(*WatchRequest, EventReactors_WatchServer) error {
+func (n *EventReactorsService) Watch(req *WatchRequest, watch EventReactors_WatchServer) error {
 	return nil
 }

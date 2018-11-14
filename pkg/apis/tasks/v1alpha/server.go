@@ -25,37 +25,37 @@ type TasksService struct {
 	TasksServer
 }
 
-// NewServer returns a TasksService
+// New returns a TasksService
 func New() TasksServer {
 	return &TasksService{}
 }
 
 // Get get a Task.
-func (n *TasksService) Get(context.Context, *GetRequest) (*GetResponse, error) {
+func (n *TasksService) Get(ctx context.Context, req *GetRequest) (*GetResponse, error) {
 	return &GetResponse{}, nil
 }
 
 // List list Tasks.
-func (n *TasksService) List(context.Context, *ListRequest) (*ListResponse, error) {
+func (n *TasksService) List(ctx context.Context, req *ListRequest) (*ListResponse, error) {
 	return &ListResponse{}, nil
 }
 
 // Add add a Task.
-func (n *TasksService) Add(context.Context, *AddRequest) (*AddResponse, error) {
+func (n *TasksService) Add(ctx context.Context, req *AddRequest) (*AddResponse, error) {
 	return &AddResponse{}, nil
 }
 
 // Update update a Task.
-func (n *TasksService) Update(context.Context, *UpdateRequest) (*UpdateResponse, error) {
+func (n *TasksService) Update(ctx context.Context, req *UpdateRequest) (*UpdateResponse, error) {
 	return &UpdateResponse{}, nil
 }
 
 // Delete delete a Task.
-func (n *TasksService) Delete(context.Context, *DeleteRequest) (*DeleteResponse, error) {
+func (n *TasksService) Delete(ctx context.Context, req *DeleteRequest) (*DeleteResponse, error) {
 	return &DeleteResponse{}, nil
 }
 
 // Watch Watch Tasks.
-func (n *TasksService) Watch(*WatchRequest, Tasks_WatchServer) error {
+func (n *TasksService) Watch(req *WatchRequest, watch Tasks_WatchServer) error {
 	return nil
 }

@@ -16,11 +16,77 @@ limitations under the License.
 
 package main
 
+import (
+	"context"
+	"fmt"
+	"io"
+	"log"
+	"os"
+	"sync"
+
+	core_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha"
+	nodes_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/nodes/v1alpha"
+	"go.uber.org/zap"
+	"google.golang.org/grpc"
+)
+
 func magicRun(stopCh chan struct{}) error {
-	// TODO
-	/*select {
-	case <-stopCh:
-		return nil
-	}*/
+	// Watch for node changes of itself
+	hostname, err := os.Hostname()
+	if err != nil {
+		logger.Error("failed to get hostname", zap.Error(err))
+		return err
+	}
+
+grpcConnLoop:
+	for {
+		opts := []grpc.DialOption{
+			grpc.WithInsecure(),
+		}
+		grpcClient, err := grpc.Dial("127.0.0.1:1337", opts...)
+		if err != nil {
+			log.Fatalf("fail to dial: %v", err)
+		}
+		defer grpcClient.Close()
+		for {
+			nodesClient := nodes_v1alpha.NewNodesClient(grpcClient)
+
+			in := &nodes_v1alpha.WatchRequest{
+				WatchOptions: &core_v1alpha.WatchOptions{
+					Name: hostname,
+				},
+			}
+			nodesWatcher, err := nodesClient.Watch(context.Background(), in)
+			if err != nil {
+				logger.Error("failed to watch nodes", zap.Error(err))
+				return err
+			}
+
+			wg := &sync.WaitGroup{}
+			wg.Add(1)
+			go func() {
+				defer wg.Done()
+				select {
+				case <-stopCh:
+					// TODO Move this to own code which is just for maintaining GRPC connection
+					grpcClient.Close()
+					logger.Error("grpc client closing conncetion failed ", zap.Error(err))
+				}
+			}()
+
+			for {
+				nodeResp, err := nodesWatcher.Recv()
+				if err == io.EOF {
+					logger.Warn("watch closed, restarting watch")
+					break
+				}
+				if err != nil {
+					logger.Error("failed to watch nodes", zap.Error(err))
+					return err
+				}
+				fmt.Printf("TEST: %+v\n", nodeResp)
+			}
+		}
+	}
 	return nil
 }

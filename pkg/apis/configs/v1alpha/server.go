@@ -25,37 +25,37 @@ type ConfigsService struct {
 	ConfigsServer
 }
 
-// NewServer returns a ConfigsService
+// New returns a ConfigsService
 func New() ConfigsServer {
 	return &ConfigsService{}
 }
 
 // Get get a Config.
-func (n *ConfigsService) Get(context.Context, *GetRequest) (*GetResponse, error) {
+func (n *ConfigsService) Get(ctx context.Context, req *GetRequest) (*GetResponse, error) {
 	return &GetResponse{}, nil
 }
 
 // List list Configs.
-func (n *ConfigsService) List(context.Context, *ListRequest) (*ListResponse, error) {
+func (n *ConfigsService) List(ctx context.Context, req *ListRequest) (*ListResponse, error) {
 	return &ListResponse{}, nil
 }
 
 // Add add a Config.
-func (n *ConfigsService) Add(context.Context, *AddRequest) (*AddResponse, error) {
+func (n *ConfigsService) Add(ctx context.Context, req *AddRequest) (*AddResponse, error) {
 	return &AddResponse{}, nil
 }
 
 // Update update a Config.
-func (n *ConfigsService) Update(context.Context, *UpdateRequest) (*UpdateResponse, error) {
+func (n *ConfigsService) Update(ctx context.Context, req *UpdateRequest) (*UpdateResponse, error) {
 	return &UpdateResponse{}, nil
 }
 
 // Delete delete a Config.
-func (n *ConfigsService) Delete(context.Context, *DeleteRequest) (*DeleteResponse, error) {
+func (n *ConfigsService) Delete(ctx context.Context, req *DeleteRequest) (*DeleteResponse, error) {
 	return &DeleteResponse{}, nil
 }
 
 // Watch Watch Configs.
-func (n *ConfigsService) Watch(*WatchRequest, Configs_WatchServer) error {
+func (n *ConfigsService) Watch(req *WatchRequest, watch Configs_WatchServer) error {
 	return nil
 }

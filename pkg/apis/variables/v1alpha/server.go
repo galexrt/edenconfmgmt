@@ -25,37 +25,37 @@ type VariablesService struct {
 	VariablesServer
 }
 
-// NewServer returns a VariablesService
+// New returns a VariablesService
 func New() VariablesServer {
 	return &VariablesService{}
 }
 
 // Get get a Variable.
-func (n *VariablesService) Get(context.Context, *GetRequest) (*GetResponse, error) {
+func (n *VariablesService) Get(ctx context.Context, req *GetRequest) (*GetResponse, error) {
 	return &GetResponse{}, nil
 }
 
 // List list Variables.
-func (n *VariablesService) List(context.Context, *ListRequest) (*ListResponse, error) {
+func (n *VariablesService) List(ctx context.Context, req *ListRequest) (*ListResponse, error) {
 	return &ListResponse{}, nil
 }
 
 // Add add a Variable.
-func (n *VariablesService) Add(context.Context, *AddRequest) (*AddResponse, error) {
+func (n *VariablesService) Add(ctx context.Context, req *AddRequest) (*AddResponse, error) {
 	return &AddResponse{}, nil
 }
 
 // Update update a Variable.
-func (n *VariablesService) Update(context.Context, *UpdateRequest) (*UpdateResponse, error) {
+func (n *VariablesService) Update(ctx context.Context, req *UpdateRequest) (*UpdateResponse, error) {
 	return &UpdateResponse{}, nil
 }
 
 // Delete delete a Variable.
-func (n *VariablesService) Delete(context.Context, *DeleteRequest) (*DeleteResponse, error) {
+func (n *VariablesService) Delete(ctx context.Context, req *DeleteRequest) (*DeleteResponse, error) {
 	return &DeleteResponse{}, nil
 }
 
 // Watch Watch Variables.
-func (n *VariablesService) Watch(*WatchRequest, Variables_WatchServer) error {
+func (n *VariablesService) Watch(req *WatchRequest, watch Variables_WatchServer) error {
 	return nil
 }

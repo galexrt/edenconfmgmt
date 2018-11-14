@@ -25,37 +25,37 @@ type JobsService struct {
 	JobsServer
 }
 
-// NewServer returns a JobsService
+// New returns a JobsService
 func New() JobsServer {
 	return &JobsService{}
 }
 
 // Get get a Job.
-func (n *JobsService) Get(context.Context, *GetRequest) (*GetResponse, error) {
+func (n *JobsService) Get(ctx context.Context, req *GetRequest) (*GetResponse, error) {
 	return &GetResponse{}, nil
 }
 
 // List list Jobs.
-func (n *JobsService) List(context.Context, *ListRequest) (*ListResponse, error) {
+func (n *JobsService) List(ctx context.Context, req *ListRequest) (*ListResponse, error) {
 	return &ListResponse{}, nil
 }
 
 // Add add a Job.
-func (n *JobsService) Add(context.Context, *AddRequest) (*AddResponse, error) {
+func (n *JobsService) Add(ctx context.Context, req *AddRequest) (*AddResponse, error) {
 	return &AddResponse{}, nil
 }
 
 // Update update a Job.
-func (n *JobsService) Update(context.Context, *UpdateRequest) (*UpdateResponse, error) {
+func (n *JobsService) Update(ctx context.Context, req *UpdateRequest) (*UpdateResponse, error) {
 	return &UpdateResponse{}, nil
 }
 
 // Delete delete a Job.
-func (n *JobsService) Delete(context.Context, *DeleteRequest) (*DeleteResponse, error) {
+func (n *JobsService) Delete(ctx context.Context, req *DeleteRequest) (*DeleteResponse, error) {
 	return &DeleteResponse{}, nil
 }
 
 // Watch Watch Jobs.
-func (n *JobsService) Watch(*WatchRequest, Jobs_WatchServer) error {
+func (n *JobsService) Watch(req *WatchRequest, watch Jobs_WatchServer) error {
 	return nil
 }

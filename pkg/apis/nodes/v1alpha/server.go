@@ -18,6 +18,10 @@ package v1alpha
 
 import (
 	"context"
+	"time"
+
+	core_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha"
+	events_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha"
 )
 
 // NodesService handler for config events.
@@ -25,37 +29,56 @@ type NodesService struct {
 	NodesServer
 }
 
-// NewServer returns a NodesService
+// New returns a NodesService
 func New() NodesServer {
 	return &NodesService{}
 }
 
 // Get get a Node.
-func (n *NodesService) Get(context.Context, *GetRequest) (*GetResponse, error) {
+func (n *NodesService) Get(ctx context.Context, req *GetRequest) (*GetResponse, error) {
 	return &GetResponse{}, nil
 }
 
 // List list Nodes.
-func (n *NodesService) List(context.Context, *ListRequest) (*ListResponse, error) {
+func (n *NodesService) List(ctx context.Context, req *ListRequest) (*ListResponse, error) {
 	return &ListResponse{}, nil
 }
 
 // Add add a Node.
-func (n *NodesService) Add(context.Context, *AddRequest) (*AddResponse, error) {
+func (n *NodesService) Add(ctx context.Context, req *AddRequest) (*AddResponse, error) {
 	return &AddResponse{}, nil
 }
 
 // Update update a Node.
-func (n *NodesService) Update(context.Context, *UpdateRequest) (*UpdateResponse, error) {
+func (n *NodesService) Update(ctx context.Context, req *UpdateRequest) (*UpdateResponse, error) {
 	return &UpdateResponse{}, nil
 }
 
 // Delete delete a Node.
-func (n *NodesService) Delete(context.Context, *DeleteRequest) (*DeleteResponse, error) {
+func (n *NodesService) Delete(ctx context.Context, req *DeleteRequest) (*DeleteResponse, error) {
 	return &DeleteResponse{}, nil
 }
 
 // Watch Watch Nodes.
-func (n *NodesService) Watch(*WatchRequest, Nodes_WatchServer) error {
-	return nil
+func (n *NodesService) Watch(req *WatchRequest, watch Nodes_WatchServer) error {
+	for {
+		if err := Nodes_WatchServer.Send(watch, &WatchResponse{
+			Node: &Node{
+				Metadata: &core_v1alpha.ObjectMetadata{
+					Name: "node",
+				},
+			},
+			Event: &events_v1alpha.Event{
+				Metadata: &core_v1alpha.ObjectMetadata{
+					Name: "node",
+				},
+				Spec: &events_v1alpha.EventSpec{
+					Summary: "Update",
+				},
+			},
+		}); err != nil {
+			return err
+		}
+		<-time.After(5 * time.Second)
+	}
 }
