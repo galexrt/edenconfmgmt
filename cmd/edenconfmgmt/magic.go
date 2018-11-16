@@ -38,7 +38,7 @@ func magicRun(stopCh chan struct{}) error {
 		return err
 	}
 
-grpcConnLoop:
+grpcConn:
 	for {
 		opts := []grpc.DialOption{
 			grpc.WithInsecure(),
@@ -48,6 +48,7 @@ grpcConnLoop:
 			log.Fatalf("fail to dial: %v", err)
 		}
 		defer grpcClient.Close()
+	grpcNodesClient:
 		for {
 			nodesClient := nodes_v1alpha.NewNodesClient(grpcClient)
 
@@ -74,6 +75,7 @@ grpcConnLoop:
 				}
 			}()
 
+		nodesWatch:
 			for {
 				nodeResp, err := nodesWatcher.Recv()
 				if err == io.EOF {
