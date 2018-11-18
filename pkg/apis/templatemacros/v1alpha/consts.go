@@ -14,9 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package eventreactors
+package v1alpha
 
 const (
-	// APIName name of the API.
-	APIName = "eventreactors"
+	// Kind the name of the object kind (singular).
+	Kind = "TemplateMacro"
+	// KindPlural the name of the object kind (plural).
+	KindPlural = "TemplateMacros"
+	// APIVersion of the API.
+	APIVersion = "v1alpha"
 )

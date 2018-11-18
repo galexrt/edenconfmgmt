@@ -17,6 +17,6 @@ limitations under the License.
 package variables
 
 const (
-	// APIName the name of the API.
+	// APIName name of the API.
 	APIName = "variables"
 )

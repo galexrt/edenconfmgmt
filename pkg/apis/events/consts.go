@@ -17,6 +17,6 @@ limitations under the License.
 package events
 
 const (
-	// APIName the name of the API.
+	// APIName name of the API.
 	APIName = "events"
 )

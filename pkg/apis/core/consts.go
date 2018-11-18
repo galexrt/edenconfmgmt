@@ -17,6 +17,6 @@ limitations under the License.
 package core
 
 const (
-	// APIName the name of the API.
+	// APIName name of the API.
 	APIName = "core"
 )

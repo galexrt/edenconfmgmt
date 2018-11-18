@@ -14,9 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package eventreactors
+package apis
 
-const (
-	// APIName name of the API.
-	APIName = "eventreactors"
+import (
+	core_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha"
 )
+
+// ErrorToErrorResponse translates a Golang error to an error core object
+func ErrorToErrorResponse(err error) *core_v1alpha.Error {
+	return &core_v1alpha.Error{
+		Code:    -1,
+		Message: err.Error(),
+	}
+}

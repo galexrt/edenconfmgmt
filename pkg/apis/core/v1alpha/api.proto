@@ -100,3 +100,10 @@ message WatchOptions {
     // Label selector in string form.
     repeated string labelSelectors = 2;
 }
+
+message Error {
+    // Code status code.
+    int64 code = 1;
+    // Message error message (can be empty).
+    string message = 2;
+}

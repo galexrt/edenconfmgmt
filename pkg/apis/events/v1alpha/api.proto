@@ -59,22 +59,28 @@ message EventSpec {
 
 // Get
 message GetRequest {
+    // GetOptions options for a GetRequest.
     core.v1alpha.GetOptions getOptions = 1;
 }
 
 message GetResponse {
     // Event object.
     Event event = 1;
+    // Error object.
+    core.v1alpha.Error error = 2;
 }
 
 // List
 message ListRequest {
+    // ListOptions options for a ListRequest.
     core.v1alpha.ListOptions listOptions = 1;
 }
 
 message ListResponse {
     // Event list.
     repeated Event events = 1;
+    // Error object.
+    core.v1alpha.Error error = 2;
 }
 
 // Add
@@ -86,6 +92,8 @@ message AddRequest {
 message AddResponse {
     // Event object.
     Event event = 1;
+    // Error object.
+    core.v1alpha.Error error = 2;
 }
 
 // Update
@@ -97,6 +105,8 @@ message UpdateRequest {
 message UpdateResponse {
     // Event object.
     Event event = 1;
+    // Error object.
+    core.v1alpha.Error error = 2;
 }
 
 // Delete
@@ -108,14 +118,19 @@ message DeleteRequest {
 message DeleteResponse {
     // Event object.
     Event event = 1;
+    // Error object.
+    core.v1alpha.Error error = 2;
 }
 
 // Watch
 message WatchRequest {
+    // WatchOptions options for WatchRequest.
     core.v1alpha.WatchOptions watchOptions = 1;
 }
 
 message WatchResponse {
     // Event for watch stream.
     Event event = 1;
+    // Error object.
+    core.v1alpha.Error error = 2;
 }

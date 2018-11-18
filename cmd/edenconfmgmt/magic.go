@@ -18,11 +18,11 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"io"
 	"log"
 	"os"
 	"sync"
+	"time"
 
 	core_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha"
 	nodes_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/nodes/v1alpha"
@@ -38,19 +38,39 @@ func magicRun(stopCh chan struct{}) error {
 		return err
 	}
 
-grpcConn:
+	wg := &sync.WaitGroup{}
+
 	for {
 		opts := []grpc.DialOption{
 			grpc.WithInsecure(),
 		}
+		// TODO Move this logic to it's own package and init it in the cmd part using the neighbors flag
 		grpcClient, err := grpc.Dial("127.0.0.1:1337", opts...)
 		if err != nil {
 			log.Fatalf("fail to dial: %v", err)
+			return err
 		}
 		defer grpcClient.Close()
-	grpcNodesClient:
+
 		for {
 			nodesClient := nodes_v1alpha.NewNodesClient(grpcClient)
+
+			wg.Add(1)
+			go func() {
+				defer wg.Done()
+				select {
+				case <-stopCh:
+					// TODO Move this to own code which is just for maintaining GRPC connection
+					grpcClient.Close()
+					logger.Error("grpc client closing conncetion failed ", zap.Error(err))
+				}
+			}()
+
+			if _, err := registerNode(nodesClient, hostname); err != nil {
+				logger.Error("failed to register node", zap.Error(err))
+			}
+
+			// TODO add node "I am alive" loop
 
 			in := &nodes_v1alpha.WatchRequest{
 				WatchOptions: &core_v1alpha.WatchOptions{
@@ -63,19 +83,6 @@ grpcConn:
 				return err
 			}
 
-			wg := &sync.WaitGroup{}
-			wg.Add(1)
-			go func() {
-				defer wg.Done()
-				select {
-				case <-stopCh:
-					// TODO Move this to own code which is just for maintaining GRPC connection
-					grpcClient.Close()
-					logger.Error("grpc client closing conncetion failed ", zap.Error(err))
-				}
-			}()
-
-		nodesWatch:
 			for {
 				nodeResp, err := nodesWatcher.Recv()
 				if err == io.EOF {
@@ -86,9 +93,29 @@ grpcConn:
 					logger.Error("failed to watch nodes", zap.Error(err))
 					return err
 				}
-				fmt.Printf("TEST: %+v\n", nodeResp)
+				logger.Info("TEST", zap.Any("nodeResp", nodeResp))
 			}
 		}
 	}
-	return nil
+}
+
+func registerNode(nodesClient nodes_v1alpha.NodesClient, hostname string) (*nodes_v1alpha.AddResponse, error) {
+	// TODO
+	addRequest := &nodes_v1alpha.AddRequest{
+		Node: &nodes_v1alpha.Node{
+			Metadata: &core_v1alpha.ObjectMetadata{
+				Kind:       nodes_v1alpha.Kind,
+				ApiVersion: nodes_v1alpha.APIVersion,
+				Name:       hostname,
+			},
+		},
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	return nodesClient.Add(ctx, addRequest)
+}
+
+func keepAliveNode() {
+	// TODO
 }
