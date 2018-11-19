@@ -37,6 +37,7 @@ import (
 	variables_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/variables/v1alpha"
 	"github.com/galexrt/edenconfmgmt/pkg/auth"
 	"github.com/galexrt/edenconfmgmt/pkg/common"
+	"github.com/galexrt/edenconfmgmt/pkg/store/handlers"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	grpc_zap "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
 	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
@@ -94,6 +95,9 @@ func init() {
 	viper.SetDefault(flagProductionMode, true)
 	viper.SetDefault(flagListenAddressGRPC, ":1337")
 	viper.SetDefault(flagListenAddressHTTP, ":1338")
+
+	// Register all store handlers flags.
+	handlers.RegisterFlags(rootCmd.PersistentFlags())
 }
 
 func main() {

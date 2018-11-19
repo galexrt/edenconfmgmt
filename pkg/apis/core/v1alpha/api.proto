@@ -99,6 +99,8 @@ message WatchOptions {
     string name = 1;
     // Label selector in string form.
     repeated string labelSelectors = 2;
+    // Conditions to look for when watching Events on an object.
+    repeated string conitions = 3;
 }
 
 message Error {
