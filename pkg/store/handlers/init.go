@@ -17,18 +17,15 @@ limitations under the License.
 package handlers
 
 import (
-	flag "github.com/spf13/pflag"
+	"github.com/spf13/cobra"
 )
 
 // flagRegisters list of available store handlers.
-var flagRegisters = map[string]func(flagSet *flag.FlagSet) error{}
+var flagRegisters = map[string]func(cmd *cobra.Command){}
 
 // RegisterFlags register flags using the function provided in flagRegisters var.
-func RegisterFlags(flagSet *flag.FlagSet) error {
+func RegisterFlags(cmd *cobra.Command) {
 	for _, register := range flagRegisters {
-		if err := register(flagSet); err != nil {
-			return err
-		}
+		register(cmd)
 	}
-	return nil
 }

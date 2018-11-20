@@ -89,15 +89,12 @@ func init() {
 	rootCmd.PersistentFlags().String(flagListenAddressGRPC, ":1337", "grpc listen address")
 	rootCmd.PersistentFlags().String(flagListenAddressHTTP, ":1338", "http listen address")
 	rootCmd.PersistentFlags().StringSlice(flagNeighbors, []string{}, "list of other neighbors (one neighbor per flag)")
-	viper.BindPFlag(flagProductionMode, rootCmd.PersistentFlags().Lookup(flagProductionMode))
-	viper.BindPFlag(flagListenAddressGRPC, rootCmd.PersistentFlags().Lookup(flagListenAddressGRPC))
-	viper.BindPFlag(flagListenAddressHTTP, rootCmd.PersistentFlags().Lookup(flagListenAddressHTTP))
-	viper.SetDefault(flagProductionMode, true)
-	viper.SetDefault(flagListenAddressGRPC, ":1337")
-	viper.SetDefault(flagListenAddressHTTP, ":1338")
 
 	// Register all store handlers flags.
-	handlers.RegisterFlags(rootCmd.PersistentFlags())
+	handlers.RegisterFlags(rootCmd)
+
+	// Bind all persistent flags to viper, for easy access.
+	viper.BindPFlags(rootCmd.PersistentFlags())
 }
 
 func main() {
