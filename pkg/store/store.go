@@ -16,19 +16,21 @@ limitations under the License.
 
 package store
 
+import (
+	"time"
+)
+
 // Store Interface to abstract get, put, del, watch actions to a store. Where a
 // store might be an etcd, consul or even in-memory.
 type Store interface {
 	// Get return a specific key.
 	Get(key string) (string, error)
 	// Put set a key to a specific value.
-	Put(key string, value string) error
+	Set(key string, value string) error
 	// PutTTL set a key to a specific value with a TTL.
-	PutTTL(key string, value string, ttlSeconds int64) error
+	SetTTL(key string, value string, ttl time.Duration) error
 	// Delete delete a key value pair.
 	Delete(key string) error
-	// Watch watch a key for creation, changes and deletion.
-	Watch(key string) (string, error)
-	// WatchDir watch a directory for creation, changes and deletion of keys.
-	WatchDir(dir string) error
+	// Watch watch a key or directory for creation, changes and deletion.
+	Watch(key string, dir bool) (*Watcher, error)
 }

@@ -17,10 +17,17 @@ limitations under the License.
 package handlers
 
 import (
+	"context"
+	"fmt"
+	"net"
+	"net/http"
+	"strings"
 	"time"
 
 	"github.com/galexrt/edenconfmgmt/pkg/store"
 	"github.com/spf13/cobra"
+	"github.com/spf13/viper"
+	"go.etcd.io/etcd/client"
 )
 
 const (
@@ -42,6 +49,8 @@ const (
 
 // ETCD implementation of store.Store interface for ETCD.
 type ETCD struct {
+	client client.Client
+	kapi   client.KeysAPI
 	store.Store
 }
 
@@ -64,6 +73,12 @@ type ETCDOptions struct {
 	User                  string
 }
 
+// ETCDWatcher watcher for ETCD implementing the store.Watcher interface.
+type ETCDWatcher struct {
+	watcher client.Watcher
+	store.Watcher
+}
+
 func init() {
 	flagRegisters["etcd"] = func(cmd *cobra.Command) {
 		cmd.PersistentFlags().String(flagETCDCACert, "", "ETCD: verify certificates of TLS-enabled secure servers using this CA bundle")
@@ -76,8 +91,8 @@ func init() {
 		cmd.PersistentFlags().Bool(flagETCDInsecureDiscovery, true, "ETCD: accept insecure SRV records describing cluster endpoints")
 		cmd.PersistentFlags().Bool(flagETCDInsecureSkipTLSVerify, false, "ETCD: skip server certificate verification")
 		cmd.PersistentFlags().Bool(flagETCDInsecureTransport, true, "ETCD: disable transport security for client connections")
-		cmd.PersistentFlags().Duration(flagETCDKeepaliveTime, 2*time.Second, "ETCD: keepalive time for client connections")
-		cmd.PersistentFlags().Duration(flagETCDKeepaliveTimeout, 6*time.Second, "ETCD: keepalive timeout for client connections")
+		cmd.PersistentFlags().Duration(flagETCDKeepaliveTime, 30*time.Second, "ETCD: keepalive time for client connections")
+		cmd.PersistentFlags().Duration(flagETCDKeepaliveTimeout, 30*time.Second, "ETCD: keepalive timeout for client connections")
 		cmd.PersistentFlags().String(flagETCDKey, "", "ETCD: identify secure client using this TLS key file")
 		cmd.PersistentFlags().String(flagETCDUser, "", "ETCD: username[:password] for authentication (prompt if password is not supplied)")
 	}
@@ -85,36 +100,111 @@ func init() {
 
 // New create new ETCD store.
 func New() (*ETCD, error) {
-	// TODO use flag values to generate config for etcd client
-	return &ETCD{}, nil
+	etcd := &ETCD{}
+	user := viper.GetString(flagETCDUser)
+	password := ""
+	if user != "" {
+		splitUserInfo := strings.Split(user, ":")
+		if len(splitUserInfo) != 2 {
+			return nil, fmt.Errorf("ETCD: user flag does not contain a password")
+		}
+		user = splitUserInfo[0]
+		password = splitUserInfo[1]
+	}
+	// TODO look at etcdctl for better client and/or transport config "generation"
+	// because currently most flags defined here are not used..
+	cfg := client.Config{
+		Endpoints: viper.GetStringSlice(flagETCDEndpoints),
+		Transport: &http.Transport{
+			Proxy: http.ProxyFromEnvironment,
+			Dial: (&net.Dialer{
+				KeepAlive: viper.GetDuration(flagETCDKeepaliveTime),
+				Timeout:   viper.GetDuration(flagETCDKeepaliveTimeout),
+			}).Dial,
+			TLSHandshakeTimeout: viper.GetDuration(flagETCDDialTimeout),
+		},
+		Username: user,
+		Password: password,
+		// set timeout per request to fail fast when the target endpoint is unavailable
+		HeaderTimeoutPerRequest: time.Second,
+		SelectionMode:           client.EndpointSelectionRandom,
+	}
+	var err error
+	if etcd.client, err = client.New(cfg); err != nil {
+		return nil, err
+	}
+	etcd.kapi = client.NewKeysAPI(etcd.client)
+	return etcd, nil
 }
 
 // Get return a specific key.
 func (st *ETCD) Get(key string) (string, error) {
-	return "", nil
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	resp, err := st.kapi.Get(ctx, key, &client.GetOptions{Quorum: true})
+	if err != nil {
+		return "", err
+	}
+	return resp.Node.Value, nil
 }
 
-// Put set a key to a specific value.
-func (st *ETCD) Put(key string, value string) error {
-	return nil
+// Set set a key to a specific value.
+func (st *ETCD) Set(key string, value string) error {
+	return st.SetTTL(key, value, 0*time.Second)
 }
 
-// PutTTL set a key to a specific value with a TTL.
-func (st *ETCD) PutTTL(key string, value string, ttlSeconds int64) error {
-	return nil
+// SetTTL set a key to a specific value with a TTL.
+func (st *ETCD) SetTTL(key string, value string, ttl time.Duration) error {
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	_, err := st.kapi.Set(ctx, key, value, &client.SetOptions{TTL: ttl})
+	return err
 }
 
 // Delete delete a key value pair.
 func (st *ETCD) Delete(key string) error {
-	return nil
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	_, err := st.kapi.Delete(ctx, key, &client.DeleteOptions{})
+	return err
 }
 
-// Watch watch a key for creation, changes and deletion.
-func (st *ETCD) Watch(key string) (string, error) {
-	return "", nil
+// Watch watch a key or directory for creation, changes and deletion.
+func (st *ETCD) Watch(key string, dir bool) (*ETCDWatcher, error) {
+	watcher := NewETCDWatcher(st.kapi.Watcher(key, &client.WatcherOptions{Recursive: dir}))
+	return watcher, nil
 }
 
-// WatchDir watch a directory for creation, changes and deletion of keys.
-func (st *ETCD) WatchDir(dir string) error {
-	return nil
+// NewETCDWatcher create a new ETCDWatcher from a etcd client.Watcher.
+func NewETCDWatcher(watcher client.Watcher) *ETCDWatcher {
+	return &ETCDWatcher{
+		watcher: watcher,
+	}
+}
+
+// Watch return channel which "streams" events as they come.
+func (w *ETCDWatcher) Watch(ctx context.Context) (chan *store.Response, error) {
+	ch := make(chan *store.Response)
+	go func() {
+		for {
+			resp, err := w.watcher.Next(ctx)
+			watchResp := &store.Response{
+				Error: err,
+			}
+			if resp.Node != nil {
+				watchResp.Key = resp.Node.Key
+				watchResp.Value = resp.Node.Value
+			}
+			ch <- watchResp
+			if err != nil {
+				return
+			}
+			select {
+			case <-ctx.Done():
+				return
+			default:
+			}
+		}
+	}()
+	return ch, nil
 }

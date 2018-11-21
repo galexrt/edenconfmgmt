@@ -35,7 +35,7 @@ The following list contains the primary goals of this project:
     * Black/Whitelist for events thrown.
 1. Simple input webhook event API:
     * Allowing e.g., Prometheus webhooks to be accepted and an annotation/a label to be used to run a certain task.
-1. React(or)ion to events:
+1. Reaction to events:
     * Allow doing things based on events.
         - [Salt's Thorium Reactor](https://docs.saltstack.com/en/latest/topics/thorium/index.html) like functionality.
 1. Allow sharing files between nodes:
