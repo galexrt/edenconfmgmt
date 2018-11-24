@@ -14,18 +14,19 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package handlers
+package v1alpha
 
 import (
-	"github.com/spf13/cobra"
+	api "github.com/galexrt/edenconfmgmt/pkg/apis/tasks"
 )
 
-// flagRegisters list of available store handlers.
-var flagRegisters = map[string]func(cmd *cobra.Command){}
-
-// RegisterFlags register flags using the function provided in flagRegisters var.
-func RegisterFlags(cmd *cobra.Command) {
-	for _, register := range flagRegisters {
-		register(cmd)
-	}
-}
+const (
+	// Kind the name of the object kind (singular).
+	Kind = "Task"
+	// KindPlural the name of the object kind (plural).
+	KindPlural = "Tasks"
+	// APIVersion of the API.
+	APIVersion = "v1alpha"
+	// DataStorePath API object path in the data store.
+	DataStorePath = api.APIName + "/" + APIVersion
+)

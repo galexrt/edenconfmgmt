@@ -16,21 +16,19 @@ limitations under the License.
 
 package store
 
-import (
-	"time"
-)
-
 // Store Interface to abstract get, put, del, watch actions to a store. Where a
 // store might be an etcd, consul or even in-memory.
 type Store interface {
+	// SetPrefix set the prefix to prefix all given keys with.
+	SetPrefix(prefix string)
 	// Get return a specific key.
 	Get(key string) (string, error)
 	// Put set a key to a specific value.
 	Set(key string, value string) error
 	// PutTTL set a key to a specific value with a TTL.
-	SetTTL(key string, value string, ttl time.Duration) error
+	SetTTL(key string, value string, ttl int64) error
 	// Delete delete a key value pair.
 	Delete(key string) error
 	// Watch watch a key or directory for creation, changes and deletion.
-	Watch(key string, dir bool) (*Watcher, error)
+	Watch(key string, dir bool) (Watcher, error)
 }

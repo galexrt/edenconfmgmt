@@ -20,7 +20,12 @@ import (
 	"context"
 )
 
-// TODO Define states of a Response (e.g. Deleted, Updated, Created).
+// TODO Write comments for states of a Response (e.g. Deleted, Updated, Created).
+const (
+	ResponseStateCreated = "Created"
+	ResponseStateUpdated = "Updated"
+	ResponseStateDeleted = "Deleted"
+)
 
 // Response response of a watch event.
 type Response struct {

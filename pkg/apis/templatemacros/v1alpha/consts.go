@@ -16,6 +16,10 @@ limitations under the License.
 
 package v1alpha
 
+import (
+	api "github.com/galexrt/edenconfmgmt/pkg/apis/templatemacros"
+)
+
 const (
 	// Kind the name of the object kind (singular).
 	Kind = "TemplateMacro"
@@ -23,4 +27,6 @@ const (
 	KindPlural = "TemplateMacros"
 	// APIVersion of the API.
 	APIVersion = "v1alpha"
+	// DataStorePath API object path in the data store.
+	DataStorePath = api.APIName + "/" + APIVersion
 )

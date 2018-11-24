@@ -23,6 +23,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"strings"
 	"sync"
 	"syscall"
 	"time"
@@ -37,6 +38,7 @@ import (
 	variables_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/variables/v1alpha"
 	"github.com/galexrt/edenconfmgmt/pkg/auth"
 	"github.com/galexrt/edenconfmgmt/pkg/common"
+	"github.com/galexrt/edenconfmgmt/pkg/store"
 	"github.com/galexrt/edenconfmgmt/pkg/store/handlers"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	grpc_zap "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
@@ -61,6 +63,8 @@ const (
 	flagProductionMode    = "production"
 	flagListenAddressGRPC = "listen-address-grpc"
 	flagListenAddressHTTP = "listen-address-http"
+	flagStore             = "store"
+	flagStoreKeyPrefix    = "store-key-prefix"
 	flagNeighbors         = "neighbors"
 )
 
@@ -88,6 +92,9 @@ func init() {
 	rootCmd.PersistentFlags().Bool(flagProductionMode, true, "production mode (logger will use different output format)")
 	rootCmd.PersistentFlags().String(flagListenAddressGRPC, ":1337", "grpc listen address")
 	rootCmd.PersistentFlags().String(flagListenAddressHTTP, ":1338", "http listen address")
+	rootCmd.PersistentFlags().String(flagStore, "etcd", "store to use")
+	rootCmd.PersistentFlags().String(flagStoreKeyPrefix, "/edenconfmgmt", "key prefix to use in the store")
+
 	rootCmd.PersistentFlags().StringSlice(flagNeighbors, []string{}, "list of other neighbors (one neighbor per flag)")
 
 	// Register all store handlers flags.
@@ -137,11 +144,12 @@ func Run(cmd *cobra.Command, args []string) error {
 	sigCh := make(chan os.Signal)
 	signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM)
 
-	// TODO Implement TLS
-	lis, err := net.Listen("tcp", viper.GetString(flagListenAddressGRPC))
+	handlerName := strings.ToLower(viper.GetString(flagStore))
+	dataStore, err := handlers.Get(handlerName)
 	if err != nil {
-		logger.Fatal("failed to listen", zap.Error(err))
+		logger.Fatal("failed to create store handler", zap.String("storehandler", handlerName))
 	}
+	dataStore.SetPrefix(viper.GetString(flagStoreKeyPrefix))
 
 	var tracer opentracing.Tracer
 	if false {
@@ -186,7 +194,7 @@ func Run(cmd *cobra.Command, args []string) error {
 	grpc_zap.ReplaceGrpcLogger(logger)
 
 	// Register APIs to grpc server
-	registerGRPCAPIs(grpcServer)
+	registerGRPCAPIs(grpcServer, dataStore)
 
 	// Initialize Prometheus GRPC metrics.
 	grpcMetrics.InitializeMetrics(grpcServer)
@@ -195,6 +203,12 @@ func Run(cmd *cobra.Command, args []string) error {
 	httpServer := &http.Server{
 		Handler: promhttp.HandlerFor(promReg, promhttp.HandlerOpts{}),
 		Addr:    viper.GetString(flagListenAddressHTTP),
+	}
+
+	// TODO Implement TLS
+	lis, err := net.Listen("tcp", viper.GetString(flagListenAddressGRPC))
+	if err != nil {
+		logger.Fatal("failed to listen", zap.Error(err))
 	}
 
 	wg := sync.WaitGroup{}
@@ -242,7 +256,7 @@ func Run(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-func registerGRPCAPIs(srv *grpc.Server) {
+func registerGRPCAPIs(srv *grpc.Server, dataStore store.Store) {
 	// Configs
 	configServer := configs_v1alpha.New()
 	configs_v1alpha.RegisterConfigsServer(srv, configServer)
@@ -256,7 +270,7 @@ func registerGRPCAPIs(srv *grpc.Server) {
 	jobsServer := jobs_v1alpha.New()
 	jobs_v1alpha.RegisterJobsServer(srv, jobsServer)
 	// Nodes
-	nodesServer := nodes_v1alpha.New()
+	nodesServer := nodes_v1alpha.New(dataStore)
 	nodes_v1alpha.RegisterNodesServer(srv, nodesServer)
 	// Tasks
 	tasksServer := tasks_v1alpha.New()

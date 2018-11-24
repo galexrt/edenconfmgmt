@@ -22,16 +22,20 @@ import (
 
 	core_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha"
 	events_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha"
+	"github.com/galexrt/edenconfmgmt/pkg/store"
 )
 
 // NodesService handler for config events.
 type NodesService struct {
 	NodesServer
+	store store.Store
 }
 
 // New returns a NodesService
-func New() NodesServer {
-	return &NodesService{}
+func New(dataStore store.Store) NodesServer {
+	return &NodesService{
+		store: dataStore,
+	}
 }
 
 // Get get a Node.
@@ -46,7 +50,17 @@ func (n *NodesService) List(ctx context.Context, req *ListRequest) (*ListRespons
 
 // Add add a Node.
 func (n *NodesService) Add(ctx context.Context, req *AddRequest) (*AddResponse, error) {
-	return &AddResponse{}, nil
+	err := n.store.Set("/test", "this is a test123")
+	var respErr *core_v1alpha.Error
+	if err != nil {
+		respErr = &core_v1alpha.Error{
+			Code:    0,
+			Message: err.Error(),
+		}
+	}
+	return &AddResponse{
+		Error: respErr,
+	}, nil
 }
 
 // Update update a Node.
