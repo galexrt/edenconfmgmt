@@ -38,9 +38,8 @@ import (
 	variables_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/variables/v1alpha"
 	"github.com/galexrt/edenconfmgmt/pkg/auth"
 	"github.com/galexrt/edenconfmgmt/pkg/common"
-	"github.com/galexrt/edenconfmgmt/pkg/datastore/handlers"
-	"github.com/galexrt/edenconfmgmt/pkg/store"
-	data_store_handlers "github.com/galexrt/edenconfmgmt/pkg/store/handlers"
+	"github.com/galexrt/edenconfmgmt/pkg/datastore"
+	data_store_handlers "github.com/galexrt/edenconfmgmt/pkg/datastore/handlers"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	grpc_zap "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
 	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
@@ -146,7 +145,7 @@ func Run(cmd *cobra.Command, args []string) error {
 	signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM)
 
 	handlerName := strings.ToLower(viper.GetString(flagStore))
-	dataStore, err := handlers.Get(handlerName)
+	dataStore, err := data_store_handlers.Get(handlerName)
 	if err != nil {
 		logger.Fatal("failed to create store handler", zap.String("storehandler", handlerName))
 	}
@@ -257,7 +256,7 @@ func Run(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-func registerGRPCAPIs(srv *grpc.Server, dataStore store.Store) {
+func registerGRPCAPIs(srv *grpc.Server, dataStore datastore.Store) {
 	// Configs
 	configServer := configs_v1alpha.New()
 	configs_v1alpha.RegisterConfigsServer(srv, configServer)

@@ -18,12 +18,13 @@ package v1alpha
 
 import (
 	"context"
+	"encoding/json"
 	"time"
 
 	core_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha"
 	events_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha"
 	"github.com/galexrt/edenconfmgmt/pkg/datastore"
-	utils_apis "github.com/galexrt/edenconfmgmt/pkg/utils/apis"
+	"github.com/galexrt/edenconfmgmt/pkg/utilsapi"
 )
 
 // NodesService handler for config events.
@@ -54,8 +55,15 @@ func (n *NodesService) Add(ctx context.Context, req *AddRequest) (*AddResponse, 
 	resp := &AddResponse{
 		Node: req.Node,
 	}
-	_, err := n.store.Put(ctx, "/test", "this is a test123")
-	resp.Error = utils_apis.ErrorToErrorResponse(err)
+	// TODO Add defaults to Node object.
+	// TODO Generate key path and marshal node to string, save into etcd.
+	node, err := json.Marshal(req.Node)
+	if err != nil {
+		resp.Error = utilsapi.ErrorToErrorResponse(err)
+		return resp, nil
+	}
+	_, err = n.store.Put(ctx, utilsapi.ObjectPath(DataStorePath, resp.Node.Metadata.Name), string(node))
+	resp.Error = utilsapi.ErrorToErrorResponse(err)
 	return resp, nil
 }
 

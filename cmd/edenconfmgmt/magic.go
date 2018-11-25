@@ -61,8 +61,12 @@ func magicRun(stopCh chan struct{}) error {
 				select {
 				case <-stopCh:
 					// TODO Move this to own code which is just for maintaining GRPC connection
-					grpcClient.Close()
-					logger.Error("grpc client closing conncetion failed ", zap.Error(err))
+					err := grpcClient.Close()
+					if err != nil {
+						logger.Error("grpc client closing conncetion failed ", zap.Error(err))
+					} else {
+						logger.Info("grpc client closed")
+					}
 				}
 			}()
 
@@ -78,7 +82,7 @@ func magicRun(stopCh chan struct{}) error {
 				},
 			}
 			nodesWatcher, err := nodesClient.Watch(context.Background(), in)
-			if err != nil {
+			if err != nil && err != grpc.ErrClientConnClosing {
 				logger.Error("failed to watch nodes", zap.Error(err))
 				return err
 			}
