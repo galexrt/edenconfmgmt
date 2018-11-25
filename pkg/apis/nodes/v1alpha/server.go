@@ -23,6 +23,7 @@ import (
 	core_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha"
 	events_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha"
 	"github.com/galexrt/edenconfmgmt/pkg/datastore"
+	utils_apis "github.com/galexrt/edenconfmgmt/pkg/utils/apis"
 )
 
 // NodesService handler for config events.
@@ -50,17 +51,12 @@ func (n *NodesService) List(ctx context.Context, req *ListRequest) (*ListRespons
 
 // Add add a Node.
 func (n *NodesService) Add(ctx context.Context, req *AddRequest) (*AddResponse, error) {
-	_, err := n.store.Put(ctx, "/test", "this is a test123")
-	var respErr *core_v1alpha.Error
-	if err != nil {
-		respErr = &core_v1alpha.Error{
-			Code:    0,
-			Message: err.Error(),
-		}
+	resp := &AddResponse{
+		Node: req.Node,
 	}
-	return &AddResponse{
-		Error: respErr,
-	}, nil
+	_, err := n.store.Put(ctx, "/test", "this is a test123")
+	resp.Error = utils_apis.ErrorToErrorResponse(err)
+	return resp, nil
 }
 
 // Update update a Node.
