@@ -23,10 +23,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/galexrt/edenconfmgmt/pkg/store"
+	"github.com/galexrt/edenconfmgmt/pkg/datastore"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"go.etcd.io/etcd/clientv3"
+	"go.etcd.io/etcd/mvcc/mvccpb"
 )
 
 const (
@@ -46,11 +47,11 @@ const (
 	flagETCDUser                  = "etcd-user"
 )
 
-// ETCD implementation of store.Store interface for ETCD.
+// ETCD implementation of datastore.Store interface for ETCD.
 type ETCD struct {
-	prefix string
-	client *clientv3.Client
-	store.Store
+	keyPrefix string
+	client    *clientv3.Client
+	datastore.Store
 }
 
 // ETCDOptions options for ETCD connection.
@@ -70,12 +71,6 @@ type ETCDOptions struct {
 	KeepaliveTimeout      time.Duration
 	Key                   string
 	User                  string
-}
-
-// ETCDWatcher watcher for ETCD implementing the store.Watcher interface.
-type ETCDWatcher struct {
-	watcher clientv3.Watcher
-	store.Watcher
 }
 
 func init() {
@@ -98,8 +93,8 @@ func init() {
 	handlers["etcd"] = NewETCD
 }
 
-// NewETCD create new ETCD store.
-func NewETCD() (store.Store, error) {
+// NewETCD create new ETCD
+func NewETCD() (datastore.Store, error) {
 	etcd := &ETCD{}
 	user := viper.GetString(flagETCDUser)
 	password := ""
@@ -128,91 +123,51 @@ func NewETCD() (store.Store, error) {
 	return etcd, err
 }
 
-// SetPrefix set the prefix to prefix all given keys with.
-func (st *ETCD) SetPrefix(prefix string) {
-	st.prefix = prefix
+// SetKeyPrefix set the prefix to prefix all given keys with.
+func (st *ETCD) SetKeyPrefix(prefix string) {
+	st.keyPrefix = prefix
 }
 
 // Get return a specific key.
-func (st *ETCD) Get(key string) (string, error) {
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-	resp, err := st.client.Get(ctx, path.Join(st.prefix, key))
-	if err != nil {
-		return "", err
-	}
-	return string(resp.Kvs[0].Value), nil
+func (st *ETCD) Get(ctx context.Context, key string, opts ...clientv3.OpOption) (*clientv3.GetResponse, error) {
+	return st.client.Get(ctx, path.Join(st.keyPrefix, key), opts...)
 }
 
-// Set set a key to a specific value.
-func (st *ETCD) Set(key string, value string) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-	_, err := st.client.Put(ctx, path.Join(st.prefix, key), value)
-	return err
+// Put set a key to a specific value.
+func (st *ETCD) Put(ctx context.Context, key string, value string, opts ...clientv3.OpOption) (*clientv3.PutResponse, error) {
+	return st.client.Put(ctx, path.Join(st.keyPrefix, key), value, opts...)
 }
 
-// SetTTL set a key to a specific value with a TTL.
-func (st *ETCD) SetTTL(key string, value string, ttl int64) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
+// PutTTL set a key to a specific value with a TTL.
+func (st *ETCD) PutTTL(ctx context.Context, key string, value string, ttl int64, opts ...clientv3.OpOption) (*clientv3.PutResponse, error) {
 	resp, err := st.client.Grant(ctx, ttl)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	_, err = st.client.Put(ctx, path.Join(st.prefix, key), value, clientv3.WithLease(resp.ID))
-	return err
+	opts = append([]clientv3.OpOption{clientv3.WithLease(resp.ID)}, opts...)
+	return st.client.Put(ctx, path.Join(st.keyPrefix, key), value, opts...)
 }
 
 // Delete delete a key value pair.
-func (st *ETCD) Delete(key string) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-	_, err := st.client.Delete(ctx, path.Join(st.prefix, key))
-	return err
+func (st *ETCD) Delete(ctx context.Context, key string, opts ...clientv3.OpOption) (*clientv3.DeleteResponse, error) {
+	return st.client.Delete(ctx, path.Join(st.keyPrefix, key), opts...)
 }
 
 // Watch watch a key or directory for creation, changes and deletion.
-func (st *ETCD) Watch(key string, dir bool) (store.Watcher, error) {
-	/*
-		watcher := NewETCDWatcher(st.client.Watcher(path.Join(st.prefix, key), &clientv3.WatcherOptions{Recursive: dir}))
-		return watcher, nil
-	*/
-	return nil, nil
+func (st *ETCD) Watch(ctx context.Context, key string, opts ...clientv3.OpOption) clientv3.WatchChan {
+	return st.client.Watch(ctx, path.Join(st.keyPrefix, key), opts...)
 }
 
-/*
-// NewETCDWatcher create a new ETCDWatcher from a etcd clientv3.Watcher.
-func NewETCDWatcher(watcher clientv3.Watcher) *ETCDWatcher {
-	return &ETCDWatcher{
-		watcher: watcher,
+// EtcdEventStateToHandlerState convert Etcd client v3 event type to our own states.
+func EtcdEventStateToHandlerState(eventType mvccpb.Event_EventType, isCreate bool, isModify bool) string {
+	if isCreate {
+		return datastore.ResponseStateCreated
 	}
+	if isModify {
+		return datastore.ResponseStateUpdated
+	}
+	if eventType == mvccpb.DELETE {
+		return datastore.ResponseStateDeleted
+	}
+	return datastore.ResponseStateUnknown
 }
-
-// Watch return channel which "streams" events as they come.
-func (w *ETCDWatcher) Watch(ctx context.Context) (chan *store.Response, error) {
-	ch := make(chan *store.Response)
-	go func() {
-		for {
-			resp, err := w.watcher.Next(ctx)
-			watchResp := &store.Response{
-				Error: err,
-			}
-			if resp.Node != nil {
-				watchResp.Key = resp.Node.Key
-				watchResp.Value = resp.Node.Value
-			}
-			ch <- watchResp
-			if err != nil {
-				return
-			}
-			select {
-			case <-ctx.Done():
-				return
-			default:
-			}
-		}
-	}()
-	return ch, nil
-}
-*/

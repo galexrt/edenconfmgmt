@@ -40,7 +40,7 @@ service Nodes {
     rpc Update (UpdateRequest) returns (UpdateResponse);
     // Delete a Node.
     rpc Delete (DeleteRequest) returns (DeleteResponse);
-    // Watch Node.
+    // Watch a Node(s).
     rpc Watch (WatchRequest) returns (stream WatchResponse);
 }
 
@@ -49,6 +49,8 @@ message Node {
     core.v1alpha.ObjectMetadata metadata = 1;
     // Spec for Node.
     Spec spec = 2;
+    // Status for Node.
+    Status status = 3;
 }
 
 message Spec {
@@ -72,6 +74,11 @@ message Port {
     int32 port = 2;
     // Protocol name.
     string protocol = 3;
+}
+
+message Status {
+    // State of Node.
+    string state = 1;
 }
 
 // Get

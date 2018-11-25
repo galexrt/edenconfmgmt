@@ -20,8 +20,9 @@ import (
 	core_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha"
 )
 
-// ErrorToErrorResponse translates a Golang error to an error core object
-func ErrorToErrorResponse(err error) *core_v1alpha.Error {
+// ErrorToResponse translates a Golang error to an error core object
+func ErrorToResponse(err error) *core_v1alpha.Error {
+	// TODO Try to create an useful code for the response.
 	return &core_v1alpha.Error{
 		Code:    -1,
 		Message: err.Error(),

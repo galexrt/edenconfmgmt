@@ -38,8 +38,9 @@ import (
 	variables_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/variables/v1alpha"
 	"github.com/galexrt/edenconfmgmt/pkg/auth"
 	"github.com/galexrt/edenconfmgmt/pkg/common"
+	"github.com/galexrt/edenconfmgmt/pkg/datastore/handlers"
 	"github.com/galexrt/edenconfmgmt/pkg/store"
-	"github.com/galexrt/edenconfmgmt/pkg/store/handlers"
+	data_store_handlers "github.com/galexrt/edenconfmgmt/pkg/store/handlers"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	grpc_zap "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
 	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
@@ -98,7 +99,7 @@ func init() {
 	rootCmd.PersistentFlags().StringSlice(flagNeighbors, []string{}, "list of other neighbors (one neighbor per flag)")
 
 	// Register all store handlers flags.
-	handlers.RegisterFlags(rootCmd)
+	data_store_handlers.RegisterFlags(rootCmd)
 
 	// Bind all persistent flags to viper, for easy access.
 	viper.BindPFlags(rootCmd.PersistentFlags())
@@ -149,7 +150,7 @@ func Run(cmd *cobra.Command, args []string) error {
 	if err != nil {
 		logger.Fatal("failed to create store handler", zap.String("storehandler", handlerName))
 	}
-	dataStore.SetPrefix(viper.GetString(flagStoreKeyPrefix))
+	dataStore.SetKeyPrefix(viper.GetString(flagStoreKeyPrefix))
 
 	var tracer opentracing.Tracer
 	if false {
@@ -242,7 +243,7 @@ func Run(cmd *cobra.Command, args []string) error {
 	logger.Info("signal received, shutting down ...")
 	close(stopCh)
 
-	// First shutdown grpc server
+	// Shutdown grpc server
 	grpcServer.GracefulStop()
 
 	// Shutdown http server

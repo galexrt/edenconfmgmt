@@ -2,17 +2,16 @@ DIR = $(strip $(dir $(realpath $(lastword $(MAKEFILE_LIST)))))
 
 GO = go
 
-PROTOFILES = $(shell find -type f -name '*.proto')
+PROTOFILES = $(shell find -type f -name '*.proto' | sed 's~\.\/~~g')
 GOPROTOFILES = $(patsubst %.proto,%.pb.go,$(PROTOFILES))
 
-.DEFAULT: build
+.DEFAULT: all
+
+all: prepare build
 
 prepare: protoc protoc-gen-doc
 
 build: proto-gen
-
-doc-gen: proto-clean
-	$(MAKE) proto-gen
 
 protoc:
 	$(GO) get -v -u github.com/gogo/protobuf/protoc-gen-gofast
@@ -22,15 +21,23 @@ protoc:
 protoc-gen-doc:
 	$(GO) get -u github.com/pseudomuto/protoc-gen-doc/cmd/protoc-gen-doc
 
-proto-gen: $(GOPROTOFILES)
+proto-gen: $(GOPROTOFILES) docs/apis.md
+
+proto-doc-gen: proto-clean
+	$(MAKE) proto-gen
 
 %.pb.go: %.proto
 	protoc \
 		-I $$GOPATH/src/ \
 		--go_out=plugins=grpc:$$GOPATH/src/ \
+		github.com/galexrt/edenconfmgmt/$^
+
+docs/apis.md: $(GOPROTOFILES)
+	protoc \
+		-I $$GOPATH/src/ \
 		--doc_out=$(DIR)docs/ \
 		--doc_opt=markdown,apis.md \
-		github.com/galexrt/edenconfmgmt/$^
+		$(addprefix github.com/galexrt/edenconfmgmt/,$(PROTOFILES))
 
 proto-clean:
 	rm -f $(GOPROTOFILES)
@@ -51,4 +58,4 @@ test-env: build
 		--listen-client-urls http://0.0.0.0:2379 \
 		--initial-cluster node1=http://0.0.0.0:2380
 
-.PHONY: all protoc proto-gen protoc-gen-doc proto-clean
+.PHONY: all protoc protoc-gen-doc proto-clean proto-doc-gen proto-gen
