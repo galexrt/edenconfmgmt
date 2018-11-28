@@ -1,0 +1,28 @@
+sequenceDiagram
+    participant git
+    participant User
+    participant Ctl
+    participant ConfigManagement
+    participant TargetedServers
+    Note over git,User: contains/has TaskBook object yamls
+    git->ConfigManagement: notify about changes
+    loop reconciliation
+        ConfigManagement->ConfigManagement: create events with task info
+    end
+    loop watch and execute
+        TargetedServers->ConfigManagement: watch events
+        TargetedServers->TargetedServers: check if changes are needed
+        alt changes needed?
+            TargetedServers->TargetedServers: apply/run required changes
+            TargetedServers->ConfigManagement: create "changes applied" eventwith results
+            Note over TargetedServers,TargetedServers: with result info/state
+        else
+            TargetedServers->ConfigManagement: create "no changes" event
+        end
+        TargetedServers->TargetedServers: return to beginning of loop
+    end
+    User->Ctl: trigger run
+    Note left of Ctl: Ctl: Will only work if<br/>files are in a git repo
+    Ctl->ConfigManagement: create new version TaskBook object
+    Note over Ctl,TargetedServers: TaskBook object is "always" in a suspended state (toggleable by flag)<br/>A) apply the TaskBook to TargetedServers or B) apply TaskBook later
+    ConfigManagement->ConfigManagement: go to reconciliation loop
