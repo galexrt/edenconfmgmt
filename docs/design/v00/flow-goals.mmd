@@ -1,7 +1,7 @@
 sequenceDiagram
     participant git
     participant User
-    participant Ctl
+    participant CLI
     participant ConfigManagement
     participant TargetedServers
     Note over git,User: contains/has TaskBook object yamls
@@ -21,8 +21,8 @@ sequenceDiagram
         end
         TargetedServers->TargetedServers: return to beginning of loop
     end
-    User->Ctl: trigger run
-    Note left of Ctl: Ctl: Will only work if<br/>files are in a git repo
-    Ctl->ConfigManagement: create new version TaskBook object
-    Note over Ctl,TargetedServers: TaskBook object is "always" in a suspended state (toggleable by flag)<br/>A) apply the TaskBook to TargetedServers or B) apply TaskBook later
+    User->CLI: trigger run
+    Note left of CLI: CLI: Will only work if<br/>files are in a git repo
+    CLI->ConfigManagement: create new version TaskBook object
+    Note over CLI,TargetedServers: TaskBook object is "always" in a suspended state (toggleable by flag)<br/>A) apply the TaskBook to TargetedServers or B) apply TaskBook later
     ConfigManagement->ConfigManagement: go to reconciliation loop
