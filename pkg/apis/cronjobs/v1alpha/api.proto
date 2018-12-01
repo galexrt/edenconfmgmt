@@ -14,12 +14,12 @@
 
 syntax = 'proto3';
 
-package events.v1alpha;
-option go_package = "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha";
+package cronjobs.v1alpha;
+option go_package = "github.com/galexrt/edenconfmgmt/pkg/apis/cronjobs/v1alpha";
 
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
-import "google/protobuf/any.proto";
 import "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha/api.proto";
+import "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha/api.proto";
 
 option (gogoproto.goproto_stringer_all) = false;
 option (gogoproto.stringer_all) =  true;
@@ -29,35 +29,36 @@ option (gogoproto.sizer_all) = true;
 option (gogoproto.unmarshaler_all) = true;
 option (gogoproto.goproto_unrecognized_all) = false;
 
-service Events {
-    // Get a Event.
+service CronJobs {
+    // Get a Job.
     rpc Get (GetRequest) returns (GetResponse);
-    // List Events.
+    // List CronJobs.
     rpc List (ListRequest) returns (ListResponse);
-    // Add a Event.
+    // Add a Job.
     rpc Add (AddRequest) returns (AddResponse);
-    // Update a Event.
+    // Update a Job.
     rpc Update (UpdateRequest) returns (UpdateResponse);
-    // Delete a Event.
+    // Delete a Job.
     rpc Delete (DeleteRequest) returns (DeleteResponse);
-    // Watch for Events.
+    // Watch Job.
     rpc Watch (WatchRequest) returns (stream WatchResponse);
 }
 
-message Event {
-    // Metadata for the Event object.
+message CronJob {
+    // Metadata for CronJob object.
     core.v1alpha.ObjectMetadata metadata = 1;
-    // Spec for Event.
-    EventSpec spec = 2;
+    // Spec for CronJob.
+    CronJobSpec spec = 2;
 }
 
-message EventSpec {
-    // Type of the Event.
-    string type = 1;
-    // Summary of Event.
-    string summary = 2;
-    // Data of Event.
-    google.protobuf.Any data = 3;
+message CronJobSpec {
+    // Schedule of CronJob.
+    Schedule schedule = 1;
+}
+
+message Schedule {
+    // Crontab style schedule time.
+    string crontTab = 1;
 }
 
 // Get
@@ -67,8 +68,8 @@ message GetRequest {
 }
 
 message GetResponse {
-    // Event object.
-    Event event = 1;
+    // CronJob object.
+    CronJob cronJob = 1;
     // Error object.
     core.v1alpha.Error error = 2;
 }
@@ -80,47 +81,47 @@ message ListRequest {
 }
 
 message ListResponse {
-    // Event list.
-    repeated Event events = 1;
+    // Config list.
+    repeated CronJob cronjobs = 1;
     // Error object.
     core.v1alpha.Error error = 2;
 }
 
 // Add
 message AddRequest {
-    // Event object.
-    Event event = 1;
+    // CronJob object.
+    CronJob cronJob = 1;
 }
 
 message AddResponse {
-    // Event object.
-    Event event = 1;
+    // CronJob object.
+    CronJob cronJob = 1;
     // Error object.
     core.v1alpha.Error error = 2;
 }
 
 // Update
 message UpdateRequest {
-    // Event object.
-    Event event = 1;
+    // CronJob object.
+    CronJob cronJob = 1;
 }
 
 message UpdateResponse {
-    // Event object.
-    Event event = 1;
+    // CronJob object.
+    CronJob cronJob = 1;
     // Error object.
     core.v1alpha.Error error = 2;
 }
 
 // Delete
 message DeleteRequest {
-    // Event object.
-    Event event = 1;
+    // CronJob object.
+    CronJob cronJob = 1;
 }
 
 message DeleteResponse {
-    // Event object.
-    Event event = 1;
+    // CronJob object.
+    CronJob cronJob = 1;
     // Error object.
     core.v1alpha.Error error = 2;
 }
@@ -132,8 +133,10 @@ message WatchRequest {
 }
 
 message WatchResponse {
-    // Event for watch stream.
-    Event event = 1;
+    // Event info for watch response.
+    events.v1alpha.Event event = 1;
+    // CronJob for watch response.
+    CronJob cronJob = 2;
     // Error object.
-    core.v1alpha.Error error = 2;
+    core.v1alpha.Error error = 3;
 }
