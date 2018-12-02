@@ -52,68 +52,31 @@ message Beacon {
     BeaconSpec spec = 2;
 }
 
+// TODO
 message BeaconSpec {
-    // RunOptions.
-    RunOptions runOptions = 1;
-    // Steps in this Beacon.
-    repeated Step steps = 2;
 }
 
-message Step {
-    string name = 1;
-    Action spec = 2;
-}
-
-message RunOptions {
-    bool sync = 1;
-    Serialize serialize = 2;
-    Target target = 3;
-}
-
-message Serialize {
-    // Count.
-    int64 count = 1;
-    // FailAfterAllTargetsRan.
-    bool failAfterAllTargetsRan = 2;
-}
-
-message Target {
-    // List of hosts (either name or label selector).
-    repeated string hosts = 1;
-    // Limit of how many hosts of the matches should be used.
-    int64 limit = 2;
-}
-
-message Action {
-    // Action name.
-    string action = 1;
-    // Conditions.
-    core.v1alpha.Conditions conditions = 2;
-    // RunOptions
-    RunOptions runOptions = 3;
-    // Map of string interface{} to be given to the action.
-    repeated google.protobuf.Any parameters = 4;
-}
-
-// Get
+// Get request content.
 message GetRequest {
     // GetOptions options for a GetRequest.
     core.v1alpha.GetOptions getOptions = 1;
 }
 
+// Get response content.
 message GetResponse {
     // Beacon object.
-    Beacon task = 1;
+    Beacon beacon = 1;
     // Error object.
     core.v1alpha.Error error = 2;
 }
 
-// List
+// List request content.
 message ListRequest {
     // ListOptions options for a ListRequest.
     core.v1alpha.ListOptions listOptions = 1;
 }
 
+// List response content.
 message ListResponse {
     // Beacon list.
     repeated Beacon beacons = 1;
@@ -121,15 +84,15 @@ message ListResponse {
     core.v1alpha.Error error = 2;
 }
 
-// Add
+// Add Beacon request.
 message AddRequest {
     // Beacon object.
-    Beacon task = 1;
+    Beacon beacon = 1;
 }
 
 message AddResponse {
     // Beacon object.
-    Beacon task = 1;
+    Beacon beacon = 1;
     // Error object.
     core.v1alpha.Error error = 2;
 }
@@ -137,12 +100,12 @@ message AddResponse {
 // Update
 message UpdateRequest {
     // Beacon object.
-    Beacon task = 1;
+    Beacon beacon = 1;
 }
 
 message UpdateResponse {
     // Beacon object.
-    Beacon task = 1;
+    Beacon beacon = 1;
     // Error object.
     core.v1alpha.Error error = 2;
 }
@@ -150,12 +113,12 @@ message UpdateResponse {
 // Delete
 message DeleteRequest {
     // Beacon object.
-    Beacon task = 1;
+    Beacon beacon = 1;
 }
 
 message DeleteResponse {
     // Beacon object.
-    Beacon task = 1;
+    Beacon beacon = 1;
     // Error object.
     core.v1alpha.Error error = 2;
 }
@@ -170,7 +133,7 @@ message WatchResponse {
     // Beacon info for watch response.
     events.v1alpha.Event event = 1;
     // Beacon for watch response.
-    Beacon task = 2;
+    Beacon beacon = 2;
     // Error object.
     core.v1alpha.Error error = 3;
 }

@@ -36,13 +36,13 @@ docs/apis.md: $(GOPROTOFILES)
 	protoc \
 		-I $$GOPATH/src/ \
 		--doc_out=$(DIR)docs/ \
-		--doc_opt=markdown,apis.md \
+		--doc_opt=$(DIR)build/docs/proto-doc-template.tmpl,apis.md \
 		$(addprefix github.com/galexrt/edenconfmgmt/,$(PROTOFILES))
 
 proto-clean:
 	rm -f $(GOPROTOFILES)
 
-test-env: build
+test-env:
 	docker run \
 		-d \
 		-p 2379:2379 \
@@ -58,4 +58,4 @@ test-env: build
 		--listen-client-urls http://0.0.0.0:2379 \
 		--initial-cluster node1=http://0.0.0.0:2380
 
-.PHONY: all protoc protoc-gen-doc proto-clean proto-doc-gen proto-gen
+.PHONY: all protoc protoc-gen-doc proto-clean proto-doc-gen proto-gen test-env
