@@ -28,7 +28,7 @@ var (
 	flagRegisters = map[string]func(cmd *cobra.Command){}
 
 	// handlers list of available datastore handlers.
-	handlers = map[string]func() (datastore.Store, error){}
+	handlers = map[string]func(keyPrefix string) (datastore.Store, error){}
 )
 
 // RegisterFlags register flags using the function provided in flagRegisters var.
@@ -39,10 +39,10 @@ func RegisterFlags(cmd *cobra.Command) {
 }
 
 // Get return a newly created datastore handler.
-func Get(handlerName string) (datastore.Store, error) {
+func Get(handlerName string, keyPrefix string) (datastore.Store, error) {
 	newFunc, ok := handlers[handlerName]
 	if !ok {
 		return nil, fmt.Errorf("no handler with name %s found in handlers list", handlerName)
 	}
-	return newFunc()
+	return newFunc(keyPrefix)
 }

@@ -20,42 +20,42 @@ import (
 	"context"
 )
 
-// TaskBookBooksService handler for config events.
-type TaskBookBooksService struct {
-	TaskBookBooksServer
+// TaskBooksService handler for config events.
+type TaskBooksService struct {
+	TaskBooksServer
 }
 
-// New returns a TaskBookBooksService
-func New() TaskBookBooksServer {
-	return &TaskBookBooksService{}
+// New returns a TaskBooksService
+func New() TaskBooksServer {
+	return &TaskBooksService{}
 }
 
 // Get get a TaskBook.
-func (n *TaskBookBooksService) Get(ctx context.Context, req *GetRequest) (*GetResponse, error) {
+func (n *TaskBooksService) Get(ctx context.Context, req *GetRequest) (*GetResponse, error) {
 	return &GetResponse{}, nil
 }
 
-// List list TaskBookBooks.
-func (n *TaskBookBooksService) List(ctx context.Context, req *ListRequest) (*ListResponse, error) {
+// List list TaskBooks.
+func (n *TaskBooksService) List(ctx context.Context, req *ListRequest) (*ListResponse, error) {
 	return &ListResponse{}, nil
 }
 
 // Add add a TaskBook.
-func (n *TaskBookBooksService) Add(ctx context.Context, req *AddRequest) (*AddResponse, error) {
+func (n *TaskBooksService) Add(ctx context.Context, req *AddRequest) (*AddResponse, error) {
 	return &AddResponse{}, nil
 }
 
 // Update update a TaskBook.
-func (n *TaskBookBooksService) Update(ctx context.Context, req *UpdateRequest) (*UpdateResponse, error) {
+func (n *TaskBooksService) Update(ctx context.Context, req *UpdateRequest) (*UpdateResponse, error) {
 	return &UpdateResponse{}, nil
 }
 
 // Delete delete a TaskBook.
-func (n *TaskBookBooksService) Delete(ctx context.Context, req *DeleteRequest) (*DeleteResponse, error) {
+func (n *TaskBooksService) Delete(ctx context.Context, req *DeleteRequest) (*DeleteResponse, error) {
 	return &DeleteResponse{}, nil
 }
 
-// Watch Watch TaskBookBooks.
-func (n *TaskBookBooksService) Watch(req *WatchRequest, watch TaskBookBooks_WatchServer) error {
+// Watch Watch TaskBooks.
+func (n *TaskBooksService) Watch(req *WatchRequest, watch TaskBooks_WatchServer) error {
 	return nil
 }

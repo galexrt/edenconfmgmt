@@ -18,6 +18,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"io"
 	"log"
 	"os"
@@ -32,6 +33,8 @@ import (
 
 func magicRun(stopCh chan struct{}) error {
 	// Watch for node changes of itself
+
+	// TODO add logic to refresh hostname every once in a while
 	hostname, err := os.Hostname()
 	if err != nil {
 		logger.Error("failed to get hostname", zap.Error(err))
@@ -70,8 +73,17 @@ func magicRun(stopCh chan struct{}) error {
 				}
 			}()
 
-			if _, err := registerNode(nodesClient, hostname); err != nil {
-				logger.Error("failed to register node", zap.Error(err))
+			maxTry := 3
+			for try := 1; try <= maxTry; try++ {
+				if _, err := registerNode(nodesClient, hostname); err != nil {
+					logger.Error(fmt.Sprintf("failed to register node (try %d of %d)", try, maxTry), zap.Error(err))
+					if try >= maxTry {
+						logger.Error(fmt.Sprintf("failed to register node after %d tries", maxTry))
+						return err
+					}
+					continue
+				}
+				break
 			}
 
 			// TODO add node "I am alive" loop

@@ -19,7 +19,6 @@ package handlers
 import (
 	"context"
 	"fmt"
-	"path"
 	"strings"
 	"time"
 
@@ -27,6 +26,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"go.etcd.io/etcd/clientv3"
+	"go.etcd.io/etcd/clientv3/namespace"
 	"go.etcd.io/etcd/mvcc/mvccpb"
 )
 
@@ -49,8 +49,7 @@ const (
 
 // ETCD implementation of datastore.Store interface for ETCD.
 type ETCD struct {
-	keyPrefix string
-	client    *clientv3.Client
+	client *clientv3.Client
 	datastore.Store
 }
 
@@ -94,7 +93,7 @@ func init() {
 }
 
 // NewETCD create new ETCD
-func NewETCD() (datastore.Store, error) {
+func NewETCD(keyPrefix string) (datastore.Store, error) {
 	etcd := &ETCD{}
 	user := viper.GetString(flagETCDUser)
 	password := ""
@@ -115,27 +114,32 @@ func NewETCD() (datastore.Store, error) {
 		DialTimeout: viper.GetDuration(flagETCDDialTimeout),
 	}
 
-	var err error
-	if etcd.client, err = clientv3.New(cfg); err != nil {
+	cli, err := clientv3.New(cfg)
+	if err != nil {
 		return nil, err
 	}
+
+	// Use namespaced KV client
+	cli.KV = namespace.NewKV(cli.KV, keyPrefix)
+	cli.Watcher = namespace.NewWatcher(cli.Watcher, keyPrefix)
+	cli.Lease = namespace.NewLease(cli.Lease, keyPrefix)
+
+	etcd.client = cli
+
+	// TODO Should a etcd.Status() call be made to one or more given endpoints?
+	// See https://godoc.org/go.etcd.io/etcd/clientv3#Maintenance
 
 	return etcd, err
 }
 
-// SetKeyPrefix set the prefix to prefix all given keys with.
-func (st *ETCD) SetKeyPrefix(prefix string) {
-	st.keyPrefix = prefix
-}
-
 // Get return a specific key.
 func (st *ETCD) Get(ctx context.Context, key string, opts ...clientv3.OpOption) (*clientv3.GetResponse, error) {
-	return st.client.Get(ctx, path.Join(st.keyPrefix, key), opts...)
+	return st.client.Get(ctx, key, opts...)
 }
 
 // Put set a key to a specific value.
 func (st *ETCD) Put(ctx context.Context, key string, value string, opts ...clientv3.OpOption) (*clientv3.PutResponse, error) {
-	return st.client.Put(ctx, path.Join(st.keyPrefix, key), value, opts...)
+	return st.client.Put(ctx, key, value, opts...)
 }
 
 // PutTTL set a key to a specific value with a TTL.
@@ -145,17 +149,17 @@ func (st *ETCD) PutTTL(ctx context.Context, key string, value string, ttl int64,
 		return nil, err
 	}
 	opts = append([]clientv3.OpOption{clientv3.WithLease(resp.ID)}, opts...)
-	return st.client.Put(ctx, path.Join(st.keyPrefix, key), value, opts...)
+	return st.client.Put(ctx, key, value, opts...)
 }
 
 // Delete delete a key value pair.
 func (st *ETCD) Delete(ctx context.Context, key string, opts ...clientv3.OpOption) (*clientv3.DeleteResponse, error) {
-	return st.client.Delete(ctx, path.Join(st.keyPrefix, key), opts...)
+	return st.client.Delete(ctx, key, opts...)
 }
 
 // Watch watch a key or directory for creation, changes and deletion.
 func (st *ETCD) Watch(ctx context.Context, key string, opts ...clientv3.OpOption) clientv3.WatchChan {
-	return st.client.Watch(ctx, path.Join(st.keyPrefix, key), opts...)
+	return st.client.Watch(ctx, key, opts...)
 }
 
 // EtcdEventStateToHandlerState convert Etcd client v3 event type to our own states.

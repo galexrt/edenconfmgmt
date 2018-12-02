@@ -14,19 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package v1alpha
+package handlers
 
 import (
-	api "github.com/galexrt/edenconfmgmt/pkg/apis/taskbooks"
+	"context"
+
+	"google.golang.org/grpc"
 )
 
-const (
-	// Kind the name of the object kind (singular).
-	Kind = "TaskBook"
-	// KindPlural the name of the object kind (plural).
-	KindPlural = "TaskBooks"
-	// APIVersion of the API.
-	APIVersion = "v1alpha"
-	// DataStorePath API object path in the data store.
-	DataStorePath = api.APIName + "/" + APIVersion
-)
+// Handler auth handler interface
+type Handler interface {
+	// StreamAuth stream grpc authorize function
+	StreamAuth(srv interface{}, stream grpc.ServerStream, info *grpc.StreamServerInfo, handler grpc.StreamHandler) (bool, error)
+	// UnaryAuth unary grpc authorize function
+	UnaryAuth(ctx context.Context, req interface{}, info *grpc.UnaryServerInfo, handler grpc.UnaryHandler) (bool, interface{}, error)
+}
+
+// Options for auth handler.
+type Options interface {
+}

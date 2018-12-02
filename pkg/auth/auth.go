@@ -14,19 +14,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package v1alpha
+package auth
 
 import (
-	api "github.com/galexrt/edenconfmgmt/pkg/apis/taskbooks"
+	"github.com/galexrt/edenconfmgmt/pkg/auth/handlers"
 )
 
-const (
-	// Kind the name of the object kind (singular).
-	Kind = "TaskBook"
-	// KindPlural the name of the object kind (plural).
-	KindPlural = "TaskBooks"
-	// APIVersion of the API.
-	APIVersion = "v1alpha"
-	// DataStorePath API object path in the data store.
-	DataStorePath = api.APIName + "/" + APIVersion
-)
+// Auth auth handler
+type Auth struct {
+	Handlers []handlers.Handler
+}
+
+// New return new Auth
+func New() (*Auth, error) {
+	return &Auth{}, nil
+}

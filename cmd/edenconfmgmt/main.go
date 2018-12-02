@@ -28,14 +28,17 @@ import (
 	"syscall"
 	"time"
 
+	beacons_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/beacons/v1alpha"
+	clustervariables_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/clustervariables/v1alpha"
 	configs_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/configs/v1alpha"
-	eventreactors_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/eventreactors/v1alpha"
+	cronjobs_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/cronjobs/v1alpha"
 	events_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha"
-	jobs_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/jobs/v1alpha"
 	nodes_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/nodes/v1alpha"
-	tasks_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/tasks/v1alpha"
-	templatemacros_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/templatemacros/v1alpha"
+	secrets_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/secrets/v1alpha"
+	taskbooks_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/taskbooks/v1alpha"
+	triggers_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/triggers/v1alpha"
 	variables_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/variables/v1alpha"
+
 	"github.com/galexrt/edenconfmgmt/pkg/auth"
 	"github.com/galexrt/edenconfmgmt/pkg/common"
 	"github.com/galexrt/edenconfmgmt/pkg/datastore"
@@ -145,11 +148,10 @@ func Run(cmd *cobra.Command, args []string) error {
 	signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM)
 
 	handlerName := strings.ToLower(viper.GetString(flagStore))
-	dataStore, err := data_store_handlers.Get(handlerName)
+	dataStore, err := data_store_handlers.Get(handlerName, viper.GetString(flagStoreKeyPrefix))
 	if err != nil {
 		logger.Fatal("failed to create store handler", zap.String("storehandler", handlerName))
 	}
-	dataStore.SetKeyPrefix(viper.GetString(flagStoreKeyPrefix))
 
 	var tracer opentracing.Tracer
 	if false {
@@ -221,6 +223,7 @@ func Run(cmd *cobra.Command, args []string) error {
 		defer wg.Done()
 		if err = httpServer.ListenAndServe(); err != nil {
 			logger.Error("failed to listen and serve http server", zap.Error(err))
+			close(stopCh)
 		}
 	}()
 	wg.Add(1)
@@ -228,6 +231,7 @@ func Run(cmd *cobra.Command, args []string) error {
 		defer wg.Done()
 		if err = grpcServer.Serve(lis); err != nil {
 			logger.Error("grpcServer.Serve() returned non-nil error on GracefulStop", zap.Error(err))
+			close(stopCh)
 		}
 	}()
 	wg.Add(1)
@@ -235,12 +239,17 @@ func Run(cmd *cobra.Command, args []string) error {
 		defer wg.Done()
 		if err := magicRun(stopCh); err != nil {
 			logger.Error("magic run returned error", zap.Error(err))
+			close(stopCh)
 		}
 	}()
 
-	<-sigCh
-	logger.Info("signal received, shutting down ...")
-	close(stopCh)
+	select {
+	case <-sigCh:
+		logger.Info("signal received, shutting down ...")
+		close(stopCh)
+	case <-stopCh:
+		logger.Info("stop channel closed, shutting down ...")
+	}
 
 	// Shutdown grpc server
 	grpcServer.GracefulStop()
@@ -257,27 +266,33 @@ func Run(cmd *cobra.Command, args []string) error {
 }
 
 func registerGRPCAPIs(srv *grpc.Server, dataStore datastore.Store) {
+	// Beacons
+	beaconsServer := beacons_v1alpha.New()
+	beacons_v1alpha.RegisterBeaconsServer(srv, beaconsServer)
+	// ClusterVariables
+	clusterVariablesServer := clustervariables_v1alpha.New()
+	clustervariables_v1alpha.RegisterClusterVariablesServer(srv, clusterVariablesServer)
 	// Configs
 	configServer := configs_v1alpha.New()
 	configs_v1alpha.RegisterConfigsServer(srv, configServer)
-	// EventReactors
-	eventReactorsServer := eventreactors_v1alpha.New()
-	eventreactors_v1alpha.RegisterEventReactorsServer(srv, eventReactorsServer)
+	// CronJobs
+	cronJobsServer := cronjobs_v1alpha.New()
+	cronjobs_v1alpha.RegisterCronJobsServer(srv, cronJobsServer)
 	// Events
 	eventsServer := events_v1alpha.New()
 	events_v1alpha.RegisterEventsServer(srv, eventsServer)
-	// Jobs
-	jobsServer := jobs_v1alpha.New()
-	jobs_v1alpha.RegisterJobsServer(srv, jobsServer)
 	// Nodes
 	nodesServer := nodes_v1alpha.New(dataStore)
 	nodes_v1alpha.RegisterNodesServer(srv, nodesServer)
-	// Tasks
-	tasksServer := tasks_v1alpha.New()
-	tasks_v1alpha.RegisterTasksServer(srv, tasksServer)
-	// TemplateMacros
-	templateMacrosServer := templatemacros_v1alpha.New()
-	templatemacros_v1alpha.RegisterTemplateMacrosServer(srv, templateMacrosServer)
+	// Secrets
+	secretsServer := secrets_v1alpha.New()
+	secrets_v1alpha.RegisterSecretsServer(srv, secretsServer)
+	// TaskBooks
+	taskBooksServer := taskbooks_v1alpha.New()
+	taskbooks_v1alpha.RegisterTaskBooksServer(srv, taskBooksServer)
+	// Triggers
+	triggersServer := triggers_v1alpha.New()
+	triggers_v1alpha.RegisterTriggersServer(srv, triggersServer)
 	// Variables
 	variablesServer := variables_v1alpha.New()
 	variables_v1alpha.RegisterVariablesServer(srv, variablesServer)

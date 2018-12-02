@@ -30,10 +30,10 @@ option (gogoproto.sizer_all) = true;
 option (gogoproto.unmarshaler_all) = true;
 option (gogoproto.goproto_unrecognized_all) = false;
 
-service TaskBookBooks {
+service TaskBooks {
     // Get a TaskBook.
     rpc Get (GetRequest) returns (GetResponse);
-    // List TaskBookBooks.
+    // List TaskBooks.
     rpc List (ListRequest) returns (ListResponse);
     // Add a TaskBook.
     rpc Add (AddRequest) returns (AddResponse);

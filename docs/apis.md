@@ -207,7 +207,7 @@
 * [github.com/galexrt/edenconfmgmt/pkg/apis/taskbooks/v1alpha/api.proto](#github.com/galexrt/edenconfmgmt/pkg/apis/taskbooks/v1alpha/api.proto)
     * Description: 
     * Services
-        * [TaskBookBooks](#taskbooks.v1alpha.TaskBookBooks)
+        * [TaskBooks](#taskbooks.v1alpha.TaskBooks)
     * Messages
         * [Action](#taskbooks.v1alpha.Action)
         * [AddRequest](#taskbooks.v1alpha.AddRequest)
@@ -2228,16 +2228,16 @@ Watch
  <!-- end HasExtensions -->
 
 
-<a name="taskbooks.v1alpha.TaskBookBooks"></a>
+<a name="taskbooks.v1alpha.TaskBooks"></a>
 
-### TaskBookBooks
+### TaskBooks
 
 
 
 | Method Name | Request Type | Response Type | Description |
 | ----------- | ------------ | ------------- | ------------|
 | Get | [GetRequest](#taskbooks.v1alpha.GetRequest) | [GetResponse](#taskbooks.v1alpha.GetResponse) | Get a TaskBook. |
-| List | [ListRequest](#taskbooks.v1alpha.ListRequest) | [ListResponse](#taskbooks.v1alpha.ListResponse) | List TaskBookBooks. |
+| List | [ListRequest](#taskbooks.v1alpha.ListRequest) | [ListResponse](#taskbooks.v1alpha.ListResponse) | List TaskBooks. |
 | Add | [AddRequest](#taskbooks.v1alpha.AddRequest) | [AddResponse](#taskbooks.v1alpha.AddResponse) | Add a TaskBook. |
 | Update | [UpdateRequest](#taskbooks.v1alpha.UpdateRequest) | [UpdateResponse](#taskbooks.v1alpha.UpdateResponse) | Update a TaskBook. |
 | Delete | [DeleteRequest](#taskbooks.v1alpha.DeleteRequest) | [DeleteResponse](#taskbooks.v1alpha.DeleteResponse) | Delete a TaskBook. |
