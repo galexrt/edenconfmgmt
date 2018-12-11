@@ -87,6 +87,7 @@ func magicRun(stopCh chan struct{}) error {
 			}
 
 			// TODO add node "I am alive" loop
+			go keepAliveNode(stopCh)
 
 			in := &nodes_v1alpha.WatchRequest{
 				WatchOptions: &core_v1alpha.WatchOptions{
@@ -132,6 +133,6 @@ func registerNode(nodesClient nodes_v1alpha.NodesClient, hostname string) (*node
 	return nodesClient.Add(ctx, addRequest)
 }
 
-func keepAliveNode() {
+func keepAliveNode(stopCh chan struct{}) {
 	// TODO
 }

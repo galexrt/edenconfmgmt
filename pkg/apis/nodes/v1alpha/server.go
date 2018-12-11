@@ -47,22 +47,27 @@ func (n *NodesService) Get(ctx context.Context, req *GetRequest) (*GetResponse, 
 
 // List list Nodes.
 func (n *NodesService) List(ctx context.Context, req *ListRequest) (*ListResponse, error) {
-	return &ListResponse{}, nil
+	resp := &ListResponse{}
+	return resp, nil
 }
 
 // Add add a Node.
 func (n *NodesService) Add(ctx context.Context, req *AddRequest) (*AddResponse, error) {
+	node := req.Node
 	resp := &AddResponse{
-		Node: req.Node,
+		Node: node,
 	}
-	// TODO Add defaults to Node object.
-	// TODO Generate key path and marshal node to string, save into etcd.
-	node, err := json.Marshal(req.Node)
+	node.SetDefaults()
+	if err := node.Validate(); err != nil {
+		resp.Error = utilsapi.ErrorToErrorResponse(err)
+		return resp, nil
+	}
+	nodeString, err := json.Marshal(node)
 	if err != nil {
 		resp.Error = utilsapi.ErrorToErrorResponse(err)
 		return resp, nil
 	}
-	_, err = n.store.Put(ctx, utilsapi.ObjectPath(DataStorePath, resp.Node.Metadata.Name), string(node))
+	_, err = n.store.Put(ctx, utilsapi.ObjectPath(DataStorePath, resp.Node.Metadata.Name), string(nodeString))
 	resp.Error = utilsapi.ErrorToErrorResponse(err)
 	return resp, nil
 }

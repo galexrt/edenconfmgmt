@@ -36,7 +36,7 @@ type Store interface {
 	// SetPrefix set the prefix to prefix all given keys with.
 	SetKeyPrefix(prefix string)
 
-	// Get return a specific key.
+	// Get return a specific key (range).
 	Get(ctx context.Context, key string, opts ...clientv3.OpOption) (*clientv3.GetResponse, error)
 	// Put set a key to a specific value.
 	Put(ctx context.Context, key string, value string, opts ...clientv3.OpOption) (*clientv3.PutResponse, error)

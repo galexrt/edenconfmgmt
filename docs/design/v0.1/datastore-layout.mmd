@@ -1,0 +1,14 @@
+graph TD
+    subgraph General
+        DATASTORE_PREFIX-->API_PATH
+        API_PATH-->NAMESPACE
+        NAMESPACE-->OBJECT_NAME
+    end
+    subgraph Object
+        OBJECT_NAME-->metadata
+        metadata-->labels
+        metadata-->|contains itself|metadata
+        OBJECT_NAME-->spec
+        spec-->|contains itself|spec
+        spec-->status
+    end

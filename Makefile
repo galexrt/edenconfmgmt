@@ -15,8 +15,6 @@ build: proto-gen
 
 protoc:
 	$(GO) get -v -u github.com/gogo/protobuf/protoc-gen-gofast
-	$(GO) get -v -u github.com/golang/protobuf/proto
-	$(GO) get -v -u github.com/golang/protobuf/protoc-gen-go
 
 protoc-gen-doc:
 	$(GO) get -u github.com/pseudomuto/protoc-gen-doc/cmd/protoc-gen-doc
@@ -29,7 +27,13 @@ proto-doc-gen: proto-clean
 %.pb.go: %.proto
 	protoc \
 		-I $$GOPATH/src/ \
-		--go_out=plugins=grpc:$$GOPATH/src/ \
+		--gofast_out=\
+Mgoogle/protobuf/any.proto=github.com/gogo/protobuf/types,\
+Mgoogle/protobuf/duration.proto=github.com/gogo/protobuf/types,\
+Mgoogle/protobuf/struct.proto=github.com/gogo/protobuf/types,\
+Mgoogle/protobuf/timestamp.proto=github.com/gogo/protobuf/types,\
+Mgoogle/protobuf/wrappers.proto=github.com/gogo/protobuf/types,\
+plugins=grpc:$$GOPATH/src/ \
 		github.com/galexrt/edenconfmgmt/$^
 
 docs/apis.md: $(GOPROTOFILES)

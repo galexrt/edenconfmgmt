@@ -27,6 +27,11 @@ option (gogoproto.marshaler_all) = true;
 option (gogoproto.sizer_all) = true;
 option (gogoproto.unmarshaler_all) = true;
 option (gogoproto.goproto_unrecognized_all) = false;
+option (gogoproto.populate_all) = true; // Needed for testgen
+option (gogoproto.equal_all) = true;  // Needed for testgen
+// TODO FIXME https://github.com/gogo/protobuf/issues/407
+option (gogoproto.testgen_all) = false;
+option (gogoproto.benchgen_all) = true;
 
 message ObjectMetadata {
     // APIVersion of object.
