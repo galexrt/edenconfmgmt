@@ -22,12 +22,18 @@ import (
 	"go.etcd.io/etcd/clientv3"
 )
 
-// TODO Write comments for states of a Response (e.g. Deleted, Updated, Created).
+// ResponseState response state type.
+type ResponseState string
+
 const (
-	ResponseStateCreated = "Created"
-	ResponseStateUpdated = "Updated"
-	ResponseStateDeleted = "Deleted"
-	ResponseStateUnknown = "Unknown"
+	// ResponseStateCreated created response state.
+	ResponseStateCreated ResponseState = "Created"
+	// ResponseStateUpdated updated response state.
+	ResponseStateUpdated ResponseState = "Updated"
+	// ResponseStateDeleted deleted response state.
+	ResponseStateDeleted ResponseState = "Deleted"
+	// ResponseStateUnknown unknown response state.
+	ResponseStateUnknown ResponseState = "Unknown"
 )
 
 // Store Interface to abstract get, put, del, watch actions to etcd datastore.

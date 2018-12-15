@@ -5,10 +5,10 @@ graph TD
         NAMESPACE-->OBJECT_NAME
     end
     subgraph Object
-        OBJECT_NAME-->metadata
+        OBJECT_NAME-->|NOT IMPLEMENTED|metadata
         metadata-->labels
         metadata-->|contains itself|metadata
-        OBJECT_NAME-->spec
+        OBJECT_NAME-->|NOT IMPLEMENTED|spec
         spec-->|contains itself|spec
         spec-->status
     end

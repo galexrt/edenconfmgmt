@@ -14,37 +14,24 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package common
+package utils
 
 import (
-	"fmt"
-	"os"
-
-	"github.com/spf13/viper"
-	"go.uber.org/zap"
-	"go.uber.org/zap/zapcore"
+	"sync"
 )
 
-const (
-	flagProductionMode = "production"
-)
+// ChannelCloser channel closer struct
+type ChannelCloser struct {
+	isClosed bool
+	sync.Mutex
+}
 
-var logger *zap.Logger
-
-// GetLogger init logger depending on production mode.
-func GetLogger(l *zapcore.Level) *zap.Logger {
-	if logger != nil {
-		return logger
+// Close closes a given channel.
+func (ch *ChannelCloser) Close(channelToClose chan<- struct{}) {
+	ch.Mutex.Lock()
+	if !ch.isClosed {
+		close(channelToClose)
+		ch.isClosed = true
 	}
-	var err error
-	if viper.GetBool(flagProductionMode) {
-		logger, err = zap.NewProduction()
-	} else {
-		logger, err = zap.NewDevelopment()
-	}
-	if err != nil {
-		fmt.Printf("failed to create zap logger. %+v\n", err)
-		os.Exit(1)
-	}
-	return logger
+	ch.Mutex.Unlock()
 }

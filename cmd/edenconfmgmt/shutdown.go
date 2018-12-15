@@ -38,7 +38,7 @@ var (
 		Use:   "shutdown",
 		Short: "Trigger shutdown of edenconfmgmt daemon",
 		PersistentPreRun: func(cmd *cobra.Command, args []string) {
-			common.GetLogger()
+			common.GetLogger(nil)
 		},
 		RunE: Shutdown,
 	}

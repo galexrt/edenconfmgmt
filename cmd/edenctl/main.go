@@ -36,7 +36,7 @@ var (
 		Use:   "edenctl",
 		Short: "Configuration management with automatic clustering, events and stuff.",
 		PersistentPreRun: func(cmd *cobra.Command, args []string) {
-			logger = common.GetLogger()
+			logger = common.GetLogger(nil)
 		},
 		RunE: func(cmd *cobra.Command, args []string) error {
 			opts := []grpc.DialOption{

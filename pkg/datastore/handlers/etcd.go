@@ -80,7 +80,7 @@ func init() {
 		cmd.PersistentFlags().Bool(flagETCDDebug, false, "ETCD: enable client-side debug logging")
 		cmd.PersistentFlags().Duration(flagETCDDialTimeout, 2*time.Second, "ETCD: dial timeout for client connections")
 		cmd.PersistentFlags().String(flagETCDDiscoverySRV, "", "ETCD: domain name to query for SRV records describing cluster endpoints")
-		cmd.PersistentFlags().StringSlice(flagETCDEndpoints, []string{}, "ETCD: gRPC endpoints")
+		cmd.PersistentFlags().StringSlice(flagETCDEndpoints, []string{"127.0.0.1:2379"}, "ETCD: gRPC endpoints")
 		cmd.PersistentFlags().Bool(flagETCDInsecureDiscovery, true, "ETCD: accept insecure SRV records describing cluster endpoints")
 		cmd.PersistentFlags().Bool(flagETCDInsecureSkipTLSVerify, false, "ETCD: skip server certificate verification")
 		cmd.PersistentFlags().Bool(flagETCDInsecureTransport, true, "ETCD: disable transport security for client connections")
@@ -163,7 +163,7 @@ func (st *ETCD) Watch(ctx context.Context, key string, opts ...clientv3.OpOption
 }
 
 // EtcdEventStateToHandlerState convert Etcd client v3 event type to our own states.
-func EtcdEventStateToHandlerState(eventType mvccpb.Event_EventType, isCreate bool, isModify bool) string {
+func EtcdEventStateToHandlerState(eventType mvccpb.Event_EventType, isCreate bool, isModify bool) datastore.ResponseState {
 	if isCreate {
 		return datastore.ResponseStateCreated
 	}

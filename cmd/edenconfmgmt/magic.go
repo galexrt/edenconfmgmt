@@ -27,12 +27,61 @@ import (
 
 	core_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha"
 	nodes_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/nodes/v1alpha"
+	"github.com/galexrt/edenconfmgmt/pkg/datastore"
+	"github.com/galexrt/edenconfmgmt/pkg/sharedinformer"
+	"go.etcd.io/etcd/clientv3"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 )
 
-func magicRun(stopCh chan struct{}) error {
+var json = jsoniter.ConfigCompatibleWithStandardLibrary
+
+func magicRun(stopCh chan struct{}, dataStore datastore.Store) error {
 	// Watch for node changes of itself
+
+	pCtx, cancel1 := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel1()
+	node := &nodes_v1alpha.Node{
+		Metadata: &core_v1alpha.ObjectMetadata{
+			Name: "TEST",
+		},
+	}
+	out, err := json.Marshal(node)
+	if err != nil {
+		return err
+	}
+	_, err = dataStore.Put(pCtx, "/test123/my-object", string(out))
+	if err != nil {
+		return err
+	}
+
+	getWatchFunc := func(ctx context.Context) (clientv3.WatchChan, error) {
+		return dataStore.Watch(ctx, "/test123", clientv3.WithPrefix()), nil
+	}
+	indexer := sharedinformer.New(getWatchFunc)
+
+	ctx, cancel2 := context.WithCancel(context.Background())
+	defer cancel2()
+
+	go indexer.Run(ctx, stopCh)
+
+	inf := indexer.GetNameInformer("my-object")
+
+	for {
+		select {
+		case result := <-inf.Watch:
+			var object nodes_v1alpha.Node
+			err = json.Unmarshal(result.Object, &object)
+			if err != nil {
+				return err
+			}
+			break
+		case <-stopCh:
+			return nil
+		}
+	}
+
+	return nil
 
 	// TODO add logic to refresh hostname every once in a while
 	hostname, err := os.Hostname()

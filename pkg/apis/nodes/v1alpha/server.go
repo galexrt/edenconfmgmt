@@ -18,14 +18,19 @@ package v1alpha
 
 import (
 	"context"
-	"encoding/json"
+	"fmt"
 	"time"
+
+	"github.com/json-iterator/go"
 
 	core_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha"
 	events_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha"
 	"github.com/galexrt/edenconfmgmt/pkg/datastore"
 	"github.com/galexrt/edenconfmgmt/pkg/utilsapi"
+	"go.etcd.io/etcd/clientv3"
 )
+
+var json = jsoniter.ConfigCompatibleWithStandardLibrary
 
 // NodesService handler for config events.
 type NodesService struct {
@@ -42,12 +47,43 @@ func New(dataStore datastore.Store) NodesServer {
 
 // Get get a Node.
 func (n *NodesService) Get(ctx context.Context, req *GetRequest) (*GetResponse, error) {
-	return &GetResponse{}, nil
+	resp := &GetResponse{}
+	storeResp, err := n.store.Get(ctx, utilsapi.ObjectPath(DataStorePath, req.GetOptions.Name), clientv3.WithPrefix())
+	if err != nil {
+		resp.Error = utilsapi.ErrorToErrorResponse(err)
+		return resp, nil
+	}
+	var (
+		metadata *core_v1alpha.ObjectMetadata
+		spec     *Spec
+	)
+	for _, kv := range storeResp.Kvs {
+		var part interface{}
+
+		switch string(kv.Key) {
+		case "metadata":
+			part = &core_v1alpha.ObjectMetadata{}
+			metadata = part.(*core_v1alpha.ObjectMetadata)
+		case "spec":
+			part = &Spec{}
+			spec = part.(*Spec)
+		}
+		if err = json.Unmarshal(kv.Value, part); err != nil {
+			resp.Error = utilsapi.ErrorToErrorResponse(fmt.Errorf(""))
+			return resp, nil
+		}
+	}
+	resp.Node = &Node{
+		Metadata: metadata,
+		Spec:     spec,
+	}
+	return resp, nil
 }
 
 // List list Nodes.
 func (n *NodesService) List(ctx context.Context, req *ListRequest) (*ListResponse, error) {
 	resp := &ListResponse{}
+
 	return resp, nil
 }
 
@@ -74,12 +110,16 @@ func (n *NodesService) Add(ctx context.Context, req *AddRequest) (*AddResponse, 
 
 // Update update a Node.
 func (n *NodesService) Update(ctx context.Context, req *UpdateRequest) (*UpdateResponse, error) {
-	return &UpdateResponse{}, nil
+	resp := &UpdateResponse{}
+
+	return resp, nil
 }
 
 // Delete delete a Node.
 func (n *NodesService) Delete(ctx context.Context, req *DeleteRequest) (*DeleteResponse, error) {
-	return &DeleteResponse{}, nil
+	resp := &DeleteResponse{}
+
+	return resp, nil
 }
 
 // Watch Watch Nodes.

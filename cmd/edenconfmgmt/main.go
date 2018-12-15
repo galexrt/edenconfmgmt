@@ -38,6 +38,7 @@ import (
 	taskbooks_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/taskbooks/v1alpha"
 	triggers_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/triggers/v1alpha"
 	variables_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/variables/v1alpha"
+	"github.com/galexrt/edenconfmgmt/pkg/utils"
 
 	"github.com/galexrt/edenconfmgmt/pkg/auth"
 	"github.com/galexrt/edenconfmgmt/pkg/common"
@@ -59,11 +60,13 @@ import (
 	"github.com/uber/jaeger-client-go/config"
 	jaeger_prometheus "github.com/uber/jaeger-lib/metrics/prometheus"
 	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 	"google.golang.org/grpc"
 )
 
 const (
 	flagProductionMode    = "production"
+	flagLogLevel          = "log-level"
 	flagListenAddressGRPC = "listen-address-grpc"
 	flagListenAddressHTTP = "listen-address-http"
 	flagStore             = "store"
@@ -76,8 +79,14 @@ var (
 	rootCmd = &cobra.Command{
 		Use:   "edenconfmgmt",
 		Short: "Configuration management with automatic clustering, events and stuff.",
-		PersistentPreRun: func(cmd *cobra.Command, args []string) {
-			logger = common.GetLogger()
+		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+			// TODO Implement log level
+			var level zapcore.Level
+			if err := (&level).UnmarshalText([]byte(viper.GetString(flagLogLevel))); err != nil {
+				return err
+			}
+			logger = common.GetLogger(nil)
+			return nil
 		},
 		RunE: Run,
 	}
@@ -93,6 +102,7 @@ func init() {
 	promReg.MustRegister(grpcMetrics)
 
 	rootCmd.PersistentFlags().Bool(flagProductionMode, true, "production mode (logger will use different output format)")
+	rootCmd.PersistentFlags().String(flagLogLevel, "INFO", "log level to use for logging")
 	rootCmd.PersistentFlags().String(flagListenAddressGRPC, ":1337", "grpc listen address")
 	rootCmd.PersistentFlags().String(flagListenAddressHTTP, ":1338", "http listen address")
 	rootCmd.PersistentFlags().String(flagStore, "etcd", "store to use")
@@ -150,7 +160,7 @@ func Run(cmd *cobra.Command, args []string) error {
 	handlerName := strings.ToLower(viper.GetString(flagStore))
 	dataStore, err := data_store_handlers.Get(handlerName, viper.GetString(flagStoreKeyPrefix))
 	if err != nil {
-		logger.Fatal("failed to create store handler", zap.String("storehandler", handlerName))
+		logger.Fatal("failed to create store handler", zap.String("storehandler", handlerName), zap.Error(err))
 	}
 
 	var tracer opentracing.Tracer
@@ -213,6 +223,7 @@ func Run(cmd *cobra.Command, args []string) error {
 		logger.Fatal("failed to listen", zap.Error(err))
 	}
 
+	closer := utils.ChannelCloser{}
 	wg := sync.WaitGroup{}
 
 	// TODO Create a "mesh" proxy.
@@ -223,7 +234,7 @@ func Run(cmd *cobra.Command, args []string) error {
 		defer wg.Done()
 		if err = httpServer.ListenAndServe(); err != nil {
 			logger.Error("failed to listen and serve http server", zap.Error(err))
-			close(stopCh)
+			closer.Close(stopCh)
 		}
 	}()
 	wg.Add(1)
@@ -231,22 +242,22 @@ func Run(cmd *cobra.Command, args []string) error {
 		defer wg.Done()
 		if err = grpcServer.Serve(lis); err != nil {
 			logger.Error("grpcServer.Serve() returned non-nil error on GracefulStop", zap.Error(err))
-			close(stopCh)
+			closer.Close(stopCh)
 		}
 	}()
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		if err := magicRun(stopCh); err != nil {
+		if err := magicRun(stopCh, dataStore); err != nil {
 			logger.Error("magic run returned error", zap.Error(err))
-			close(stopCh)
+			closer.Close(stopCh)
 		}
 	}()
 
 	select {
 	case <-sigCh:
 		logger.Info("signal received, shutting down ...")
-		close(stopCh)
+		closer.Close(stopCh)
 	case <-stopCh:
 		logger.Info("stop channel closed, shutting down ...")
 	}
