@@ -31,10 +31,12 @@ Let me be honest here, for the first part this project should solve my problems,
 
 The following list contains the primary goals of this project:
 
-1. Throw an event for "everything":
-    * Black/Whitelist for events thrown.
+1. Throw an event for most things happening and be able to react to it:
+    * Blacklist and Whitelist for events thrown.
 1. Simple input webhook event API:
     * Allowing e.g., Prometheus webhooks to be accepted and an annotation/a label to be used to run a certain task.
+    * End goal is to be able to make sense of "any" input to make an event out of it.
+        * For first part at least something like an event "received webhook from my-prometheus.com".
 1. Reaction to events:
     * Allow doing things based on events.
         - [Salt's Thorium Reactor](https://docs.saltstack.com/en/latest/topics/thorium/index.html) like functionality.
