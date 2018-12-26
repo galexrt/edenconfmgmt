@@ -26,7 +26,7 @@ import (
 	core_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha"
 	events_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha"
 	"github.com/galexrt/edenconfmgmt/pkg/datastore"
-	"github.com/galexrt/edenconfmgmt/pkg/utilsapi"
+	utilsapi "github.com/galexrt/edenconfmgmt/pkg/utils/api"
 	"go.etcd.io/etcd/clientv3"
 )
 

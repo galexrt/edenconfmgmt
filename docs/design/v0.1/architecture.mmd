@@ -1,0 +1,60 @@
+graph LR
+    Start-->User
+    subgraph User
+        User-->|uses|edenctl
+        User-->HTTPServer
+    end
+    subgraph Master
+        HTTPServer[HTTP Server]-->Prometheus[Prometheus Metrics]
+        edenctl-->GRPC[GRPC API]
+        GRPC-->Unmarshal
+        subgraph Objects
+            Unmarshal-->|set defaults|Validation
+            Validation-->StoreCacheAccess
+        end
+        subgraph DataStore + Cache
+            StoreCacheAccess[Store + Cache Access]-->|Get, List, Update, Delete, Watch|CacheStoreInt[Cache Store Interface]
+            CacheStoreInt-->|Get, Update, Delete, Watch|Cacher
+            Cacher-.->|Implements|CacheStoreInt
+            Cacher-->|Watches/Notifies|CacheInformer
+            CacheInformer-->|Inform|CacheStoreInt
+            Cacher-->dataStoreStoreInt[dataStore.Store Interface]
+            dataStoreStoreInt-->|Store + Watch|etcd
+            etcd-->|Notify on Changes|dataStoreStoreInt
+            etcd-.->|Implements|dataStoreStoreInt
+            Cacher-->|Store|CacheAdapter[Cache Adapter Interface]
+            CacheAdapter-->CacheAdapterMemory["Memory (default)"]
+        end
+        subgraph Controller
+            NodeStatus-->|Watch Nodes|CacheStoreInt
+            VariablesUpdater-->|Reconciliation Loop|VariablesUpdater
+            VariablesUpdater-->|Watch Variables, ClusterVariables + CVarsBindings|CacheStoreInt
+            TaskBookController-->|Watch TaskBooks|CacheStoreInt
+        end
+        subgraph Scheduler
+            Scheduler-->|Watch|CacheStoreInt
+            subgraph Orchestration
+                GRPC-->Interactive
+                Serialization
+            end
+        end
+        subgraph EventReactor
+            EventReactor-->|Watch Events|CacheStoreInt
+            EventReactor-->|Watch Triggers|CacheStoreInt
+            EventReactor-->|Run Triggers|Trigger
+            Trigger-->Scheduler
+        end
+    end
+    subgraph Node
+        ObservReportExcec-->|Bi-directional connection|GRPC
+        GRPC-->|Bi-directional connection|ObservReportExcec
+        ObservReportExcec-->ConfigReload
+        ConfigReload-->|Reload for change|ConfigReload
+        ObservReportExcec-->|Run tasks|Executor[Executor]
+        ObservReportExcec-->|Run CronJobs|Cron[Cron]
+        Cron-->Executor
+        Executor-->|"Report back result (Events)"|ObservReportExcec
+        ObservReportExcec-.->|Stay in sync|Serialization
+        ObservReportExcec-.->|Stay in sync|Interactive
+        ObservReportExcec-.->|Watch Update/Events from Scheduler|GRPC
+    end

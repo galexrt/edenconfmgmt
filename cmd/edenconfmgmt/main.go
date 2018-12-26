@@ -30,7 +30,7 @@ import (
 
 	beacons_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/beacons/v1alpha"
 	clustervariables_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/clustervariables/v1alpha"
-	configs_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/configs/v1alpha"
+	configs_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/agentconfigs/v1alpha"
 	cronjobs_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/cronjobs/v1alpha"
 	events_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha"
 	nodes_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/nodes/v1alpha"
@@ -283,9 +283,9 @@ func registerGRPCAPIs(srv *grpc.Server, dataStore datastore.Store) {
 	// ClusterVariables
 	clusterVariablesServer := clustervariables_v1alpha.New()
 	clustervariables_v1alpha.RegisterClusterVariablesServer(srv, clusterVariablesServer)
-	// Configs
+	// AgentConfigs
 	configServer := configs_v1alpha.New()
-	configs_v1alpha.RegisterConfigsServer(srv, configServer)
+	configs_v1alpha.RegisterAgentConfigsServer(srv, configServer)
 	// CronJobs
 	cronJobsServer := cronjobs_v1alpha.New()
 	cronjobs_v1alpha.RegisterCronJobsServer(srv, cronJobsServer)

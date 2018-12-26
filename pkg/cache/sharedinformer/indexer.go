@@ -120,7 +120,15 @@ func (ind *Indexer) Run(ctx context.Context, stopCh chan struct{}) error {
 				ind.wg.Add(1)
 				go func(ev *clientv3.Event) {
 					defer ind.wg.Done()
-					ind.processETCDEvent(ev)
+					resp := ind.processETCDEvent(ev)
+					informerList, ok := ind.nameInformer[resp.Name]
+					if !ok {
+						logger.Debug("no informer for name", zap.String("name", resp.Name), zap.String("key", resp.Key))
+						return
+					}
+					for _, informer := range informerList {
+						informer.Watch <- resp
+					}
 				}(event)
 			}
 			ind.wg.Wait()
@@ -130,7 +138,7 @@ func (ind *Indexer) Run(ctx context.Context, stopCh chan struct{}) error {
 	return nil
 }
 
-func (ind *Indexer) processETCDEvent(event *clientv3.Event) {
+func (ind *Indexer) processETCDEvent(event *clientv3.Event) *Result {
 	logger.Debug("etcd watch: result event", zap.Any("event", event))
 	// {"event": {"kv":{"key":"L3Rlc3QxMjMvbm9wZS90ZXN0","create_revision":5,"mod_revision":42,"version":38,"value":"bm9wZQ=="}}}
 	key := string(event.Kv.Key)
@@ -139,23 +147,14 @@ func (ind *Indexer) processETCDEvent(event *clientv3.Event) {
 	logger.Debug("event name and key", zap.String("name", name), zap.String("key", key))
 
 	// As we only watch APIs here
-	informerList, ok := ind.nameInformer[name]
-	if !ok {
-		logger.Debug("no informer for name", zap.String("name", name), zap.String("key", key))
-		return
-	}
 	state := handlers.EtcdEventStateToHandlerState(event.Type, event.IsCreate(), event.IsModify())
 
-	resp := &Result{
+	return &Result{
 		Error:  nil,
 		State:  state,
 		Key:    key,
 		Name:   name,
 		Object: event.Kv.Value,
-	}
-
-	for _, informer := range informerList {
-		informer.Watch <- resp
 	}
 }
 
@@ -184,6 +183,17 @@ func (ind *Indexer) GetNameInformer(name string) *Informer {
 	ind.nameInformerMutex.Unlock()
 
 	return informer
+}
+
+// CloseNameInformer close a nameInformer watch channel.
+func (ind *Indexer) CloseNameInformer(informer *Informer) {
+	if _, ok := ind.nameInformer[informer.search]; ok {
+		if _, ok := ind.nameInformer[informer.search][informer.timeID]; ok {
+			ind.labelsInformerMutex.Lock()
+			delete(ind.nameInformer[informer.search], informer.timeID)
+			ind.labelsInformerMutex.Unlock()
+		}
+	}
 }
 
 // GetLabelsInformer return an Informer watching on specificly labelled object containing a channel which one can "listen" to.

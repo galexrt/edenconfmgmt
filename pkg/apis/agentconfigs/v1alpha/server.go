@@ -20,42 +20,42 @@ import (
 	"context"
 )
 
-// ConfigsService handler for config events.
-type ConfigsService struct {
-	ConfigsServer
+// AgentConfigsService handler for config events.
+type AgentConfigsService struct {
+	AgentConfigsServer
 }
 
-// New returns a ConfigsService
-func New() ConfigsServer {
-	return &ConfigsService{}
+// New returns a AgentConfigsService
+func New() AgentConfigsServer {
+	return &AgentConfigsService{}
 }
 
 // Get get a Config.
-func (n *ConfigsService) Get(ctx context.Context, req *GetRequest) (*GetResponse, error) {
+func (n *AgentConfigsService) Get(ctx context.Context, req *GetRequest) (*GetResponse, error) {
 	return &GetResponse{}, nil
 }
 
-// List list Configs.
-func (n *ConfigsService) List(ctx context.Context, req *ListRequest) (*ListResponse, error) {
+// List list AgentConfigs.
+func (n *AgentConfigsService) List(ctx context.Context, req *ListRequest) (*ListResponse, error) {
 	return &ListResponse{}, nil
 }
 
 // Add add a Config.
-func (n *ConfigsService) Add(ctx context.Context, req *AddRequest) (*AddResponse, error) {
+func (n *AgentConfigsService) Add(ctx context.Context, req *AddRequest) (*AddResponse, error) {
 	return &AddResponse{}, nil
 }
 
 // Update update a Config.
-func (n *ConfigsService) Update(ctx context.Context, req *UpdateRequest) (*UpdateResponse, error) {
+func (n *AgentConfigsService) Update(ctx context.Context, req *UpdateRequest) (*UpdateResponse, error) {
 	return &UpdateResponse{}, nil
 }
 
 // Delete delete a Config.
-func (n *ConfigsService) Delete(ctx context.Context, req *DeleteRequest) (*DeleteResponse, error) {
+func (n *AgentConfigsService) Delete(ctx context.Context, req *DeleteRequest) (*DeleteResponse, error) {
 	return &DeleteResponse{}, nil
 }
 
-// Watch Watch Configs.
-func (n *ConfigsService) Watch(req *WatchRequest, watch Configs_WatchServer) error {
+// Watch Watch AgentConfigs.
+func (n *AgentConfigsService) Watch(req *WatchRequest, watch AgentConfigs_WatchServer) error {
 	return nil
 }

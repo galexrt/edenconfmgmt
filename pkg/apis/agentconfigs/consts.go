@@ -14,19 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package v1alpha
-
-import (
-	api "github.com/galexrt/edenconfmgmt/pkg/apis/configs"
-)
+package config
 
 const (
-	// Kind the name of the object kind (singular).
-	Kind = "Config"
-	// KindPlural the name of the object kind (plural).
-	KindPlural = "Configs"
-	// APIVersion of the API.
-	APIVersion = "v1alpha"
-	// DataStorePath API object path in the data store.
-	DataStorePath = api.APIName + "/" + APIVersion
+	// APIName name of the API.
+	APIName = "agentconfigs"
 )

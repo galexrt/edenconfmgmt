@@ -50,11 +50,8 @@ type Store interface {
 	PutTTL(ctx context.Context, key string, value string, ttl int64, opts ...clientv3.OpOption) (*clientv3.PutResponse, error)
 	// Delete delete a key value pair.
 	Delete(ctx context.Context, key string, opts ...clientv3.OpOption) (*clientv3.DeleteResponse, error)
-	// Txn creates a transaction.
-	Txn(ctx context.Context) clientv3.Txn
-
 	// Watch watch a key or directory for creation, changes and deletion.
 	Watch(ctx context.Context, key string, opts ...clientv3.OpOption) clientv3.WatchChan
-	// Close closes the watcher and cancels all watch requests.
+	// Close closes the store and cancels all watch requests with it.
 	Close() error
 }

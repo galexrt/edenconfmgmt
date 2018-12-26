@@ -14,8 +14,8 @@
 
 syntax = 'proto3';
 
-package configs.v1alpha;
-option go_package = "github.com/galexrt/edenconfmgmt/pkg/apis/configs/v1alpha";
+package agentagentconfigs.v1alpha;
+option go_package = "github.com/galexrt/edenconfmgmt/pkg/apis/agentconfigs/v1alpha";
 
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha/api.proto";
@@ -33,30 +33,30 @@ option (gogoproto.equal_all) = true;  // Needed for testgen
 option (gogoproto.testgen_all) = false;
 option (gogoproto.benchgen_all) = true;
 
-service Configs {
-    // Get a Config.
+service AgentConfigs {
+    // Get a AgentConfig.
     rpc Get (GetRequest) returns (GetResponse);
-    // List Configs.
+    // List AgentConfigs.
     rpc List (ListRequest) returns (ListResponse);
-    // Add a Config.
+    // Add a AgentConfig.
     rpc Add (AddRequest) returns (AddResponse);
-    // Update a Config.
+    // Update a AgentConfig.
     rpc Update (UpdateRequest) returns (UpdateResponse);
-    // Delete a Config.
+    // Delete a AgentConfig.
     rpc Delete (DeleteRequest) returns (DeleteResponse);
-    // Watch Config.
+    // Watch AgentConfig.
     rpc Watch (WatchRequest) returns (stream WatchResponse);
 }
 
-// Config object base.
-message Config {
-    // Metadata for Config object.
+// AgentConfig object base.
+message AgentConfig {
+    // Metadata for AgentConfig object.
     core.v1alpha.ObjectMetadata metadata = 1;
-    // Spec for Config.
-    ConfigSpec spec = 2;
+    // Spec for AgentConfig.
+    AgentConfigSpec spec = 2;
 }
 
-message ConfigSpec {
+message AgentConfigSpec {
     // DataStore.
     DataStore dataStore = 1;
 }
@@ -83,8 +83,8 @@ message GetRequest {
 }
 
 message GetResponse {
-    // Config object.
-    Config config = 1;
+    // AgentConfig object.
+    AgentConfig agentConfig = 1;
     // Error object.
     core.v1alpha.Error error = 2;
 }
@@ -96,47 +96,47 @@ message ListRequest {
 }
 
 message ListResponse {
-    // Config list.
-    repeated Config configs = 1;
+    // AgentConfig list.
+    repeated AgentConfig agentConfigs = 1;
     // Error object.
     core.v1alpha.Error error = 2;
 }
 
 // Add
 message AddRequest {
-    // Config object.
-    Config config = 1;
+    // AgentConfig object.
+    AgentConfig agentConfig = 1;
 }
 
 message AddResponse {
-    // Config object.
-    Config config = 1;
+    // AgentConfig object.
+    AgentConfig agentConfig = 1;
     // Error object.
     core.v1alpha.Error error = 2;
 }
 
 // Update
 message UpdateRequest {
-    // Config object.
-    Config config = 1;
+    // AgentConfig object.
+    AgentConfig agentConfig = 1;
 }
 
 message UpdateResponse {
-    // Config object.
-    Config config = 1;
+    // AgentConfig object.
+    AgentConfig agentConfig = 1;
     // Error object.
     core.v1alpha.Error error = 2;
 }
 
 // Delete
 message DeleteRequest {
-    // Config object.
-    Config config = 1;
+    // AgentConfig object.
+    AgentConfig agentConfig = 1;
 }
 
 message DeleteResponse {
-    // Config object.
-    Config config = 1;
+    // AgentConfig object.
+    AgentConfig agentConfig = 1;
     // Error object.
     core.v1alpha.Error error = 2;
 }
@@ -150,8 +150,8 @@ message WatchRequest {
 message WatchResponse {
     // Event info for watch response.
     events.v1alpha.Event event = 1;
-    // Config object.
-    Config config = 2;
+    // AgentConfig object.
+    AgentConfig agentConfig = 2;
     // Error object.
     core.v1alpha.Error error = 3;
 }
