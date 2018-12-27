@@ -2,12 +2,14 @@ graph LR
     Start-->User
     subgraph User
         User-->|uses|edenctl
-        User-->HTTPServer
     end
     subgraph Master
-        HTTPServer[HTTP Server]-->Prometheus[Prometheus Metrics]
-        edenctl-->GRPC[GRPC API]
-        GRPC-->Unmarshal
+        User-->HTTPAPI
+        HTTPAPI[HTTP API]-->Prometheus[Prometheus Metrics]
+        edenctl-->HTTPAPI
+        HTTPAPI-->Unmarshal
+        GRPC[GRPC API]-->Interactive
+        GRPC[GRPC API]-->Serialization
         subgraph Objects
             Unmarshal-->|set defaults|Validation
             Validation-->StoreCacheAccess
@@ -34,8 +36,8 @@ graph LR
         subgraph Scheduler
             Scheduler-->|Watch|CacheStoreInt
             subgraph Orchestration
-                GRPC-->Interactive
                 Serialization
+                Interactive
             end
         end
         subgraph EventReactor
