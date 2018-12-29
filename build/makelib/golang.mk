@@ -1,3 +1,0 @@
-go.test:
-
-go.benchmark:

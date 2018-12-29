@@ -1,11 +1,16 @@
 DIR = $(strip $(dir $(realpath $(lastword $(MAKEFILE_LIST)))))
 
 GO = go
+GO_GET_FLAGS = -v -u
 
 PROTOFILES = $(shell find -type f -name '*.proto' | sed 's~\.\/~~g')
 GOPROTOFILES = $(patsubst %.proto,%.pb.go,$(PROTOFILES))
+GOFILESDIRS = $(shell find -type d)
+GOFILES = $(shell find -type f -name '*.go')
 
 .DEFAULT: all
+
+FORCE:
 
 all: prepare build
 
@@ -14,10 +19,30 @@ prepare: protoc protoc-gen-doc
 build: proto-gen
 
 protoc:
-	$(GO) get -v -u github.com/gogo/protobuf/protoc-gen-gofast
+	$(GO) get $(GO_GET_FLAGS) github.com/gogo/protobuf/protoc-gen-gofast
 
 protoc-gen-doc:
-	$(GO) get -u github.com/pseudomuto/protoc-gen-doc/cmd/protoc-gen-doc
+	$(GO) get $(GO_GET_FLAGS) github.com/pseudomuto/protoc-gen-doc/cmd/protoc-gen-doc
+
+license-bill-of-materials:
+	$(GO) get $(GO_GET_FLAGS) github.com/coreos/license-bill-of-materials
+
+bill-of-materials.json: license-bill-of-materials FORCE
+	license-bill-of-materials \
+		github.com/galexrt/edenconfmgmt/cmd/edenconfmgmt \
+		github.com/galexrt/edenconfmgmt/cmd/edenctl \
+		> bill-of-materials.json
+
+license-header-check:
+	@noHeaderError=false; \
+	for f in $(GOFILES); do \
+		if [[ "$$f" =~ .*(apipb_test.go|api.pb.go) ]]; then echo "-> File $$f skipped."; continue; fi; \
+		if ! awk -v strings="$$(cat .license-header)" -f ./build/license-header-check.awk "$$f"; then \
+			echo "-> File $$f has no license header."; \
+			noHeaderError=true; \
+		fi; \
+	done; \
+	if $$noHeaderError; then echo "=> Files with no license header found."; exit 1; fi
 
 proto-gen: $(GOPROTOFILES) docs/apis.md
 
