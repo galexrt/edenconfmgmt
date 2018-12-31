@@ -6,43 +6,38 @@ graph LR
     subgraph Master
         User-->HTTPAPI
         HTTPAPI[HTTP API]-->Prometheus[Prometheus Metrics]
-        edenctl-->HTTPAPI
-        HTTPAPI-->Unmarshal
-        GRPC[GRPC API]-->Interactive
-        GRPC[GRPC API]-->Serialization
+        edenctl-->GRPC[GRPC API]
+        GRPC-->Interactive
+        GRPC-->Serialization
         subgraph Objects
             Unmarshal-->|set defaults|Validation
             Validation-->StoreCacheAccess
         end
         subgraph DataStore + Cache
-            StoreCacheAccess[Store + Cache Access]-->|Get, List, Update, Delete, Watch|CacheStoreInt[Cache Store Interface]
-            CacheStoreInt-->|Get, Update, Delete, Watch|Cacher
-            Cacher-.->|Implements|CacheStoreInt
+            StoreCacheAccess[Store + Cache Access]-->|Get, List, Update, Delete, Watch|dataStoreStoreInt[dataStore.Store Interface]
+            dataStoreStoreInt-->|Get, Update, Delete, Watch|Cacher
+            Cacher-.->|Implements|dataStoreStoreInt
             Cacher-->|Watches/Notifies|CacheInformer
-            CacheInformer-->|Inform|CacheStoreInt
-            Cacher-->dataStoreStoreInt[dataStore.Store Interface]
-            dataStoreStoreInt-->|Store + Watch|etcd
-            etcd-->|Notify on Changes|dataStoreStoreInt
             etcd-.->|Implements|dataStoreStoreInt
-            Cacher-->|Store|CacheAdapter[Cache Adapter Interface]
-            CacheAdapter-->CacheAdapterMemory["Memory (default)"]
+			Cacher-->|Store + Watch|etcd
+            Cacher-->|Store|CacheAdapterMemory["Memory (go map[string]string)"]
         end
         subgraph Controller
-            NodeStatus-->|Watch Nodes|CacheStoreInt
+            NodeStatus-->|Watch Nodes|dataStoreStoreInt
             VariablesUpdater-->|Reconciliation Loop|VariablesUpdater
-            VariablesUpdater-->|Watch Variables, ClusterVariables + CVarsBindings|CacheStoreInt
-            TaskBookController-->|Watch TaskBooks|CacheStoreInt
+            VariablesUpdater-->|Watch Variables, ClusterVariables + CVarsBindings|dataStoreStoreInt
+            TaskBookController-->|Watch TaskBooks|dataStoreStoreInt
         end
         subgraph Scheduler
-            Scheduler-->|Watch|CacheStoreInt
+            Scheduler-->|Watch|dataStoreStoreInt
             subgraph Orchestration
                 Serialization
                 Interactive
             end
         end
         subgraph EventReactor
-            EventReactor-->|Watch Events|CacheStoreInt
-            EventReactor-->|Watch Triggers|CacheStoreInt
+            EventReactor-->|Watch Events|dataStoreStoreInt
+            EventReactor-->|Watch Triggers|dataStoreStoreInt
             EventReactor-->|Run Triggers|Trigger
             Trigger-->Scheduler
         end

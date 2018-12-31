@@ -39,7 +39,7 @@ const (
 // Store Interface to abstract get, put, del, watch actions to etcd datastore.
 // TODO does it make sense to have different datastores?
 type Store interface {
-	// SetPrefix set the prefix to prefix all given keys with.
+	// SetKeyPrefix set the prefix to prefix all given keys with.
 	SetKeyPrefix(prefix string)
 
 	// Get return a specific key (range).

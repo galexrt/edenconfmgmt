@@ -17,42 +17,32 @@ limitations under the License.
 package cache
 
 import (
-    "github.com/galexrt/edenconfmgmt/pkg/datastore"
-    "go.etcd.io/etcd/clientv3"
-    "context"
+	"github.com/galexrt/edenconfmgmt/pkg/datastore"
 )
 
+// Cache cache store
 type Cache struct {
-    datastore.Store
-    cache map[string]interface{}
+	datastore.Store
+	store datastore.Store
+	cache map[string]string
 }
 
-// SetPrefix set the prefix to prefix all given keys with.
-func (c *Cache) SetKeyPrefix(prefix string) {
-
+// CacheStoreAdapter
+type CacheStoreAdapter interface {
+	// Get get a value for a key.
+	Get(key string) (string, error)
+	// IsSet return bool state if a key exists.
+	IsSet(key string) (bool, error)
+	// Put put a key value pair.
+	Put(key string, value string) error
+	// Delete delete a key value pair.
+	Delete(key string) error
 }
 
-// Get return a specific key (range).
-func (c *Cache) Get(ctx context.Context, key string, opts ...clientv3.OpOption) (*clientv3.GetResponse, error) {
-    return nil, nil
-}
-// Put set a key to a specific value.
-func (c *Cache) Put(ctx context.Context, key string, value string, opts ...clientv3.OpOption) (*clientv3.PutResponse, error) {
-    return nil, nil
-}
-// PutTTL set a key to a specific value with a TTL.
-func (c *Cache) PutTTL(ctx context.Context, key string, value string, ttl int64, opts ...clientv3.OpOption) (*clientv3.PutResponse, error) {
-    return nil, nil
-}
-// Delete delete a key value pair.
-func (c *Cache) Delete(ctx context.Context, key string, opts ...clientv3.OpOption) (*clientv3.DeleteResponse, error) {
-    return nil, nil
-}
-// Watch watch a key or directory for creation, changes and deletion.
-func (c *Cache) Watch(ctx context.Context, key string, opts ...clientv3.OpOption) clientv3.WatchChan {
-    return nil
-}
-// Close closes the store and cancels all watch requests with it.
-func (c *Cache) Close() error {
-    return nil
+// New return a new Cache store
+func New(store datastore.Store) *Cache {
+	return &Cache{
+		store: store,
+		cache: map[string]string{},
+	}
 }

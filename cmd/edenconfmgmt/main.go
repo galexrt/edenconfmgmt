@@ -28,9 +28,9 @@ import (
 	"syscall"
 	"time"
 
+	configs_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/agentconfigs/v1alpha"
 	beacons_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/beacons/v1alpha"
 	clustervariables_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/clustervariables/v1alpha"
-	configs_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/agentconfigs/v1alpha"
 	cronjobs_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/cronjobs/v1alpha"
 	events_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha"
 	nodes_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/nodes/v1alpha"
