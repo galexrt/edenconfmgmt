@@ -18,6 +18,6 @@
 | `pkg/auth`                  | WIP   | .                                                  |
 | `pkg/common`                | WIP   | .                                                  |
 | `pkg/datastore`             | WIP   | .                                                  |
-| `pkg/cache/sharedinformer`  | WIP   | .                                                  |
+| `pkg/store`                 | WIP   | .                                                  |
 | `pkg/utils`                 | WIP   | General utility functions.                         |
 | `pkg/utils/api`             | WIP   | Utility functions for the API (e.g. Path joining). |

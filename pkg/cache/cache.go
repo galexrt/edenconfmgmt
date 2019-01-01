@@ -17,6 +17,7 @@ limitations under the License.
 package cache
 
 import (
+	"github.com/galexrt/edenconfmgmt/pkg/cache/adapters"
 	"github.com/galexrt/edenconfmgmt/pkg/datastore"
 )
 
@@ -24,25 +25,14 @@ import (
 type Cache struct {
 	datastore.Store
 	store datastore.Store
-	cache map[string]string
-}
-
-// CacheStoreAdapter
-type CacheStoreAdapter interface {
-	// Get get a value for a key.
-	Get(key string) (string, error)
-	// IsSet return bool state if a key exists.
-	IsSet(key string) (bool, error)
-	// Put put a key value pair.
-	Put(key string, value string) error
-	// Delete delete a key value pair.
-	Delete(key string) error
+	cache adapters.CacheStoreAdapter
 }
 
 // New return a new Cache store
 func New(store datastore.Store) *Cache {
+	adapter := adapters.NewMemory()
 	return &Cache{
 		store: store,
-		cache: map[string]string{},
+		cache: &adapter,
 	}
 }

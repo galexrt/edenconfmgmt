@@ -24,12 +24,13 @@ import (
 
 // SetKeyPrefix set the prefix to prefix all given keys with.
 func (c *Cache) SetKeyPrefix(prefix string) {
-
+	c.store.SetKeyPrefix(prefix)
 }
 
 // Get return a specific key (range).
-func (c *Cache) Get(ctx context.Context, key string, opts ...clientv3.OpOption) (*clientv3.GetResponse, error) {
-	return nil, nil
+func (c *Cache) Get(ctx context.Context, key string, opts ...clientv3.OpOption) (string, error) {
+	c.cache.Get(key)
+	return "", nil
 }
 
 // Put set a key to a specific value.

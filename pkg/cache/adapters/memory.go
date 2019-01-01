@@ -17,42 +17,56 @@ limitations under the License.
 package adapters
 
 import (
-	"github.com/galexrt/edenconfmgmt/pkg/cache"
+	"fmt"
+	"sync"
 )
 
-// Memory "in-memory" cache adapter implementation
+// Memory "in-memory" cache adapter implementation.
+// `sync.Map` is used here due to the nature of parallele access to the (cache) adapter.
 type Memory struct {
-	cache.CacheStoreAdapter
-	cache map[string]string
+	CacheStoreAdapter
+	cache sync.Map
 }
 
 // NewMemory return new Memory adapter.
-func NewMemory() *Memory {
-	return &Memory{
-		cache: map[string]string{},
+func NewMemory() Memory {
+	return Memory{
+		cache: sync.Map{},
 	}
 }
 
 // Get get a value for a key.
-func (adp *Memory) Get(key string) (string, error) {
-	return adp.cache[key], nil
+func (adp *Memory) Get(key string) (string, bool, error) {
+	valueLoaded, ok := adp.cache.Load(key)
+	var value string
+	var err error
+	if ok {
+		value, ok = valueLoaded.(string)
+		if !ok {
+			err = fmt.Errorf("failed to cast value to string (key: %s)", key)
+		}
+	}
+	return value, ok, err
 }
 
 // IsSet return bool state if a key exists.
 func (adp *Memory) IsSet(key string) (bool, error) {
-	_, ok := adp.cache[key]
+	_, ok := adp.cache.Load(key)
 	return ok, nil
 }
 
 // Put put a key value pair.
 func (adp *Memory) Put(key string, value string) error {
-	adp.cache[key] = value
+	adp.cache.Store(key, value)
 	return nil
 }
 
 // Delete delete a key value pair.
 func (adp *Memory) Delete(key string) error {
-	delete(adp.cache, key)
-	// Because `delete()` does not return anything, we always assume delete is successful.
+	return adp.Delete(key)
+}
+
+// Close adapter.
+func (adp *Memory) Close() error {
 	return nil
 }
