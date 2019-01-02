@@ -1,5 +1,5 @@
 /*
-Copyright 2018 Alexander Trost. All rights reserved.
+Copyright 2019 Alexander Trost. All rights reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package handlers
+package adapters
 
 import (
 	"fmt"
@@ -24,11 +24,11 @@ import (
 )
 
 var (
-	// flagRegisters list of available datastore handlers flag register functions.
+	// flagRegisters list of available datastore adapters flag register functions.
 	flagRegisters = map[string]func(cmd *cobra.Command){}
 
-	// handlers list of available datastore handlers.
-	handlers = map[string]func(keyPrefix string) (datastore.Store, error){}
+	// adapters list of available datastore adapters.
+	adapters = map[string]func(keyPrefix string) (datastore.Store, error){}
 )
 
 // RegisterFlags register flags using the function provided in flagRegisters var.
@@ -40,9 +40,9 @@ func RegisterFlags(cmd *cobra.Command) {
 
 // Get return a newly created datastore handler.
 func Get(handlerName string, keyPrefix string) (datastore.Store, error) {
-	newFunc, ok := handlers[handlerName]
+	newFunc, ok := adapters[handlerName]
 	if !ok {
-		return nil, fmt.Errorf("no handler with name %s found in handlers list", handlerName)
+		return nil, fmt.Errorf("no handler with name %s found in adapters list", handlerName)
 	}
 	return newFunc(keyPrefix)
 }

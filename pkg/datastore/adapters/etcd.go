@@ -1,5 +1,5 @@
 /*
-Copyright 2018 Alexander Trost. All rights reserved.
+Copyright 2019 Alexander Trost. All rights reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package handlers
+package adapters
 
 import (
 	"context"
@@ -23,6 +23,7 @@ import (
 	"time"
 
 	"github.com/galexrt/edenconfmgmt/pkg/datastore"
+	"github.com/galexrt/edenconfmgmt/pkg/datastore/watcher"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"go.etcd.io/etcd/clientv3"
@@ -47,7 +48,7 @@ const (
 	flagETCDUser                  = "etcd-user"
 )
 
-// ETCD implementation of datastore.Store interface for ETCD.
+// ETCD implementation of Handler interface for ETCD.
 type ETCD struct {
 	client *clientv3.Client
 	datastore.Store
@@ -89,7 +90,7 @@ func init() {
 		cmd.PersistentFlags().String(flagETCDKey, "", "ETCD: identify secure client using this TLS key file")
 		cmd.PersistentFlags().String(flagETCDUser, "", "ETCD: username[:password] for authentication (prompt if password is not supplied)")
 	}
-	handlers["etcd"] = NewETCD
+	adapters["etcd"] = NewETCD
 }
 
 // NewETCD create new ETCD
@@ -133,45 +134,72 @@ func NewETCD(keyPrefix string) (datastore.Store, error) {
 }
 
 // Get return a specific key.
-func (st *ETCD) Get(ctx context.Context, key string, opts ...clientv3.OpOption) (*clientv3.GetResponse, error) {
-	return st.client.Get(ctx, key, opts...)
+func (st *ETCD) Get(ctx context.Context, key string) (string, bool, error) {
+	resp, err := st.client.Get(ctx, key)
+	if err != nil {
+		return "", false, err
+	}
+	for _, kv := range resp.Kvs {
+		return kv.String(), true, nil
+	}
+	return "", false, nil
+}
+
+// GetRecursive return a list of keys with values at the given key arg.
+func (st *ETCD) GetRecursive(ctx context.Context, key string) (map[string]string, bool, error) {
+	var found bool
+	var results map[string]string
+	opts := []clientv3.OpOption{clientv3.WithPrefix()}
+	resp, err := st.client.Get(ctx, key, opts...)
+	if err != nil {
+		return results, false, err
+	}
+	if len(resp.Kvs) > 0 {
+		found = true
+	}
+	for _, kv := range resp.Kvs {
+		results[string(kv.Key)] = string(kv.Value)
+	}
+	return results, found, nil
 }
 
 // Put set a key to a specific value.
-func (st *ETCD) Put(ctx context.Context, key string, value string, opts ...clientv3.OpOption) (*clientv3.PutResponse, error) {
-	return st.client.Put(ctx, key, value, opts...)
-}
-
-// PutTTL set a key to a specific value with a TTL.
-func (st *ETCD) PutTTL(ctx context.Context, key string, value string, ttl int64, opts ...clientv3.OpOption) (*clientv3.PutResponse, error) {
-	resp, err := st.client.Grant(ctx, ttl)
-	if err != nil {
-		return nil, err
-	}
-	opts = append([]clientv3.OpOption{clientv3.WithLease(resp.ID)}, opts...)
-	return st.client.Put(ctx, key, value, opts...)
+func (st *ETCD) Put(ctx context.Context, key string, value string) error {
+	_, err := st.client.Put(ctx, key, value)
+	return err
 }
 
 // Delete delete a key value pair.
-func (st *ETCD) Delete(ctx context.Context, key string, opts ...clientv3.OpOption) (*clientv3.DeleteResponse, error) {
-	return st.client.Delete(ctx, key, opts...)
+func (st *ETCD) Delete(ctx context.Context, key string, recursive bool) error {
+	var opts []clientv3.OpOption
+	if recursive {
+		opts = append(opts, clientv3.WithPrefix())
+	}
+	_, err := st.client.Delete(ctx, key, opts...)
+	return err
 }
 
 // Watch watch a key or directory for creation, changes and deletion.
-func (st *ETCD) Watch(ctx context.Context, key string, opts ...clientv3.OpOption) clientv3.WatchChan {
-	return st.client.Watch(ctx, key, opts...)
+func (st *ETCD) Watch(ctx context.Context, key string, recursive bool) (*watcher.Informer, error) {
+	// TODO st.client.Watch(ctx, key)
+	return nil, nil
+}
+
+// Close closes the store and cancels all watches (if supported).
+func (st *ETCD) Close() error {
+	return st.client.Close()
 }
 
 // EtcdEventStateToHandlerState convert Etcd client v3 event type to our own states.
-func EtcdEventStateToHandlerState(eventType mvccpb.Event_EventType, isCreate bool, isModify bool) datastore.ResponseState {
+func EtcdEventStateToHandlerState(eventType mvccpb.Event_EventType, isCreate bool, isModify bool) watcher.State {
 	if isCreate {
-		return datastore.ResponseStateCreated
+		return watcher.StateCreated
 	}
 	if isModify {
-		return datastore.ResponseStateUpdated
+		return watcher.StateUpdated
 	}
 	if eventType == mvccpb.DELETE {
-		return datastore.ResponseStateDeleted
+		return watcher.StateDeleted
 	}
-	return datastore.ResponseStateUnknown
+	return watcher.StateUnknown
 }

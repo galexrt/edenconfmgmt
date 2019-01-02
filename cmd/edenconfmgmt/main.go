@@ -1,5 +1,5 @@
 /*
-Copyright 2018 Alexander Trost. All rights reserved.
+Copyright 2019 Alexander Trost. All rights reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -40,10 +40,13 @@ import (
 	variables_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/variables/v1alpha"
 	"github.com/galexrt/edenconfmgmt/pkg/utils"
 
+	_ "net/http/pprof"
+
 	"github.com/galexrt/edenconfmgmt/pkg/auth"
 	"github.com/galexrt/edenconfmgmt/pkg/common"
 	"github.com/galexrt/edenconfmgmt/pkg/datastore"
-	data_store_handlers "github.com/galexrt/edenconfmgmt/pkg/datastore/handlers"
+	data_store_adapters "github.com/galexrt/edenconfmgmt/pkg/datastore/adapters"
+	"github.com/galexrt/edenconfmgmt/pkg/datastore/cache"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	grpc_zap "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
 	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
@@ -65,13 +68,16 @@ import (
 )
 
 const (
-	flagProductionMode    = "production"
-	flagLogLevel          = "log-level"
-	flagListenAddressGRPC = "listen-address-grpc"
-	flagListenAddressHTTP = "listen-address-http"
-	flagStore             = "store"
-	flagStoreKeyPrefix    = "store-key-prefix"
-	flagNeighbors         = "neighbors"
+	flagProductionMode      = "production"
+	flagLogLevel            = "log-level"
+	flagListenAddressGRPC   = "listen-address-grpc"
+	flagListenAddressHTTP   = "listen-address-http"
+	flagDataStore           = "data-store"
+	flagDataStoreKeyPrefix  = "data-store-key-prefix"
+	flagCacheEnabled        = "cache-enabled"
+	flagCacheStore          = "cache-store"
+	flagCacheStoreKeyPrefix = "cache-store-key-prefix"
+	flagNeighbors           = "neighbors"
 )
 
 var (
@@ -80,12 +86,12 @@ var (
 		Use:   "edenconfmgmt",
 		Short: "Configuration management with automatic clustering, events and stuff.",
 		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
-			// TODO Implement log level
+			// TODO Implement atomic/dynamic log level
 			var level zapcore.Level
 			if err := (&level).UnmarshalText([]byte(viper.GetString(flagLogLevel))); err != nil {
 				return err
 			}
-			logger = common.GetLogger(nil)
+			logger = common.GetLogger(&level)
 			return nil
 		},
 		RunE: Run,
@@ -105,13 +111,16 @@ func init() {
 	rootCmd.PersistentFlags().String(flagLogLevel, "INFO", "log level to use for logging")
 	rootCmd.PersistentFlags().String(flagListenAddressGRPC, ":1337", "grpc listen address")
 	rootCmd.PersistentFlags().String(flagListenAddressHTTP, ":1338", "http listen address")
-	rootCmd.PersistentFlags().String(flagStore, "etcd", "store to use")
-	rootCmd.PersistentFlags().String(flagStoreKeyPrefix, "/edenconfmgmt", "key prefix to use in the store")
+	rootCmd.PersistentFlags().String(flagDataStore, "etcd", "datastore to use")
+	rootCmd.PersistentFlags().String(flagDataStoreKeyPrefix, "/edendata", "key prefix to use in the datastore")
+	rootCmd.PersistentFlags().Bool(flagCacheEnabled, true, "if a cachestore should be used")
+	rootCmd.PersistentFlags().String(flagCacheStore, "memory", "cachestore to use")
+	rootCmd.PersistentFlags().String(flagCacheStoreKeyPrefix, "", "key prefix to use in the cachestore")
 
 	rootCmd.PersistentFlags().StringSlice(flagNeighbors, []string{}, "list of other neighbors (one neighbor per flag)")
 
 	// Register all store handlers flags.
-	data_store_handlers.RegisterFlags(rootCmd)
+	data_store_adapters.RegisterFlags(rootCmd)
 
 	// Bind all persistent flags to viper, for easy access.
 	viper.BindPFlags(rootCmd.PersistentFlags())
@@ -157,10 +166,22 @@ func Run(cmd *cobra.Command, args []string) error {
 	sigCh := make(chan os.Signal)
 	signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM)
 
-	handlerName := strings.ToLower(viper.GetString(flagStore))
-	dataStore, err := data_store_handlers.Get(handlerName, viper.GetString(flagStoreKeyPrefix))
+	dataStoreHandlerName := strings.ToLower(viper.GetString(flagDataStore))
+	dataStore, err := data_store_adapters.Get(dataStoreHandlerName, viper.GetString(flagDataStoreKeyPrefix))
 	if err != nil {
-		logger.Fatal("failed to create store handler", zap.String("storehandler", handlerName), zap.Error(err))
+		logger.Fatal("failed to create store handler", zap.String("storehandler", dataStoreHandlerName), zap.Error(err))
+	}
+	var store datastore.Store
+	if viper.GetBool(flagCacheEnabled) {
+		cacheStoreHandlerName := strings.ToLower(viper.GetString(flagCacheStore))
+		var cacheStore datastore.Store
+		cacheStore, err = data_store_adapters.Get(cacheStoreHandlerName, viper.GetString(flagCacheStoreKeyPrefix))
+		if err != nil {
+			logger.Fatal("failed to create store handler", zap.String("storehandler", cacheStoreHandlerName), zap.Error(err))
+		}
+		store = cache.New(dataStore, cacheStore)
+	} else {
+		store = dataStore
 	}
 
 	var tracer opentracing.Tracer
@@ -248,7 +269,7 @@ func Run(cmd *cobra.Command, args []string) error {
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		if err := magicRun(stopCh, dataStore); err != nil {
+		if err := magicRun(stopCh, store); err != nil {
 			logger.Error("magic run returned error", zap.Error(err))
 			closer.Close(stopCh)
 		}
@@ -276,7 +297,7 @@ func Run(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-func registerGRPCAPIs(srv *grpc.Server, dataStore datastore.Store) {
+func registerGRPCAPIs(srv *grpc.Server, store datastore.Store) {
 	// Beacons
 	beaconsServer := beacons_v1alpha.New()
 	beacons_v1alpha.RegisterBeaconsServer(srv, beaconsServer)
@@ -293,7 +314,7 @@ func registerGRPCAPIs(srv *grpc.Server, dataStore datastore.Store) {
 	eventsServer := events_v1alpha.New()
 	events_v1alpha.RegisterEventsServer(srv, eventsServer)
 	// Nodes
-	nodesServer := nodes_v1alpha.New(dataStore)
+	nodesServer := nodes_v1alpha.New(store)
 	nodes_v1alpha.RegisterNodesServer(srv, nodesServer)
 	// Secrets
 	secretsServer := secrets_v1alpha.New()

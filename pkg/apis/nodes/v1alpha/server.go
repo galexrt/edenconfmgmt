@@ -1,5 +1,5 @@
 /*
-Copyright 2018 Alexander Trost. All rights reserved.
+Copyright 2019 Alexander Trost. All rights reserved.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -18,16 +18,13 @@ package v1alpha
 
 import (
 	"context"
-	"fmt"
 	"time"
 
-	"github.com/json-iterator/go"
+	jsoniter "github.com/json-iterator/go"
 
 	core_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha"
 	events_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha"
 	"github.com/galexrt/edenconfmgmt/pkg/datastore"
-	utilsapi "github.com/galexrt/edenconfmgmt/pkg/utils/api"
-	"go.etcd.io/etcd/clientv3"
 )
 
 var json = jsoniter.ConfigCompatibleWithStandardLibrary
@@ -48,35 +45,7 @@ func New(dataStore datastore.Store) NodesServer {
 // Get get a Node.
 func (n *NodesService) Get(ctx context.Context, req *GetRequest) (*GetResponse, error) {
 	resp := &GetResponse{}
-	storeResp, err := n.store.Get(ctx, utilsapi.ObjectPath(DataStorePath, req.GetOptions.Name), clientv3.WithPrefix())
-	if err != nil {
-		resp.Error = utilsapi.ErrorToErrorResponse(err)
-		return resp, nil
-	}
-	var (
-		metadata *core_v1alpha.ObjectMetadata
-		spec     *Spec
-	)
-	for _, kv := range storeResp.Kvs {
-		var part interface{}
 
-		switch string(kv.Key) {
-		case "metadata":
-			part = &core_v1alpha.ObjectMetadata{}
-			metadata = part.(*core_v1alpha.ObjectMetadata)
-		case "spec":
-			part = &Spec{}
-			spec = part.(*Spec)
-		}
-		if err = json.Unmarshal(kv.Value, part); err != nil {
-			resp.Error = utilsapi.ErrorToErrorResponse(fmt.Errorf(""))
-			return resp, nil
-		}
-	}
-	resp.Node = &Node{
-		Metadata: metadata,
-		Spec:     spec,
-	}
 	return resp, nil
 }
 
@@ -89,22 +58,8 @@ func (n *NodesService) List(ctx context.Context, req *ListRequest) (*ListRespons
 
 // Add add a Node.
 func (n *NodesService) Add(ctx context.Context, req *AddRequest) (*AddResponse, error) {
-	node := req.Node
-	resp := &AddResponse{
-		Node: node,
-	}
-	node.SetDefaults()
-	if err := node.Validate(); err != nil {
-		resp.Error = utilsapi.ErrorToErrorResponse(err)
-		return resp, nil
-	}
-	nodeString, err := json.Marshal(node)
-	if err != nil {
-		resp.Error = utilsapi.ErrorToErrorResponse(err)
-		return resp, nil
-	}
-	_, err = n.store.Put(ctx, utilsapi.ObjectPath(DataStorePath, resp.Node.Metadata.Name), string(nodeString))
-	resp.Error = utilsapi.ErrorToErrorResponse(err)
+	resp := &AddResponse{}
+
 	return resp, nil
 }
 
