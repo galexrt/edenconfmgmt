@@ -47,6 +47,7 @@ import (
 	"github.com/galexrt/edenconfmgmt/pkg/datastore"
 	data_store_adapters "github.com/galexrt/edenconfmgmt/pkg/datastore/adapters"
 	"github.com/galexrt/edenconfmgmt/pkg/datastore/cache"
+	"github.com/galexrt/edenconfmgmt/pkg/datastore/informer"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	grpc_zap "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
 	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
@@ -68,16 +69,16 @@ import (
 )
 
 const (
-	flagProductionMode      = "production"
-	flagLogLevel            = "log-level"
-	flagListenAddressGRPC   = "listen-address-grpc"
-	flagListenAddressHTTP   = "listen-address-http"
-	flagDataStore           = "data-store"
-	flagDataStoreKeyPrefix  = "data-store-key-prefix"
-	flagCacheEnabled        = "cache-enabled"
-	flagCacheStore          = "cache-store"
-	flagCacheStoreKeyPrefix = "cache-store-key-prefix"
-	flagNeighbors           = "neighbors"
+	flagProductionMode          = "production"
+	flagLogLevel                = "log-level"
+	flagListenAddressGRPC       = "listen-address-grpc"
+	flagListenAddressHTTP       = "listen-address-http"
+	flagDataStore               = "data-store"
+	flagDataStoreKeyPrefix      = "data-store-key-prefix"
+	flagCacheEnabled            = "cache-enabled"
+	flagCacheStore              = "cache-store"
+	flagCacheStoreKeyPrefix     = "cache-store-key-prefix"
+	flagStoreWatchCleanInterval = "store-watch-clean-interval"
 )
 
 var (
@@ -111,16 +112,18 @@ func init() {
 	rootCmd.PersistentFlags().String(flagLogLevel, "INFO", "log level to use for logging")
 	rootCmd.PersistentFlags().String(flagListenAddressGRPC, ":1337", "grpc listen address")
 	rootCmd.PersistentFlags().String(flagListenAddressHTTP, ":1338", "http listen address")
+	// Directories
+	// Store
 	rootCmd.PersistentFlags().String(flagDataStore, "etcd", "datastore to use")
 	rootCmd.PersistentFlags().String(flagDataStoreKeyPrefix, "/edendata", "key prefix to use in the datastore")
 	rootCmd.PersistentFlags().Bool(flagCacheEnabled, true, "if a cachestore should be used")
 	rootCmd.PersistentFlags().String(flagCacheStore, "memory", "cachestore to use")
 	rootCmd.PersistentFlags().String(flagCacheStoreKeyPrefix, "", "key prefix to use in the cachestore")
+	rootCmd.PersistentFlags().Duration(flagStoreWatchCleanInterval, 7*time.Second, "interval to remove (and possibly close) unused store wataches")
 
-	rootCmd.PersistentFlags().StringSlice(flagNeighbors, []string{}, "list of other neighbors (one neighbor per flag)")
-
-	// Register all store handlers flags.
-	data_store_adapters.RegisterFlags(rootCmd)
+	// Register all datatstore adapters flags for cache and data store.
+	data_store_adapters.RegisterFlags(flagDataStore, rootCmd)
+	data_store_adapters.RegisterFlags(flagCacheStore, rootCmd)
 
 	// Bind all persistent flags to viper, for easy access.
 	viper.BindPFlags(rootCmd.PersistentFlags())
@@ -179,7 +182,11 @@ func Run(cmd *cobra.Command, args []string) error {
 		if err != nil {
 			logger.Fatal("failed to create store handler", zap.String("storehandler", cacheStoreHandlerName), zap.Error(err))
 		}
-		store = cache.New(dataStore, cacheStore)
+		watchSharedInformer := &informer.SharedInformer{
+			StoreWatchCleanInterval: viper.GetDuration(flagStoreWatchCleanInterval),
+		}
+		watchSharedInformer.StartWithStopCh(stopCh)
+		store = cache.New(watchSharedInformer, dataStore, cacheStore)
 	} else {
 		store = dataStore
 	}

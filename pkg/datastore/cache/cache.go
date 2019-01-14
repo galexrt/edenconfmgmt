@@ -21,23 +21,31 @@ import (
 	"fmt"
 
 	"github.com/galexrt/edenconfmgmt/pkg/datastore"
-	"github.com/galexrt/edenconfmgmt/pkg/datastore/watcher"
+	"github.com/galexrt/edenconfmgmt/pkg/datastore/informer"
 )
 
 // Store using the dataStore and a second cacheStore for caching.
 type Store struct {
-	dataStore   datastore.Store
-	cacheStore  datastore.Store
-	watchKeeper watcher.Keeper
+	dataStore      datastore.Store
+	cacheStore     datastore.Store
+	sharedInformer *informer.SharedInformer
+	prefix         string
 	datastore.Store
 }
 
 // New return new Store.
-func New(dataStore datastore.Store, cacheStore datastore.Store) *Store {
+func New(sharedInformer *informer.SharedInformer, dataStore datastore.Store, cacheStore datastore.Store) *Store {
 	return &Store{
-		dataStore:  dataStore,
-		cacheStore: cacheStore,
+		dataStore:      dataStore,
+		cacheStore:     cacheStore,
+		sharedInformer: sharedInformer,
 	}
+}
+
+func (st *Store) SetKeyPrefix(prefix string) {
+	st.dataStore.SetKeyPrefix(prefix)
+	st.cacheStore.SetKeyPrefix(prefix)
+	st.prefix = prefix
 }
 
 // Get get a value for a key.
@@ -100,8 +108,9 @@ func (st *Store) Delete(ctx context.Context, key string, recursively bool) error
 }
 
 // Watch watch a key or directory for creation, changes and deletion.
-func (st *Store) Watch(ctx context.Context, key string, recursive bool) (*watcher.Informer, error) {
-	// TODO Register watch in system and make it possible to close using the Store.Close() function below
+func (st *Store) Watch(stopCh chan struct{}, key string, recursive bool) (*informer.Informer, error) {
+	// TODO Get watch in informer.SharedInformer and make it possible to close using the Store.Close() function below
+	_ = st.sharedInformer.Watch(nil, st.prefix+key)
 	return nil, nil
 }
 

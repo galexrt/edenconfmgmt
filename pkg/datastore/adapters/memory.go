@@ -23,7 +23,7 @@ import (
 	"sync"
 
 	"github.com/galexrt/edenconfmgmt/pkg/datastore"
-	"github.com/galexrt/edenconfmgmt/pkg/datastore/watcher"
+	"github.com/galexrt/edenconfmgmt/pkg/datastore/informer"
 )
 
 // Memory "in-memory" cache adapter implementation.
@@ -127,7 +127,7 @@ func (st *Memory) Delete(ctx context.Context, key string, recursively bool) erro
 }
 
 // Watch watch a key or directory for creation, changes and deletion.
-func (st *Memory) Watch(ctx context.Context, key string, recursive bool) (*watcher.Informer, error) {
+func (st *Memory) Watch(stopCh chan struct{}, key string, recursive bool) (*informer.Informer, error) {
 	return nil, nil
 }
 

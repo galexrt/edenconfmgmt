@@ -25,16 +25,19 @@ import (
 
 var (
 	// flagRegisters list of available datastore adapters flag register functions.
-	flagRegisters = map[string]func(cmd *cobra.Command){}
+	flagRegisters = map[string]func(prefix string, cmd *cobra.Command){}
 
 	// adapters list of available datastore adapters.
 	adapters = map[string]func(keyPrefix string) (datastore.Store, error){}
 )
 
 // RegisterFlags register flags using the function provided in flagRegisters var.
-func RegisterFlags(cmd *cobra.Command) {
+func RegisterFlags(prefix string, cmd *cobra.Command) {
+	if prefix != "" {
+		prefix = prefix + "-"
+	}
 	for _, register := range flagRegisters {
-		register(cmd)
+		register(prefix, cmd)
 	}
 }
 

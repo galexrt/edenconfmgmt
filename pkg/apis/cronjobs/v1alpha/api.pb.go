@@ -11,7 +11,7 @@ import v1alpha1 "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha"
 import _ "github.com/gogo/protobuf/gogoproto"
 
 import (
-	context "golang.org/x/net/context"
+	"context"
 	grpc "google.golang.org/grpc"
 )
 

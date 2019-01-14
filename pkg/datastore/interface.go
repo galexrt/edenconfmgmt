@@ -19,7 +19,7 @@ package datastore
 import (
 	"context"
 
-	"github.com/galexrt/edenconfmgmt/pkg/datastore/watcher"
+	"github.com/galexrt/edenconfmgmt/pkg/datastore/informer"
 )
 
 // Store Interface to abstract get, put, del, watch actions to etcd datastore.
@@ -36,7 +36,7 @@ type Store interface {
 	// Delete delete a key value pair.
 	Delete(ctx context.Context, key string, recursive bool) error
 	// Watch watch a key or directory for creation, changes and deletion.
-	Watch(ctx context.Context, key string, recursive bool) (*watcher.Informer, error)
+	Watch(stopCh chan struct{}, key string, recursive bool) (*informer.Informer, error)
 	// Close closes the store and cancels all watches (if supported).
 	Close() error
 }

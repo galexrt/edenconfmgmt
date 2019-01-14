@@ -23,7 +23,7 @@ import (
 	"time"
 
 	"github.com/galexrt/edenconfmgmt/pkg/datastore"
-	"github.com/galexrt/edenconfmgmt/pkg/datastore/watcher"
+	"github.com/galexrt/edenconfmgmt/pkg/datastore/informer"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"go.etcd.io/etcd/clientv3"
@@ -74,21 +74,21 @@ type ETCDOptions struct {
 }
 
 func init() {
-	flagRegisters["etcd"] = func(cmd *cobra.Command) {
-		cmd.PersistentFlags().String(flagETCDCACert, "", "ETCD: verify certificates of TLS-enabled secure servers using this CA bundle")
-		cmd.PersistentFlags().String(flagETCDCert, "", "ETCD: identify secure client using this TLS certificate file")
-		cmd.PersistentFlags().Duration(flagETCDCommandTimeout, 5*time.Second, "ETCD: timeout for short running command (excluding dial timeout)")
-		cmd.PersistentFlags().Bool(flagETCDDebug, false, "ETCD: enable client-side debug logging")
-		cmd.PersistentFlags().Duration(flagETCDDialTimeout, 2*time.Second, "ETCD: dial timeout for client connections")
-		cmd.PersistentFlags().String(flagETCDDiscoverySRV, "", "ETCD: domain name to query for SRV records describing cluster endpoints")
-		cmd.PersistentFlags().StringSlice(flagETCDEndpoints, []string{"127.0.0.1:2379"}, "ETCD: gRPC endpoints")
-		cmd.PersistentFlags().Bool(flagETCDInsecureDiscovery, true, "ETCD: accept insecure SRV records describing cluster endpoints")
-		cmd.PersistentFlags().Bool(flagETCDInsecureSkipTLSVerify, false, "ETCD: skip server certificate verification")
-		cmd.PersistentFlags().Bool(flagETCDInsecureTransport, true, "ETCD: disable transport security for client connections")
-		cmd.PersistentFlags().Duration(flagETCDKeepaliveTime, 30*time.Second, "ETCD: keepalive time for client connections")
-		cmd.PersistentFlags().Duration(flagETCDKeepaliveTimeout, 30*time.Second, "ETCD: keepalive timeout for client connections")
-		cmd.PersistentFlags().String(flagETCDKey, "", "ETCD: identify secure client using this TLS key file")
-		cmd.PersistentFlags().String(flagETCDUser, "", "ETCD: username[:password] for authentication (prompt if password is not supplied)")
+	flagRegisters["etcd"] = func(prefix string, cmd *cobra.Command) {
+		cmd.PersistentFlags().String(prefix+flagETCDCACert, "", "ETCD: verify certificates of TLS-enabled secure servers using this CA bundle")
+		cmd.PersistentFlags().String(prefix+flagETCDCert, "", "ETCD: identify secure client using this TLS certificate file")
+		cmd.PersistentFlags().Duration(prefix+flagETCDCommandTimeout, 5*time.Second, "ETCD: timeout for short running command (excluding dial timeout)")
+		cmd.PersistentFlags().Bool(prefix+flagETCDDebug, false, "ETCD: enable client-side debug logging")
+		cmd.PersistentFlags().Duration(prefix+flagETCDDialTimeout, 2*time.Second, "ETCD: dial timeout for client connections")
+		cmd.PersistentFlags().String(prefix+flagETCDDiscoverySRV, "", "ETCD: domain name to query for SRV records describing cluster endpoints")
+		cmd.PersistentFlags().StringSlice(prefix+flagETCDEndpoints, []string{"127.0.0.1:2379"}, "ETCD: gRPC endpoints")
+		cmd.PersistentFlags().Bool(prefix+flagETCDInsecureDiscovery, true, "ETCD: accept insecure SRV records describing cluster endpoints")
+		cmd.PersistentFlags().Bool(prefix+flagETCDInsecureSkipTLSVerify, false, "ETCD: skip server certificate verification")
+		cmd.PersistentFlags().Bool(prefix+flagETCDInsecureTransport, true, "ETCD: disable transport security for client connections")
+		cmd.PersistentFlags().Duration(prefix+flagETCDKeepaliveTime, 30*time.Second, "ETCD: keepalive time for client connections")
+		cmd.PersistentFlags().Duration(prefix+flagETCDKeepaliveTimeout, 30*time.Second, "ETCD: keepalive timeout for client connections")
+		cmd.PersistentFlags().String(prefix+flagETCDKey, "", "ETCD: identify secure client using this TLS key file")
+		cmd.PersistentFlags().String(prefix+flagETCDUser, "", "ETCD: username[:password] for authentication (prompt if password is not supplied)")
 	}
 	adapters["etcd"] = NewETCD
 }
@@ -180,8 +180,8 @@ func (st *ETCD) Delete(ctx context.Context, key string, recursive bool) error {
 }
 
 // Watch watch a key or directory for creation, changes and deletion.
-func (st *ETCD) Watch(ctx context.Context, key string, recursive bool) (*watcher.Informer, error) {
-	// TODO st.client.Watch(ctx, key)
+func (st *ETCD) Watch(stopCh chan struct{}, key string, recursive bool) (*informer.Informer, error) {
+	//watch := st.client.Watch(ctx, key)
 	return nil, nil
 }
 
@@ -191,15 +191,15 @@ func (st *ETCD) Close() error {
 }
 
 // EtcdEventStateToHandlerState convert Etcd client v3 event type to our own states.
-func EtcdEventStateToHandlerState(eventType mvccpb.Event_EventType, isCreate bool, isModify bool) watcher.State {
+func EtcdEventStateToHandlerState(eventType mvccpb.Event_EventType, isCreate bool, isModify bool) informer.State {
 	if isCreate {
-		return watcher.StateCreated
+		return informer.StateCreated
 	}
 	if isModify {
-		return watcher.StateUpdated
+		return informer.StateUpdated
 	}
 	if eventType == mvccpb.DELETE {
-		return watcher.StateDeleted
+		return informer.StateDeleted
 	}
-	return watcher.StateUnknown
+	return informer.StateUnknown
 }
