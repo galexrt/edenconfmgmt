@@ -20,20 +20,6 @@ import (
 	"context"
 )
 
-// State response state type.
-type State string
-
-const (
-	// StateCreated created response state.
-	StateCreated State = "Created"
-	// StateUpdated updated response state.
-	StateUpdated State = "Updated"
-	// StateDeleted deleted response state.
-	StateDeleted State = "Deleted"
-	// StateUnknown unknown response state.
-	StateUnknown State = "Unknown"
-)
-
 // InformerType the type a Informer can be.
 type InformerType string
 
@@ -46,23 +32,13 @@ const (
 	InformerTypeDirectory InformerType = "Directory"
 )
 
-// Result result returned by the channel
-type Result struct {
-	Closed  bool
-	Errors  []error
-	State   State
-	Name    string
-	Value   string
-	Version int64
-}
-
 // InformerMiddleware middleware function to be used with Informer
-type InformerMiddleware func(*Result) (bool, error)
+type InformerMiddleware func(*ResultState) (bool, error)
 
-// Informer holds information and middleware to run on `Result` coming from a watch channel (SharedInformer manages the watch).
+// Informer holds information and middleware to run on `ResultState` coming from a watch channel (SharedInformer manages the watch).
 type Informer struct {
-	input       chan *Result
-	output      chan *Result
+	input       chan *ResultState
+	output      chan *ResultState
 	Type        InformerType
 	Path        string
 	middleware  []InformerMiddleware
@@ -70,10 +46,10 @@ type Informer struct {
 }
 
 // NewInformer return a new Informer.
-func NewInformer(kp *SharedInformer, input chan *Result, infType InformerType, path string, middleware ...InformerMiddleware) *Informer {
+func NewInformer(kp *SharedInformer, input chan *ResultState, infType InformerType, path string, middleware ...InformerMiddleware) *Informer {
 	return &Informer{
 		input:      input,
-		output:     make(chan *Result),
+		output:     make(chan *ResultState),
 		Type:       infType,
 		Path:       path,
 		middleware: middleware,
@@ -106,9 +82,9 @@ func (inf *Informer) StartWithStopCh(stopCh chan struct{}) {
 	}
 }
 
-// WatchChan return the watch channel which can/must be used to receive the `Result`s of the watch.
+// WatchChan return the watch channel which can/must be used to receive the `ResultState`s of the watch.
 // Start() must have been called before this otherwise there will never be output.
-func (inf *Informer) WatchChan() <-chan *Result {
+func (inf *Informer) WatchChan() <-chan *ResultState {
 	return inf.output
 }
 

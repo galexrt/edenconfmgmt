@@ -18,30 +18,44 @@ package cache
 
 import (
 	"context"
-	"fmt"
+	"sync"
 
-	"github.com/galexrt/edenconfmgmt/pkg/datastore"
-	"github.com/galexrt/edenconfmgmt/pkg/datastore/informer"
+	"github.com/galexrt/edenconfmgmt/pkg/store/data"
+	"github.com/galexrt/edenconfmgmt/pkg/store/informer"
+	"github.com/galexrt/edenconfmgmt/pkg/utils/errors"
 )
 
 // Store using the dataStore and a second cacheStore for caching.
 type Store struct {
-	dataStore      datastore.Store
-	cacheStore     datastore.Store
-	sharedInformer *informer.SharedInformer
-	prefix         string
-	datastore.Store
+	dataStore  data.Store
+	cacheStore data.Store
+	informer   *informer.Informer
+	prefix     string
+	wg         sync.WaitGroup
 }
 
 // New return new Store.
-func New(sharedInformer *informer.SharedInformer, dataStore datastore.Store, cacheStore datastore.Store) *Store {
+func New(dataStore data.Store, cacheStore data.Store, inf *informer.Informer) *Store {
 	return &Store{
-		dataStore:      dataStore,
-		cacheStore:     cacheStore,
-		sharedInformer: sharedInformer,
+		dataStore:  dataStore,
+		cacheStore: cacheStore,
+		informer:   inf,
 	}
 }
 
+// Start start the logic behind the cache store.
+func (st *Store) Start(stopCh chan struct{}) error {
+	var err error
+	for {
+		select {
+		case <-stopCh:
+			st.wg.Wait()
+			return err
+		}
+	}
+}
+
+// SetKeyPrefix set the prefix to prefix all given keys with.
 func (st *Store) SetKeyPrefix(prefix string) {
 	st.dataStore.SetKeyPrefix(prefix)
 	st.cacheStore.SetKeyPrefix(prefix)
@@ -72,23 +86,19 @@ func (st *Store) GetRecursive(ctx context.Context, key string) (map[string]strin
 	}
 	if !found {
 		results, found, err = st.dataStore.GetRecursive(ctx, key)
+		if err != nil {
+			return results, found, err
+		}
 	}
-	var errors []error
+
+	var errs []error
 	for k, v := range results {
 		if err = st.cacheStore.Put(ctx, k, v); err != nil {
 			// TODO Handle error (e.g., build concated error)
-			errors = append(errors, err)
+			errs = append(errs, err)
 		}
 	}
-	if len(errors) > 0 {
-		errsConcat := "failed to put GetRecursive() result into cachestore: "
-		for _, e := range errors {
-			errsConcat += e.Error()
-			errsConcat += "; "
-		}
-		err = fmt.Errorf(errsConcat)
-	}
-	return results, found, err
+	return results, found, errors.Concat(errs...)
 }
 
 // Put put a key value pair.
@@ -100,36 +110,25 @@ func (st *Store) Put(ctx context.Context, key string, value string) error {
 }
 
 // Delete delete a key value pair.
-func (st *Store) Delete(ctx context.Context, key string, recursively bool) error {
-	if err := st.dataStore.Delete(ctx, key, recursively); err != nil {
+func (st *Store) Delete(ctx context.Context, key string, recursive bool) error {
+	if err := st.dataStore.Delete(ctx, key, recursive); err != nil {
 		return err
 	}
-	return st.cacheStore.Delete(ctx, key, recursively)
+	return st.cacheStore.Delete(ctx, key, recursive)
 }
 
 // Watch watch a key or directory for creation, changes and deletion.
-func (st *Store) Watch(stopCh chan struct{}, key string, recursive bool) (*informer.Informer, error) {
-	// TODO Get watch in informer.SharedInformer and make it possible to close using the Store.Close() function below
-	_ = st.sharedInformer.Watch(nil, st.prefix+key)
-	return nil, nil
+func (st *Store) Watch(ctx context.Context, key string, recursive bool) (chan *informer.Result, error) {
+	// TODO call st.informer.DataStoreChExists() to see if a datastore watchchan is needed.
+	watch, err := st.dataStore.Watch(ctx, key, recursive)
+	if err != nil {
+		return nil, err
+	}
+	return st.informer.Watch(ctx, key, watch)
 }
 
 // Close adapter.
 func (st *Store) Close() error {
-	var err error
-	var errors []error
-	errors = append(errors, st.dataStore.Close())
-	errors = append(errors, st.cacheStore.Close())
-	if len(errors) > 0 {
-		errsConcat := "failed to close datastore and cachestore: "
-		for _, e := range errors {
-			if e != nil {
-				continue
-			}
-			errsConcat += e.Error()
-			errsConcat += "; "
-		}
-		err = fmt.Errorf(errsConcat)
-	}
-	return err
+
+	return errors.Concat(st.dataStore.Close(), st.cacheStore.Close())
 }

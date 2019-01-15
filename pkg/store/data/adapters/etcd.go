@@ -22,13 +22,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/galexrt/edenconfmgmt/pkg/datastore"
-	"github.com/galexrt/edenconfmgmt/pkg/datastore/informer"
+	"github.com/galexrt/edenconfmgmt/pkg/store/data"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"go.etcd.io/etcd/clientv3"
 	"go.etcd.io/etcd/clientv3/namespace"
-	"go.etcd.io/etcd/mvcc/mvccpb"
 )
 
 const (
@@ -50,8 +48,8 @@ const (
 
 // ETCD implementation of Handler interface for ETCD.
 type ETCD struct {
-	client *clientv3.Client
-	datastore.Store
+	cli *clientv3.Client
+	data.Store
 }
 
 // ETCDOptions options for ETCD connection.
@@ -94,7 +92,7 @@ func init() {
 }
 
 // NewETCD create new ETCD
-func NewETCD(keyPrefix string) (datastore.Store, error) {
+func NewETCD() (data.Store, error) {
 	etcd := &ETCD{}
 	user := viper.GetString(flagETCDUser)
 	password := ""
@@ -119,13 +117,7 @@ func NewETCD(keyPrefix string) (datastore.Store, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	// Use namespaced KV client
-	cli.KV = namespace.NewKV(cli.KV, keyPrefix)
-	cli.Watcher = namespace.NewWatcher(cli.Watcher, keyPrefix)
-	cli.Lease = namespace.NewLease(cli.Lease, keyPrefix)
-
-	etcd.client = cli
+	etcd.cli = cli
 
 	// TODO Should a etcd.Status() call be made to one or more given endpoints?
 	// See https://godoc.org/go.etcd.io/etcd/clientv3#Maintenance
@@ -133,9 +125,17 @@ func NewETCD(keyPrefix string) (datastore.Store, error) {
 	return etcd, err
 }
 
+// SetKeyPrefix set the prefix to prefix all given keys with.
+func (st *ETCD) SetKeyPrefix(prefix string) {
+	// Use namespaced KV client
+	st.cli.KV = namespace.NewKV(st.cli.KV, prefix)
+	st.cli.Watcher = namespace.NewWatcher(st.cli.Watcher, prefix)
+	st.cli.Lease = namespace.NewLease(st.cli.Lease, prefix)
+}
+
 // Get return a specific key.
 func (st *ETCD) Get(ctx context.Context, key string) (string, bool, error) {
-	resp, err := st.client.Get(ctx, key)
+	resp, err := st.cli.Get(ctx, key)
 	if err != nil {
 		return "", false, err
 	}
@@ -150,7 +150,7 @@ func (st *ETCD) GetRecursive(ctx context.Context, key string) (map[string]string
 	var found bool
 	var results map[string]string
 	opts := []clientv3.OpOption{clientv3.WithPrefix()}
-	resp, err := st.client.Get(ctx, key, opts...)
+	resp, err := st.cli.Get(ctx, key, opts...)
 	if err != nil {
 		return results, false, err
 	}
@@ -165,7 +165,7 @@ func (st *ETCD) GetRecursive(ctx context.Context, key string) (map[string]string
 
 // Put set a key to a specific value.
 func (st *ETCD) Put(ctx context.Context, key string, value string) error {
-	_, err := st.client.Put(ctx, key, value)
+	_, err := st.cli.Put(ctx, key, value)
 	return err
 }
 
@@ -175,31 +175,17 @@ func (st *ETCD) Delete(ctx context.Context, key string, recursive bool) error {
 	if recursive {
 		opts = append(opts, clientv3.WithPrefix())
 	}
-	_, err := st.client.Delete(ctx, key, opts...)
+	_, err := st.cli.Delete(ctx, key, opts...)
 	return err
 }
 
 // Watch watch a key or directory for creation, changes and deletion.
-func (st *ETCD) Watch(stopCh chan struct{}, key string, recursive bool) (*informer.Informer, error) {
-	//watch := st.client.Watch(ctx, key)
-	return nil, nil
+func (st *ETCD) Watch(ctx context.Context, key string, recursive bool) (clientv3.WatchChan, error) {
+	watch := st.cli.Watch(ctx, key)
+	return watch, nil
 }
 
 // Close closes the store and cancels all watches (if supported).
 func (st *ETCD) Close() error {
-	return st.client.Close()
-}
-
-// EtcdEventStateToHandlerState convert Etcd client v3 event type to our own states.
-func EtcdEventStateToHandlerState(eventType mvccpb.Event_EventType, isCreate bool, isModify bool) informer.State {
-	if isCreate {
-		return informer.StateCreated
-	}
-	if isModify {
-		return informer.StateUpdated
-	}
-	if eventType == mvccpb.DELETE {
-		return informer.StateDeleted
-	}
-	return informer.StateUnknown
+	return st.cli.Close()
 }

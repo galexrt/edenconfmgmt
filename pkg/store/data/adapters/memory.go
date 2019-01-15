@@ -22,8 +22,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/galexrt/edenconfmgmt/pkg/datastore"
-	"github.com/galexrt/edenconfmgmt/pkg/datastore/informer"
+	"github.com/galexrt/edenconfmgmt/pkg/store/data"
 )
 
 // Memory "in-memory" cache adapter implementation.
@@ -31,7 +30,7 @@ import (
 type Memory struct {
 	cache sync.Map
 	// As a map does not have an event/notification system we have a channel.
-	datastore.Store
+	data.Store
 }
 
 func init() {
@@ -39,11 +38,14 @@ func init() {
 }
 
 // NewMemory return new Memory store.
-func NewMemory(keyPrefix string) (datastore.Store, error) {
+func NewMemory() (data.Store, error) {
 	return &Memory{
 		cache: sync.Map{},
 	}, nil
 }
+
+// SetKeyPrefix set the prefix to prefix all given keys with.
+func (st *Memory) SetKeyPrefix(prefix string) { /* Noop for Memory */ }
 
 // Get get a value for a key.
 func (st *Memory) Get(ctx context.Context, key string) (string, bool, error) {
@@ -115,7 +117,7 @@ func (st *Memory) Put(ctx context.Context, key string, value string) error {
 }
 
 // Delete delete a key value pair.
-func (st *Memory) Delete(ctx context.Context, key string, recursively bool) error {
+func (st *Memory) Delete(ctx context.Context, key string, recursive bool) error {
 	keys := st.searchKeysSubstr(key)
 	if len(keys) > 0 {
 		return nil
@@ -124,11 +126,6 @@ func (st *Memory) Delete(ctx context.Context, key string, recursively bool) erro
 		st.cache.Delete(fKey)
 	}
 	return nil
-}
-
-// Watch watch a key or directory for creation, changes and deletion.
-func (st *Memory) Watch(stopCh chan struct{}, key string, recursive bool) (*informer.Informer, error) {
-	return nil, nil
 }
 
 // Close adapter.

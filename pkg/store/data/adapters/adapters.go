@@ -19,16 +19,16 @@ package adapters
 import (
 	"fmt"
 
-	"github.com/galexrt/edenconfmgmt/pkg/datastore"
+	"github.com/galexrt/edenconfmgmt/pkg/store/data"
 	"github.com/spf13/cobra"
 )
 
 var (
-	// flagRegisters list of available datastore adapters flag register functions.
+	// flagRegisters list of available data adapters flag register functions.
 	flagRegisters = map[string]func(prefix string, cmd *cobra.Command){}
 
-	// adapters list of available datastore adapters.
-	adapters = map[string]func(keyPrefix string) (datastore.Store, error){}
+	// adapters list of available data adapters.
+	adapters = map[string]func() (data.Store, error){}
 )
 
 // RegisterFlags register flags using the function provided in flagRegisters var.
@@ -41,11 +41,11 @@ func RegisterFlags(prefix string, cmd *cobra.Command) {
 	}
 }
 
-// Get return a newly created datastore handler.
-func Get(handlerName string, keyPrefix string) (datastore.Store, error) {
+// Get return a newly created data handler.
+func Get(handlerName string) (data.Store, error) {
 	newFunc, ok := adapters[handlerName]
 	if !ok {
 		return nil, fmt.Errorf("no handler with name %s found in adapters list", handlerName)
 	}
-	return newFunc(keyPrefix)
+	return newFunc()
 }

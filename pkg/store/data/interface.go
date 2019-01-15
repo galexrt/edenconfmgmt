@@ -14,12 +14,12 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package datastore
+package data
 
 import (
 	"context"
 
-	"github.com/galexrt/edenconfmgmt/pkg/datastore/informer"
+	"go.etcd.io/etcd/clientv3"
 )
 
 // Store Interface to abstract get, put, del, watch actions to etcd datastore.
@@ -36,7 +36,16 @@ type Store interface {
 	// Delete delete a key value pair.
 	Delete(ctx context.Context, key string, recursive bool) error
 	// Watch watch a key or directory for creation, changes and deletion.
-	Watch(stopCh chan struct{}, key string, recursive bool) (*informer.Informer, error)
+	Watch(ctx context.Context, key string, recursive bool) (clientv3.WatchChan, error)
 	// Close closes the store and cancels all watches (if supported).
 	Close() error
+
+	// Status returns the "status" of the store (e.g., if it is healthy)
+	Status() *Status
+}
+
+// Status store status structure.
+type Status struct {
+	// Healthy true for healthy, false for unhealthy.
+	Healthy bool
 }
