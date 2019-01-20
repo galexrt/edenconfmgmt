@@ -10,8 +10,13 @@ import (
 
 // Informer
 type Informer struct {
-	channel   map[string]clientv3.WatchChan
+	channel   map[string]*chanContainer
 	receivers map[string]*receiverList
+}
+
+type chanContainer struct {
+	watch clientv3.WatchChan
+	link  *chanContainer
 }
 
 type receiverList struct {
@@ -33,15 +38,22 @@ func (inf *Informer) Start(stopCh chan struct{}) error {
 
 // DataStoreChExists
 func (inf *Informer) DataStoreChExists(key string) bool {
-	// TODO Iterate over "per directory /" map as we can have compacted the datastore channel
-	// _, ok := inf.channel[key]
+	// TODO "Iterate" over "per directory /" map as we can have compacted the datastore channel
+	// E.g., match compcated paths such as `/my-object/test123` from a key `/my-object/*`
+	//_, ok := inf.channel[key]
 	return false
+}
+
+func (inf *Informer) getDataStoreCh(key string) (*chanContainer) {
+	return nil, false
 }
 
 // Watch
 func (inf *Informer) Watch(ctx context.Context, key string, dataStoreCh clientv3.WatchChan) (chan *Result, error) {
 	if _, ok := inf.channel[key]; !ok {
-		inf.channel[key] = dataStoreCh
+		inf.channel[key] = &chanContainer{
+			watch: dataStoreCh,
+		}
 		go inf.watch(ctx, key)
 	}
 	ch := make(chan *Result)
@@ -52,11 +64,12 @@ func (inf *Informer) Watch(ctx context.Context, key string, dataStoreCh clientv3
 }
 
 func (inf *Informer) watch(ctx context.Context, key string) {
+	dataStoreCh := inf.getDataStoreCh(key)
 	for {
 		select {
 		case <-ctx.Done():
 			return
-		case resp := <-inf.channel[key]:
+		case resp := <-dataStoreCh.watch:
 			var errs []error
 			if err := resp.Err(); err != nil {
 				errs = append(errs, err)
