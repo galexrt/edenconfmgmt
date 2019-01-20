@@ -34,9 +34,9 @@ type Store interface {
 	// Put set a key to a specific value.
 	Put(ctx context.Context, key string, value string) error
 	// Delete delete a key value pair.
-	Delete(ctx context.Context, key string, recursive bool) error
+	Delete(ctx context.Context, key string) error
 	// Watch watch a key or directory for creation, changes and deletion.
-	Watch(ctx context.Context, key string, recursive bool) (clientv3.WatchChan, error)
+	Watch(ctx context.Context, key string) (clientv3.WatchChan, error)
 	// Close closes the store and cancels all watches (if supported).
 	Close() error
 

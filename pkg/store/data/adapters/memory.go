@@ -23,6 +23,7 @@ import (
 	"sync"
 
 	"github.com/galexrt/edenconfmgmt/pkg/store/data"
+	"go.etcd.io/etcd/clientv3"
 )
 
 // Memory "in-memory" cache adapter implementation.
@@ -38,7 +39,7 @@ func init() {
 }
 
 // NewMemory return new Memory store.
-func NewMemory() (data.Store, error) {
+func NewMemory(flagPrefix string) (data.Store, error) {
 	return &Memory{
 		cache: sync.Map{},
 	}, nil
@@ -117,15 +118,24 @@ func (st *Memory) Put(ctx context.Context, key string, value string) error {
 }
 
 // Delete delete a key value pair.
-func (st *Memory) Delete(ctx context.Context, key string, recursive bool) error {
-	keys := st.searchKeysSubstr(key)
-	if len(keys) > 0 {
-		return nil
-	}
-	for _, fKey := range keys {
-		st.cache.Delete(fKey)
+func (st *Memory) Delete(ctx context.Context, key string) error {
+	if key[len(key)-1:] == "/" {
+		keys := st.searchKeysSubstr(key)
+		if len(keys) > 0 {
+			return nil
+		}
+		for _, sKey := range keys {
+			st.cache.Delete(sKey)
+		}
+	} else {
+		st.cache.Delete(key)
 	}
 	return nil
+}
+
+// Watch watch a key or directory for creation, changes and deletion.
+func (st *Memory) Watch(ctx context.Context, key string) (clientv3.WatchChan, error) {
+	return nil, nil
 }
 
 // Close adapter.

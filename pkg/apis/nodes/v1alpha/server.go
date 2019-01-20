@@ -24,22 +24,18 @@ import (
 
 	core_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha"
 	events_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha"
-	"github.com/galexrt/edenconfmgmt/pkg/datastore"
 )
 
 var json = jsoniter.ConfigCompatibleWithStandardLibrary
 
 // NodesService handler for config events.
 type NodesService struct {
-	store datastore.Store
 	NodesServer
 }
 
 // New returns a NodesService
-func New(dataStore datastore.Store) NodesServer {
-	return &NodesService{
-		store: dataStore,
-	}
+func New() NodesServer {
+	return &NodesService{}
 }
 
 // Get get a Node.

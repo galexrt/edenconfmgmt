@@ -27,7 +27,7 @@ import (
 
 	core_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha"
 	nodes_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/nodes/v1alpha"
-	"github.com/galexrt/edenconfmgmt/pkg/datastore"
+	"github.com/galexrt/edenconfmgmt/pkg/store/cache"
 	jsoniter "github.com/json-iterator/go"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
@@ -35,13 +35,13 @@ import (
 
 var json = jsoniter.ConfigCompatibleWithStandardLibrary
 
-func magicRun(stopCh chan struct{}, store datastore.Store) error {
+func magicRun(stopCh chan struct{}, store *cache.Store) error {
 	logger.Info("magicRun started")
 	// Watch for node changes of itself
 
 	go func() {
 		for {
-			fmt.Printf("store.PUT TIME NOW TEST\n")
+			fmt.Printf("store.PUT NOW TEST\n")
 			ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 			defer cancel()
 			err := store.Put(ctx, "/test123/my-object", time.Now().String())
@@ -54,15 +54,24 @@ func magicRun(stopCh chan struct{}, store datastore.Store) error {
 				fmt.Printf("store.Get ERROR: %+v\n", err)
 				return
 			}
-			fmt.Printf("PUT GET TEST: OKAY: %+v; RESULT: %+v\n", ok, resp)
+			fmt.Printf("store.Get TEST: OKAY: %+v; RESULT: %+v\n", ok, resp)
 			time.Sleep(5 * time.Second)
 		}
 	}()
 
-	watcher, err := store.Watch(stopCh, "/test123", true)
-	fmt.Printf("WATCH: %+v; %+v\n", watcher, err)
+	ctx, cancel := context.WithCancel(context.Background())
+	defer cancel()
+	watcher, err := store.Watch(ctx, "/test123/")
+	fmt.Printf("WATCH ERROR: %+v\n", err)
 
-	return nil
+	for {
+		select {
+		case res := <-watcher:
+			fmt.Printf("WATCH RESULT: %+v\n", res)
+		case <-stopCh:
+			return nil
+		}
+	}
 
 	// TODO add logic to refresh hostname every once in a while
 	hostname, err := os.Hostname()

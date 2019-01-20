@@ -92,9 +92,9 @@ func init() {
 }
 
 // NewETCD create new ETCD
-func NewETCD() (data.Store, error) {
+func NewETCD(flagPrefix string) (data.Store, error) {
 	etcd := &ETCD{}
-	user := viper.GetString(flagETCDUser)
+	user := viper.GetString(flagPrefix + flagETCDUser)
 	password := ""
 	if user != "" {
 		splitUserInfo := strings.Split(user, ":")
@@ -107,10 +107,10 @@ func NewETCD() (data.Store, error) {
 	// TODO look at etcdctl for better client and/or transport config "generation"
 	// because currently most flags defined here are not used..
 	cfg := clientv3.Config{
-		Endpoints:   viper.GetStringSlice(flagETCDEndpoints),
+		Endpoints:   viper.GetStringSlice(flagPrefix + flagETCDEndpoints),
 		Username:    user,
 		Password:    password,
-		DialTimeout: viper.GetDuration(flagETCDDialTimeout),
+		DialTimeout: viper.GetDuration(flagPrefix + flagETCDDialTimeout),
 	}
 
 	cli, err := clientv3.New(cfg)
@@ -170,9 +170,9 @@ func (st *ETCD) Put(ctx context.Context, key string, value string) error {
 }
 
 // Delete delete a key value pair.
-func (st *ETCD) Delete(ctx context.Context, key string, recursive bool) error {
+func (st *ETCD) Delete(ctx context.Context, key string) error {
 	var opts []clientv3.OpOption
-	if recursive {
+	if key[len(key)-1:] == "/" {
 		opts = append(opts, clientv3.WithPrefix())
 	}
 	_, err := st.cli.Delete(ctx, key, opts...)
@@ -180,8 +180,13 @@ func (st *ETCD) Delete(ctx context.Context, key string, recursive bool) error {
 }
 
 // Watch watch a key or directory for creation, changes and deletion.
-func (st *ETCD) Watch(ctx context.Context, key string, recursive bool) (clientv3.WatchChan, error) {
-	watch := st.cli.Watch(ctx, key)
+// If the `key` ends in `/` it will be a recursive watch.
+func (st *ETCD) Watch(ctx context.Context, key string) (clientv3.WatchChan, error) {
+	opts := []clientv3.OpOption{}
+	if key[len(key)-1:] == "/" {
+		opts = append(opts, clientv3.WithPrefix())
+	}
+	watch := st.cli.Watch(ctx, key, opts...)
 	return watch, nil
 }
 

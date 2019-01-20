@@ -18,34 +18,45 @@ package cache
 
 import (
 	"context"
+	"fmt"
 	"sync"
 
 	"github.com/galexrt/edenconfmgmt/pkg/store/data"
-	"github.com/galexrt/edenconfmgmt/pkg/store/informer"
 	"github.com/galexrt/edenconfmgmt/pkg/utils/errors"
+	"go.uber.org/zap"
 )
 
 // Store using the dataStore and a second cacheStore for caching.
 type Store struct {
 	dataStore  data.Store
 	cacheStore data.Store
-	informer   *informer.Informer
+	informer   *Informer
 	prefix     string
 	wg         sync.WaitGroup
+	logger     *zap.Logger
 }
 
 // New return new Store.
-func New(dataStore data.Store, cacheStore data.Store, inf *informer.Informer) *Store {
+func New(dataStore data.Store, cacheStore data.Store, logger *zap.Logger) *Store {
+	inf := NewInformer(dataStore, cacheStore, logger)
 	return &Store{
 		dataStore:  dataStore,
 		cacheStore: cacheStore,
 		informer:   inf,
+		logger:     logger.Named("pkg/store/cache:Store"),
 	}
 }
 
 // Start start the logic behind the cache store.
 func (st *Store) Start(stopCh chan struct{}) error {
 	var err error
+
+	st.wg.Add(1)
+	go func() {
+		defer st.wg.Done()
+		st.informer.Start(stopCh)
+	}()
+
 	for {
 		select {
 		case <-stopCh:
@@ -110,20 +121,21 @@ func (st *Store) Put(ctx context.Context, key string, value string) error {
 }
 
 // Delete delete a key value pair.
-func (st *Store) Delete(ctx context.Context, key string, recursive bool) error {
-	if err := st.dataStore.Delete(ctx, key, recursive); err != nil {
+func (st *Store) Delete(ctx context.Context, key string) error {
+	if err := st.dataStore.Delete(ctx, key); err != nil {
 		return err
 	}
-	return st.cacheStore.Delete(ctx, key, recursive)
+	return st.cacheStore.Delete(ctx, key)
 }
 
 // Watch watch a key or directory for creation, changes and deletion.
-func (st *Store) Watch(ctx context.Context, key string, recursive bool) (chan *informer.Result, error) {
+func (st *Store) Watch(ctx context.Context, key string) (chan *InformerResult, error) {
 	// TODO call st.informer.DataStoreChExists() to see if a datastore watchchan is needed.
-	watch, err := st.dataStore.Watch(ctx, key, recursive)
+	watch, err := st.dataStore.Watch(ctx, key)
 	if err != nil {
 		return nil, err
 	}
+	fmt.Printf("store.Watch key: %s\n", key)
 	return st.informer.Watch(ctx, key, watch)
 }
 

@@ -44,10 +44,9 @@ import (
 
 	"github.com/galexrt/edenconfmgmt/pkg/auth"
 	"github.com/galexrt/edenconfmgmt/pkg/common"
-	"github.com/galexrt/edenconfmgmt/pkg/datastore"
-	data_store_adapters "github.com/galexrt/edenconfmgmt/pkg/datastore/adapters"
-	"github.com/galexrt/edenconfmgmt/pkg/datastore/cache"
-	"github.com/galexrt/edenconfmgmt/pkg/datastore/informer"
+	"github.com/galexrt/edenconfmgmt/pkg/store/cache"
+	"github.com/galexrt/edenconfmgmt/pkg/store/data"
+	store_data_adapters "github.com/galexrt/edenconfmgmt/pkg/store/data/adapters"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	grpc_zap "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
 	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
@@ -75,7 +74,6 @@ const (
 	flagListenAddressHTTP       = "listen-address-http"
 	flagDataStore               = "data-store"
 	flagDataStoreKeyPrefix      = "data-store-key-prefix"
-	flagCacheEnabled            = "cache-enabled"
 	flagCacheStore              = "cache-store"
 	flagCacheStoreKeyPrefix     = "cache-store-key-prefix"
 	flagStoreWatchCleanInterval = "store-watch-clean-interval"
@@ -116,14 +114,13 @@ func init() {
 	// Store
 	rootCmd.PersistentFlags().String(flagDataStore, "etcd", "datastore to use")
 	rootCmd.PersistentFlags().String(flagDataStoreKeyPrefix, "/edendata", "key prefix to use in the datastore")
-	rootCmd.PersistentFlags().Bool(flagCacheEnabled, true, "if a cachestore should be used")
 	rootCmd.PersistentFlags().String(flagCacheStore, "memory", "cachestore to use")
 	rootCmd.PersistentFlags().String(flagCacheStoreKeyPrefix, "", "key prefix to use in the cachestore")
 	rootCmd.PersistentFlags().Duration(flagStoreWatchCleanInterval, 7*time.Second, "interval to remove (and possibly close) unused store wataches")
 
 	// Register all datatstore adapters flags for cache and data store.
-	data_store_adapters.RegisterFlags(flagDataStore, rootCmd)
-	data_store_adapters.RegisterFlags(flagCacheStore, rootCmd)
+	store_data_adapters.RegisterFlags(flagDataStore, rootCmd)
+	store_data_adapters.RegisterFlags(flagCacheStore, rootCmd)
 
 	// Bind all persistent flags to viper, for easy access.
 	viper.BindPFlags(rootCmd.PersistentFlags())
@@ -170,26 +167,17 @@ func Run(cmd *cobra.Command, args []string) error {
 	signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM)
 
 	dataStoreHandlerName := strings.ToLower(viper.GetString(flagDataStore))
-	dataStore, err := data_store_adapters.Get(dataStoreHandlerName, viper.GetString(flagDataStoreKeyPrefix))
+	dataStore, err := store_data_adapters.Get(dataStoreHandlerName, flagDataStore+"-")
 	if err != nil {
 		logger.Fatal("failed to create store handler", zap.String("storehandler", dataStoreHandlerName), zap.Error(err))
 	}
-	var store datastore.Store
-	if viper.GetBool(flagCacheEnabled) {
-		cacheStoreHandlerName := strings.ToLower(viper.GetString(flagCacheStore))
-		var cacheStore datastore.Store
-		cacheStore, err = data_store_adapters.Get(cacheStoreHandlerName, viper.GetString(flagCacheStoreKeyPrefix))
-		if err != nil {
-			logger.Fatal("failed to create store handler", zap.String("storehandler", cacheStoreHandlerName), zap.Error(err))
-		}
-		watchSharedInformer := &informer.SharedInformer{
-			StoreWatchCleanInterval: viper.GetDuration(flagStoreWatchCleanInterval),
-		}
-		watchSharedInformer.StartWithStopCh(stopCh)
-		store = cache.New(watchSharedInformer, dataStore, cacheStore)
-	} else {
-		store = dataStore
+	cacheStoreHandlerName := strings.ToLower(viper.GetString(flagCacheStore))
+	var cacheStore data.Store
+	cacheStore, err = store_data_adapters.Get(cacheStoreHandlerName, flagCacheStore+"-")
+	if err != nil {
+		logger.Fatal("failed to create store handler", zap.String("storehandler", cacheStoreHandlerName), zap.Error(err))
 	}
+	store := cache.New(dataStore, cacheStore, logger)
 
 	var tracer opentracing.Tracer
 	if false {
@@ -234,7 +222,7 @@ func Run(cmd *cobra.Command, args []string) error {
 	grpc_zap.ReplaceGrpcLogger(logger)
 
 	// Register APIs to grpc server
-	registerGRPCAPIs(grpcServer, dataStore)
+	registerGRPCAPIs(grpcServer, store)
 
 	// Initialize Prometheus GRPC metrics.
 	grpcMetrics.InitializeMetrics(grpcServer)
@@ -260,19 +248,21 @@ func Run(cmd *cobra.Command, args []string) error {
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		if err = httpServer.ListenAndServe(); err != nil {
+		if err := httpServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			logger.Error("failed to listen and serve http server", zap.Error(err))
 			closer.Close(stopCh)
 		}
 	}()
+
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		if err = grpcServer.Serve(lis); err != nil {
+		if err := grpcServer.Serve(lis); err != nil && err != grpc.ErrServerStopped {
 			logger.Error("grpcServer.Serve() returned non-nil error on GracefulStop", zap.Error(err))
 			closer.Close(stopCh)
 		}
 	}()
+
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
@@ -304,7 +294,7 @@ func Run(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-func registerGRPCAPIs(srv *grpc.Server, store datastore.Store) {
+func registerGRPCAPIs(srv *grpc.Server, store *cache.Store) {
 	// Beacons
 	beaconsServer := beacons_v1alpha.New()
 	beacons_v1alpha.RegisterBeaconsServer(srv, beaconsServer)
@@ -321,7 +311,7 @@ func registerGRPCAPIs(srv *grpc.Server, store datastore.Store) {
 	eventsServer := events_v1alpha.New()
 	events_v1alpha.RegisterEventsServer(srv, eventsServer)
 	// Nodes
-	nodesServer := nodes_v1alpha.New(store)
+	nodesServer := nodes_v1alpha.New()
 	nodes_v1alpha.RegisterNodesServer(srv, nodesServer)
 	// Secrets
 	secretsServer := secrets_v1alpha.New()

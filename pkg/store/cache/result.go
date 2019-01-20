@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package informer
+package cache
 
 // ResultState response state type.
 type ResultState string
@@ -30,12 +30,12 @@ const (
 	ResultStateUnknown ResultState = "Unknown"
 )
 
-// Result result returned by the channel
-type Result struct {
+// InformerResult result returned by the channel
+type InformerResult struct {
 	Closed  bool
 	Errors  []error
 	State   ResultState
-	Name    string
+	Key     string
 	Value   string
 	Version int64
 }
