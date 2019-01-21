@@ -18,12 +18,12 @@ var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
 
-func BenchmarkConfigProtoMarshal(b *testing.B) {
+func BenchmarkAgentConfigProtoMarshal(b *testing.B) {
 	popr := math_rand.New(math_rand.NewSource(616))
 	total := 0
-	pops := make([]*Config, 10000)
+	pops := make([]*AgentConfig, 10000)
 	for i := 0; i < 10000; i++ {
-		pops[i] = NewPopulatedConfig(popr, false)
+		pops[i] = NewPopulatedAgentConfig(popr, false)
 	}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -36,18 +36,18 @@ func BenchmarkConfigProtoMarshal(b *testing.B) {
 	b.SetBytes(int64(total / b.N))
 }
 
-func BenchmarkConfigProtoUnmarshal(b *testing.B) {
+func BenchmarkAgentConfigProtoUnmarshal(b *testing.B) {
 	popr := math_rand.New(math_rand.NewSource(616))
 	total := 0
 	datas := make([][]byte, 10000)
 	for i := 0; i < 10000; i++ {
-		dAtA, err := github_com_golang_protobuf_proto.Marshal(NewPopulatedConfig(popr, false))
+		dAtA, err := github_com_golang_protobuf_proto.Marshal(NewPopulatedAgentConfig(popr, false))
 		if err != nil {
 			panic(err)
 		}
 		datas[i] = dAtA
 	}
-	msg := &Config{}
+	msg := &AgentConfig{}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		total += len(datas[i%10000])
@@ -58,12 +58,12 @@ func BenchmarkConfigProtoUnmarshal(b *testing.B) {
 	b.SetBytes(int64(total / b.N))
 }
 
-func BenchmarkConfigSpecProtoMarshal(b *testing.B) {
+func BenchmarkAgentConfigSpecProtoMarshal(b *testing.B) {
 	popr := math_rand.New(math_rand.NewSource(616))
 	total := 0
-	pops := make([]*ConfigSpec, 10000)
+	pops := make([]*AgentConfigSpec, 10000)
 	for i := 0; i < 10000; i++ {
-		pops[i] = NewPopulatedConfigSpec(popr, false)
+		pops[i] = NewPopulatedAgentConfigSpec(popr, false)
 	}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -76,18 +76,18 @@ func BenchmarkConfigSpecProtoMarshal(b *testing.B) {
 	b.SetBytes(int64(total / b.N))
 }
 
-func BenchmarkConfigSpecProtoUnmarshal(b *testing.B) {
+func BenchmarkAgentConfigSpecProtoUnmarshal(b *testing.B) {
 	popr := math_rand.New(math_rand.NewSource(616))
 	total := 0
 	datas := make([][]byte, 10000)
 	for i := 0; i < 10000; i++ {
-		dAtA, err := github_com_golang_protobuf_proto.Marshal(NewPopulatedConfigSpec(popr, false))
+		dAtA, err := github_com_golang_protobuf_proto.Marshal(NewPopulatedAgentConfigSpec(popr, false))
 		if err != nil {
 			panic(err)
 		}
 		datas[i] = dAtA
 	}
-	msg := &ConfigSpec{}
+	msg := &AgentConfigSpec{}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		total += len(datas[i%10000])
@@ -658,12 +658,12 @@ func BenchmarkWatchResponseProtoUnmarshal(b *testing.B) {
 	b.SetBytes(int64(total / b.N))
 }
 
-func BenchmarkConfigSize(b *testing.B) {
+func BenchmarkAgentConfigSize(b *testing.B) {
 	popr := math_rand.New(math_rand.NewSource(616))
 	total := 0
-	pops := make([]*Config, 1000)
+	pops := make([]*AgentConfig, 1000)
 	for i := 0; i < 1000; i++ {
-		pops[i] = NewPopulatedConfig(popr, false)
+		pops[i] = NewPopulatedAgentConfig(popr, false)
 	}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -672,12 +672,12 @@ func BenchmarkConfigSize(b *testing.B) {
 	b.SetBytes(int64(total / b.N))
 }
 
-func BenchmarkConfigSpecSize(b *testing.B) {
+func BenchmarkAgentConfigSpecSize(b *testing.B) {
 	popr := math_rand.New(math_rand.NewSource(616))
 	total := 0
-	pops := make([]*ConfigSpec, 1000)
+	pops := make([]*AgentConfigSpec, 1000)
 	for i := 0; i < 1000; i++ {
-		pops[i] = NewPopulatedConfigSpec(popr, false)
+		pops[i] = NewPopulatedAgentConfigSpec(popr, false)
 	}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {

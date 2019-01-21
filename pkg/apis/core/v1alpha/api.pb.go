@@ -46,7 +46,7 @@ type ObjectMetadata struct {
 func (m *ObjectMetadata) Reset()      { *m = ObjectMetadata{} }
 func (*ObjectMetadata) ProtoMessage() {}
 func (*ObjectMetadata) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_6baaaa9c4c8bd54f, []int{0}
+	return fileDescriptor_api_d5458438176d3c73, []int{0}
 }
 func (m *ObjectMetadata) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -125,7 +125,7 @@ type VersionRequest struct {
 func (m *VersionRequest) Reset()      { *m = VersionRequest{} }
 func (*VersionRequest) ProtoMessage() {}
 func (*VersionRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_6baaaa9c4c8bd54f, []int{1}
+	return fileDescriptor_api_d5458438176d3c73, []int{1}
 }
 func (m *VersionRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -172,7 +172,7 @@ type VersionResponse struct {
 func (m *VersionResponse) Reset()      { *m = VersionResponse{} }
 func (*VersionResponse) ProtoMessage() {}
 func (*VersionResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_6baaaa9c4c8bd54f, []int{2}
+	return fileDescriptor_api_d5458438176d3c73, []int{2}
 }
 func (m *VersionResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -248,7 +248,7 @@ type Include struct {
 func (m *Include) Reset()      { *m = Include{} }
 func (*Include) ProtoMessage() {}
 func (*Include) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_6baaaa9c4c8bd54f, []int{3}
+	return fileDescriptor_api_d5458438176d3c73, []int{3}
 }
 func (m *Include) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -303,7 +303,7 @@ type Conditions struct {
 func (m *Conditions) Reset()      { *m = Conditions{} }
 func (*Conditions) ProtoMessage() {}
 func (*Conditions) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_6baaaa9c4c8bd54f, []int{4}
+	return fileDescriptor_api_d5458438176d3c73, []int{4}
 }
 func (m *Conditions) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -356,7 +356,7 @@ type Condition struct {
 func (m *Condition) Reset()      { *m = Condition{} }
 func (*Condition) ProtoMessage() {}
 func (*Condition) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_6baaaa9c4c8bd54f, []int{5}
+	return fileDescriptor_api_d5458438176d3c73, []int{5}
 }
 func (m *Condition) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -409,7 +409,7 @@ type Retry struct {
 func (m *Retry) Reset()      { *m = Retry{} }
 func (*Retry) ProtoMessage() {}
 func (*Retry) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_6baaaa9c4c8bd54f, []int{6}
+	return fileDescriptor_api_d5458438176d3c73, []int{6}
 }
 func (m *Retry) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -464,7 +464,7 @@ type GetOptions struct {
 func (m *GetOptions) Reset()      { *m = GetOptions{} }
 func (*GetOptions) ProtoMessage() {}
 func (*GetOptions) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_6baaaa9c4c8bd54f, []int{7}
+	return fileDescriptor_api_d5458438176d3c73, []int{7}
 }
 func (m *GetOptions) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -517,7 +517,7 @@ type ListOptions struct {
 func (m *ListOptions) Reset()      { *m = ListOptions{} }
 func (*ListOptions) ProtoMessage() {}
 func (*ListOptions) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_6baaaa9c4c8bd54f, []int{8}
+	return fileDescriptor_api_d5458438176d3c73, []int{8}
 }
 func (m *ListOptions) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -567,7 +567,7 @@ type WatchOptions struct {
 func (m *WatchOptions) Reset()      { *m = WatchOptions{} }
 func (*WatchOptions) ProtoMessage() {}
 func (*WatchOptions) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_6baaaa9c4c8bd54f, []int{9}
+	return fileDescriptor_api_d5458438176d3c73, []int{9}
 }
 func (m *WatchOptions) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -629,7 +629,7 @@ type Error struct {
 func (m *Error) Reset()      { *m = Error{} }
 func (*Error) ProtoMessage() {}
 func (*Error) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_6baaaa9c4c8bd54f, []int{10}
+	return fileDescriptor_api_d5458438176d3c73, []int{10}
 }
 func (m *Error) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3682,10 +3682,10 @@ var (
 )
 
 func init() {
-	proto.RegisterFile("github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha/api.proto", fileDescriptor_api_6baaaa9c4c8bd54f)
+	proto.RegisterFile("github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha/api.proto", fileDescriptor_api_d5458438176d3c73)
 }
 
-var fileDescriptor_api_6baaaa9c4c8bd54f = []byte{
+var fileDescriptor_api_d5458438176d3c73 = []byte{
 	// 667 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x54, 0xcd, 0x6e, 0xd4, 0x3c,
 	0x14, 0x9d, 0x4c, 0x3a, 0xed, 0xd7, 0x3b, 0x55, 0xbf, 0xca, 0x20, 0x11, 0x46, 0xc8, 0xaa, 0xb2,

@@ -11,7 +11,7 @@ import v1alpha1 "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha"
 import _ "github.com/gogo/protobuf/gogoproto"
 
 import (
-	"context"
+	context "golang.org/x/net/context"
 	grpc "google.golang.org/grpc"
 )
 
@@ -31,27 +31,27 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion2 // please upgrade the proto package
 
-// Config object base.
-type Config struct {
-	// Metadata for Config object.
+// AgentConfig object base.
+type AgentConfig struct {
+	// Metadata for AgentConfig object.
 	Metadata *v1alpha.ObjectMetadata `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
-	// Spec for Config.
-	Spec                 *ConfigSpec `protobuf:"bytes,2,opt,name=spec,proto3" json:"spec,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
-	XXX_sizecache        int32       `json:"-"`
+	// Spec for AgentConfig.
+	Spec                 *AgentConfigSpec `protobuf:"bytes,2,opt,name=spec,proto3" json:"spec,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_sizecache        int32            `json:"-"`
 }
 
-func (m *Config) Reset()      { *m = Config{} }
-func (*Config) ProtoMessage() {}
-func (*Config) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_2666ad74493c7cf6, []int{0}
+func (m *AgentConfig) Reset()      { *m = AgentConfig{} }
+func (*AgentConfig) ProtoMessage() {}
+func (*AgentConfig) Descriptor() ([]byte, []int) {
+	return fileDescriptor_api_e20920802f29ebf7, []int{0}
 }
-func (m *Config) XXX_Unmarshal(b []byte) error {
+func (m *AgentConfig) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *Config) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *AgentConfig) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_Config.Marshal(b, m, deterministic)
+		return xxx_messageInfo_AgentConfig.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalTo(b)
@@ -61,50 +61,50 @@ func (m *Config) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return b[:n], nil
 	}
 }
-func (dst *Config) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_Config.Merge(dst, src)
+func (dst *AgentConfig) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AgentConfig.Merge(dst, src)
 }
-func (m *Config) XXX_Size() int {
+func (m *AgentConfig) XXX_Size() int {
 	return m.Size()
 }
-func (m *Config) XXX_DiscardUnknown() {
-	xxx_messageInfo_Config.DiscardUnknown(m)
+func (m *AgentConfig) XXX_DiscardUnknown() {
+	xxx_messageInfo_AgentConfig.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_Config proto.InternalMessageInfo
+var xxx_messageInfo_AgentConfig proto.InternalMessageInfo
 
-func (m *Config) GetMetadata() *v1alpha.ObjectMetadata {
+func (m *AgentConfig) GetMetadata() *v1alpha.ObjectMetadata {
 	if m != nil {
 		return m.Metadata
 	}
 	return nil
 }
 
-func (m *Config) GetSpec() *ConfigSpec {
+func (m *AgentConfig) GetSpec() *AgentConfigSpec {
 	if m != nil {
 		return m.Spec
 	}
 	return nil
 }
 
-type ConfigSpec struct {
+type AgentConfigSpec struct {
 	// DataStore.
 	DataStore            *DataStore `protobuf:"bytes,1,opt,name=dataStore,proto3" json:"dataStore,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
 	XXX_sizecache        int32      `json:"-"`
 }
 
-func (m *ConfigSpec) Reset()      { *m = ConfigSpec{} }
-func (*ConfigSpec) ProtoMessage() {}
-func (*ConfigSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_2666ad74493c7cf6, []int{1}
+func (m *AgentConfigSpec) Reset()      { *m = AgentConfigSpec{} }
+func (*AgentConfigSpec) ProtoMessage() {}
+func (*AgentConfigSpec) Descriptor() ([]byte, []int) {
+	return fileDescriptor_api_e20920802f29ebf7, []int{1}
 }
-func (m *ConfigSpec) XXX_Unmarshal(b []byte) error {
+func (m *AgentConfigSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *ConfigSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *AgentConfigSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_ConfigSpec.Marshal(b, m, deterministic)
+		return xxx_messageInfo_AgentConfigSpec.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalTo(b)
@@ -114,19 +114,19 @@ func (m *ConfigSpec) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return b[:n], nil
 	}
 }
-func (dst *ConfigSpec) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ConfigSpec.Merge(dst, src)
+func (dst *AgentConfigSpec) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AgentConfigSpec.Merge(dst, src)
 }
-func (m *ConfigSpec) XXX_Size() int {
+func (m *AgentConfigSpec) XXX_Size() int {
 	return m.Size()
 }
-func (m *ConfigSpec) XXX_DiscardUnknown() {
-	xxx_messageInfo_ConfigSpec.DiscardUnknown(m)
+func (m *AgentConfigSpec) XXX_DiscardUnknown() {
+	xxx_messageInfo_AgentConfigSpec.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_ConfigSpec proto.InternalMessageInfo
+var xxx_messageInfo_AgentConfigSpec proto.InternalMessageInfo
 
-func (m *ConfigSpec) GetDataStore() *DataStore {
+func (m *AgentConfigSpec) GetDataStore() *DataStore {
 	if m != nil {
 		return m.DataStore
 	}
@@ -148,7 +148,7 @@ type DataStore struct {
 func (m *DataStore) Reset()      { *m = DataStore{} }
 func (*DataStore) ProtoMessage() {}
 func (*DataStore) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_2666ad74493c7cf6, []int{2}
+	return fileDescriptor_api_e20920802f29ebf7, []int{2}
 }
 func (m *DataStore) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -208,7 +208,7 @@ type ETCD struct {
 func (m *ETCD) Reset()      { *m = ETCD{} }
 func (*ETCD) ProtoMessage() {}
 func (*ETCD) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_2666ad74493c7cf6, []int{3}
+	return fileDescriptor_api_e20920802f29ebf7, []int{3}
 }
 func (m *ETCD) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -255,7 +255,7 @@ type GetRequest struct {
 func (m *GetRequest) Reset()      { *m = GetRequest{} }
 func (*GetRequest) ProtoMessage() {}
 func (*GetRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_2666ad74493c7cf6, []int{4}
+	return fileDescriptor_api_e20920802f29ebf7, []int{4}
 }
 func (m *GetRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -292,8 +292,8 @@ func (m *GetRequest) GetGetOptions() *v1alpha.GetOptions {
 }
 
 type GetResponse struct {
-	// Config object.
-	Config *Config `protobuf:"bytes,1,opt,name=config,proto3" json:"config,omitempty"`
+	// AgentConfig object.
+	AgentConfig *AgentConfig `protobuf:"bytes,1,opt,name=agentConfig,proto3" json:"agentConfig,omitempty"`
 	// Error object.
 	Error                *v1alpha.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
@@ -303,7 +303,7 @@ type GetResponse struct {
 func (m *GetResponse) Reset()      { *m = GetResponse{} }
 func (*GetResponse) ProtoMessage() {}
 func (*GetResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_2666ad74493c7cf6, []int{5}
+	return fileDescriptor_api_e20920802f29ebf7, []int{5}
 }
 func (m *GetResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -332,9 +332,9 @@ func (m *GetResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetResponse proto.InternalMessageInfo
 
-func (m *GetResponse) GetConfig() *Config {
+func (m *GetResponse) GetAgentConfig() *AgentConfig {
 	if m != nil {
-		return m.Config
+		return m.AgentConfig
 	}
 	return nil
 }
@@ -357,7 +357,7 @@ type ListRequest struct {
 func (m *ListRequest) Reset()      { *m = ListRequest{} }
 func (*ListRequest) ProtoMessage() {}
 func (*ListRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_2666ad74493c7cf6, []int{6}
+	return fileDescriptor_api_e20920802f29ebf7, []int{6}
 }
 func (m *ListRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -394,8 +394,8 @@ func (m *ListRequest) GetListOptions() *v1alpha.ListOptions {
 }
 
 type ListResponse struct {
-	// Config list.
-	AgentConfigs []*Config `protobuf:"bytes,1,rep,name=configs,proto3" json:"configs,omitempty"`
+	// AgentConfig list.
+	AgentConfigs []*AgentConfig `protobuf:"bytes,1,rep,name=agentConfigs,proto3" json:"agentConfigs,omitempty"`
 	// Error object.
 	Error                *v1alpha.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
@@ -405,7 +405,7 @@ type ListResponse struct {
 func (m *ListResponse) Reset()      { *m = ListResponse{} }
 func (*ListResponse) ProtoMessage() {}
 func (*ListResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_2666ad74493c7cf6, []int{7}
+	return fileDescriptor_api_e20920802f29ebf7, []int{7}
 }
 func (m *ListResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -434,7 +434,7 @@ func (m *ListResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ListResponse proto.InternalMessageInfo
 
-func (m *ListResponse) GetAgentConfigs() []*Config {
+func (m *ListResponse) GetAgentConfigs() []*AgentConfig {
 	if m != nil {
 		return m.AgentConfigs
 	}
@@ -450,16 +450,16 @@ func (m *ListResponse) GetError() *v1alpha.Error {
 
 // Add
 type AddRequest struct {
-	// Config object.
-	Config               *Config  `protobuf:"bytes,1,opt,name=config,proto3" json:"config,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	// AgentConfig object.
+	AgentConfig          *AgentConfig `protobuf:"bytes,1,opt,name=agentConfig,proto3" json:"agentConfig,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}     `json:"-"`
+	XXX_sizecache        int32        `json:"-"`
 }
 
 func (m *AddRequest) Reset()      { *m = AddRequest{} }
 func (*AddRequest) ProtoMessage() {}
 func (*AddRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_2666ad74493c7cf6, []int{8}
+	return fileDescriptor_api_e20920802f29ebf7, []int{8}
 }
 func (m *AddRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -488,16 +488,16 @@ func (m *AddRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_AddRequest proto.InternalMessageInfo
 
-func (m *AddRequest) GetConfig() *Config {
+func (m *AddRequest) GetAgentConfig() *AgentConfig {
 	if m != nil {
-		return m.Config
+		return m.AgentConfig
 	}
 	return nil
 }
 
 type AddResponse struct {
-	// Config object.
-	Config *Config `protobuf:"bytes,1,opt,name=config,proto3" json:"config,omitempty"`
+	// AgentConfig object.
+	AgentConfig *AgentConfig `protobuf:"bytes,1,opt,name=agentConfig,proto3" json:"agentConfig,omitempty"`
 	// Error object.
 	Error                *v1alpha.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
@@ -507,7 +507,7 @@ type AddResponse struct {
 func (m *AddResponse) Reset()      { *m = AddResponse{} }
 func (*AddResponse) ProtoMessage() {}
 func (*AddResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_2666ad74493c7cf6, []int{9}
+	return fileDescriptor_api_e20920802f29ebf7, []int{9}
 }
 func (m *AddResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -536,9 +536,9 @@ func (m *AddResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_AddResponse proto.InternalMessageInfo
 
-func (m *AddResponse) GetConfig() *Config {
+func (m *AddResponse) GetAgentConfig() *AgentConfig {
 	if m != nil {
-		return m.Config
+		return m.AgentConfig
 	}
 	return nil
 }
@@ -552,16 +552,16 @@ func (m *AddResponse) GetError() *v1alpha.Error {
 
 // Update
 type UpdateRequest struct {
-	// Config object.
-	Config               *Config  `protobuf:"bytes,1,opt,name=config,proto3" json:"config,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	// AgentConfig object.
+	AgentConfig          *AgentConfig `protobuf:"bytes,1,opt,name=agentConfig,proto3" json:"agentConfig,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}     `json:"-"`
+	XXX_sizecache        int32        `json:"-"`
 }
 
 func (m *UpdateRequest) Reset()      { *m = UpdateRequest{} }
 func (*UpdateRequest) ProtoMessage() {}
 func (*UpdateRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_2666ad74493c7cf6, []int{10}
+	return fileDescriptor_api_e20920802f29ebf7, []int{10}
 }
 func (m *UpdateRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -590,16 +590,16 @@ func (m *UpdateRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_UpdateRequest proto.InternalMessageInfo
 
-func (m *UpdateRequest) GetConfig() *Config {
+func (m *UpdateRequest) GetAgentConfig() *AgentConfig {
 	if m != nil {
-		return m.Config
+		return m.AgentConfig
 	}
 	return nil
 }
 
 type UpdateResponse struct {
-	// Config object.
-	Config *Config `protobuf:"bytes,1,opt,name=config,proto3" json:"config,omitempty"`
+	// AgentConfig object.
+	AgentConfig *AgentConfig `protobuf:"bytes,1,opt,name=agentConfig,proto3" json:"agentConfig,omitempty"`
 	// Error object.
 	Error                *v1alpha.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
@@ -609,7 +609,7 @@ type UpdateResponse struct {
 func (m *UpdateResponse) Reset()      { *m = UpdateResponse{} }
 func (*UpdateResponse) ProtoMessage() {}
 func (*UpdateResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_2666ad74493c7cf6, []int{11}
+	return fileDescriptor_api_e20920802f29ebf7, []int{11}
 }
 func (m *UpdateResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -638,9 +638,9 @@ func (m *UpdateResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_UpdateResponse proto.InternalMessageInfo
 
-func (m *UpdateResponse) GetConfig() *Config {
+func (m *UpdateResponse) GetAgentConfig() *AgentConfig {
 	if m != nil {
-		return m.Config
+		return m.AgentConfig
 	}
 	return nil
 }
@@ -654,16 +654,16 @@ func (m *UpdateResponse) GetError() *v1alpha.Error {
 
 // Delete
 type DeleteRequest struct {
-	// Config object.
-	Config               *Config  `protobuf:"bytes,1,opt,name=config,proto3" json:"config,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
+	// AgentConfig object.
+	AgentConfig          *AgentConfig `protobuf:"bytes,1,opt,name=agentConfig,proto3" json:"agentConfig,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}     `json:"-"`
+	XXX_sizecache        int32        `json:"-"`
 }
 
 func (m *DeleteRequest) Reset()      { *m = DeleteRequest{} }
 func (*DeleteRequest) ProtoMessage() {}
 func (*DeleteRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_2666ad74493c7cf6, []int{12}
+	return fileDescriptor_api_e20920802f29ebf7, []int{12}
 }
 func (m *DeleteRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -692,16 +692,16 @@ func (m *DeleteRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_DeleteRequest proto.InternalMessageInfo
 
-func (m *DeleteRequest) GetConfig() *Config {
+func (m *DeleteRequest) GetAgentConfig() *AgentConfig {
 	if m != nil {
-		return m.Config
+		return m.AgentConfig
 	}
 	return nil
 }
 
 type DeleteResponse struct {
-	// Config object.
-	Config *Config `protobuf:"bytes,1,opt,name=config,proto3" json:"config,omitempty"`
+	// AgentConfig object.
+	AgentConfig *AgentConfig `protobuf:"bytes,1,opt,name=agentConfig,proto3" json:"agentConfig,omitempty"`
 	// Error object.
 	Error                *v1alpha.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
@@ -711,7 +711,7 @@ type DeleteResponse struct {
 func (m *DeleteResponse) Reset()      { *m = DeleteResponse{} }
 func (*DeleteResponse) ProtoMessage() {}
 func (*DeleteResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_2666ad74493c7cf6, []int{13}
+	return fileDescriptor_api_e20920802f29ebf7, []int{13}
 }
 func (m *DeleteResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -740,9 +740,9 @@ func (m *DeleteResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_DeleteResponse proto.InternalMessageInfo
 
-func (m *DeleteResponse) GetConfig() *Config {
+func (m *DeleteResponse) GetAgentConfig() *AgentConfig {
 	if m != nil {
-		return m.Config
+		return m.AgentConfig
 	}
 	return nil
 }
@@ -765,7 +765,7 @@ type WatchRequest struct {
 func (m *WatchRequest) Reset()      { *m = WatchRequest{} }
 func (*WatchRequest) ProtoMessage() {}
 func (*WatchRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_2666ad74493c7cf6, []int{14}
+	return fileDescriptor_api_e20920802f29ebf7, []int{14}
 }
 func (m *WatchRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -804,8 +804,8 @@ func (m *WatchRequest) GetWatchOptions() *v1alpha.WatchOptions {
 type WatchResponse struct {
 	// Event info for watch response.
 	Event *v1alpha1.Event `protobuf:"bytes,1,opt,name=event,proto3" json:"event,omitempty"`
-	// Config object.
-	Config *Config `protobuf:"bytes,2,opt,name=config,proto3" json:"config,omitempty"`
+	// AgentConfig object.
+	AgentConfig *AgentConfig `protobuf:"bytes,2,opt,name=agentConfig,proto3" json:"agentConfig,omitempty"`
 	// Error object.
 	Error                *v1alpha.Error `protobuf:"bytes,3,opt,name=error,proto3" json:"error,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
@@ -815,7 +815,7 @@ type WatchResponse struct {
 func (m *WatchResponse) Reset()      { *m = WatchResponse{} }
 func (*WatchResponse) ProtoMessage() {}
 func (*WatchResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_2666ad74493c7cf6, []int{15}
+	return fileDescriptor_api_e20920802f29ebf7, []int{15}
 }
 func (m *WatchResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -851,9 +851,9 @@ func (m *WatchResponse) GetEvent() *v1alpha1.Event {
 	return nil
 }
 
-func (m *WatchResponse) GetConfig() *Config {
+func (m *WatchResponse) GetAgentConfig() *AgentConfig {
 	if m != nil {
-		return m.Config
+		return m.AgentConfig
 	}
 	return nil
 }
@@ -866,31 +866,31 @@ func (m *WatchResponse) GetError() *v1alpha.Error {
 }
 
 func init() {
-	proto.RegisterType((*Config)(nil), "agentconfigs.v1alpha.Config")
-	proto.RegisterType((*ConfigSpec)(nil), "agentconfigs.v1alpha.ConfigSpec")
-	proto.RegisterType((*DataStore)(nil), "agentconfigs.v1alpha.DataStore")
-	proto.RegisterType((*ETCD)(nil), "agentconfigs.v1alpha.ETCD")
-	proto.RegisterType((*GetRequest)(nil), "agentconfigs.v1alpha.GetRequest")
-	proto.RegisterType((*GetResponse)(nil), "agentconfigs.v1alpha.GetResponse")
-	proto.RegisterType((*ListRequest)(nil), "agentconfigs.v1alpha.ListRequest")
-	proto.RegisterType((*ListResponse)(nil), "agentconfigs.v1alpha.ListResponse")
-	proto.RegisterType((*AddRequest)(nil), "agentconfigs.v1alpha.AddRequest")
-	proto.RegisterType((*AddResponse)(nil), "agentconfigs.v1alpha.AddResponse")
-	proto.RegisterType((*UpdateRequest)(nil), "agentconfigs.v1alpha.UpdateRequest")
-	proto.RegisterType((*UpdateResponse)(nil), "agentconfigs.v1alpha.UpdateResponse")
-	proto.RegisterType((*DeleteRequest)(nil), "agentconfigs.v1alpha.DeleteRequest")
-	proto.RegisterType((*DeleteResponse)(nil), "agentconfigs.v1alpha.DeleteResponse")
-	proto.RegisterType((*WatchRequest)(nil), "agentconfigs.v1alpha.WatchRequest")
-	proto.RegisterType((*WatchResponse)(nil), "agentconfigs.v1alpha.WatchResponse")
+	proto.RegisterType((*AgentConfig)(nil), "agentagentconfigs.v1alpha.AgentConfig")
+	proto.RegisterType((*AgentConfigSpec)(nil), "agentagentconfigs.v1alpha.AgentConfigSpec")
+	proto.RegisterType((*DataStore)(nil), "agentagentconfigs.v1alpha.DataStore")
+	proto.RegisterType((*ETCD)(nil), "agentagentconfigs.v1alpha.ETCD")
+	proto.RegisterType((*GetRequest)(nil), "agentagentconfigs.v1alpha.GetRequest")
+	proto.RegisterType((*GetResponse)(nil), "agentagentconfigs.v1alpha.GetResponse")
+	proto.RegisterType((*ListRequest)(nil), "agentagentconfigs.v1alpha.ListRequest")
+	proto.RegisterType((*ListResponse)(nil), "agentagentconfigs.v1alpha.ListResponse")
+	proto.RegisterType((*AddRequest)(nil), "agentagentconfigs.v1alpha.AddRequest")
+	proto.RegisterType((*AddResponse)(nil), "agentagentconfigs.v1alpha.AddResponse")
+	proto.RegisterType((*UpdateRequest)(nil), "agentagentconfigs.v1alpha.UpdateRequest")
+	proto.RegisterType((*UpdateResponse)(nil), "agentagentconfigs.v1alpha.UpdateResponse")
+	proto.RegisterType((*DeleteRequest)(nil), "agentagentconfigs.v1alpha.DeleteRequest")
+	proto.RegisterType((*DeleteResponse)(nil), "agentagentconfigs.v1alpha.DeleteResponse")
+	proto.RegisterType((*WatchRequest)(nil), "agentagentconfigs.v1alpha.WatchRequest")
+	proto.RegisterType((*WatchResponse)(nil), "agentagentconfigs.v1alpha.WatchResponse")
 }
-func (this *Config) Equal(that interface{}) bool {
+func (this *AgentConfig) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*Config)
+	that1, ok := that.(*AgentConfig)
 	if !ok {
-		that2, ok := that.(Config)
+		that2, ok := that.(AgentConfig)
 		if ok {
 			that1 = &that2
 		} else {
@@ -910,14 +910,14 @@ func (this *Config) Equal(that interface{}) bool {
 	}
 	return true
 }
-func (this *ConfigSpec) Equal(that interface{}) bool {
+func (this *AgentConfigSpec) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*ConfigSpec)
+	that1, ok := that.(*AgentConfigSpec)
 	if !ok {
-		that2, ok := that.(ConfigSpec)
+		that2, ok := that.(AgentConfigSpec)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1031,7 +1031,7 @@ func (this *GetResponse) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.Config.Equal(that1.Config) {
+	if !this.AgentConfig.Equal(that1.AgentConfig) {
 		return false
 	}
 	if !this.Error.Equal(that1.Error) {
@@ -1114,7 +1114,7 @@ func (this *AddRequest) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.Config.Equal(that1.Config) {
+	if !this.AgentConfig.Equal(that1.AgentConfig) {
 		return false
 	}
 	return true
@@ -1138,7 +1138,7 @@ func (this *AddResponse) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.Config.Equal(that1.Config) {
+	if !this.AgentConfig.Equal(that1.AgentConfig) {
 		return false
 	}
 	if !this.Error.Equal(that1.Error) {
@@ -1165,7 +1165,7 @@ func (this *UpdateRequest) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.Config.Equal(that1.Config) {
+	if !this.AgentConfig.Equal(that1.AgentConfig) {
 		return false
 	}
 	return true
@@ -1189,7 +1189,7 @@ func (this *UpdateResponse) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.Config.Equal(that1.Config) {
+	if !this.AgentConfig.Equal(that1.AgentConfig) {
 		return false
 	}
 	if !this.Error.Equal(that1.Error) {
@@ -1216,7 +1216,7 @@ func (this *DeleteRequest) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.Config.Equal(that1.Config) {
+	if !this.AgentConfig.Equal(that1.AgentConfig) {
 		return false
 	}
 	return true
@@ -1240,7 +1240,7 @@ func (this *DeleteResponse) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.Config.Equal(that1.Config) {
+	if !this.AgentConfig.Equal(that1.AgentConfig) {
 		return false
 	}
 	if !this.Error.Equal(that1.Error) {
@@ -1294,7 +1294,7 @@ func (this *WatchResponse) Equal(that interface{}) bool {
 	if !this.Event.Equal(that1.Event) {
 		return false
 	}
-	if !this.Config.Equal(that1.Config) {
+	if !this.AgentConfig.Equal(that1.AgentConfig) {
 		return false
 	}
 	if !this.Error.Equal(that1.Error) {
@@ -1315,79 +1315,79 @@ const _ = grpc.SupportPackageIsVersion4
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
 type AgentConfigsClient interface {
-	// Get a Config.
+	// Get a AgentConfig.
 	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
 	// List AgentConfigs.
 	List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
-	// Add a Config.
+	// Add a AgentConfig.
 	Add(ctx context.Context, in *AddRequest, opts ...grpc.CallOption) (*AddResponse, error)
-	// Update a Config.
+	// Update a AgentConfig.
 	Update(ctx context.Context, in *UpdateRequest, opts ...grpc.CallOption) (*UpdateResponse, error)
-	// Delete a Config.
+	// Delete a AgentConfig.
 	Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*DeleteResponse, error)
-	// Watch Config.
+	// Watch AgentConfig.
 	Watch(ctx context.Context, in *WatchRequest, opts ...grpc.CallOption) (AgentConfigs_WatchClient, error)
 }
 
-type configsClient struct {
+type agentConfigsClient struct {
 	cc *grpc.ClientConn
 }
 
 func NewAgentConfigsClient(cc *grpc.ClientConn) AgentConfigsClient {
-	return &configsClient{cc}
+	return &agentConfigsClient{cc}
 }
 
-func (c *configsClient) Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error) {
+func (c *agentConfigsClient) Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error) {
 	out := new(GetResponse)
-	err := c.cc.Invoke(ctx, "/agentconfigs.v1alpha.AgentConfigs/Get", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/agentagentconfigs.v1alpha.AgentConfigs/Get", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *configsClient) List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error) {
+func (c *agentConfigsClient) List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error) {
 	out := new(ListResponse)
-	err := c.cc.Invoke(ctx, "/agentconfigs.v1alpha.AgentConfigs/List", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/agentagentconfigs.v1alpha.AgentConfigs/List", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *configsClient) Add(ctx context.Context, in *AddRequest, opts ...grpc.CallOption) (*AddResponse, error) {
+func (c *agentConfigsClient) Add(ctx context.Context, in *AddRequest, opts ...grpc.CallOption) (*AddResponse, error) {
 	out := new(AddResponse)
-	err := c.cc.Invoke(ctx, "/agentconfigs.v1alpha.AgentConfigs/Add", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/agentagentconfigs.v1alpha.AgentConfigs/Add", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *configsClient) Update(ctx context.Context, in *UpdateRequest, opts ...grpc.CallOption) (*UpdateResponse, error) {
+func (c *agentConfigsClient) Update(ctx context.Context, in *UpdateRequest, opts ...grpc.CallOption) (*UpdateResponse, error) {
 	out := new(UpdateResponse)
-	err := c.cc.Invoke(ctx, "/agentconfigs.v1alpha.AgentConfigs/Update", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/agentagentconfigs.v1alpha.AgentConfigs/Update", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *configsClient) Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*DeleteResponse, error) {
+func (c *agentConfigsClient) Delete(ctx context.Context, in *DeleteRequest, opts ...grpc.CallOption) (*DeleteResponse, error) {
 	out := new(DeleteResponse)
-	err := c.cc.Invoke(ctx, "/agentconfigs.v1alpha.AgentConfigs/Delete", in, out, opts...)
+	err := c.cc.Invoke(ctx, "/agentagentconfigs.v1alpha.AgentConfigs/Delete", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-func (c *configsClient) Watch(ctx context.Context, in *WatchRequest, opts ...grpc.CallOption) (AgentConfigs_WatchClient, error) {
-	stream, err := c.cc.NewStream(ctx, &_AgentConfigs_serviceDesc.Streams[0], "/agentconfigs.v1alpha.AgentConfigs/Watch", opts...)
+func (c *agentConfigsClient) Watch(ctx context.Context, in *WatchRequest, opts ...grpc.CallOption) (AgentConfigs_WatchClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_AgentConfigs_serviceDesc.Streams[0], "/agentagentconfigs.v1alpha.AgentConfigs/Watch", opts...)
 	if err != nil {
 		return nil, err
 	}
-	x := &configsWatchClient{stream}
+	x := &agentConfigsWatchClient{stream}
 	if err := x.ClientStream.SendMsg(in); err != nil {
 		return nil, err
 	}
@@ -1402,11 +1402,11 @@ type AgentConfigs_WatchClient interface {
 	grpc.ClientStream
 }
 
-type configsWatchClient struct {
+type agentConfigsWatchClient struct {
 	grpc.ClientStream
 }
 
-func (x *configsWatchClient) Recv() (*WatchResponse, error) {
+func (x *agentConfigsWatchClient) Recv() (*WatchResponse, error) {
 	m := new(WatchResponse)
 	if err := x.ClientStream.RecvMsg(m); err != nil {
 		return nil, err
@@ -1416,17 +1416,17 @@ func (x *configsWatchClient) Recv() (*WatchResponse, error) {
 
 // AgentConfigsServer is the server API for AgentConfigs service.
 type AgentConfigsServer interface {
-	// Get a Config.
+	// Get a AgentConfig.
 	Get(context.Context, *GetRequest) (*GetResponse, error)
 	// List AgentConfigs.
 	List(context.Context, *ListRequest) (*ListResponse, error)
-	// Add a Config.
+	// Add a AgentConfig.
 	Add(context.Context, *AddRequest) (*AddResponse, error)
-	// Update a Config.
+	// Update a AgentConfig.
 	Update(context.Context, *UpdateRequest) (*UpdateResponse, error)
-	// Delete a Config.
+	// Delete a AgentConfig.
 	Delete(context.Context, *DeleteRequest) (*DeleteResponse, error)
-	// Watch Config.
+	// Watch AgentConfig.
 	Watch(*WatchRequest, AgentConfigs_WatchServer) error
 }
 
@@ -1444,7 +1444,7 @@ func _AgentConfigs_Get_Handler(srv interface{}, ctx context.Context, dec func(in
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/agentconfigs.v1alpha.AgentConfigs/Get",
+		FullMethod: "/agentagentconfigs.v1alpha.AgentConfigs/Get",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AgentConfigsServer).Get(ctx, req.(*GetRequest))
@@ -1462,7 +1462,7 @@ func _AgentConfigs_List_Handler(srv interface{}, ctx context.Context, dec func(i
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/agentconfigs.v1alpha.AgentConfigs/List",
+		FullMethod: "/agentagentconfigs.v1alpha.AgentConfigs/List",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AgentConfigsServer).List(ctx, req.(*ListRequest))
@@ -1480,7 +1480,7 @@ func _AgentConfigs_Add_Handler(srv interface{}, ctx context.Context, dec func(in
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/agentconfigs.v1alpha.AgentConfigs/Add",
+		FullMethod: "/agentagentconfigs.v1alpha.AgentConfigs/Add",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AgentConfigsServer).Add(ctx, req.(*AddRequest))
@@ -1498,7 +1498,7 @@ func _AgentConfigs_Update_Handler(srv interface{}, ctx context.Context, dec func
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/agentconfigs.v1alpha.AgentConfigs/Update",
+		FullMethod: "/agentagentconfigs.v1alpha.AgentConfigs/Update",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AgentConfigsServer).Update(ctx, req.(*UpdateRequest))
@@ -1516,7 +1516,7 @@ func _AgentConfigs_Delete_Handler(srv interface{}, ctx context.Context, dec func
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/agentconfigs.v1alpha.AgentConfigs/Delete",
+		FullMethod: "/agentagentconfigs.v1alpha.AgentConfigs/Delete",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AgentConfigsServer).Delete(ctx, req.(*DeleteRequest))
@@ -1529,7 +1529,7 @@ func _AgentConfigs_Watch_Handler(srv interface{}, stream grpc.ServerStream) erro
 	if err := stream.RecvMsg(m); err != nil {
 		return err
 	}
-	return srv.(AgentConfigsServer).Watch(m, &configsWatchServer{stream})
+	return srv.(AgentConfigsServer).Watch(m, &agentConfigsWatchServer{stream})
 }
 
 type AgentConfigs_WatchServer interface {
@@ -1537,16 +1537,16 @@ type AgentConfigs_WatchServer interface {
 	grpc.ServerStream
 }
 
-type configsWatchServer struct {
+type agentConfigsWatchServer struct {
 	grpc.ServerStream
 }
 
-func (x *configsWatchServer) Send(m *WatchResponse) error {
+func (x *agentConfigsWatchServer) Send(m *WatchResponse) error {
 	return x.ServerStream.SendMsg(m)
 }
 
 var _AgentConfigs_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "agentconfigs.v1alpha.AgentConfigs",
+	ServiceName: "agentagentconfigs.v1alpha.AgentConfigs",
 	HandlerType: (*AgentConfigsServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -1580,7 +1580,7 @@ var _AgentConfigs_serviceDesc = grpc.ServiceDesc{
 	Metadata: "github.com/galexrt/edenconfmgmt/pkg/apis/agentconfigs/v1alpha/api.proto",
 }
 
-func (m *Config) Marshal() (dAtA []byte, err error) {
+func (m *AgentConfig) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalTo(dAtA)
@@ -1590,7 +1590,7 @@ func (m *Config) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *Config) MarshalTo(dAtA []byte) (int, error) {
+func (m *AgentConfig) MarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
@@ -1618,7 +1618,7 @@ func (m *Config) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
-func (m *ConfigSpec) Marshal() (dAtA []byte, err error) {
+func (m *AgentConfigSpec) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalTo(dAtA)
@@ -1628,7 +1628,7 @@ func (m *ConfigSpec) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *ConfigSpec) MarshalTo(dAtA []byte) (int, error) {
+func (m *AgentConfigSpec) MarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
@@ -1752,11 +1752,11 @@ func (m *GetResponse) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.Config != nil {
+	if m.AgentConfig != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Config.Size()))
-		n6, err := m.Config.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.AgentConfig.Size()))
+		n6, err := m.AgentConfig.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -1858,11 +1858,11 @@ func (m *AddRequest) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.Config != nil {
+	if m.AgentConfig != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Config.Size()))
-		n10, err := m.Config.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.AgentConfig.Size()))
+		n10, err := m.AgentConfig.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -1886,11 +1886,11 @@ func (m *AddResponse) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.Config != nil {
+	if m.AgentConfig != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Config.Size()))
-		n11, err := m.Config.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.AgentConfig.Size()))
+		n11, err := m.AgentConfig.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -1924,11 +1924,11 @@ func (m *UpdateRequest) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.Config != nil {
+	if m.AgentConfig != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Config.Size()))
-		n13, err := m.Config.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.AgentConfig.Size()))
+		n13, err := m.AgentConfig.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -1952,11 +1952,11 @@ func (m *UpdateResponse) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.Config != nil {
+	if m.AgentConfig != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Config.Size()))
-		n14, err := m.Config.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.AgentConfig.Size()))
+		n14, err := m.AgentConfig.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -1990,11 +1990,11 @@ func (m *DeleteRequest) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.Config != nil {
+	if m.AgentConfig != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Config.Size()))
-		n16, err := m.Config.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.AgentConfig.Size()))
+		n16, err := m.AgentConfig.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -2018,11 +2018,11 @@ func (m *DeleteResponse) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.Config != nil {
+	if m.AgentConfig != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Config.Size()))
-		n17, err := m.Config.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.AgentConfig.Size()))
+		n17, err := m.AgentConfig.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -2094,11 +2094,11 @@ func (m *WatchResponse) MarshalTo(dAtA []byte) (int, error) {
 		}
 		i += n20
 	}
-	if m.Config != nil {
+	if m.AgentConfig != nil {
 		dAtA[i] = 0x12
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Config.Size()))
-		n21, err := m.Config.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.AgentConfig.Size()))
+		n21, err := m.AgentConfig.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -2126,21 +2126,21 @@ func encodeVarintApi(dAtA []byte, offset int, v uint64) int {
 	dAtA[offset] = uint8(v)
 	return offset + 1
 }
-func NewPopulatedConfig(r randyApi, easy bool) *Config {
-	this := &Config{}
+func NewPopulatedAgentConfig(r randyApi, easy bool) *AgentConfig {
+	this := &AgentConfig{}
 	if r.Intn(10) != 0 {
 		this.Metadata = v1alpha.NewPopulatedObjectMetadata(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		this.Spec = NewPopulatedConfigSpec(r, easy)
+		this.Spec = NewPopulatedAgentConfigSpec(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
 }
 
-func NewPopulatedConfigSpec(r randyApi, easy bool) *ConfigSpec {
-	this := &ConfigSpec{}
+func NewPopulatedAgentConfigSpec(r randyApi, easy bool) *AgentConfigSpec {
+	this := &AgentConfigSpec{}
 	if r.Intn(10) != 0 {
 		this.DataStore = NewPopulatedDataStore(r, easy)
 	}
@@ -2185,7 +2185,7 @@ func NewPopulatedGetRequest(r randyApi, easy bool) *GetRequest {
 func NewPopulatedGetResponse(r randyApi, easy bool) *GetResponse {
 	this := &GetResponse{}
 	if r.Intn(10) != 0 {
-		this.Config = NewPopulatedConfig(r, easy)
+		this.AgentConfig = NewPopulatedAgentConfig(r, easy)
 	}
 	if r.Intn(10) != 0 {
 		this.Error = v1alpha.NewPopulatedError(r, easy)
@@ -2209,9 +2209,9 @@ func NewPopulatedListResponse(r randyApi, easy bool) *ListResponse {
 	this := &ListResponse{}
 	if r.Intn(10) != 0 {
 		v1 := r.Intn(5)
-		this.AgentConfigs = make([]*Config, v1)
+		this.AgentConfigs = make([]*AgentConfig, v1)
 		for i := 0; i < v1; i++ {
-			this.AgentConfigs[i] = NewPopulatedConfig(r, easy)
+			this.AgentConfigs[i] = NewPopulatedAgentConfig(r, easy)
 		}
 	}
 	if r.Intn(10) != 0 {
@@ -2225,7 +2225,7 @@ func NewPopulatedListResponse(r randyApi, easy bool) *ListResponse {
 func NewPopulatedAddRequest(r randyApi, easy bool) *AddRequest {
 	this := &AddRequest{}
 	if r.Intn(10) != 0 {
-		this.Config = NewPopulatedConfig(r, easy)
+		this.AgentConfig = NewPopulatedAgentConfig(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2235,7 +2235,7 @@ func NewPopulatedAddRequest(r randyApi, easy bool) *AddRequest {
 func NewPopulatedAddResponse(r randyApi, easy bool) *AddResponse {
 	this := &AddResponse{}
 	if r.Intn(10) != 0 {
-		this.Config = NewPopulatedConfig(r, easy)
+		this.AgentConfig = NewPopulatedAgentConfig(r, easy)
 	}
 	if r.Intn(10) != 0 {
 		this.Error = v1alpha.NewPopulatedError(r, easy)
@@ -2248,7 +2248,7 @@ func NewPopulatedAddResponse(r randyApi, easy bool) *AddResponse {
 func NewPopulatedUpdateRequest(r randyApi, easy bool) *UpdateRequest {
 	this := &UpdateRequest{}
 	if r.Intn(10) != 0 {
-		this.Config = NewPopulatedConfig(r, easy)
+		this.AgentConfig = NewPopulatedAgentConfig(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2258,7 +2258,7 @@ func NewPopulatedUpdateRequest(r randyApi, easy bool) *UpdateRequest {
 func NewPopulatedUpdateResponse(r randyApi, easy bool) *UpdateResponse {
 	this := &UpdateResponse{}
 	if r.Intn(10) != 0 {
-		this.Config = NewPopulatedConfig(r, easy)
+		this.AgentConfig = NewPopulatedAgentConfig(r, easy)
 	}
 	if r.Intn(10) != 0 {
 		this.Error = v1alpha.NewPopulatedError(r, easy)
@@ -2271,7 +2271,7 @@ func NewPopulatedUpdateResponse(r randyApi, easy bool) *UpdateResponse {
 func NewPopulatedDeleteRequest(r randyApi, easy bool) *DeleteRequest {
 	this := &DeleteRequest{}
 	if r.Intn(10) != 0 {
-		this.Config = NewPopulatedConfig(r, easy)
+		this.AgentConfig = NewPopulatedAgentConfig(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2281,7 +2281,7 @@ func NewPopulatedDeleteRequest(r randyApi, easy bool) *DeleteRequest {
 func NewPopulatedDeleteResponse(r randyApi, easy bool) *DeleteResponse {
 	this := &DeleteResponse{}
 	if r.Intn(10) != 0 {
-		this.Config = NewPopulatedConfig(r, easy)
+		this.AgentConfig = NewPopulatedAgentConfig(r, easy)
 	}
 	if r.Intn(10) != 0 {
 		this.Error = v1alpha.NewPopulatedError(r, easy)
@@ -2307,7 +2307,7 @@ func NewPopulatedWatchResponse(r randyApi, easy bool) *WatchResponse {
 		this.Event = v1alpha1.NewPopulatedEvent(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		this.Config = NewPopulatedConfig(r, easy)
+		this.AgentConfig = NewPopulatedAgentConfig(r, easy)
 	}
 	if r.Intn(10) != 0 {
 		this.Error = v1alpha.NewPopulatedError(r, easy)
@@ -2389,7 +2389,7 @@ func encodeVarintPopulateApi(dAtA []byte, v uint64) []byte {
 	dAtA = append(dAtA, uint8(v))
 	return dAtA
 }
-func (m *Config) Size() (n int) {
+func (m *AgentConfig) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -2406,7 +2406,7 @@ func (m *Config) Size() (n int) {
 	return n
 }
 
-func (m *ConfigSpec) Size() (n int) {
+func (m *AgentConfigSpec) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -2471,8 +2471,8 @@ func (m *GetResponse) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.Config != nil {
-		l = m.Config.Size()
+	if m.AgentConfig != nil {
+		l = m.AgentConfig.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	if m.Error != nil {
@@ -2520,8 +2520,8 @@ func (m *AddRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.Config != nil {
-		l = m.Config.Size()
+	if m.AgentConfig != nil {
+		l = m.AgentConfig.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -2533,8 +2533,8 @@ func (m *AddResponse) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.Config != nil {
-		l = m.Config.Size()
+	if m.AgentConfig != nil {
+		l = m.AgentConfig.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	if m.Error != nil {
@@ -2550,8 +2550,8 @@ func (m *UpdateRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.Config != nil {
-		l = m.Config.Size()
+	if m.AgentConfig != nil {
+		l = m.AgentConfig.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -2563,8 +2563,8 @@ func (m *UpdateResponse) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.Config != nil {
-		l = m.Config.Size()
+	if m.AgentConfig != nil {
+		l = m.AgentConfig.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	if m.Error != nil {
@@ -2580,8 +2580,8 @@ func (m *DeleteRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.Config != nil {
-		l = m.Config.Size()
+	if m.AgentConfig != nil {
+		l = m.AgentConfig.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -2593,8 +2593,8 @@ func (m *DeleteResponse) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.Config != nil {
-		l = m.Config.Size()
+	if m.AgentConfig != nil {
+		l = m.AgentConfig.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	if m.Error != nil {
@@ -2627,8 +2627,8 @@ func (m *WatchResponse) Size() (n int) {
 		l = m.Event.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
-	if m.Config != nil {
-		l = m.Config.Size()
+	if m.AgentConfig != nil {
+		l = m.AgentConfig.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	if m.Error != nil {
@@ -2651,22 +2651,22 @@ func sovApi(x uint64) (n int) {
 func sozApi(x uint64) (n int) {
 	return sovApi(uint64((x << 1) ^ uint64((int64(x) >> 63))))
 }
-func (this *Config) String() string {
+func (this *AgentConfig) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&Config{`,
+	s := strings.Join([]string{`&AgentConfig{`,
 		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "ObjectMetadata", "v1alpha.ObjectMetadata", 1) + `,`,
-		`Spec:` + strings.Replace(fmt.Sprintf("%v", this.Spec), "ConfigSpec", "ConfigSpec", 1) + `,`,
+		`Spec:` + strings.Replace(fmt.Sprintf("%v", this.Spec), "AgentConfigSpec", "AgentConfigSpec", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *ConfigSpec) String() string {
+func (this *AgentConfigSpec) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&ConfigSpec{`,
+	s := strings.Join([]string{`&AgentConfigSpec{`,
 		`DataStore:` + strings.Replace(fmt.Sprintf("%v", this.DataStore), "DataStore", "DataStore", 1) + `,`,
 		`}`,
 	}, "")
@@ -2709,7 +2709,7 @@ func (this *GetResponse) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetResponse{`,
-		`Config:` + strings.Replace(fmt.Sprintf("%v", this.Config), "Config", "Config", 1) + `,`,
+		`AgentConfig:` + strings.Replace(fmt.Sprintf("%v", this.AgentConfig), "AgentConfig", "AgentConfig", 1) + `,`,
 		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1alpha.Error", 1) + `,`,
 		`}`,
 	}, "")
@@ -2730,7 +2730,7 @@ func (this *ListResponse) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ListResponse{`,
-		`AgentConfigs:` + strings.Replace(fmt.Sprintf("%v", this.AgentConfigs), "Config", "Config", 1) + `,`,
+		`AgentConfigs:` + strings.Replace(fmt.Sprintf("%v", this.AgentConfigs), "AgentConfig", "AgentConfig", 1) + `,`,
 		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1alpha.Error", 1) + `,`,
 		`}`,
 	}, "")
@@ -2741,7 +2741,7 @@ func (this *AddRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&AddRequest{`,
-		`Config:` + strings.Replace(fmt.Sprintf("%v", this.Config), "Config", "Config", 1) + `,`,
+		`AgentConfig:` + strings.Replace(fmt.Sprintf("%v", this.AgentConfig), "AgentConfig", "AgentConfig", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2751,7 +2751,7 @@ func (this *AddResponse) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&AddResponse{`,
-		`Config:` + strings.Replace(fmt.Sprintf("%v", this.Config), "Config", "Config", 1) + `,`,
+		`AgentConfig:` + strings.Replace(fmt.Sprintf("%v", this.AgentConfig), "AgentConfig", "AgentConfig", 1) + `,`,
 		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1alpha.Error", 1) + `,`,
 		`}`,
 	}, "")
@@ -2762,7 +2762,7 @@ func (this *UpdateRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&UpdateRequest{`,
-		`Config:` + strings.Replace(fmt.Sprintf("%v", this.Config), "Config", "Config", 1) + `,`,
+		`AgentConfig:` + strings.Replace(fmt.Sprintf("%v", this.AgentConfig), "AgentConfig", "AgentConfig", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2772,7 +2772,7 @@ func (this *UpdateResponse) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&UpdateResponse{`,
-		`Config:` + strings.Replace(fmt.Sprintf("%v", this.Config), "Config", "Config", 1) + `,`,
+		`AgentConfig:` + strings.Replace(fmt.Sprintf("%v", this.AgentConfig), "AgentConfig", "AgentConfig", 1) + `,`,
 		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1alpha.Error", 1) + `,`,
 		`}`,
 	}, "")
@@ -2783,7 +2783,7 @@ func (this *DeleteRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&DeleteRequest{`,
-		`Config:` + strings.Replace(fmt.Sprintf("%v", this.Config), "Config", "Config", 1) + `,`,
+		`AgentConfig:` + strings.Replace(fmt.Sprintf("%v", this.AgentConfig), "AgentConfig", "AgentConfig", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2793,7 +2793,7 @@ func (this *DeleteResponse) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&DeleteResponse{`,
-		`Config:` + strings.Replace(fmt.Sprintf("%v", this.Config), "Config", "Config", 1) + `,`,
+		`AgentConfig:` + strings.Replace(fmt.Sprintf("%v", this.AgentConfig), "AgentConfig", "AgentConfig", 1) + `,`,
 		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1alpha.Error", 1) + `,`,
 		`}`,
 	}, "")
@@ -2815,7 +2815,7 @@ func (this *WatchResponse) String() string {
 	}
 	s := strings.Join([]string{`&WatchResponse{`,
 		`Event:` + strings.Replace(fmt.Sprintf("%v", this.Event), "Event", "v1alpha1.Event", 1) + `,`,
-		`Config:` + strings.Replace(fmt.Sprintf("%v", this.Config), "Config", "Config", 1) + `,`,
+		`AgentConfig:` + strings.Replace(fmt.Sprintf("%v", this.AgentConfig), "AgentConfig", "AgentConfig", 1) + `,`,
 		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1alpha.Error", 1) + `,`,
 		`}`,
 	}, "")
@@ -2829,7 +2829,7 @@ func valueToStringApi(v interface{}) string {
 	pv := reflect.Indirect(rv).Interface()
 	return fmt.Sprintf("*%v", pv)
 }
-func (m *Config) Unmarshal(dAtA []byte) error {
+func (m *AgentConfig) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2852,10 +2852,10 @@ func (m *Config) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: Config: wiretype end group for non-group")
+			return fmt.Errorf("proto: AgentConfig: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: Config: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: AgentConfig: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -2918,7 +2918,7 @@ func (m *Config) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Spec == nil {
-				m.Spec = &ConfigSpec{}
+				m.Spec = &AgentConfigSpec{}
 			}
 			if err := m.Spec.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -2945,7 +2945,7 @@ func (m *Config) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *ConfigSpec) Unmarshal(dAtA []byte) error {
+func (m *AgentConfigSpec) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -2968,10 +2968,10 @@ func (m *ConfigSpec) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: ConfigSpec: wiretype end group for non-group")
+			return fmt.Errorf("proto: AgentConfigSpec: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: ConfigSpec: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: AgentConfigSpec: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -3352,7 +3352,7 @@ func (m *GetResponse) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Config", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field AgentConfig", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -3376,10 +3376,10 @@ func (m *GetResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Config == nil {
-				m.Config = &Config{}
+			if m.AgentConfig == nil {
+				m.AgentConfig = &AgentConfig{}
 			}
-			if err := m.Config.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.AgentConfig.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -3575,7 +3575,7 @@ func (m *ListResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.AgentConfigs = append(m.AgentConfigs, &Config{})
+			m.AgentConfigs = append(m.AgentConfigs, &AgentConfig{})
 			if err := m.AgentConfigs[len(m.AgentConfigs)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
@@ -3665,7 +3665,7 @@ func (m *AddRequest) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Config", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field AgentConfig", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -3689,10 +3689,10 @@ func (m *AddRequest) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Config == nil {
-				m.Config = &Config{}
+			if m.AgentConfig == nil {
+				m.AgentConfig = &AgentConfig{}
 			}
-			if err := m.Config.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.AgentConfig.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -3748,7 +3748,7 @@ func (m *AddResponse) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Config", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field AgentConfig", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -3772,10 +3772,10 @@ func (m *AddResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Config == nil {
-				m.Config = &Config{}
+			if m.AgentConfig == nil {
+				m.AgentConfig = &AgentConfig{}
 			}
-			if err := m.Config.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.AgentConfig.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -3864,7 +3864,7 @@ func (m *UpdateRequest) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Config", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field AgentConfig", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -3888,10 +3888,10 @@ func (m *UpdateRequest) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Config == nil {
-				m.Config = &Config{}
+			if m.AgentConfig == nil {
+				m.AgentConfig = &AgentConfig{}
 			}
-			if err := m.Config.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.AgentConfig.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -3947,7 +3947,7 @@ func (m *UpdateResponse) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Config", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field AgentConfig", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -3971,10 +3971,10 @@ func (m *UpdateResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Config == nil {
-				m.Config = &Config{}
+			if m.AgentConfig == nil {
+				m.AgentConfig = &AgentConfig{}
 			}
-			if err := m.Config.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.AgentConfig.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -4063,7 +4063,7 @@ func (m *DeleteRequest) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Config", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field AgentConfig", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -4087,10 +4087,10 @@ func (m *DeleteRequest) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Config == nil {
-				m.Config = &Config{}
+			if m.AgentConfig == nil {
+				m.AgentConfig = &AgentConfig{}
 			}
-			if err := m.Config.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.AgentConfig.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -4146,7 +4146,7 @@ func (m *DeleteResponse) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Config", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field AgentConfig", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -4170,10 +4170,10 @@ func (m *DeleteResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Config == nil {
-				m.Config = &Config{}
+			if m.AgentConfig == nil {
+				m.AgentConfig = &AgentConfig{}
 			}
-			if err := m.Config.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.AgentConfig.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -4378,7 +4378,7 @@ func (m *WatchResponse) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Config", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field AgentConfig", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -4402,10 +4402,10 @@ func (m *WatchResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Config == nil {
-				m.Config = &Config{}
+			if m.AgentConfig == nil {
+				m.AgentConfig = &AgentConfig{}
 			}
-			if err := m.Config.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.AgentConfig.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -4569,53 +4569,55 @@ var (
 )
 
 func init() {
-	proto.RegisterFile("github.com/galexrt/edenconfmgmt/pkg/apis/agentconfigs/v1alpha/api.proto", fileDescriptor_api_2666ad74493c7cf6)
+	proto.RegisterFile("github.com/galexrt/edenconfmgmt/pkg/apis/agentconfigs/v1alpha/api.proto", fileDescriptor_api_e20920802f29ebf7)
 }
 
-var fileDescriptor_api_2666ad74493c7cf6 = []byte{
-	// 702 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x56, 0xcf, 0x4f, 0xd4, 0x40,
-	0x14, 0xde, 0xb2, 0x3f, 0x70, 0xdf, 0x82, 0x26, 0xa3, 0xc4, 0xb5, 0xe2, 0x48, 0x1a, 0x0f, 0x12,
-	0x63, 0x2b, 0x78, 0xd9, 0xc4, 0xa8, 0xc0, 0x82, 0xa8, 0x41, 0x49, 0x06, 0x0d, 0x89, 0x27, 0xbb,
-	0xed, 0x50, 0x8a, 0xbb, 0x6d, 0x6d, 0x67, 0x51, 0x6f, 0xfe, 0x09, 0x1e, 0xf9, 0x13, 0x3c, 0x7b,
-	0xf2, 0xe8, 0x91, 0xa3, 0x47, 0x8f, 0x52, 0xfe, 0x09, 0x8f, 0xa6, 0xd3, 0xe9, 0xb6, 0xa5, 0xbb,
-	0xea, 0x62, 0xc2, 0xad, 0x6f, 0xde, 0x37, 0xdf, 0xfb, 0xbe, 0xc7, 0x9b, 0xc7, 0xc2, 0x8a, 0x65,
-	0xb3, 0xdd, 0x7e, 0x47, 0x35, 0xdc, 0x9e, 0x66, 0xe9, 0x5d, 0xfa, 0xde, 0x67, 0x1a, 0x35, 0xa9,
-	0x63, 0xb8, 0xce, 0x4e, 0xcf, 0xea, 0x31, 0xcd, 0x7b, 0x63, 0x69, 0xba, 0x67, 0x07, 0x5a, 0x74,
-	0x62, 0x5b, 0x81, 0xb6, 0xbf, 0xa0, 0x77, 0xbd, 0x5d, 0x3d, 0x3a, 0x54, 0x3d, 0xdf, 0x65, 0x2e,
-	0xba, 0x20, 0x52, 0xaa, 0x48, 0xc9, 0xb7, 0xb3, 0xa4, 0xae, 0xe5, 0x6a, 0x1c, 0xd7, 0xe9, 0xef,
-	0xf0, 0x88, 0x07, 0xfc, 0x2b, 0xbe, 0x2f, 0x3f, 0x1c, 0x43, 0x83, 0x4f, 0x8b, 0x02, 0xe4, 0xe5,
-	0x7f, 0x26, 0xa0, 0xfb, 0xd4, 0x61, 0x43, 0x3c, 0x28, 0x01, 0xd4, 0xda, 0xdc, 0x05, 0x6a, 0xc1,
-	0xb9, 0x1e, 0x65, 0xba, 0xa9, 0x33, 0xbd, 0x29, 0xcd, 0x49, 0x37, 0x1b, 0x8b, 0xb3, 0x6a, 0x54,
-	0x37, 0x71, 0xa7, 0x6e, 0x76, 0xf6, 0xa8, 0xc1, 0x9e, 0x09, 0x0c, 0x19, 0xa0, 0x91, 0x06, 0x95,
-	0xc0, 0xa3, 0x46, 0x73, 0x82, 0xdf, 0xba, 0xaa, 0x9e, 0x68, 0x8b, 0x1a, 0x17, 0xd8, 0xf2, 0xa8,
-	0x41, 0x38, 0x50, 0x79, 0x04, 0x90, 0x9e, 0xa1, 0x16, 0xd4, 0x23, 0x9a, 0x2d, 0xe6, 0xfa, 0x54,
-	0x54, 0x96, 0x0b, 0x1c, 0xab, 0x09, 0x82, 0xa4, 0x60, 0xe5, 0x35, 0xd4, 0x07, 0xe7, 0x08, 0x41,
-	0x85, 0x7d, 0xf0, 0x62, 0x86, 0x3a, 0xe1, 0xdf, 0xe8, 0x12, 0x54, 0x0d, 0xb7, 0xef, 0x30, 0x2e,
-	0xad, 0x4c, 0xe2, 0x00, 0xcd, 0x43, 0x85, 0x32, 0xc3, 0x6c, 0x96, 0x79, 0xad, 0x99, 0x42, 0xad,
-	0xb5, 0x17, 0xed, 0x55, 0xc2, 0x21, 0xca, 0x0d, 0xa8, 0x44, 0x11, 0x9a, 0x85, 0x3a, 0x75, 0x4c,
-	0xcf, 0xb5, 0x1d, 0x16, 0x88, 0x0a, 0xe9, 0x41, 0xe4, 0x67, 0x9d, 0x32, 0x42, 0xdf, 0xf6, 0x69,
-	0xc0, 0x50, 0x0b, 0xc0, 0xa2, 0x6c, 0xd3, 0x63, 0xb6, 0xeb, 0x04, 0xc2, 0x50, 0x33, 0xdf, 0xca,
-	0xf5, 0x41, 0x9e, 0x64, 0xb0, 0x8a, 0x0d, 0x0d, 0xce, 0x13, 0x78, 0xae, 0x13, 0x50, 0xa4, 0x41,
-	0x2d, 0x96, 0x26, 0x48, 0x2e, 0x8f, 0xe8, 0x2c, 0x11, 0x30, 0x34, 0x0f, 0x55, 0xea, 0xfb, 0xae,
-	0x2f, 0xfe, 0x12, 0x17, 0xf3, 0x45, 0xd7, 0xa2, 0x14, 0x89, 0x11, 0xca, 0x53, 0x68, 0x6c, 0xd8,
-	0xc1, 0x40, 0xf3, 0x3d, 0x68, 0x74, 0xed, 0xe0, 0x84, 0xe8, 0x2b, 0xf9, 0xfb, 0x1b, 0x29, 0x80,
-	0x64, 0xd1, 0x4a, 0x17, 0xa6, 0x62, 0x2e, 0xa1, 0x7b, 0x01, 0x26, 0x85, 0xd0, 0xa6, 0x34, 0x57,
-	0xfe, 0x93, 0xf0, 0x04, 0x37, 0x8e, 0xf2, 0xfb, 0x00, 0xcb, 0xa6, 0x99, 0x08, 0x1f, 0xb7, 0x47,
-	0x51, 0x8f, 0xf9, 0xf5, 0x33, 0xe8, 0xf1, 0x12, 0x4c, 0xbf, 0xf4, 0x4c, 0x9d, 0xd1, 0x53, 0x8b,
-	0xed, 0xc2, 0xf9, 0x84, 0xe1, 0x6c, 0xf4, 0xae, 0xd2, 0x2e, 0xfd, 0x3f, 0xbd, 0x09, 0xc3, 0x19,
-	0xe8, 0x7d, 0x0e, 0x53, 0xdb, 0x3a, 0x33, 0x76, 0x13, 0xb9, 0x0f, 0x60, 0xea, 0x5d, 0x14, 0xe7,
-	0xa7, 0x58, 0xce, 0x33, 0x6c, 0x67, 0x10, 0x24, 0x87, 0x57, 0x0e, 0x24, 0x98, 0x16, 0x84, 0x42,
-	0xfd, 0x2d, 0xa8, 0xf2, 0xcd, 0x29, 0xa8, 0x66, 0xd4, 0x78, 0x8f, 0xa6, 0x72, 0xa2, 0x90, 0xc4,
-	0x98, 0x8c, 0xd5, 0x89, 0x31, 0xad, 0x96, 0xff, 0x66, 0x75, 0xf1, 0x4b, 0x19, 0x26, 0xdb, 0xe2,
-	0xad, 0x2c, 0x41, 0x79, 0x9d, 0x32, 0x54, 0xdc, 0xb3, 0xe9, 0x0e, 0x92, 0x67, 0x87, 0x27, 0x85,
-	0xad, 0x36, 0x54, 0xa2, 0x07, 0x8b, 0x8a, 0xa8, 0xcc, 0x4e, 0x90, 0xaf, 0x8d, 0xc8, 0x0a, 0x92,
-	0x25, 0x28, 0x2f, 0x9b, 0xe6, 0x10, 0x19, 0xe9, 0xeb, 0x1c, 0x22, 0x23, 0xfb, 0xf6, 0x9e, 0x40,
-	0x2d, 0x9e, 0x6e, 0x84, 0x0b, 0xb8, 0xdc, 0xc3, 0x91, 0xaf, 0x8f, 0xcc, 0xa7, 0x54, 0xf1, 0xe0,
-	0x0d, 0xa1, 0xca, 0xcd, 0xf4, 0x10, 0xaa, 0x13, 0x13, 0xfb, 0x18, 0xaa, 0x7c, 0x08, 0x50, 0xd1,
-	0x7f, 0x76, 0xda, 0x64, 0x3c, 0x2a, 0x1d, 0xf3, 0xdc, 0x91, 0x56, 0xf6, 0x0e, 0x8f, 0xb0, 0xf4,
-	0xe3, 0x08, 0x97, 0x7e, 0x1d, 0x61, 0xe9, 0x63, 0x88, 0xa5, 0xcf, 0x21, 0x96, 0xbe, 0x86, 0xb8,
-	0xf4, 0x2d, 0xc4, 0xd2, 0x61, 0x88, 0xa5, 0xef, 0x21, 0x96, 0x7e, 0x86, 0x58, 0xfa, 0x74, 0x8c,
-	0x4b, 0x07, 0xc7, 0xb8, 0xf4, 0xaa, 0x75, 0xda, 0x5f, 0x25, 0x9d, 0x1a, 0xff, 0x77, 0x7e, 0xf7,
-	0x77, 0x00, 0x00, 0x00, 0xff, 0xff, 0xd9, 0x22, 0xd6, 0xee, 0xd8, 0x08, 0x00, 0x00,
+var fileDescriptor_api_e20920802f29ebf7 = []byte{
+	// 729 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xc4, 0x56, 0xbf, 0x6f, 0xd3, 0x50,
+	0x10, 0xce, 0x6b, 0x92, 0x8a, 0x5c, 0x52, 0x90, 0x1e, 0x20, 0xa5, 0x56, 0x65, 0x90, 0x55, 0x4a,
+	0x0b, 0xc2, 0x86, 0x76, 0xa9, 0x84, 0x28, 0x4a, 0x7f, 0x10, 0x54, 0x15, 0x2a, 0xb9, 0x2d, 0x15,
+	0x08, 0x06, 0xc7, 0x7e, 0x75, 0x5d, 0x12, 0x3f, 0x63, 0xbf, 0x14, 0xd8, 0x10, 0x52, 0xc5, 0xca,
+	0xc8, 0x9f, 0xc0, 0x86, 0xd8, 0x18, 0x19, 0x3b, 0x32, 0x32, 0x52, 0xf7, 0x9f, 0x60, 0x44, 0x7e,
+	0x76, 0x62, 0x3b, 0x80, 0x93, 0x8a, 0xa2, 0x6c, 0x3e, 0xdf, 0x77, 0xdf, 0xdd, 0x77, 0xef, 0xdd,
+	0xd9, 0x50, 0x37, 0x2d, 0xb6, 0xdb, 0x6e, 0xc8, 0x3a, 0x6d, 0x29, 0xa6, 0xd6, 0x24, 0xaf, 0x5c,
+	0xa6, 0x10, 0x83, 0xd8, 0x3a, 0xb5, 0x77, 0x5a, 0x66, 0x8b, 0x29, 0xce, 0x73, 0x53, 0xd1, 0x1c,
+	0xcb, 0x53, 0x34, 0x93, 0xd8, 0x2c, 0x78, 0x6d, 0x99, 0x9e, 0xb2, 0x7f, 0x4b, 0x6b, 0x3a, 0xbb,
+	0x5a, 0xe0, 0x91, 0x1d, 0x97, 0x32, 0x8a, 0xc7, 0xb9, 0x3f, 0x09, 0x92, 0x23, 0x90, 0x70, 0x23,
+	0x99, 0x83, 0x9a, 0x54, 0xe1, 0x11, 0x8d, 0xf6, 0x0e, 0xb7, 0xb8, 0xc1, 0x9f, 0x42, 0x26, 0xe1,
+	0xee, 0xc0, 0x25, 0xe9, 0xd4, 0x25, 0xbf, 0x97, 0x22, 0xd4, 0x06, 0x26, 0x20, 0xfb, 0xc4, 0x66,
+	0x7f, 0x50, 0x23, 0xbd, 0x43, 0x50, 0xae, 0x05, 0x5a, 0x96, 0xb8, 0x16, 0x3c, 0x0f, 0x67, 0x5a,
+	0x84, 0x69, 0x86, 0xc6, 0xb4, 0x2a, 0xba, 0x8c, 0xa6, 0xcb, 0xb3, 0x13, 0x72, 0x90, 0xbd, 0xa3,
+	0x51, 0x5e, 0x6f, 0xec, 0x11, 0x9d, 0x3d, 0x88, 0x30, 0x6a, 0x17, 0x8d, 0x17, 0xa0, 0xe0, 0x39,
+	0x44, 0xaf, 0x8e, 0xf0, 0xa8, 0x6b, 0xf2, 0x5f, 0xdb, 0x24, 0x27, 0xf2, 0x6d, 0x38, 0x44, 0x57,
+	0x79, 0x9c, 0xb4, 0x05, 0xe7, 0x7a, 0x1c, 0x78, 0x11, 0x4a, 0x01, 0xf5, 0x06, 0xa3, 0x2e, 0x89,
+	0xaa, 0x99, 0xcc, 0xe0, 0x5d, 0xee, 0x60, 0xd5, 0x38, 0x4c, 0xda, 0x83, 0x52, 0xf7, 0x3d, 0xc6,
+	0x50, 0x60, 0xaf, 0x9d, 0x90, 0xab, 0xa4, 0xf2, 0x67, 0x7c, 0x01, 0x8a, 0x3a, 0x6d, 0xdb, 0x8c,
+	0x17, 0x9e, 0x57, 0x43, 0x03, 0xcf, 0x41, 0x81, 0x30, 0xdd, 0xa8, 0xe6, 0x79, 0xd6, 0x4b, 0x19,
+	0x59, 0x57, 0x36, 0x97, 0x96, 0x55, 0x0e, 0x96, 0x26, 0xa1, 0x10, 0x58, 0x78, 0x02, 0x4a, 0xc4,
+	0x36, 0x1c, 0x6a, 0xd9, 0xcc, 0x8b, 0x72, 0xc5, 0x2f, 0xa4, 0x7b, 0x00, 0x75, 0xc2, 0x54, 0xf2,
+	0xa2, 0x4d, 0x3c, 0x86, 0xe7, 0x01, 0x4c, 0xc2, 0xd6, 0x1d, 0x66, 0x51, 0xdb, 0x8b, 0x44, 0x56,
+	0xd3, 0x2d, 0xaf, 0x77, 0xfd, 0x6a, 0x02, 0x2b, 0xbd, 0x45, 0x50, 0xe6, 0x44, 0x9e, 0x43, 0x6d,
+	0x8f, 0xe0, 0xfb, 0x50, 0xd6, 0xe2, 0x06, 0x46, 0x54, 0x53, 0x83, 0x9d, 0x83, 0x9a, 0x0c, 0xc5,
+	0x33, 0x50, 0x24, 0xae, 0x4b, 0xdd, 0xe8, 0x2c, 0xcf, 0xa7, 0xcb, 0x59, 0x09, 0x5c, 0x6a, 0x88,
+	0x90, 0x56, 0xa1, 0xbc, 0x66, 0x79, 0x5d, 0x35, 0xb7, 0xa1, 0xdc, 0xb4, 0xbc, 0x1e, 0x39, 0xe3,
+	0xe9, 0xf8, 0xb5, 0x18, 0xa0, 0x26, 0xd1, 0xd2, 0x01, 0x82, 0x4a, 0x48, 0x16, 0x29, 0x5a, 0x85,
+	0x4a, 0xa2, 0xac, 0x80, 0x2e, 0x7f, 0x02, 0x49, 0xa9, 0xd8, 0x93, 0x68, 0x7a, 0x04, 0x50, 0x33,
+	0x8c, 0x8e, 0xa4, 0x53, 0x6b, 0x2b, 0x3f, 0x30, 0x4e, 0x3c, 0xcc, 0x03, 0x7b, 0x0c, 0x63, 0x5b,
+	0x8e, 0xa1, 0x31, 0x72, 0xfa, 0xfa, 0x0e, 0x10, 0x9c, 0xed, 0x70, 0x0f, 0x59, 0xe2, 0x32, 0x69,
+	0x92, 0xff, 0x25, 0xb1, 0xc3, 0x3d, 0x4c, 0x89, 0x0f, 0xa1, 0xb2, 0xad, 0x31, 0x7d, 0xb7, 0xa3,
+	0x70, 0x01, 0x2a, 0x2f, 0x03, 0x3b, 0x3d, 0x78, 0x42, 0x9a, 0x61, 0x3b, 0x81, 0x50, 0x53, 0x78,
+	0xe9, 0x33, 0x82, 0xb1, 0x88, 0x30, 0x92, 0x75, 0x1d, 0x8a, 0xfc, 0xa3, 0x11, 0x51, 0x5d, 0x94,
+	0xc3, 0x4f, 0x48, 0x5c, 0x4e, 0x60, 0xaa, 0x21, 0xa6, 0xb7, 0x07, 0x23, 0xa7, 0xd0, 0x83, 0x7c,
+	0xbf, 0x1e, 0xcc, 0x7e, 0x2a, 0x40, 0xa5, 0x96, 0x1c, 0xf1, 0x4d, 0xc8, 0xd7, 0x09, 0xc3, 0x57,
+	0x32, 0xf2, 0xc6, 0x8b, 0x57, 0x98, 0xea, 0x07, 0x8b, 0x1a, 0xb1, 0x0d, 0x85, 0x60, 0x29, 0xe1,
+	0x2c, 0x7c, 0x62, 0x05, 0x0a, 0x57, 0xfb, 0xe2, 0x22, 0xe2, 0x4d, 0xc8, 0xd7, 0x0c, 0x23, 0xb3,
+	0xdc, 0x78, 0x0d, 0x65, 0x96, 0x9b, 0x5c, 0x2a, 0xcf, 0x60, 0x34, 0x9c, 0x41, 0x3c, 0x9d, 0x11,
+	0x91, 0x5a, 0x01, 0xc2, 0xcc, 0x00, 0xc8, 0x98, 0x3e, 0xbc, 0xff, 0x99, 0xf4, 0xa9, 0xf1, 0xcb,
+	0xa4, 0xef, 0x19, 0xa6, 0xa7, 0x50, 0xe4, 0xd7, 0x10, 0x67, 0x75, 0x31, 0x79, 0xf3, 0x85, 0xe9,
+	0xfe, 0xc0, 0x90, 0xfb, 0x26, 0x5a, 0xa4, 0x87, 0x47, 0x22, 0xfa, 0x7e, 0x24, 0xe6, 0x7e, 0x1e,
+	0x89, 0xe8, 0x8d, 0x2f, 0xa2, 0x8f, 0xbe, 0x88, 0xbe, 0xf8, 0x62, 0xee, 0xab, 0x2f, 0xa2, 0x43,
+	0x5f, 0x44, 0xdf, 0x7c, 0x11, 0xfd, 0xf0, 0x45, 0xf4, 0xfe, 0x58, 0xcc, 0x7d, 0x38, 0x16, 0x73,
+	0x4f, 0xee, 0xfc, 0xd3, 0x5f, 0x63, 0x63, 0x94, 0xff, 0x64, 0xcd, 0xfd, 0x0a, 0x00, 0x00, 0xff,
+	0xff, 0xdd, 0xd0, 0xcd, 0x5f, 0x7d, 0x0a, 0x00, 0x00,
 }

@@ -18,6 +18,7 @@ package nodes.v1alpha;
 option go_package = "github.com/galexrt/edenconfmgmt/pkg/apis/nodes/v1alpha";
 
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "github.com/mwitkow/go-proto-validators/validator.proto";
 import "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha/api.proto";
 import "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha/api.proto";
 
@@ -50,9 +51,9 @@ service Nodes {
 
 message Node {
     // Metadata for Node object.
-    core.v1alpha.ObjectMetadata metadata = 1;
+    core.v1alpha.ObjectMetadata metadata = 1 [(validator.field) = {msg_exists : true}];
     // Spec for Node.
-    Spec spec = 2;
+    Spec spec = 2 [(validator.field) = {msg_exists : true}];
     // Status for Node.
     Status status = 3;
 }
@@ -114,7 +115,7 @@ message ListResponse {
 // Add
 message AddRequest {
     // Node object.
-    Node node = 1;
+    Node node = 1 [(validator.field) = {msg_exists : true}];
 }
 
 message AddResponse {

@@ -12,6 +12,7 @@ import math "math"
 import _ "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha"
 import _ "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha"
 import _ "github.com/gogo/protobuf/gogoproto"
+import _ "github.com/mwitkow/go-proto-validators"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal

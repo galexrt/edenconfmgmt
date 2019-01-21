@@ -47,11 +47,13 @@ func magicRun(stopCh chan struct{}, store *cache.Store) error {
 			err := store.Put(ctx, "/test123/my-object", time.Now().String())
 			if err != nil {
 				fmt.Printf("store.Put ERROR: %+v\n", err)
+				time.Sleep(5 * time.Second)
 				return
 			}
 			resp, ok, err := store.Get(ctx, "/test123/my-object")
 			if err != nil {
 				fmt.Printf("store.Get ERROR: %+v\n", err)
+				time.Sleep(5 * time.Second)
 				return
 			}
 			fmt.Printf("store.Get TEST: OKAY: %+v; RESULT: %+v\n", ok, resp)

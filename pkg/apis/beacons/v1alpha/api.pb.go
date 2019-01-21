@@ -11,7 +11,7 @@ import v1alpha1 "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha"
 import _ "github.com/gogo/protobuf/gogoproto"
 
 import (
-	"context"
+	context "golang.org/x/net/context"
 	grpc "google.golang.org/grpc"
 )
 
@@ -43,7 +43,7 @@ type Beacon struct {
 func (m *Beacon) Reset()      { *m = Beacon{} }
 func (*Beacon) ProtoMessage() {}
 func (*Beacon) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_5f75fccb662b4417, []int{0}
+	return fileDescriptor_api_2c4c70fe75b9168d, []int{0}
 }
 func (m *Beacon) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -95,7 +95,7 @@ type BeaconSpec struct {
 func (m *BeaconSpec) Reset()      { *m = BeaconSpec{} }
 func (*BeaconSpec) ProtoMessage() {}
 func (*BeaconSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_5f75fccb662b4417, []int{1}
+	return fileDescriptor_api_2c4c70fe75b9168d, []int{1}
 }
 func (m *BeaconSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -135,7 +135,7 @@ type GetRequest struct {
 func (m *GetRequest) Reset()      { *m = GetRequest{} }
 func (*GetRequest) ProtoMessage() {}
 func (*GetRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_5f75fccb662b4417, []int{2}
+	return fileDescriptor_api_2c4c70fe75b9168d, []int{2}
 }
 func (m *GetRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -184,7 +184,7 @@ type GetResponse struct {
 func (m *GetResponse) Reset()      { *m = GetResponse{} }
 func (*GetResponse) ProtoMessage() {}
 func (*GetResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_5f75fccb662b4417, []int{3}
+	return fileDescriptor_api_2c4c70fe75b9168d, []int{3}
 }
 func (m *GetResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -238,7 +238,7 @@ type ListRequest struct {
 func (m *ListRequest) Reset()      { *m = ListRequest{} }
 func (*ListRequest) ProtoMessage() {}
 func (*ListRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_5f75fccb662b4417, []int{4}
+	return fileDescriptor_api_2c4c70fe75b9168d, []int{4}
 }
 func (m *ListRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -287,7 +287,7 @@ type ListResponse struct {
 func (m *ListResponse) Reset()      { *m = ListResponse{} }
 func (*ListResponse) ProtoMessage() {}
 func (*ListResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_5f75fccb662b4417, []int{5}
+	return fileDescriptor_api_2c4c70fe75b9168d, []int{5}
 }
 func (m *ListResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -341,7 +341,7 @@ type AddRequest struct {
 func (m *AddRequest) Reset()      { *m = AddRequest{} }
 func (*AddRequest) ProtoMessage() {}
 func (*AddRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_5f75fccb662b4417, []int{6}
+	return fileDescriptor_api_2c4c70fe75b9168d, []int{6}
 }
 func (m *AddRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -389,7 +389,7 @@ type AddResponse struct {
 func (m *AddResponse) Reset()      { *m = AddResponse{} }
 func (*AddResponse) ProtoMessage() {}
 func (*AddResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_5f75fccb662b4417, []int{7}
+	return fileDescriptor_api_2c4c70fe75b9168d, []int{7}
 }
 func (m *AddResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -443,7 +443,7 @@ type UpdateRequest struct {
 func (m *UpdateRequest) Reset()      { *m = UpdateRequest{} }
 func (*UpdateRequest) ProtoMessage() {}
 func (*UpdateRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_5f75fccb662b4417, []int{8}
+	return fileDescriptor_api_2c4c70fe75b9168d, []int{8}
 }
 func (m *UpdateRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -491,7 +491,7 @@ type UpdateResponse struct {
 func (m *UpdateResponse) Reset()      { *m = UpdateResponse{} }
 func (*UpdateResponse) ProtoMessage() {}
 func (*UpdateResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_5f75fccb662b4417, []int{9}
+	return fileDescriptor_api_2c4c70fe75b9168d, []int{9}
 }
 func (m *UpdateResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -545,7 +545,7 @@ type DeleteRequest struct {
 func (m *DeleteRequest) Reset()      { *m = DeleteRequest{} }
 func (*DeleteRequest) ProtoMessage() {}
 func (*DeleteRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_5f75fccb662b4417, []int{10}
+	return fileDescriptor_api_2c4c70fe75b9168d, []int{10}
 }
 func (m *DeleteRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -593,7 +593,7 @@ type DeleteResponse struct {
 func (m *DeleteResponse) Reset()      { *m = DeleteResponse{} }
 func (*DeleteResponse) ProtoMessage() {}
 func (*DeleteResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_5f75fccb662b4417, []int{11}
+	return fileDescriptor_api_2c4c70fe75b9168d, []int{11}
 }
 func (m *DeleteResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -647,7 +647,7 @@ type WatchRequest struct {
 func (m *WatchRequest) Reset()      { *m = WatchRequest{} }
 func (*WatchRequest) ProtoMessage() {}
 func (*WatchRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_5f75fccb662b4417, []int{12}
+	return fileDescriptor_api_2c4c70fe75b9168d, []int{12}
 }
 func (m *WatchRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -697,7 +697,7 @@ type WatchResponse struct {
 func (m *WatchResponse) Reset()      { *m = WatchResponse{} }
 func (*WatchResponse) ProtoMessage() {}
 func (*WatchResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_5f75fccb662b4417, []int{13}
+	return fileDescriptor_api_2c4c70fe75b9168d, []int{13}
 }
 func (m *WatchResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -3990,10 +3990,10 @@ var (
 )
 
 func init() {
-	proto.RegisterFile("github.com/galexrt/edenconfmgmt/pkg/apis/beacons/v1alpha/api.proto", fileDescriptor_api_5f75fccb662b4417)
+	proto.RegisterFile("github.com/galexrt/edenconfmgmt/pkg/apis/beacons/v1alpha/api.proto", fileDescriptor_api_2c4c70fe75b9168d)
 }
 
-var fileDescriptor_api_5f75fccb662b4417 = []byte{
+var fileDescriptor_api_2c4c70fe75b9168d = []byte{
 	// 619 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x95, 0xbf, 0x6f, 0xd3, 0x40,
 	0x14, 0xc7, 0x73, 0x4d, 0x9b, 0xa2, 0x97, 0x14, 0x24, 0x23, 0x44, 0x30, 0xe5, 0xa8, 0x3c, 0x81,

@@ -44,6 +44,7 @@ import (
 
 	"github.com/galexrt/edenconfmgmt/pkg/auth"
 	"github.com/galexrt/edenconfmgmt/pkg/common"
+	grpc_setdefaults "github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/setdefaults"
 	"github.com/galexrt/edenconfmgmt/pkg/store/cache"
 	"github.com/galexrt/edenconfmgmt/pkg/store/data"
 	store_data_adapters "github.com/galexrt/edenconfmgmt/pkg/store/data/adapters"
@@ -52,6 +53,7 @@ import (
 	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
 	grpc_ctxtags "github.com/grpc-ecosystem/go-grpc-middleware/tags"
 	grpc_opentracing "github.com/grpc-ecosystem/go-grpc-middleware/tracing/opentracing"
+	grpc_validator "github.com/grpc-ecosystem/go-grpc-middleware/validator"
 	grpc_prometheus "github.com/grpc-ecosystem/go-grpc-prometheus"
 	opentracing "github.com/opentracing/opentracing-go"
 	"github.com/prometheus/client_golang/prometheus"
@@ -207,6 +209,8 @@ func Run(cmd *cobra.Command, args []string) error {
 			grpcMetrics.StreamServerInterceptor(),
 			grpc_zap.StreamServerInterceptor(logger),
 			authProvider.StreamInterceptor,
+			grpc_validator.StreamServerInterceptor(),
+			grpc_setdefaults.StreamServerInterceptor(),
 			grpc_recovery.StreamServerInterceptor(),
 		)),
 		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
@@ -215,6 +219,8 @@ func Run(cmd *cobra.Command, args []string) error {
 			grpcMetrics.UnaryServerInterceptor(),
 			grpc_zap.UnaryServerInterceptor(logger),
 			authProvider.UnaryInterceptor,
+			grpc_validator.UnaryServerInterceptor(),
+			grpc_setdefaults.UnaryServerInterceptor(),
 			grpc_recovery.UnaryServerInterceptor(),
 		)),
 	}
@@ -243,7 +249,7 @@ func Run(cmd *cobra.Command, args []string) error {
 	wg := sync.WaitGroup{}
 
 	// TODO Create a "mesh" proxy.
-	// Would be cool if each daemon can tell other servers where the masters are or even proxy to them.
+	// Would be cool if each daemon can tell other servers where the masters are or UnaryServerInterceptor(),even proxy to them.
 
 	wg.Add(1)
 	go func() {

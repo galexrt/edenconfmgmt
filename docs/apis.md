@@ -61,27 +61,6 @@
         * [VariableSpec.VariablesEntry](#variables.v1alpha.VariableSpec.VariablesEntry)
         * [WatchRequest](#variables.v1alpha.WatchRequest)
         * [WatchResponse](#variables.v1alpha.WatchResponse)
-* [github.com/galexrt/edenconfmgmt/pkg/apis/agentconfigs/v1alpha/api.proto](#github.com/galexrt/edenconfmgmt/pkg/apis/agentconfigs/v1alpha/api.proto)
-    * Description: 
-    * Services
-        * [AgentConfigs](#agentconfigs.v1alpha.AgentConfigs)
-    * Messages
-        * [AddRequest](#agentconfigs.v1alpha.AddRequest)
-        * [AddResponse](#agentconfigs.v1alpha.AddResponse)
-        * [Config](#agentconfigs.v1alpha.Config)
-        * [ConfigSpec](#agentconfigs.v1alpha.ConfigSpec)
-        * [DataStore](#agentconfigs.v1alpha.DataStore)
-        * [DeleteRequest](#agentconfigs.v1alpha.DeleteRequest)
-        * [DeleteResponse](#agentconfigs.v1alpha.DeleteResponse)
-        * [ETCD](#agentconfigs.v1alpha.ETCD)
-        * [GetRequest](#agentconfigs.v1alpha.GetRequest)
-        * [GetResponse](#agentconfigs.v1alpha.GetResponse)
-        * [ListRequest](#agentconfigs.v1alpha.ListRequest)
-        * [ListResponse](#agentconfigs.v1alpha.ListResponse)
-        * [UpdateRequest](#agentconfigs.v1alpha.UpdateRequest)
-        * [UpdateResponse](#agentconfigs.v1alpha.UpdateResponse)
-        * [WatchRequest](#agentconfigs.v1alpha.WatchRequest)
-        * [WatchResponse](#agentconfigs.v1alpha.WatchResponse)
 * [github.com/galexrt/edenconfmgmt/pkg/apis/clustervariables/v1alpha/api.proto](#github.com/galexrt/edenconfmgmt/pkg/apis/clustervariables/v1alpha/api.proto)
     * Description: 
     * Services
@@ -162,6 +141,27 @@
         * [UpdateResponse](#triggers.v1alpha.UpdateResponse)
         * [WatchRequest](#triggers.v1alpha.WatchRequest)
         * [WatchResponse](#triggers.v1alpha.WatchResponse)
+* [github.com/galexrt/edenconfmgmt/pkg/apis/agentconfigs/v1alpha/api.proto](#github.com/galexrt/edenconfmgmt/pkg/apis/agentconfigs/v1alpha/api.proto)
+    * Description: 
+    * Services
+        * [AgentConfigs](#agentagentconfigs.v1alpha.AgentConfigs)
+    * Messages
+        * [AddRequest](#agentagentconfigs.v1alpha.AddRequest)
+        * [AddResponse](#agentagentconfigs.v1alpha.AddResponse)
+        * [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig)
+        * [AgentConfigSpec](#agentagentconfigs.v1alpha.AgentConfigSpec)
+        * [DataStore](#agentagentconfigs.v1alpha.DataStore)
+        * [DeleteRequest](#agentagentconfigs.v1alpha.DeleteRequest)
+        * [DeleteResponse](#agentagentconfigs.v1alpha.DeleteResponse)
+        * [ETCD](#agentagentconfigs.v1alpha.ETCD)
+        * [GetRequest](#agentagentconfigs.v1alpha.GetRequest)
+        * [GetResponse](#agentagentconfigs.v1alpha.GetResponse)
+        * [ListRequest](#agentagentconfigs.v1alpha.ListRequest)
+        * [ListResponse](#agentagentconfigs.v1alpha.ListResponse)
+        * [UpdateRequest](#agentagentconfigs.v1alpha.UpdateRequest)
+        * [UpdateResponse](#agentagentconfigs.v1alpha.UpdateResponse)
+        * [WatchRequest](#agentagentconfigs.v1alpha.WatchRequest)
+        * [WatchResponse](#agentagentconfigs.v1alpha.WatchResponse)
 * [github.com/galexrt/edenconfmgmt/pkg/apis/taskbooks/v1alpha/api.proto](#github.com/galexrt/edenconfmgmt/pkg/apis/taskbooks/v1alpha/api.proto)
     * Description: 
     * Services
@@ -733,193 +733,6 @@ Watch
 | Update | [UpdateRequest](#variables.v1alpha.UpdateRequest) | [UpdateResponse](#variables.v1alpha.UpdateResponse) | Update a Variable. |
 | Delete | [DeleteRequest](#variables.v1alpha.DeleteRequest) | [DeleteResponse](#variables.v1alpha.DeleteResponse) | Delete a Variable. |
 | Watch | [WatchRequest](#variables.v1alpha.WatchRequest) | [WatchResponse](#variables.v1alpha.WatchResponse) stream | Watch Variable. |
-
- <!-- end services -->
-
-
-
-<a name="github.com/galexrt/edenconfmgmt/pkg/apis/agentconfigs/v1alpha/api.proto"></a>
-<p align="right"><a href="#top">Top</a></p>
-
-## github.com/galexrt/edenconfmgmt/pkg/apis/agentconfigs/v1alpha/api.proto
-
-
-
-<a name="agentconfigs.v1alpha.AddRequest"></a>
-
-### AddRequest
-
-Add
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| config | [Config](#agentconfigs.v1alpha.Config) |  | Config object. |
-<a name="agentconfigs.v1alpha.AddResponse"></a>
-
-### AddResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| config | [Config](#agentconfigs.v1alpha.Config) |  | Config object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
-<a name="agentconfigs.v1alpha.Config"></a>
-
-### Config
-
-Config object base.
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| metadata | [core.v1alpha.ObjectMetadata](#core.v1alpha.ObjectMetadata) |  | Metadata for Config object. |
-| spec | [ConfigSpec](#agentconfigs.v1alpha.ConfigSpec) |  | Spec for Config. |
-<a name="agentconfigs.v1alpha.ConfigSpec"></a>
-
-### ConfigSpec
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| dataStore | [DataStore](#agentconfigs.v1alpha.DataStore) |  | DataStore. |
-<a name="agentconfigs.v1alpha.DataStore"></a>
-
-### DataStore
-
-DataStore config for the data store
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| type | [string](#string) |  | Type. |
-| count | [int64](#int64) |  | Count. |
-| etcd | [ETCD](#agentconfigs.v1alpha.ETCD) |  | ETCD config options. |
-<a name="agentconfigs.v1alpha.DeleteRequest"></a>
-
-### DeleteRequest
-
-Delete
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| config | [Config](#agentconfigs.v1alpha.Config) |  | Config object. |
-<a name="agentconfigs.v1alpha.DeleteResponse"></a>
-
-### DeleteResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| config | [Config](#agentconfigs.v1alpha.Config) |  | Config object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
-<a name="agentconfigs.v1alpha.ETCD"></a>
-
-### ETCD
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| endpoints | [string](#string) |  | List of endpoints if running your own ETCD server (should only be used for testing). |
-<a name="agentconfigs.v1alpha.GetRequest"></a>
-
-### GetRequest
-
-Get
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| getOptions | [core.v1alpha.GetOptions](#core.v1alpha.GetOptions) |  | GetOptions options for a GetRequest. |
-<a name="agentconfigs.v1alpha.GetResponse"></a>
-
-### GetResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| config | [Config](#agentconfigs.v1alpha.Config) |  | Config object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
-<a name="agentconfigs.v1alpha.ListRequest"></a>
-
-### ListRequest
-
-List
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| listOptions | [core.v1alpha.ListOptions](#core.v1alpha.ListOptions) |  | ListOptions options for a ListRequest. |
-<a name="agentconfigs.v1alpha.ListResponse"></a>
-
-### ListResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| configs | [Config](#agentconfigs.v1alpha.Config) | repeated | Config list. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
-<a name="agentconfigs.v1alpha.UpdateRequest"></a>
-
-### UpdateRequest
-
-Update
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| config | [Config](#agentconfigs.v1alpha.Config) |  | Config object. |
-<a name="agentconfigs.v1alpha.UpdateResponse"></a>
-
-### UpdateResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| config | [Config](#agentconfigs.v1alpha.Config) |  | Config object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
-<a name="agentconfigs.v1alpha.WatchRequest"></a>
-
-### WatchRequest
-
-Watch
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| watchOptions | [core.v1alpha.WatchOptions](#core.v1alpha.WatchOptions) |  | WatchOptions options for WatchRequest. |
-<a name="agentconfigs.v1alpha.WatchResponse"></a>
-
-### WatchResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| event | [events.v1alpha.Event](#events.v1alpha.Event) |  | Event info for watch response. |
-| config | [Config](#agentconfigs.v1alpha.Config) |  | Config object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
-<!-- end messages -->
-
-<!-- end enums -->
-
- <!-- end HasExtensions -->
-
-
-<a name="agentconfigs.v1alpha.AgentConfigs"></a>
-
-### AgentConfigs
-
-
-
-| Method Name | Request Type | Response Type | Description |
-| ----------- | ------------ | ------------- | ------------|
-| Get | [GetRequest](#agentconfigs.v1alpha.GetRequest) | [GetResponse](#agentconfigs.v1alpha.GetResponse) | Get a Config. |
-| List | [ListRequest](#agentconfigs.v1alpha.ListRequest) | [ListResponse](#agentconfigs.v1alpha.ListResponse) | List AgentConfigs. |
-| Add | [AddRequest](#agentconfigs.v1alpha.AddRequest) | [AddResponse](#agentconfigs.v1alpha.AddResponse) | Add a Config. |
-| Update | [UpdateRequest](#agentconfigs.v1alpha.UpdateRequest) | [UpdateResponse](#agentconfigs.v1alpha.UpdateResponse) | Update a Config. |
-| Delete | [DeleteRequest](#agentconfigs.v1alpha.DeleteRequest) | [DeleteResponse](#agentconfigs.v1alpha.DeleteResponse) | Delete a Config. |
-| Watch | [WatchRequest](#agentconfigs.v1alpha.WatchRequest) | [WatchResponse](#agentconfigs.v1alpha.WatchResponse) stream | Watch Config. |
 
  <!-- end services -->
 
@@ -1644,6 +1457,193 @@ Watch
 | Update | [UpdateRequest](#triggers.v1alpha.UpdateRequest) | [UpdateResponse](#triggers.v1alpha.UpdateResponse) | Update a Trigger. |
 | Delete | [DeleteRequest](#triggers.v1alpha.DeleteRequest) | [DeleteResponse](#triggers.v1alpha.DeleteResponse) | Delete a Trigger. |
 | Watch | [WatchRequest](#triggers.v1alpha.WatchRequest) | [WatchResponse](#triggers.v1alpha.WatchResponse) stream | Watch Trigger. |
+
+ <!-- end services -->
+
+
+
+<a name="github.com/galexrt/edenconfmgmt/pkg/apis/agentconfigs/v1alpha/api.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## github.com/galexrt/edenconfmgmt/pkg/apis/agentconfigs/v1alpha/api.proto
+
+
+
+<a name="agentagentconfigs.v1alpha.AddRequest"></a>
+
+### AddRequest
+
+Add
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| agentConfig | [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig) |  | AgentConfig object. |
+<a name="agentagentconfigs.v1alpha.AddResponse"></a>
+
+### AddResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| agentConfig | [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig) |  | AgentConfig object. |
+| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+<a name="agentagentconfigs.v1alpha.AgentConfig"></a>
+
+### AgentConfig
+
+AgentConfig object base.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| metadata | [core.v1alpha.ObjectMetadata](#core.v1alpha.ObjectMetadata) |  | Metadata for AgentConfig object. |
+| spec | [AgentConfigSpec](#agentagentconfigs.v1alpha.AgentConfigSpec) |  | Spec for AgentConfig. |
+<a name="agentagentconfigs.v1alpha.AgentConfigSpec"></a>
+
+### AgentConfigSpec
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| dataStore | [DataStore](#agentagentconfigs.v1alpha.DataStore) |  | DataStore. |
+<a name="agentagentconfigs.v1alpha.DataStore"></a>
+
+### DataStore
+
+DataStore config for the data store
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| type | [string](#string) |  | Type. |
+| count | [int64](#int64) |  | Count. |
+| etcd | [ETCD](#agentagentconfigs.v1alpha.ETCD) |  | ETCD config options. |
+<a name="agentagentconfigs.v1alpha.DeleteRequest"></a>
+
+### DeleteRequest
+
+Delete
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| agentConfig | [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig) |  | AgentConfig object. |
+<a name="agentagentconfigs.v1alpha.DeleteResponse"></a>
+
+### DeleteResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| agentConfig | [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig) |  | AgentConfig object. |
+| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+<a name="agentagentconfigs.v1alpha.ETCD"></a>
+
+### ETCD
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| endpoints | [string](#string) |  | List of endpoints if running your own ETCD server (should only be used for testing). |
+<a name="agentagentconfigs.v1alpha.GetRequest"></a>
+
+### GetRequest
+
+Get
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| getOptions | [core.v1alpha.GetOptions](#core.v1alpha.GetOptions) |  | GetOptions options for a GetRequest. |
+<a name="agentagentconfigs.v1alpha.GetResponse"></a>
+
+### GetResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| agentConfig | [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig) |  | AgentConfig object. |
+| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+<a name="agentagentconfigs.v1alpha.ListRequest"></a>
+
+### ListRequest
+
+List
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| listOptions | [core.v1alpha.ListOptions](#core.v1alpha.ListOptions) |  | ListOptions options for a ListRequest. |
+<a name="agentagentconfigs.v1alpha.ListResponse"></a>
+
+### ListResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| agentConfigs | [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig) | repeated | AgentConfig list. |
+| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+<a name="agentagentconfigs.v1alpha.UpdateRequest"></a>
+
+### UpdateRequest
+
+Update
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| agentConfig | [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig) |  | AgentConfig object. |
+<a name="agentagentconfigs.v1alpha.UpdateResponse"></a>
+
+### UpdateResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| agentConfig | [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig) |  | AgentConfig object. |
+| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+<a name="agentagentconfigs.v1alpha.WatchRequest"></a>
+
+### WatchRequest
+
+Watch
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| watchOptions | [core.v1alpha.WatchOptions](#core.v1alpha.WatchOptions) |  | WatchOptions options for WatchRequest. |
+<a name="agentagentconfigs.v1alpha.WatchResponse"></a>
+
+### WatchResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| event | [events.v1alpha.Event](#events.v1alpha.Event) |  | Event info for watch response. |
+| agentConfig | [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig) |  | AgentConfig object. |
+| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+<!-- end messages -->
+
+<!-- end enums -->
+
+ <!-- end HasExtensions -->
+
+
+<a name="agentagentconfigs.v1alpha.AgentConfigs"></a>
+
+### AgentConfigs
+
+
+
+| Method Name | Request Type | Response Type | Description |
+| ----------- | ------------ | ------------- | ------------|
+| Get | [GetRequest](#agentagentconfigs.v1alpha.GetRequest) | [GetResponse](#agentagentconfigs.v1alpha.GetResponse) | Get a AgentConfig. |
+| List | [ListRequest](#agentagentconfigs.v1alpha.ListRequest) | [ListResponse](#agentagentconfigs.v1alpha.ListResponse) | List AgentConfigs. |
+| Add | [AddRequest](#agentagentconfigs.v1alpha.AddRequest) | [AddResponse](#agentagentconfigs.v1alpha.AddResponse) | Add a AgentConfig. |
+| Update | [UpdateRequest](#agentagentconfigs.v1alpha.UpdateRequest) | [UpdateResponse](#agentagentconfigs.v1alpha.UpdateResponse) | Update a AgentConfig. |
+| Delete | [DeleteRequest](#agentagentconfigs.v1alpha.DeleteRequest) | [DeleteResponse](#agentagentconfigs.v1alpha.DeleteResponse) | Delete a AgentConfig. |
+| Watch | [WatchRequest](#agentagentconfigs.v1alpha.WatchRequest) | [WatchResponse](#agentagentconfigs.v1alpha.WatchResponse) stream | Watch AgentConfig. |
 
  <!-- end services -->
 

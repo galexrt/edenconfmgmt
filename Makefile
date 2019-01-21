@@ -3,7 +3,7 @@ DIR = $(strip $(dir $(realpath $(lastword $(MAKEFILE_LIST)))))
 GO = go
 GO_GET_FLAGS = -v -u
 
-PROTOFILES = $(shell find -type f -name '*.proto' | sed 's~\.\/~~g')
+PROTOFILES = $(shell find -type f -name '*.proto' -not -path "./pkg/grpc/plugins/*" | sed 's~\.\/~~g')
 GOPROTOFILES = $(patsubst %.proto,%.pb.go,$(PROTOFILES))
 GOFILESDIRS = $(shell find -type d)
 GOFILES = $(shell find -type f -name '*.go')
@@ -14,13 +14,18 @@ FORCE:
 
 all: prepare build
 
-prepare: protoc protoc-gen-doc
+prepare: protoc protoc-gen-doc go-proto-validators
 
 build: proto-gen
 
 protoc:
 	$(GO) get $(GO_GET_FLAGS) github.com/gogo/protobuf/protoc-gen-gofast
 
+go-proto-validators:
+	$(GO) get $(GO_GET_FLAGS) github.com/mwitkow/go-proto-validators/protoc-gen-govalidators
+
+protoc-gen-setdefaults:
+	$(GO) get $(GO_GET_FLAGS) github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/setdefaults/protoc-gen-setdefaults
 protoc-gen-doc:
 	$(GO) get $(GO_GET_FLAGS) github.com/pseudomuto/protoc-gen-doc/cmd/protoc-gen-doc
 
@@ -44,10 +49,20 @@ license-header-check:
 	done; \
 	if $$noHeaderError; then echo "=> Files with no license header found."; exit 1; fi
 
-proto-gen: $(GOPROTOFILES) docs/apis.md
+pkg/grpc/plugins/%.pb.go: pkg/grpc/plugins/%.proto
+	protoc \
+		-I $$GOPATH/src/ \
+		--gofast_out=\
+Mgoogle/protobuf/any.proto=github.com/gogo/protobuf/types,\
+Mgoogle/protobuf/duration.proto=github.com/gogo/protobuf/types,\
+Mgoogle/protobuf/struct.proto=github.com/gogo/protobuf/types,\
+Mgoogle/protobuf/timestamp.proto=github.com/gogo/protobuf/types,\
+Mgoogle/protobuf/wrappers.proto=github.com/gogo/protobuf/types,\
+plugins=grpc:$$GOPATH/src/ \
+		github.com/galexrt/edenconfmgmt/$^
+	go fmt github.com/galexrt/edenconfmgmt/$(dir $^)...
 
-proto-doc-gen: proto-clean
-	$(MAKE) proto-gen
+proto-gen: $(GOPROTOFILES) docs/apis.md
 
 %.pb.go: %.proto
 	protoc \
@@ -59,7 +74,17 @@ Mgoogle/protobuf/struct.proto=github.com/gogo/protobuf/types,\
 Mgoogle/protobuf/timestamp.proto=github.com/gogo/protobuf/types,\
 Mgoogle/protobuf/wrappers.proto=github.com/gogo/protobuf/types,\
 plugins=grpc:$$GOPATH/src/ \
+		--govalidators_out=gogoimport=true:$$GOPATH/src/ \
+		--setdefaults_out=gogoimport=true:$$GOPATH/src/ \
 		github.com/galexrt/edenconfmgmt/$^
+	go fmt github.com/galexrt/edenconfmgmt/$(dir $^)...
+
+proto-gen-plugins: $(patsubst %.proto,%.pb.go,$(shell find -type f -name '*.proto' -path "./pkg/grpc/plugins/*" | sed 's~\.\/~~g'))
+
+proto-gen-doc: proto-clean
+	$(MAKE) proto-gen
+
+proto-gen-all: proto-gen proto-gen-plugins
 
 docs/apis.md: $(GOPROTOFILES)
 	protoc \
@@ -69,7 +94,7 @@ docs/apis.md: $(GOPROTOFILES)
 		$(addprefix github.com/galexrt/edenconfmgmt/,$(PROTOFILES))
 
 proto-clean:
-	rm -f $(GOPROTOFILES)
+	rm -f $(shell find -type f -name '*.pb.go' | sed 's~\.\/~~g')
 
 test-env:
 	docker run \
@@ -87,4 +112,4 @@ test-env:
 		--listen-client-urls http://0.0.0.0:2379 \
 		--initial-cluster node1=http://0.0.0.0:2380
 
-.PHONY: all protoc protoc-gen-doc proto-clean proto-doc-gen proto-gen test-env
+.PHONY: all protoc protoc-gen-doc proto-clean proto-gen-doc proto-gen test-env

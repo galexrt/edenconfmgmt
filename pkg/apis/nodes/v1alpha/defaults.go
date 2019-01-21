@@ -16,13 +16,8 @@ limitations under the License.
 
 package v1alpha
 
-// SetDefaults set defaults on Node object.
-func (n *Node) SetDefaults() {
+// setDefaults set defaults on object (called through grpc plugin magic code generation).
+func (n *Node) setDefaults() error {
 	// TODO Add defaults to Node object.
-}
-
-// Validate validate Node object and return error on validation failure.
-func (n *Node) Validate() error {
-	// TODO
 	return nil
 }

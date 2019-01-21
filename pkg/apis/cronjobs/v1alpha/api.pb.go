@@ -11,7 +11,7 @@ import v1alpha1 "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha"
 import _ "github.com/gogo/protobuf/gogoproto"
 
 import (
-	"context"
+	context "golang.org/x/net/context"
 	grpc "google.golang.org/grpc"
 )
 
@@ -43,7 +43,7 @@ type CronJob struct {
 func (m *CronJob) Reset()      { *m = CronJob{} }
 func (*CronJob) ProtoMessage() {}
 func (*CronJob) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_3f9ff9fd371225bd, []int{0}
+	return fileDescriptor_api_54d48ac19e09a9fe, []int{0}
 }
 func (m *CronJob) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -96,7 +96,7 @@ type CronJobSpec struct {
 func (m *CronJobSpec) Reset()      { *m = CronJobSpec{} }
 func (*CronJobSpec) ProtoMessage() {}
 func (*CronJobSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_3f9ff9fd371225bd, []int{1}
+	return fileDescriptor_api_54d48ac19e09a9fe, []int{1}
 }
 func (m *CronJobSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -142,7 +142,7 @@ type Schedule struct {
 func (m *Schedule) Reset()      { *m = Schedule{} }
 func (*Schedule) ProtoMessage() {}
 func (*Schedule) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_3f9ff9fd371225bd, []int{2}
+	return fileDescriptor_api_54d48ac19e09a9fe, []int{2}
 }
 func (m *Schedule) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -189,7 +189,7 @@ type GetRequest struct {
 func (m *GetRequest) Reset()      { *m = GetRequest{} }
 func (*GetRequest) ProtoMessage() {}
 func (*GetRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_3f9ff9fd371225bd, []int{3}
+	return fileDescriptor_api_54d48ac19e09a9fe, []int{3}
 }
 func (m *GetRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -237,7 +237,7 @@ type GetResponse struct {
 func (m *GetResponse) Reset()      { *m = GetResponse{} }
 func (*GetResponse) ProtoMessage() {}
 func (*GetResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_3f9ff9fd371225bd, []int{4}
+	return fileDescriptor_api_54d48ac19e09a9fe, []int{4}
 }
 func (m *GetResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -291,7 +291,7 @@ type ListRequest struct {
 func (m *ListRequest) Reset()      { *m = ListRequest{} }
 func (*ListRequest) ProtoMessage() {}
 func (*ListRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_3f9ff9fd371225bd, []int{5}
+	return fileDescriptor_api_54d48ac19e09a9fe, []int{5}
 }
 func (m *ListRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -339,7 +339,7 @@ type ListResponse struct {
 func (m *ListResponse) Reset()      { *m = ListResponse{} }
 func (*ListResponse) ProtoMessage() {}
 func (*ListResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_3f9ff9fd371225bd, []int{6}
+	return fileDescriptor_api_54d48ac19e09a9fe, []int{6}
 }
 func (m *ListResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -393,7 +393,7 @@ type AddRequest struct {
 func (m *AddRequest) Reset()      { *m = AddRequest{} }
 func (*AddRequest) ProtoMessage() {}
 func (*AddRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_3f9ff9fd371225bd, []int{7}
+	return fileDescriptor_api_54d48ac19e09a9fe, []int{7}
 }
 func (m *AddRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -441,7 +441,7 @@ type AddResponse struct {
 func (m *AddResponse) Reset()      { *m = AddResponse{} }
 func (*AddResponse) ProtoMessage() {}
 func (*AddResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_3f9ff9fd371225bd, []int{8}
+	return fileDescriptor_api_54d48ac19e09a9fe, []int{8}
 }
 func (m *AddResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -495,7 +495,7 @@ type UpdateRequest struct {
 func (m *UpdateRequest) Reset()      { *m = UpdateRequest{} }
 func (*UpdateRequest) ProtoMessage() {}
 func (*UpdateRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_3f9ff9fd371225bd, []int{9}
+	return fileDescriptor_api_54d48ac19e09a9fe, []int{9}
 }
 func (m *UpdateRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -543,7 +543,7 @@ type UpdateResponse struct {
 func (m *UpdateResponse) Reset()      { *m = UpdateResponse{} }
 func (*UpdateResponse) ProtoMessage() {}
 func (*UpdateResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_3f9ff9fd371225bd, []int{10}
+	return fileDescriptor_api_54d48ac19e09a9fe, []int{10}
 }
 func (m *UpdateResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -597,7 +597,7 @@ type DeleteRequest struct {
 func (m *DeleteRequest) Reset()      { *m = DeleteRequest{} }
 func (*DeleteRequest) ProtoMessage() {}
 func (*DeleteRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_3f9ff9fd371225bd, []int{11}
+	return fileDescriptor_api_54d48ac19e09a9fe, []int{11}
 }
 func (m *DeleteRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -645,7 +645,7 @@ type DeleteResponse struct {
 func (m *DeleteResponse) Reset()      { *m = DeleteResponse{} }
 func (*DeleteResponse) ProtoMessage() {}
 func (*DeleteResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_3f9ff9fd371225bd, []int{12}
+	return fileDescriptor_api_54d48ac19e09a9fe, []int{12}
 }
 func (m *DeleteResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -699,7 +699,7 @@ type WatchRequest struct {
 func (m *WatchRequest) Reset()      { *m = WatchRequest{} }
 func (*WatchRequest) ProtoMessage() {}
 func (*WatchRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_3f9ff9fd371225bd, []int{13}
+	return fileDescriptor_api_54d48ac19e09a9fe, []int{13}
 }
 func (m *WatchRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -749,7 +749,7 @@ type WatchResponse struct {
 func (m *WatchResponse) Reset()      { *m = WatchResponse{} }
 func (*WatchResponse) ProtoMessage() {}
 func (*WatchResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_api_3f9ff9fd371225bd, []int{14}
+	return fileDescriptor_api_54d48ac19e09a9fe, []int{14}
 }
 func (m *WatchResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -4255,10 +4255,10 @@ var (
 )
 
 func init() {
-	proto.RegisterFile("github.com/galexrt/edenconfmgmt/pkg/apis/cronjobs/v1alpha/api.proto", fileDescriptor_api_3f9ff9fd371225bd)
+	proto.RegisterFile("github.com/galexrt/edenconfmgmt/pkg/apis/cronjobs/v1alpha/api.proto", fileDescriptor_api_54d48ac19e09a9fe)
 }
 
-var fileDescriptor_api_3f9ff9fd371225bd = []byte{
+var fileDescriptor_api_54d48ac19e09a9fe = []byte{
 	// 668 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x96, 0xcb, 0x6e, 0xd3, 0x40,
 	0x14, 0x86, 0x33, 0x4d, 0x2f, 0xe1, 0xa4, 0x45, 0x68, 0x10, 0x52, 0x6a, 0xb5, 0xd3, 0xca, 0x0b,

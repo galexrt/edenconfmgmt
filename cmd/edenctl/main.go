@@ -52,6 +52,11 @@ var (
 			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 			defer cancel()
 
+			addResponse, err := nodesClient.Add(ctx, &nodes_v1alpha.AddRequest{
+				Node: &nodes_v1alpha.Node{},
+			})
+			fmt.Printf("Nodes.Add(): %+v - %+v\n", addResponse, err)
+
 			in := &nodes_v1alpha.ListRequest{}
 			listResponse, err := nodesClient.List(ctx, in)
 			fmt.Printf("Nodes.List(): %+v - %+v\n", listResponse, err)
