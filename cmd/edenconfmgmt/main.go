@@ -44,7 +44,6 @@ import (
 
 	"github.com/galexrt/edenconfmgmt/pkg/auth"
 	"github.com/galexrt/edenconfmgmt/pkg/common"
-	grpc_setdefaults "github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/setdefaults"
 	"github.com/galexrt/edenconfmgmt/pkg/store/cache"
 	"github.com/galexrt/edenconfmgmt/pkg/store/data"
 	store_data_adapters "github.com/galexrt/edenconfmgmt/pkg/store/data/adapters"
@@ -210,7 +209,6 @@ func Run(cmd *cobra.Command, args []string) error {
 			grpc_zap.StreamServerInterceptor(logger),
 			authProvider.StreamInterceptor,
 			grpc_validator.StreamServerInterceptor(),
-			grpc_setdefaults.StreamServerInterceptor(),
 			grpc_recovery.StreamServerInterceptor(),
 		)),
 		grpc.UnaryInterceptor(grpc_middleware.ChainUnaryServer(
@@ -220,7 +218,6 @@ func Run(cmd *cobra.Command, args []string) error {
 			grpc_zap.UnaryServerInterceptor(logger),
 			authProvider.UnaryInterceptor,
 			grpc_validator.UnaryServerInterceptor(),
-			grpc_setdefaults.UnaryServerInterceptor(),
 			grpc_recovery.UnaryServerInterceptor(),
 		)),
 	}

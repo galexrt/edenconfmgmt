@@ -24,8 +24,6 @@ protoc:
 go-proto-validators:
 	$(GO) get $(GO_GET_FLAGS) github.com/mwitkow/go-proto-validators/protoc-gen-govalidators
 
-protoc-gen-setdefaults:
-	$(GO) get $(GO_GET_FLAGS) github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/setdefaults/protoc-gen-setdefaults
 protoc-gen-doc:
 	$(GO) get $(GO_GET_FLAGS) github.com/pseudomuto/protoc-gen-doc/cmd/protoc-gen-doc
 
@@ -49,19 +47,6 @@ license-header-check:
 	done; \
 	if $$noHeaderError; then echo "=> Files with no license header found."; exit 1; fi
 
-pkg/grpc/plugins/%.pb.go: pkg/grpc/plugins/%.proto
-	protoc \
-		-I $$GOPATH/src/ \
-		--gofast_out=\
-Mgoogle/protobuf/any.proto=github.com/gogo/protobuf/types,\
-Mgoogle/protobuf/duration.proto=github.com/gogo/protobuf/types,\
-Mgoogle/protobuf/struct.proto=github.com/gogo/protobuf/types,\
-Mgoogle/protobuf/timestamp.proto=github.com/gogo/protobuf/types,\
-Mgoogle/protobuf/wrappers.proto=github.com/gogo/protobuf/types,\
-plugins=grpc:$$GOPATH/src/ \
-		github.com/galexrt/edenconfmgmt/$^
-	go fmt github.com/galexrt/edenconfmgmt/$(dir $^)...
-
 proto-gen: $(GOPROTOFILES) docs/apis.md
 
 %.pb.go: %.proto
@@ -75,7 +60,6 @@ Mgoogle/protobuf/timestamp.proto=github.com/gogo/protobuf/types,\
 Mgoogle/protobuf/wrappers.proto=github.com/gogo/protobuf/types,\
 plugins=grpc:$$GOPATH/src/ \
 		--govalidators_out=gogoimport=true:$$GOPATH/src/ \
-		--setdefaults_out=gogoimport=true:$$GOPATH/src/ \
 		github.com/galexrt/edenconfmgmt/$^
 	go fmt github.com/galexrt/edenconfmgmt/$(dir $^)...
 
@@ -84,7 +68,7 @@ proto-gen-plugins: $(patsubst %.proto,%.pb.go,$(shell find -type f -name '*.prot
 proto-gen-doc: proto-clean
 	$(MAKE) proto-gen
 
-proto-gen-all: proto-gen proto-gen-plugins
+proto-gen-all: proto-gen
 
 docs/apis.md: $(GOPROTOFILES)
 	protoc \

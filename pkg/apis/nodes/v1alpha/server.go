@@ -54,13 +54,17 @@ func (n *NodesService) List(ctx context.Context, req *ListRequest) (*ListRespons
 
 // Add add a Node.
 func (n *NodesService) Add(ctx context.Context, req *AddRequest) (*AddResponse, error) {
-	resp := &AddResponse{}
+	req.Node.SetDefaults()
+	resp := &AddResponse{
+		Node: req.Node,
+	}
 
 	return resp, nil
 }
 
 // Update update a Node.
 func (n *NodesService) Update(ctx context.Context, req *UpdateRequest) (*UpdateResponse, error) {
+	req.Node.SetDefaults()
 	resp := &UpdateResponse{}
 
 	return resp, nil
