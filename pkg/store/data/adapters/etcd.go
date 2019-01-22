@@ -134,38 +134,34 @@ func (st *ETCD) SetKeyPrefix(prefix string) {
 }
 
 // Get return a specific key.
-func (st *ETCD) Get(ctx context.Context, key string) (string, bool, error) {
+func (st *ETCD) Get(ctx context.Context, key string) ([]byte, error) {
 	resp, err := st.cli.Get(ctx, key)
 	if err != nil {
-		return "", false, err
+		return []byte{}, err
 	}
 	for _, kv := range resp.Kvs {
-		return kv.String(), true, nil
+		return kv.Value, nil
 	}
-	return "", false, nil
+	return []byte{}, nil
 }
 
 // GetRecursive return a list of keys with values at the given key arg.
-func (st *ETCD) GetRecursive(ctx context.Context, key string) (map[string]string, bool, error) {
-	var found bool
-	var results map[string]string
+func (st *ETCD) GetRecursive(ctx context.Context, key string) (map[string][]byte, error) {
+	var results map[string][]byte
 	opts := []clientv3.OpOption{clientv3.WithPrefix()}
 	resp, err := st.cli.Get(ctx, key, opts...)
 	if err != nil {
-		return results, false, err
-	}
-	if len(resp.Kvs) > 0 {
-		found = true
+		return results, err
 	}
 	for _, kv := range resp.Kvs {
-		results[string(kv.Key)] = string(kv.Value)
+		results[string(kv.Key)] = kv.Value
 	}
-	return results, found, nil
+	return results, nil
 }
 
 // Put set a key to a specific value.
-func (st *ETCD) Put(ctx context.Context, key string, value string) error {
-	_, err := st.cli.Put(ctx, key, value)
+func (st *ETCD) Put(ctx context.Context, key string, value []byte) error {
+	_, err := st.cli.Put(ctx, key, string(value))
 	return err
 }
 

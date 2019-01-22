@@ -19,6 +19,7 @@ option go_package = "github.com/galexrt/edenconfmgmt/pkg/apis/nodes/v1alpha";
 
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "github.com/mwitkow/go-proto-validators/validator.proto";
+import "github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/internalclient/client.proto";
 import "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha/api.proto";
 import "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha/api.proto";
 
@@ -50,6 +51,8 @@ service Nodes {
 }
 
 message Node {
+    option (internalclient.options).generate = true;
+    option (internalclient.options).namespaced = false;
     // Metadata for Node object.
     core.v1alpha.ObjectMetadata metadata = 1 [(validator.field) = {msg_exists : true}];
     // Spec for Node.

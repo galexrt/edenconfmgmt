@@ -16,7 +16,7 @@ limitations under the License.
 
 package v1alpha
 
-// setDefaults set defaults on object (called through grpc plugin magic code generation).
+// SetDefaults set defaults on object (called through grpc plugin magic code generation).
 func (n *Node) SetDefaults() error {
 	// TODO Add defaults to Node object.
 	n.Spec.Network = &Network{

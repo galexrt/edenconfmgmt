@@ -36,6 +36,8 @@ type Store struct {
 	logger     *zap.Logger
 }
 
+// TODO Rewrite to save objects protobuf encoded as this will definitly be faster than to always parse JSON again.
+
 // New return new Store.
 func New(dataStore data.Store, cacheStore data.Store, logger *zap.Logger) *Store {
 	inf := NewInformer(dataStore, cacheStore, logger)
@@ -74,32 +76,37 @@ func (st *Store) SetKeyPrefix(prefix string) {
 }
 
 // Get get a value for a key.
-func (st *Store) Get(ctx context.Context, key string) (string, bool, error) {
-	result, found, err := st.cacheStore.Get(ctx, key)
+func (st *Store) Get(ctx context.Context, key string) ([]byte, error) {
+	result, err := st.cacheStore.Get(ctx, key)
 	if err != nil {
-		return result, found, err
+		return nil, err
 	}
-	if !found {
-		result, found, err = st.dataStore.Get(ctx, key)
+
+	if len(result) == 0 {
+		result, err = st.dataStore.Get(ctx, key)
 		if err != nil {
-			return result, found, err
+			return result, err
 		}
 	}
 	err = st.cacheStore.Put(ctx, key, result)
-	return result, found, err
+	return result, err
 }
 
 // GetRecursive return a list of keys with values at the given key arg.
-func (st *Store) GetRecursive(ctx context.Context, key string) (map[string]string, bool, error) {
-	results, found, err := st.cacheStore.GetRecursive(ctx, key)
+func (st *Store) GetRecursive(ctx context.Context, key string) (map[string][]byte, error) {
+	results, err := st.cacheStore.GetRecursive(ctx, key)
 	if err != nil {
-		return results, found, err
+		return results, err
 	}
-	if !found {
-		results, found, err = st.dataStore.GetRecursive(ctx, key)
+	if len(results) == 0 {
+		results, err = st.dataStore.GetRecursive(ctx, key)
 		if err != nil {
-			return results, found, err
+			return results, err
 		}
+	}
+
+	if len(results) == 0 {
+		return results, err
 	}
 
 	var errs []error
@@ -109,11 +116,11 @@ func (st *Store) GetRecursive(ctx context.Context, key string) (map[string]strin
 			errs = append(errs, err)
 		}
 	}
-	return results, found, errors.Concat(errs...)
+	return results, errors.Concat(errs...)
 }
 
 // Put put a key value pair.
-func (st *Store) Put(ctx context.Context, key string, value string) error {
+func (st *Store) Put(ctx context.Context, key string, value []byte) error {
 	if err := st.dataStore.Put(ctx, key, value); err != nil {
 		return err
 	}
@@ -141,6 +148,5 @@ func (st *Store) Watch(ctx context.Context, key string) (chan *InformerResult, e
 
 // Close adapter.
 func (st *Store) Close() error {
-
 	return errors.Concat(st.dataStore.Close(), st.cacheStore.Close())
 }

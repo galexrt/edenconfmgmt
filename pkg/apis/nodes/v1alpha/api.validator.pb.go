@@ -7,6 +7,7 @@ import (
 	fmt "fmt"
 	_ "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha"
 	_ "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha"
+	_ "github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/internalclient"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	_ "github.com/mwitkow/go-proto-validators"

@@ -36,6 +36,6 @@ type InformerResult struct {
 	Errors  []error
 	State   ResultState
 	Key     string
-	Value   string
+	Value   []byte
 	Version int64
 }

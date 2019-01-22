@@ -28,11 +28,11 @@ type Store interface {
 	SetKeyPrefix(prefix string)
 
 	// Get return a specific key value pair.
-	Get(ctx context.Context, key string) (string, bool, error)
+	Get(ctx context.Context, key string) ([]byte, error)
 	// GetRecursive return a list of keys with values at the given key arg.
-	GetRecursive(ctx context.Context, key string) (map[string]string, bool, error)
+	GetRecursive(ctx context.Context, key string) (map[string][]byte, error)
 	// Put set a key to a specific value.
-	Put(ctx context.Context, key string, value string) error
+	Put(ctx context.Context, key string, value []byte) error
 	// Delete delete a key value pair.
 	Delete(ctx context.Context, key string) error
 	// Watch watch a key or directory for creation, changes and deletion.

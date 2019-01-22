@@ -49,30 +49,27 @@ func NewMemory(flagPrefix string) (data.Store, error) {
 func (st *Memory) SetKeyPrefix(prefix string) { /* Noop for Memory */ }
 
 // Get get a value for a key.
-func (st *Memory) Get(ctx context.Context, key string) (string, bool, error) {
+func (st *Memory) Get(ctx context.Context, key string) ([]byte, error) {
 	valueLoaded, ok := st.cache.Load(key)
-	var value string
+	var value []byte
 	var err error
 	if ok {
-		value, ok = valueLoaded.(string)
+		value, ok = valueLoaded.([]byte)
 		if !ok {
-			err = fmt.Errorf("failed to cast value to string (key: %s)", key)
+			err = fmt.Errorf("failed to cast value to []byte (key: %s)", key)
 		}
 	}
-	return value, ok, err
+	return value, err
 }
 
 // GetRecursive return a list of keys with values at the given key arg.
-func (st *Memory) GetRecursive(ctx context.Context, key string) (map[string]string, bool, error) {
-	var results map[string]string
+func (st *Memory) GetRecursive(ctx context.Context, key string) (map[string][]byte, error) {
+	var results map[string][]byte
 	var errors []error
 
 	keys := st.searchKeysSubstr(key)
-	var found bool
-	if len(keys) > 0 {
-		found = true
-	} else {
-		return results, found, nil
+	if len(keys) == 0 {
+		return results, nil
 	}
 
 	for _, fKey := range keys {
@@ -81,7 +78,7 @@ func (st *Memory) GetRecursive(ctx context.Context, key string) (map[string]stri
 			errors = append(errors, fmt.Errorf("unable to load key %s from sync.Map", fKey))
 			continue
 		}
-		results[fKey], ok = loadedValue.(string)
+		results[fKey], ok = loadedValue.([]byte)
 		if !ok {
 			errors = append(errors, fmt.Errorf("unable to cast value of key %s from sync.Map", fKey))
 		}
@@ -97,7 +94,7 @@ func (st *Memory) GetRecursive(ctx context.Context, key string) (map[string]stri
 		err = fmt.Errorf(errsConcat)
 	}
 
-	return results, found, err
+	return results, err
 }
 
 func (st *Memory) searchKeysSubstr(search string) []string {
@@ -112,7 +109,7 @@ func (st *Memory) searchKeysSubstr(search string) []string {
 }
 
 // Put put a key value pair.
-func (st *Memory) Put(ctx context.Context, key string, value string) error {
+func (st *Memory) Put(ctx context.Context, key string, value []byte) error {
 	st.cache.Store(key, value)
 	return nil
 }

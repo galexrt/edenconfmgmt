@@ -159,16 +159,14 @@ func (inf *Informer) watch(ctx context.Context, key string) {
 			var errs []error
 			if err := resp.Err(); err != nil {
 				errs = append(errs, err)
-			} else {
-				errs = nil
 			}
 			for _, event := range resp.Events {
 				key := string(event.Kv.Key)
 				state := convertETCDtoResultState(event)
-				value := string(event.Kv.Value)
+				value := event.Kv.Value
 				version := event.Kv.Version
 				inf.wg.Add(1)
-				go func(key string, state ResultState, value string) {
+				go func(key string, state ResultState, value []byte) {
 					switch state {
 					case ResultStateCreated:
 						fallthrough
@@ -181,7 +179,7 @@ func (inf *Informer) watch(ctx context.Context, key string) {
 					}
 				}(key, state, value)
 				inf.wg.Add(1)
-				go func(key string, state ResultState, value string, version int64) {
+				go func(key string, state ResultState, value []byte, version int64) {
 					result := &InformerResult{
 						Errors:  errs,
 						Closed:  resp.Canceled,
@@ -193,9 +191,11 @@ func (inf *Informer) watch(ctx context.Context, key string) {
 					// TODO should we lock the list here?
 					receivers := inf.getReceiverChs(key)
 					for _, rcvs := range receivers {
+						rcvs.RLock()
 						for _, rcv := range rcvs.list {
 							rcv <- result
 						}
+						rcvs.RUnlock()
 					}
 				}(key, state, value, version)
 			}

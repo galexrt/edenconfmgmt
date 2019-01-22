@@ -33,8 +33,8 @@ type NodesService struct {
 	NodesServer
 }
 
-// New returns a NodesService
-func New() NodesServer {
+// NewNodesServer returns a NodesServer
+func NewNodesServer() NodesServer {
 	return &NodesService{}
 }
 

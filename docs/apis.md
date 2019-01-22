@@ -1138,6 +1138,7 @@ Watch
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | name | [string](#string) |  | Name used for listing. |
+| namespace | [string](#string) |  | Namespace used for listing. |
 | labelSelectors | [string](#string) | repeated | Label selector in string form. |
 <a name="core.v1alpha.Include"></a>
 

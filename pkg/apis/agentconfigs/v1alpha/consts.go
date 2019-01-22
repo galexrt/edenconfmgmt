@@ -27,6 +27,6 @@ const (
 	KindPlural = "AgentConfigs"
 	// APIVersion of the API.
 	APIVersion = "v1alpha"
-	// DataStorePath API object path in the data store.
-	DataStorePath = api.APIName + "/" + APIVersion
+	// APIPath API object path in the data store.
+	APIPath = api.APIName + "/" + APIVersion
 )
