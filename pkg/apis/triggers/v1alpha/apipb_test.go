@@ -5,7 +5,7 @@ package v1alpha
 
 import (
 	fmt "fmt"
-	_ "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha"
+	_ "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1"
 	_ "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha"
 	_ "github.com/gogo/protobuf/gogoproto"
 	github_com_gogo_protobuf_proto "github.com/gogo/protobuf/proto"

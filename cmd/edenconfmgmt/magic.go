@@ -25,7 +25,7 @@ import (
 	"sync"
 	"time"
 
-	core_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha"
+	core_v1 "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1"
 	nodes_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/nodes/v1alpha"
 	"github.com/galexrt/edenconfmgmt/pkg/store/cache"
 	jsoniter "github.com/json-iterator/go"
@@ -131,7 +131,7 @@ func magicRun(stopCh chan struct{}, store *cache.Store) error {
 			go keepAliveNode(stopCh)
 
 			in := &nodes_v1alpha.WatchRequest{
-				WatchOptions: &core_v1alpha.WatchOptions{
+				WatchOptions: &core_v1.WatchOptions{
 					Name: hostname,
 				},
 			}
@@ -161,7 +161,7 @@ func registerNode(nodesClient nodes_v1alpha.NodesClient, hostname string) (*node
 	// TODO
 	addRequest := &nodes_v1alpha.AddRequest{
 		Node: &nodes_v1alpha.Node{
-			Metadata: &core_v1alpha.ObjectMetadata{
+			Metadata: &core_v1.ObjectMetadata{
 				Kind:       nodes_v1alpha.Kind,
 				ApiVersion: nodes_v1alpha.APIVersion,
 				Name:       hostname,

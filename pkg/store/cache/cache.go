@@ -18,7 +18,6 @@ package cache
 
 import (
 	"context"
-	"fmt"
 	"sync"
 
 	"github.com/galexrt/edenconfmgmt/pkg/store/data"
@@ -92,34 +91,12 @@ func (st *Store) Get(ctx context.Context, key string) ([]byte, error) {
 	return result, err
 }
 
-// GetRecursive return a list of keys with values at the given key arg.
-func (st *Store) GetRecursive(ctx context.Context, key string) (map[string][]byte, error) {
-	results, err := st.cacheStore.GetRecursive(ctx, key)
-	if err != nil {
-		return results, err
-	}
-	if len(results) == 0 {
-		results, err = st.dataStore.GetRecursive(ctx, key)
-		if err != nil {
-			return results, err
-		}
-	}
-
-	if len(results) == 0 {
-		return results, err
-	}
-
-	var errs []error
-	for k, v := range results {
-		if err = st.cacheStore.Put(ctx, k, v); err != nil {
-			// TODO Handle error (e.g., build concated error)
-			errs = append(errs, err)
-		}
-	}
-	return results, errors.Concat(errs...)
+// List return a list of key value pairs.
+func (st *Store) List(ctx context.Context, key string) (map[string][]byte, error) {
+	return nil, nil
 }
 
-// Put put a key value pair.
+// Put creates or updates if exists, a key value pair.
 func (st *Store) Put(ctx context.Context, key string, value []byte) error {
 	if err := st.dataStore.Put(ctx, key, value); err != nil {
 		return err
@@ -142,7 +119,6 @@ func (st *Store) Watch(ctx context.Context, key string) (chan *InformerResult, e
 	if err != nil {
 		return nil, err
 	}
-	fmt.Printf("store.Watch key: %s\n", key)
 	return st.informer.Watch(ctx, key, watch)
 }
 

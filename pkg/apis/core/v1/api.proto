@@ -14,8 +14,8 @@
 
 syntax = 'proto3';
 
-package core.v1alpha;
-option go_package = "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha";
+package core.v1;
+option go_package = "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1";
 
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "google/protobuf/duration.proto";
@@ -97,8 +97,21 @@ message GetOptions {
 }
 
 message ListOptions {
+    // Namespace used for listing.
+    string namespace = 2;
     // Label selector in string form.
-    repeated string labelSelectors = 2;
+    repeated string labelSelectors = 3;
+}
+
+message CreateOptions {
+}
+
+message UpdateOptions {
+}
+
+message DeleteOptions {
+    // Label selector in string form.
+    repeated string labelSelectors = 3;
 }
 
 message WatchOptions {

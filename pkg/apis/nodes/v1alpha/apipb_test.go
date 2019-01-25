@@ -5,7 +5,7 @@ package v1alpha
 
 import (
 	fmt "fmt"
-	_ "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha"
+	_ "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1"
 	_ "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha"
 	_ "github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/internalclient"
 	_ "github.com/gogo/protobuf/gogoproto"
@@ -52,6 +52,46 @@ func BenchmarkNodeProtoUnmarshal(b *testing.B) {
 		datas[i] = dAtA
 	}
 	msg := &Node{}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		total += len(datas[i%10000])
+		if err := github_com_gogo_protobuf_proto.Unmarshal(datas[i%10000], msg); err != nil {
+			panic(err)
+		}
+	}
+	b.SetBytes(int64(total / b.N))
+}
+
+func BenchmarkNodeListProtoMarshal(b *testing.B) {
+	popr := math_rand.New(math_rand.NewSource(616))
+	total := 0
+	pops := make([]*NodeList, 10000)
+	for i := 0; i < 10000; i++ {
+		pops[i] = NewPopulatedNodeList(popr, false)
+	}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		dAtA, err := github_com_gogo_protobuf_proto.Marshal(pops[i%10000])
+		if err != nil {
+			panic(err)
+		}
+		total += len(dAtA)
+	}
+	b.SetBytes(int64(total / b.N))
+}
+
+func BenchmarkNodeListProtoUnmarshal(b *testing.B) {
+	popr := math_rand.New(math_rand.NewSource(616))
+	total := 0
+	datas := make([][]byte, 10000)
+	for i := 0; i < 10000; i++ {
+		dAtA, err := github_com_gogo_protobuf_proto.Marshal(NewPopulatedNodeList(popr, false))
+		if err != nil {
+			panic(err)
+		}
+		datas[i] = dAtA
+	}
+	msg := &NodeList{}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		total += len(datas[i%10000])
@@ -708,6 +748,20 @@ func BenchmarkNodeSize(b *testing.B) {
 	pops := make([]*Node, 1000)
 	for i := 0; i < 1000; i++ {
 		pops[i] = NewPopulatedNode(popr, false)
+	}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		total += pops[i%1000].Size()
+	}
+	b.SetBytes(int64(total / b.N))
+}
+
+func BenchmarkNodeListSize(b *testing.B) {
+	popr := math_rand.New(math_rand.NewSource(616))
+	total := 0
+	pops := make([]*NodeList, 1000)
+	for i := 0; i < 1000; i++ {
+		pops[i] = NewPopulatedNodeList(popr, false)
 	}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {

@@ -22,7 +22,7 @@ import (
 
 	jsoniter "github.com/json-iterator/go"
 
-	core_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha"
+	core_v1 "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1"
 	events_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha"
 )
 
@@ -82,12 +82,12 @@ func (n *NodesService) Watch(req *WatchRequest, watch Nodes_WatchServer) error {
 	for {
 		if err := Nodes_WatchServer.Send(watch, &WatchResponse{
 			Node: &Node{
-				Metadata: &core_v1alpha.ObjectMetadata{
+				Metadata: &core_v1.ObjectMetadata{
 					Name: "node",
 				},
 			},
 			Event: &events_v1alpha.Event{
-				Metadata: &core_v1alpha.ObjectMetadata{
+				Metadata: &core_v1.ObjectMetadata{
 					Name: "node",
 				},
 				Spec: &events_v1alpha.EventSpec{

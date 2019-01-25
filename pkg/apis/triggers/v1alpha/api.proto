@@ -19,7 +19,7 @@ option go_package = "github.com/galexrt/edenconfmgmt/pkg/apis/triggers/v1alpha";
 
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "google/protobuf/any.proto";
-import "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha/api.proto";
+import "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1/api.proto";
 import "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha/api.proto";
 
 option (gogoproto.goproto_stringer_all) = false;
@@ -51,7 +51,7 @@ service Triggers {
 
 message Trigger {
     // Metadata for Trigger object.
-    core.v1alpha.ObjectMetadata metadata = 1;
+    core.v1.ObjectMetadata metadata = 1;
     // Spec for Trigger.
     TriggerSpec spec = 2;
 }
@@ -92,7 +92,7 @@ message Action {
     // Action name.
     string action = 1;
     // Conditions.
-    core.v1alpha.Conditions conditions = 2;
+    core.v1.Conditions conditions = 2;
     // RunOptions
     RunOptions runOptions = 3;
     // Map of string interface{} to be given to the action.
@@ -102,27 +102,27 @@ message Action {
 // Get
 message GetRequest {
     // GetOptions options for a GetRequest.
-    core.v1alpha.GetOptions getOptions = 1;
+    core.v1.GetOptions getOptions = 1;
 }
 
 message GetResponse {
     // Trigger object.
     Trigger task = 1;
     // Error object.
-    core.v1alpha.Error error = 2;
+    core.v1.Error error = 2;
 }
 
 // List
 message ListRequest {
     // ListOptions options for a ListRequest.
-    core.v1alpha.ListOptions listOptions = 1;
+    core.v1.ListOptions listOptions = 1;
 }
 
 message ListResponse {
     // Trigger list.
     repeated Trigger triggers = 1;
     // Error object.
-    core.v1alpha.Error error = 2;
+    core.v1.Error error = 2;
 }
 
 // Add
@@ -135,7 +135,7 @@ message AddResponse {
     // Trigger object.
     Trigger task = 1;
     // Error object.
-    core.v1alpha.Error error = 2;
+    core.v1.Error error = 2;
 }
 
 // Update
@@ -148,7 +148,7 @@ message UpdateResponse {
     // Trigger object.
     Trigger task = 1;
     // Error object.
-    core.v1alpha.Error error = 2;
+    core.v1.Error error = 2;
 }
 
 // Delete
@@ -161,13 +161,13 @@ message DeleteResponse {
     // Trigger object.
     Trigger task = 1;
     // Error object.
-    core.v1alpha.Error error = 2;
+    core.v1.Error error = 2;
 }
 
 // Watch
 message WatchRequest {
     // WatchOptions options for WatchRequest.
-    core.v1alpha.WatchOptions watchOptions = 1;
+    core.v1.WatchOptions watchOptions = 1;
 }
 
 message WatchResponse {
@@ -176,5 +176,5 @@ message WatchResponse {
     // Trigger for watch response.
     Trigger task = 2;
     // Error object.
-    core.v1alpha.Error error = 3;
+    core.v1.Error error = 3;
 }

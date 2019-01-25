@@ -6,8 +6,8 @@ package v1alpha
 import (
 	context "context"
 	fmt "fmt"
-	v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha"
-	v1alpha1 "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha"
+	v1 "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1"
+	v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	github_com_gogo_protobuf_sortkeys "github.com/gogo/protobuf/sortkeys"
@@ -32,7 +32,7 @@ const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
 
 type Secret struct {
 	// Metadata for Secret object.
-	Metadata *v1alpha.ObjectMetadata `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	Metadata *v1.ObjectMetadata `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
 	// Spec for Secret.
 	Spec                 *SecretSpec `protobuf:"bytes,2,opt,name=spec,proto3" json:"spec,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
@@ -71,7 +71,7 @@ func (m *Secret) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Secret proto.InternalMessageInfo
 
-func (m *Secret) GetMetadata() *v1alpha.ObjectMetadata {
+func (m *Secret) GetMetadata() *v1.ObjectMetadata {
 	if m != nil {
 		return m.Metadata
 	}
@@ -144,9 +144,9 @@ func (m *SecretSpec) GetType() string {
 // Get
 type GetRequest struct {
 	// GetOptions options for a GetRequest.
-	GetOptions           *v1alpha.GetOptions `protobuf:"bytes,1,opt,name=getOptions,proto3" json:"getOptions,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}            `json:"-"`
-	XXX_sizecache        int32               `json:"-"`
+	GetOptions           *v1.GetOptions `protobuf:"bytes,1,opt,name=getOptions,proto3" json:"getOptions,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
+	XXX_sizecache        int32          `json:"-"`
 }
 
 func (m *GetRequest) Reset()      { *m = GetRequest{} }
@@ -181,7 +181,7 @@ func (m *GetRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetRequest proto.InternalMessageInfo
 
-func (m *GetRequest) GetGetOptions() *v1alpha.GetOptions {
+func (m *GetRequest) GetGetOptions() *v1.GetOptions {
 	if m != nil {
 		return m.GetOptions
 	}
@@ -192,9 +192,9 @@ type GetResponse struct {
 	// Secret object.
 	Secret *Secret `protobuf:"bytes,1,opt,name=secret,proto3" json:"secret,omitempty"`
 	// Error object.
-	Error                *v1alpha.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
-	XXX_sizecache        int32          `json:"-"`
+	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
 }
 
 func (m *GetResponse) Reset()      { *m = GetResponse{} }
@@ -236,7 +236,7 @@ func (m *GetResponse) GetSecret() *Secret {
 	return nil
 }
 
-func (m *GetResponse) GetError() *v1alpha.Error {
+func (m *GetResponse) GetError() *v1.Error {
 	if m != nil {
 		return m.Error
 	}
@@ -246,9 +246,9 @@ func (m *GetResponse) GetError() *v1alpha.Error {
 // List
 type ListRequest struct {
 	// ListOptions options for a ListRequest.
-	ListOptions          *v1alpha.ListOptions `protobuf:"bytes,1,opt,name=listOptions,proto3" json:"listOptions,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}             `json:"-"`
-	XXX_sizecache        int32                `json:"-"`
+	ListOptions          *v1.ListOptions `protobuf:"bytes,1,opt,name=listOptions,proto3" json:"listOptions,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
+	XXX_sizecache        int32           `json:"-"`
 }
 
 func (m *ListRequest) Reset()      { *m = ListRequest{} }
@@ -283,7 +283,7 @@ func (m *ListRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ListRequest proto.InternalMessageInfo
 
-func (m *ListRequest) GetListOptions() *v1alpha.ListOptions {
+func (m *ListRequest) GetListOptions() *v1.ListOptions {
 	if m != nil {
 		return m.ListOptions
 	}
@@ -294,9 +294,9 @@ type ListResponse struct {
 	// Secret list.
 	Secrets []*Secret `protobuf:"bytes,1,rep,name=secrets,proto3" json:"secrets,omitempty"`
 	// Error object.
-	Error                *v1alpha.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
-	XXX_sizecache        int32          `json:"-"`
+	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
 }
 
 func (m *ListResponse) Reset()      { *m = ListResponse{} }
@@ -338,7 +338,7 @@ func (m *ListResponse) GetSecrets() []*Secret {
 	return nil
 }
 
-func (m *ListResponse) GetError() *v1alpha.Error {
+func (m *ListResponse) GetError() *v1.Error {
 	if m != nil {
 		return m.Error
 	}
@@ -396,9 +396,9 @@ type AddResponse struct {
 	// Secret object.
 	Secret *Secret `protobuf:"bytes,1,opt,name=secret,proto3" json:"secret,omitempty"`
 	// Error object.
-	Error                *v1alpha.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
-	XXX_sizecache        int32          `json:"-"`
+	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
 }
 
 func (m *AddResponse) Reset()      { *m = AddResponse{} }
@@ -440,7 +440,7 @@ func (m *AddResponse) GetSecret() *Secret {
 	return nil
 }
 
-func (m *AddResponse) GetError() *v1alpha.Error {
+func (m *AddResponse) GetError() *v1.Error {
 	if m != nil {
 		return m.Error
 	}
@@ -498,9 +498,9 @@ type UpdateResponse struct {
 	// Secret object.
 	Secret *Secret `protobuf:"bytes,1,opt,name=secret,proto3" json:"secret,omitempty"`
 	// Error object.
-	Error                *v1alpha.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
-	XXX_sizecache        int32          `json:"-"`
+	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
 }
 
 func (m *UpdateResponse) Reset()      { *m = UpdateResponse{} }
@@ -542,7 +542,7 @@ func (m *UpdateResponse) GetSecret() *Secret {
 	return nil
 }
 
-func (m *UpdateResponse) GetError() *v1alpha.Error {
+func (m *UpdateResponse) GetError() *v1.Error {
 	if m != nil {
 		return m.Error
 	}
@@ -600,9 +600,9 @@ type DeleteResponse struct {
 	// Secret object.
 	Secret *Secret `protobuf:"bytes,1,opt,name=secret,proto3" json:"secret,omitempty"`
 	// Error object.
-	Error                *v1alpha.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
-	XXX_sizecache        int32          `json:"-"`
+	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
 }
 
 func (m *DeleteResponse) Reset()      { *m = DeleteResponse{} }
@@ -644,7 +644,7 @@ func (m *DeleteResponse) GetSecret() *Secret {
 	return nil
 }
 
-func (m *DeleteResponse) GetError() *v1alpha.Error {
+func (m *DeleteResponse) GetError() *v1.Error {
 	if m != nil {
 		return m.Error
 	}
@@ -654,9 +654,9 @@ func (m *DeleteResponse) GetError() *v1alpha.Error {
 // Watch
 type WatchRequest struct {
 	// WatchOptions options for WatchRequest.
-	WatchOptions         *v1alpha.WatchOptions `protobuf:"bytes,1,opt,name=watchOptions,proto3" json:"watchOptions,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}              `json:"-"`
-	XXX_sizecache        int32                 `json:"-"`
+	WatchOptions         *v1.WatchOptions `protobuf:"bytes,1,opt,name=watchOptions,proto3" json:"watchOptions,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_sizecache        int32            `json:"-"`
 }
 
 func (m *WatchRequest) Reset()      { *m = WatchRequest{} }
@@ -691,7 +691,7 @@ func (m *WatchRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_WatchRequest proto.InternalMessageInfo
 
-func (m *WatchRequest) GetWatchOptions() *v1alpha.WatchOptions {
+func (m *WatchRequest) GetWatchOptions() *v1.WatchOptions {
 	if m != nil {
 		return m.WatchOptions
 	}
@@ -700,13 +700,13 @@ func (m *WatchRequest) GetWatchOptions() *v1alpha.WatchOptions {
 
 type WatchResponse struct {
 	// Secret info for watch response.
-	Event *v1alpha1.Event `protobuf:"bytes,1,opt,name=event,proto3" json:"event,omitempty"`
+	Event *v1alpha.Event `protobuf:"bytes,1,opt,name=event,proto3" json:"event,omitempty"`
 	// Secret for watch response.
 	Secret *Secret `protobuf:"bytes,2,opt,name=secret,proto3" json:"secret,omitempty"`
 	// Error object.
-	Error                *v1alpha.Error `protobuf:"bytes,3,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
-	XXX_sizecache        int32          `json:"-"`
+	Error                *v1.Error `protobuf:"bytes,3,opt,name=error,proto3" json:"error,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
 }
 
 func (m *WatchResponse) Reset()      { *m = WatchResponse{} }
@@ -741,7 +741,7 @@ func (m *WatchResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_WatchResponse proto.InternalMessageInfo
 
-func (m *WatchResponse) GetEvent() *v1alpha1.Event {
+func (m *WatchResponse) GetEvent() *v1alpha.Event {
 	if m != nil {
 		return m.Event
 	}
@@ -755,7 +755,7 @@ func (m *WatchResponse) GetSecret() *Secret {
 	return nil
 }
 
-func (m *WatchResponse) GetError() *v1alpha.Error {
+func (m *WatchResponse) GetError() *v1.Error {
 	if m != nil {
 		return m.Error
 	}
@@ -785,51 +785,51 @@ func init() {
 }
 
 var fileDescriptor_73985c47aba79f84 = []byte{
-	// 701 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x56, 0xcf, 0x53, 0xd3, 0x40,
-	0x14, 0x66, 0x29, 0x2d, 0xf2, 0x5a, 0xd4, 0x59, 0x75, 0x2c, 0x11, 0x23, 0x93, 0x13, 0xea, 0x98,
-	0x08, 0x5e, 0x18, 0x1d, 0x95, 0xa2, 0x88, 0x3a, 0x28, 0x4e, 0x18, 0x87, 0x19, 0x6f, 0x69, 0xf2,
-	0x08, 0x95, 0x34, 0x89, 0xc9, 0x16, 0xed, 0xcd, 0x3f, 0xc1, 0xa3, 0x7f, 0x82, 0x67, 0x0f, 0x8e,
-	0x47, 0x8f, 0x1c, 0x3d, 0x7a, 0x94, 0xf8, 0x4f, 0x78, 0x74, 0xb2, 0xd9, 0x34, 0x49, 0x7f, 0x28,
-	0xe0, 0x0c, 0xb7, 0xdd, 0xbc, 0xef, 0x7d, 0xfb, 0x7d, 0x6f, 0xdf, 0xbe, 0x16, 0x56, 0xec, 0x16,
-	0xdb, 0xe9, 0x34, 0x55, 0xd3, 0x6b, 0x6b, 0xb6, 0xe1, 0xe0, 0xbb, 0x80, 0x69, 0x68, 0xa1, 0x6b,
-	0x7a, 0xee, 0x76, 0xdb, 0x6e, 0x33, 0xcd, 0xdf, 0xb5, 0x35, 0xc3, 0x6f, 0x85, 0x5a, 0x88, 0x66,
-	0x80, 0x2c, 0xd4, 0xf6, 0x16, 0x0c, 0xc7, 0xdf, 0x31, 0xe2, 0x8f, 0xaa, 0x1f, 0x78, 0xcc, 0xa3,
-	0x67, 0x44, 0x48, 0x15, 0x21, 0xe9, 0x46, 0x9e, 0xd4, 0xb3, 0x3d, 0x8d, 0xe3, 0x9a, 0x9d, 0x6d,
-	0xbe, 0xe3, 0x1b, 0xbe, 0x4a, 0xf2, 0xa5, 0x19, 0xdb, 0xf3, 0x6c, 0x07, 0x33, 0x94, 0xe1, 0x76,
-	0x45, 0xe8, 0xfe, 0xa1, 0xe5, 0x99, 0x5e, 0x80, 0x83, 0xda, 0xa4, 0xc6, 0xa1, 0x09, 0x70, 0x0f,
-	0xdd, 0x61, 0xf6, 0x94, 0x10, 0x2a, 0x9b, 0xdc, 0x20, 0x5d, 0x82, 0x53, 0x6d, 0x64, 0x86, 0x65,
-	0x30, 0xa3, 0x4e, 0xe6, 0xc8, 0x7c, 0x75, 0x71, 0x56, 0x8d, 0xcf, 0x4d, 0x8d, 0xab, 0x1b, 0xcd,
-	0xd7, 0x68, 0xb2, 0x67, 0x02, 0xa3, 0xf7, 0xd0, 0x54, 0x83, 0x89, 0xd0, 0x47, 0xb3, 0x3e, 0xce,
-	0xb3, 0x2e, 0xa9, 0x7d, 0x15, 0x53, 0x93, 0x03, 0x36, 0x7d, 0x34, 0x75, 0x0e, 0x54, 0xbe, 0x10,
-	0x80, 0xec, 0x23, 0x5d, 0x81, 0x49, 0x91, 0x52, 0x27, 0x73, 0xa5, 0xf9, 0xea, 0xe2, 0xfc, 0x5f,
-	0x28, 0xc4, 0x32, 0x5c, 0x75, 0x59, 0xd0, 0xd5, 0xd3, 0x44, 0x4a, 0x61, 0x82, 0x75, 0x7d, 0xe4,
-	0x1a, 0xa6, 0x74, 0xbe, 0x96, 0x5e, 0x40, 0x2d, 0x0f, 0xa6, 0x67, 0xa1, 0xb4, 0x8b, 0x5d, 0x6e,
-	0x6e, 0x4a, 0x8f, 0x97, 0xf4, 0x1a, 0x94, 0xf7, 0x0c, 0xa7, 0x83, 0x42, 0xfa, 0x79, 0x35, 0xb9,
-	0x2c, 0x35, 0xbd, 0x2c, 0xb5, 0xe1, 0x76, 0xf5, 0x04, 0x72, 0x7b, 0x7c, 0x89, 0x28, 0x8f, 0x00,
-	0xd6, 0x90, 0xe9, 0xf8, 0xa6, 0x83, 0x61, 0x5c, 0x31, 0xb0, 0x91, 0x6d, 0xf8, 0xac, 0xe5, 0xb9,
-	0xa1, 0xa8, 0x59, 0xbd, 0x58, 0xb3, 0xb5, 0x5e, 0x5c, 0xcf, 0x61, 0x95, 0x16, 0x54, 0x39, 0x4f,
-	0xe8, 0x7b, 0x6e, 0x88, 0x54, 0x83, 0x4a, 0xe2, 0x43, 0x90, 0x5c, 0x1c, 0xe1, 0x5f, 0x17, 0x30,
-	0x7a, 0x15, 0xca, 0x18, 0x04, 0x5e, 0x20, 0x74, 0x9f, 0x2b, 0x1e, 0xba, 0x1a, 0x87, 0xf4, 0x04,
-	0xa1, 0x3c, 0x85, 0xea, 0x7a, 0x2b, 0xec, 0x69, 0xbe, 0x03, 0x55, 0xa7, 0x15, 0xf6, 0x89, 0x9e,
-	0x29, 0xe6, 0xaf, 0x67, 0x00, 0x3d, 0x8f, 0x56, 0x1c, 0xa8, 0x25, 0x5c, 0x42, 0xf7, 0x42, 0xff,
-	0xc5, 0x8d, 0x14, 0xde, 0xbb, 0xa7, 0x23, 0x28, 0xbf, 0x0b, 0xd0, 0xb0, 0xac, 0x54, 0xf8, 0x51,
-	0x6b, 0x14, 0xd7, 0x98, 0xa7, 0x9f, 0x40, 0x8d, 0x97, 0x61, 0xfa, 0xa5, 0x6f, 0x19, 0x0c, 0x8f,
-	0x2d, 0xd6, 0x81, 0xd3, 0x29, 0xc3, 0xc9, 0xe8, 0x7d, 0x88, 0x0e, 0xfe, 0x9f, 0xde, 0x94, 0xe1,
-	0x04, 0xf4, 0x3e, 0x87, 0xda, 0x96, 0xc1, 0xcc, 0x9d, 0x54, 0xee, 0x3d, 0xa8, 0xbd, 0x8d, 0xf7,
-	0xc5, 0x2e, 0x96, 0x8a, 0x0c, 0x5b, 0x39, 0x84, 0x5e, 0xc0, 0x2b, 0x1f, 0x09, 0x4c, 0x0b, 0x42,
-	0xa1, 0xfe, 0x3a, 0x94, 0xf9, 0x88, 0x14, 0x54, 0x17, 0xd4, 0x64, 0x60, 0x66, 0x72, 0xe2, 0xad,
-	0x9e, 0x60, 0x72, 0x56, 0xc7, 0x8f, 0x68, 0xb5, 0xf4, 0x2f, 0xab, 0x8b, 0x9f, 0x4b, 0x30, 0x29,
-	0x86, 0x16, 0x5d, 0x86, 0xd2, 0x1a, 0x32, 0x3a, 0x38, 0x50, 0xb3, 0x19, 0x24, 0xcd, 0x0e, 0x0f,
-	0x0a, 0x5b, 0x0f, 0x60, 0x22, 0x7e, 0xb0, 0x74, 0x10, 0x95, 0x9b, 0x09, 0xd2, 0xe5, 0x11, 0x51,
-	0x41, 0xb2, 0x0c, 0xa5, 0x86, 0x65, 0x0d, 0x91, 0x91, 0xbd, 0xce, 0x21, 0x32, 0xf2, 0x6f, 0xef,
-	0x09, 0x54, 0x92, 0xee, 0xa6, 0xf2, 0x00, 0xae, 0xf0, 0x70, 0xa4, 0x2b, 0x23, 0xe3, 0x19, 0x55,
-	0xd2, 0x78, 0x43, 0xa8, 0x0a, 0x3d, 0x3d, 0x84, 0xaa, 0xaf, 0x63, 0x1f, 0x43, 0x99, 0x37, 0x01,
-	0x1d, 0xf4, 0x9f, 0xef, 0x36, 0x49, 0x1e, 0x15, 0x4e, 0x78, 0x6e, 0x92, 0x95, 0xed, 0xfd, 0x03,
-	0x99, 0xfc, 0x38, 0x90, 0xc7, 0x7e, 0x1f, 0xc8, 0xe4, 0x7d, 0x24, 0x93, 0x4f, 0x91, 0x4c, 0xbe,
-	0x46, 0xf2, 0xd8, 0xb7, 0x48, 0x26, 0xfb, 0x91, 0x4c, 0xbe, 0x47, 0x32, 0xf9, 0x19, 0xc9, 0xe4,
-	0xc3, 0x2f, 0x79, 0xec, 0xd5, 0xd2, 0x71, 0xff, 0x95, 0x34, 0x2b, 0xfc, 0x77, 0xe9, 0xd6, 0x9f,
-	0x00, 0x00, 0x00, 0xff, 0xff, 0xa6, 0x72, 0x76, 0xd7, 0xd8, 0x08, 0x00, 0x00,
+	// 703 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x56, 0x41, 0x6f, 0xd3, 0x4c,
+	0x10, 0xed, 0x36, 0x4d, 0xfa, 0x75, 0x92, 0xf6, 0x43, 0x4b, 0x11, 0xc5, 0x80, 0xa9, 0x2c, 0x0e,
+	0x15, 0x08, 0x9b, 0xb4, 0x12, 0x2a, 0x95, 0x90, 0x9a, 0x42, 0x54, 0x2a, 0x15, 0x15, 0xb9, 0x42,
+	0x95, 0xb8, 0x39, 0xf6, 0xd4, 0x0d, 0x4d, 0x6c, 0x63, 0x6f, 0x02, 0xb9, 0xf1, 0x13, 0x90, 0xf8,
+	0x13, 0x9c, 0x39, 0x20, 0x8e, 0x1c, 0x7b, 0xe4, 0xc8, 0x91, 0x9a, 0x3f, 0xc1, 0x11, 0x79, 0xbd,
+	0xb1, 0x9d, 0xc4, 0xa9, 0xda, 0xa2, 0xdc, 0x76, 0xf7, 0xbd, 0x79, 0x7e, 0x33, 0x3b, 0x3b, 0x09,
+	0x6c, 0xd9, 0x4d, 0x76, 0xd4, 0x69, 0xa8, 0xa6, 0xdb, 0xd6, 0x6c, 0xa3, 0x85, 0xef, 0x7d, 0xa6,
+	0xa1, 0x85, 0x8e, 0xe9, 0x3a, 0x87, 0x6d, 0xbb, 0xcd, 0x34, 0xef, 0xd8, 0xd6, 0x0c, 0xaf, 0x19,
+	0x68, 0x01, 0x9a, 0x3e, 0xb2, 0x40, 0xeb, 0x56, 0x8d, 0x96, 0x77, 0x64, 0x44, 0x87, 0xaa, 0xe7,
+	0xbb, 0xcc, 0xa5, 0xff, 0x0b, 0x48, 0x15, 0x90, 0xf4, 0x20, 0x2b, 0xea, 0xda, 0xae, 0xc6, 0x79,
+	0x8d, 0xce, 0x21, 0xdf, 0xf1, 0x0d, 0x5f, 0xc5, 0xf1, 0xd2, 0x0d, 0xdb, 0x75, 0xed, 0x16, 0xa6,
+	0x2c, 0xc3, 0xe9, 0x09, 0x68, 0xe3, 0xdc, 0xf6, 0x4c, 0xd7, 0x47, 0xad, 0x5b, 0x4d, 0x6d, 0x49,
+	0xb5, 0x73, 0xc7, 0x62, 0x17, 0x9d, 0xbc, 0xcc, 0x14, 0x07, 0x4a, 0xfb, 0x3c, 0x37, 0xba, 0x06,
+	0xff, 0xb5, 0x91, 0x19, 0x96, 0xc1, 0x8c, 0x25, 0xb2, 0x4c, 0x56, 0xca, 0xab, 0xd7, 0xd5, 0xe8,
+	0x93, 0x6a, 0xb7, 0xaa, 0xee, 0x35, 0xde, 0xa0, 0xc9, 0x5e, 0x08, 0x58, 0x4f, 0x88, 0x54, 0x83,
+	0x99, 0xc0, 0x43, 0x73, 0x69, 0x9a, 0x07, 0xdc, 0x54, 0x87, 0xea, 0xa4, 0xc6, 0xda, 0xfb, 0x1e,
+	0x9a, 0x3a, 0x27, 0x2a, 0x5f, 0x09, 0x40, 0x7a, 0x48, 0xb7, 0x60, 0x56, 0x84, 0x2c, 0x91, 0xe5,
+	0xc2, 0x4a, 0x79, 0x75, 0xe5, 0x0c, 0x09, 0xb1, 0x0c, 0xea, 0x0e, 0xf3, 0x7b, 0x7a, 0x3f, 0x90,
+	0x52, 0x98, 0x61, 0x3d, 0x0f, 0xb9, 0x87, 0x39, 0x9d, 0xaf, 0xa5, 0x97, 0x50, 0xc9, 0x92, 0xe9,
+	0x15, 0x28, 0x1c, 0x63, 0x8f, 0xe7, 0x35, 0xa7, 0x47, 0x4b, 0x7a, 0x0f, 0x8a, 0x5d, 0xa3, 0xd5,
+	0x41, 0x61, 0x7d, 0x51, 0x8d, 0xaf, 0x48, 0xed, 0x5f, 0x91, 0x5a, 0x73, 0x7a, 0x7a, 0x4c, 0xd9,
+	0x98, 0x5e, 0x27, 0x4a, 0x0d, 0x60, 0x1b, 0x99, 0x8e, 0x6f, 0x3b, 0x18, 0x44, 0xc5, 0x02, 0x1b,
+	0xd9, 0x9e, 0xc7, 0x9a, 0xae, 0x13, 0x88, 0x72, 0x5d, 0x4d, 0xca, 0xb5, 0x9d, 0x40, 0x7a, 0x86,
+	0xa6, 0x58, 0x50, 0xe6, 0x12, 0x81, 0xe7, 0x3a, 0x01, 0x52, 0x0d, 0x4a, 0x71, 0x0a, 0x49, 0xb9,
+	0xf3, 0x53, 0xd7, 0x05, 0x8d, 0xde, 0x85, 0x22, 0xfa, 0xbe, 0xeb, 0x0b, 0xcb, 0x0b, 0xc9, 0xf7,
+	0xea, 0xd1, 0xa9, 0x1e, 0x83, 0x4a, 0x1d, 0xca, 0xbb, 0xcd, 0x20, 0x71, 0xfa, 0x08, 0xca, 0xad,
+	0x66, 0x30, 0x64, 0x75, 0x31, 0x09, 0xdd, 0x4d, 0x31, 0x3d, 0x4b, 0x54, 0x6c, 0xa8, 0xc4, 0x32,
+	0xc2, 0x6d, 0x75, 0xf8, 0xa6, 0xc6, 0xda, 0x4d, 0x2e, 0xe6, 0x7c, 0x7e, 0x9f, 0x00, 0xd4, 0x2c,
+	0xab, 0x6f, 0xf7, 0xa2, 0x45, 0x89, 0x8a, 0xca, 0xc3, 0x27, 0x5b, 0xd4, 0x4d, 0x98, 0x7f, 0xe5,
+	0x59, 0x06, 0xc3, 0x4b, 0xfb, 0xb4, 0x61, 0xa1, 0xaf, 0x30, 0x71, 0xab, 0xcf, 0xb0, 0x85, 0xff,
+	0x66, 0xb5, 0xaf, 0x30, 0x59, 0xab, 0x3b, 0x50, 0x39, 0x30, 0x98, 0x79, 0xd4, 0x77, 0xfa, 0x18,
+	0x2a, 0xef, 0xa2, 0xfd, 0x60, 0xb3, 0x5e, 0x4b, 0x82, 0x0f, 0x32, 0xa0, 0x3e, 0x40, 0x55, 0x3e,
+	0x11, 0x98, 0x17, 0x5a, 0xc2, 0xf3, 0x7d, 0x28, 0xf2, 0xa9, 0x97, 0xa8, 0xc4, 0x33, 0x30, 0x71,
+	0x5c, 0x8f, 0xb6, 0x7a, 0xcc, 0xc9, 0x24, 0x38, 0x7d, 0xc1, 0x04, 0x0b, 0x67, 0x24, 0xb8, 0xfa,
+	0xa5, 0x00, 0xb3, 0x62, 0x0e, 0xd1, 0x4d, 0x28, 0x6c, 0x23, 0xa3, 0xa3, 0x33, 0x32, 0x1d, 0x2b,
+	0xd2, 0xad, 0x7c, 0x50, 0x64, 0xf4, 0x14, 0x66, 0xa2, 0x27, 0x49, 0x47, 0x59, 0x99, 0x07, 0x2f,
+	0xdd, 0x1e, 0x83, 0x0a, 0x91, 0x4d, 0x28, 0xd4, 0x2c, 0x2b, 0xc7, 0x46, 0xfa, 0x08, 0x73, 0x6c,
+	0x64, 0x9f, 0xd8, 0x0e, 0x94, 0xe2, 0x4e, 0xa6, 0xf2, 0x08, 0x6f, 0xe0, 0x91, 0x48, 0x77, 0xc6,
+	0xe2, 0xa9, 0x54, 0xdc, 0x69, 0x39, 0x52, 0x03, 0x4d, 0x9c, 0x23, 0x35, 0xd4, 0xa2, 0xcf, 0xa1,
+	0xc8, 0xef, 0x9f, 0x8e, 0xe6, 0x9f, 0xed, 0x31, 0x49, 0x1e, 0x07, 0xc7, 0x3a, 0x0f, 0xc9, 0xd6,
+	0xe1, 0xc9, 0xa9, 0x4c, 0x7e, 0x9e, 0xca, 0x53, 0x7f, 0x4e, 0x65, 0xf2, 0x21, 0x94, 0xc9, 0xe7,
+	0x50, 0x26, 0xdf, 0x42, 0x79, 0xea, 0x7b, 0x28, 0x93, 0x93, 0x50, 0x26, 0x3f, 0x42, 0x99, 0xfc,
+	0x0a, 0x65, 0xf2, 0xf1, 0xb7, 0x3c, 0xf5, 0x7a, 0xfd, 0xb2, 0x7f, 0x2f, 0x1a, 0x25, 0xfe, 0x53,
+	0xb3, 0xf6, 0x37, 0x00, 0x00, 0xff, 0xff, 0xd8, 0x66, 0x45, 0xce, 0xa1, 0x08, 0x00, 0x00,
 }
 
 func (this *Secret) Equal(that interface{}) bool {
@@ -1993,7 +1993,7 @@ func encodeVarintApi(dAtA []byte, offset int, v uint64) int {
 func NewPopulatedSecret(r randyApi, easy bool) *Secret {
 	this := &Secret{}
 	if r.Intn(10) != 0 {
-		this.Metadata = v1alpha.NewPopulatedObjectMetadata(r, easy)
+		this.Metadata = v1.NewPopulatedObjectMetadata(r, easy)
 	}
 	if r.Intn(10) != 0 {
 		this.Spec = NewPopulatedSecretSpec(r, easy)
@@ -2021,7 +2021,7 @@ func NewPopulatedSecretSpec(r randyApi, easy bool) *SecretSpec {
 func NewPopulatedGetRequest(r randyApi, easy bool) *GetRequest {
 	this := &GetRequest{}
 	if r.Intn(10) != 0 {
-		this.GetOptions = v1alpha.NewPopulatedGetOptions(r, easy)
+		this.GetOptions = v1.NewPopulatedGetOptions(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2034,7 +2034,7 @@ func NewPopulatedGetResponse(r randyApi, easy bool) *GetResponse {
 		this.Secret = NewPopulatedSecret(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		this.Error = v1alpha.NewPopulatedError(r, easy)
+		this.Error = v1.NewPopulatedError(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2044,7 +2044,7 @@ func NewPopulatedGetResponse(r randyApi, easy bool) *GetResponse {
 func NewPopulatedListRequest(r randyApi, easy bool) *ListRequest {
 	this := &ListRequest{}
 	if r.Intn(10) != 0 {
-		this.ListOptions = v1alpha.NewPopulatedListOptions(r, easy)
+		this.ListOptions = v1.NewPopulatedListOptions(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2061,7 +2061,7 @@ func NewPopulatedListResponse(r randyApi, easy bool) *ListResponse {
 		}
 	}
 	if r.Intn(10) != 0 {
-		this.Error = v1alpha.NewPopulatedError(r, easy)
+		this.Error = v1.NewPopulatedError(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2084,7 +2084,7 @@ func NewPopulatedAddResponse(r randyApi, easy bool) *AddResponse {
 		this.Secret = NewPopulatedSecret(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		this.Error = v1alpha.NewPopulatedError(r, easy)
+		this.Error = v1.NewPopulatedError(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2107,7 +2107,7 @@ func NewPopulatedUpdateResponse(r randyApi, easy bool) *UpdateResponse {
 		this.Secret = NewPopulatedSecret(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		this.Error = v1alpha.NewPopulatedError(r, easy)
+		this.Error = v1.NewPopulatedError(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2130,7 +2130,7 @@ func NewPopulatedDeleteResponse(r randyApi, easy bool) *DeleteResponse {
 		this.Secret = NewPopulatedSecret(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		this.Error = v1alpha.NewPopulatedError(r, easy)
+		this.Error = v1.NewPopulatedError(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2140,7 +2140,7 @@ func NewPopulatedDeleteResponse(r randyApi, easy bool) *DeleteResponse {
 func NewPopulatedWatchRequest(r randyApi, easy bool) *WatchRequest {
 	this := &WatchRequest{}
 	if r.Intn(10) != 0 {
-		this.WatchOptions = v1alpha.NewPopulatedWatchOptions(r, easy)
+		this.WatchOptions = v1.NewPopulatedWatchOptions(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2150,13 +2150,13 @@ func NewPopulatedWatchRequest(r randyApi, easy bool) *WatchRequest {
 func NewPopulatedWatchResponse(r randyApi, easy bool) *WatchResponse {
 	this := &WatchResponse{}
 	if r.Intn(10) != 0 {
-		this.Event = v1alpha1.NewPopulatedEvent(r, easy)
+		this.Event = v1alpha.NewPopulatedEvent(r, easy)
 	}
 	if r.Intn(10) != 0 {
 		this.Secret = NewPopulatedSecret(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		this.Error = v1alpha.NewPopulatedError(r, easy)
+		this.Error = v1.NewPopulatedError(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2482,7 +2482,7 @@ func (this *Secret) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&Secret{`,
-		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "ObjectMetadata", "v1alpha.ObjectMetadata", 1) + `,`,
+		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "ObjectMetadata", "v1.ObjectMetadata", 1) + `,`,
 		`Spec:` + strings.Replace(fmt.Sprintf("%v", this.Spec), "SecretSpec", "SecretSpec", 1) + `,`,
 		`}`,
 	}, "")
@@ -2514,7 +2514,7 @@ func (this *GetRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetRequest{`,
-		`GetOptions:` + strings.Replace(fmt.Sprintf("%v", this.GetOptions), "GetOptions", "v1alpha.GetOptions", 1) + `,`,
+		`GetOptions:` + strings.Replace(fmt.Sprintf("%v", this.GetOptions), "GetOptions", "v1.GetOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2525,7 +2525,7 @@ func (this *GetResponse) String() string {
 	}
 	s := strings.Join([]string{`&GetResponse{`,
 		`Secret:` + strings.Replace(fmt.Sprintf("%v", this.Secret), "Secret", "Secret", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1alpha.Error", 1) + `,`,
+		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2535,7 +2535,7 @@ func (this *ListRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ListRequest{`,
-		`ListOptions:` + strings.Replace(fmt.Sprintf("%v", this.ListOptions), "ListOptions", "v1alpha.ListOptions", 1) + `,`,
+		`ListOptions:` + strings.Replace(fmt.Sprintf("%v", this.ListOptions), "ListOptions", "v1.ListOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2546,7 +2546,7 @@ func (this *ListResponse) String() string {
 	}
 	s := strings.Join([]string{`&ListResponse{`,
 		`Secrets:` + strings.Replace(fmt.Sprintf("%v", this.Secrets), "Secret", "Secret", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1alpha.Error", 1) + `,`,
+		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2567,7 +2567,7 @@ func (this *AddResponse) String() string {
 	}
 	s := strings.Join([]string{`&AddResponse{`,
 		`Secret:` + strings.Replace(fmt.Sprintf("%v", this.Secret), "Secret", "Secret", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1alpha.Error", 1) + `,`,
+		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2588,7 +2588,7 @@ func (this *UpdateResponse) String() string {
 	}
 	s := strings.Join([]string{`&UpdateResponse{`,
 		`Secret:` + strings.Replace(fmt.Sprintf("%v", this.Secret), "Secret", "Secret", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1alpha.Error", 1) + `,`,
+		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2609,7 +2609,7 @@ func (this *DeleteResponse) String() string {
 	}
 	s := strings.Join([]string{`&DeleteResponse{`,
 		`Secret:` + strings.Replace(fmt.Sprintf("%v", this.Secret), "Secret", "Secret", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1alpha.Error", 1) + `,`,
+		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2619,7 +2619,7 @@ func (this *WatchRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&WatchRequest{`,
-		`WatchOptions:` + strings.Replace(fmt.Sprintf("%v", this.WatchOptions), "WatchOptions", "v1alpha.WatchOptions", 1) + `,`,
+		`WatchOptions:` + strings.Replace(fmt.Sprintf("%v", this.WatchOptions), "WatchOptions", "v1.WatchOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2629,9 +2629,9 @@ func (this *WatchResponse) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&WatchResponse{`,
-		`Event:` + strings.Replace(fmt.Sprintf("%v", this.Event), "Event", "v1alpha1.Event", 1) + `,`,
+		`Event:` + strings.Replace(fmt.Sprintf("%v", this.Event), "Event", "v1alpha.Event", 1) + `,`,
 		`Secret:` + strings.Replace(fmt.Sprintf("%v", this.Secret), "Secret", "Secret", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1alpha.Error", 1) + `,`,
+		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2700,7 +2700,7 @@ func (m *Secret) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Metadata == nil {
-				m.Metadata = &v1alpha.ObjectMetadata{}
+				m.Metadata = &v1.ObjectMetadata{}
 			}
 			if err := m.Metadata.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -3018,7 +3018,7 @@ func (m *GetRequest) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.GetOptions == nil {
-				m.GetOptions = &v1alpha.GetOptions{}
+				m.GetOptions = &v1.GetOptions{}
 			}
 			if err := m.GetOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -3134,7 +3134,7 @@ func (m *GetResponse) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Error == nil {
-				m.Error = &v1alpha.Error{}
+				m.Error = &v1.Error{}
 			}
 			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -3217,7 +3217,7 @@ func (m *ListRequest) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.ListOptions == nil {
-				m.ListOptions = &v1alpha.ListOptions{}
+				m.ListOptions = &v1.ListOptions{}
 			}
 			if err := m.ListOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -3331,7 +3331,7 @@ func (m *ListResponse) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Error == nil {
-				m.Error = &v1alpha.Error{}
+				m.Error = &v1.Error{}
 			}
 			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -3530,7 +3530,7 @@ func (m *AddResponse) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Error == nil {
-				m.Error = &v1alpha.Error{}
+				m.Error = &v1.Error{}
 			}
 			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -3729,7 +3729,7 @@ func (m *UpdateResponse) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Error == nil {
-				m.Error = &v1alpha.Error{}
+				m.Error = &v1.Error{}
 			}
 			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -3928,7 +3928,7 @@ func (m *DeleteResponse) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Error == nil {
-				m.Error = &v1alpha.Error{}
+				m.Error = &v1.Error{}
 			}
 			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -4011,7 +4011,7 @@ func (m *WatchRequest) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.WatchOptions == nil {
-				m.WatchOptions = &v1alpha.WatchOptions{}
+				m.WatchOptions = &v1.WatchOptions{}
 			}
 			if err := m.WatchOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -4094,7 +4094,7 @@ func (m *WatchResponse) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Event == nil {
-				m.Event = &v1alpha1.Event{}
+				m.Event = &v1alpha.Event{}
 			}
 			if err := m.Event.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -4160,7 +4160,7 @@ func (m *WatchResponse) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Error == nil {
-				m.Error = &v1alpha.Error{}
+				m.Error = &v1.Error{}
 			}
 			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err

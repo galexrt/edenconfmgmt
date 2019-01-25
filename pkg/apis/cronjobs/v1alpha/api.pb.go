@@ -6,8 +6,8 @@ package v1alpha
 import (
 	context "context"
 	fmt "fmt"
-	v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha"
-	v1alpha1 "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha"
+	v1 "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1"
+	v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	grpc "google.golang.org/grpc"
@@ -30,7 +30,7 @@ const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
 
 type CronJob struct {
 	// Metadata for CronJob object.
-	Metadata *v1alpha.ObjectMetadata `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	Metadata *v1.ObjectMetadata `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
 	// Spec for CronJob.
 	Spec                 *CronJobSpec `protobuf:"bytes,2,opt,name=spec,proto3" json:"spec,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}     `json:"-"`
@@ -69,7 +69,7 @@ func (m *CronJob) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_CronJob proto.InternalMessageInfo
 
-func (m *CronJob) GetMetadata() *v1alpha.ObjectMetadata {
+func (m *CronJob) GetMetadata() *v1.ObjectMetadata {
 	if m != nil {
 		return m.Metadata
 	}
@@ -178,9 +178,9 @@ func (m *Schedule) GetCrontTab() string {
 // Get
 type GetRequest struct {
 	// GetOptions options for a GetRequest.
-	GetOptions           *v1alpha.GetOptions `protobuf:"bytes,1,opt,name=getOptions,proto3" json:"getOptions,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}            `json:"-"`
-	XXX_sizecache        int32               `json:"-"`
+	GetOptions           *v1.GetOptions `protobuf:"bytes,1,opt,name=getOptions,proto3" json:"getOptions,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
+	XXX_sizecache        int32          `json:"-"`
 }
 
 func (m *GetRequest) Reset()      { *m = GetRequest{} }
@@ -215,7 +215,7 @@ func (m *GetRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetRequest proto.InternalMessageInfo
 
-func (m *GetRequest) GetGetOptions() *v1alpha.GetOptions {
+func (m *GetRequest) GetGetOptions() *v1.GetOptions {
 	if m != nil {
 		return m.GetOptions
 	}
@@ -226,9 +226,9 @@ type GetResponse struct {
 	// CronJob object.
 	CronJob *CronJob `protobuf:"bytes,1,opt,name=cronJob,proto3" json:"cronJob,omitempty"`
 	// Error object.
-	Error                *v1alpha.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
-	XXX_sizecache        int32          `json:"-"`
+	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
 }
 
 func (m *GetResponse) Reset()      { *m = GetResponse{} }
@@ -270,7 +270,7 @@ func (m *GetResponse) GetCronJob() *CronJob {
 	return nil
 }
 
-func (m *GetResponse) GetError() *v1alpha.Error {
+func (m *GetResponse) GetError() *v1.Error {
 	if m != nil {
 		return m.Error
 	}
@@ -280,9 +280,9 @@ func (m *GetResponse) GetError() *v1alpha.Error {
 // List
 type ListRequest struct {
 	// ListOptions options for a ListRequest.
-	ListOptions          *v1alpha.ListOptions `protobuf:"bytes,1,opt,name=listOptions,proto3" json:"listOptions,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}             `json:"-"`
-	XXX_sizecache        int32                `json:"-"`
+	ListOptions          *v1.ListOptions `protobuf:"bytes,1,opt,name=listOptions,proto3" json:"listOptions,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
+	XXX_sizecache        int32           `json:"-"`
 }
 
 func (m *ListRequest) Reset()      { *m = ListRequest{} }
@@ -317,7 +317,7 @@ func (m *ListRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ListRequest proto.InternalMessageInfo
 
-func (m *ListRequest) GetListOptions() *v1alpha.ListOptions {
+func (m *ListRequest) GetListOptions() *v1.ListOptions {
 	if m != nil {
 		return m.ListOptions
 	}
@@ -328,9 +328,9 @@ type ListResponse struct {
 	// Config list.
 	Cronjobs []*CronJob `protobuf:"bytes,1,rep,name=cronjobs,proto3" json:"cronjobs,omitempty"`
 	// Error object.
-	Error                *v1alpha.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
-	XXX_sizecache        int32          `json:"-"`
+	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
 }
 
 func (m *ListResponse) Reset()      { *m = ListResponse{} }
@@ -372,7 +372,7 @@ func (m *ListResponse) GetCronjobs() []*CronJob {
 	return nil
 }
 
-func (m *ListResponse) GetError() *v1alpha.Error {
+func (m *ListResponse) GetError() *v1.Error {
 	if m != nil {
 		return m.Error
 	}
@@ -430,9 +430,9 @@ type AddResponse struct {
 	// CronJob object.
 	CronJob *CronJob `protobuf:"bytes,1,opt,name=cronJob,proto3" json:"cronJob,omitempty"`
 	// Error object.
-	Error                *v1alpha.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
-	XXX_sizecache        int32          `json:"-"`
+	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
 }
 
 func (m *AddResponse) Reset()      { *m = AddResponse{} }
@@ -474,7 +474,7 @@ func (m *AddResponse) GetCronJob() *CronJob {
 	return nil
 }
 
-func (m *AddResponse) GetError() *v1alpha.Error {
+func (m *AddResponse) GetError() *v1.Error {
 	if m != nil {
 		return m.Error
 	}
@@ -532,9 +532,9 @@ type UpdateResponse struct {
 	// CronJob object.
 	CronJob *CronJob `protobuf:"bytes,1,opt,name=cronJob,proto3" json:"cronJob,omitempty"`
 	// Error object.
-	Error                *v1alpha.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
-	XXX_sizecache        int32          `json:"-"`
+	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
 }
 
 func (m *UpdateResponse) Reset()      { *m = UpdateResponse{} }
@@ -576,7 +576,7 @@ func (m *UpdateResponse) GetCronJob() *CronJob {
 	return nil
 }
 
-func (m *UpdateResponse) GetError() *v1alpha.Error {
+func (m *UpdateResponse) GetError() *v1.Error {
 	if m != nil {
 		return m.Error
 	}
@@ -634,9 +634,9 @@ type DeleteResponse struct {
 	// CronJob object.
 	CronJob *CronJob `protobuf:"bytes,1,opt,name=cronJob,proto3" json:"cronJob,omitempty"`
 	// Error object.
-	Error                *v1alpha.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
-	XXX_sizecache        int32          `json:"-"`
+	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
 }
 
 func (m *DeleteResponse) Reset()      { *m = DeleteResponse{} }
@@ -678,7 +678,7 @@ func (m *DeleteResponse) GetCronJob() *CronJob {
 	return nil
 }
 
-func (m *DeleteResponse) GetError() *v1alpha.Error {
+func (m *DeleteResponse) GetError() *v1.Error {
 	if m != nil {
 		return m.Error
 	}
@@ -688,9 +688,9 @@ func (m *DeleteResponse) GetError() *v1alpha.Error {
 // Watch
 type WatchRequest struct {
 	// WatchOptions options for WatchRequest.
-	WatchOptions         *v1alpha.WatchOptions `protobuf:"bytes,1,opt,name=watchOptions,proto3" json:"watchOptions,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}              `json:"-"`
-	XXX_sizecache        int32                 `json:"-"`
+	WatchOptions         *v1.WatchOptions `protobuf:"bytes,1,opt,name=watchOptions,proto3" json:"watchOptions,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_sizecache        int32            `json:"-"`
 }
 
 func (m *WatchRequest) Reset()      { *m = WatchRequest{} }
@@ -725,7 +725,7 @@ func (m *WatchRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_WatchRequest proto.InternalMessageInfo
 
-func (m *WatchRequest) GetWatchOptions() *v1alpha.WatchOptions {
+func (m *WatchRequest) GetWatchOptions() *v1.WatchOptions {
 	if m != nil {
 		return m.WatchOptions
 	}
@@ -734,13 +734,13 @@ func (m *WatchRequest) GetWatchOptions() *v1alpha.WatchOptions {
 
 type WatchResponse struct {
 	// Event info for watch response.
-	Event *v1alpha1.Event `protobuf:"bytes,1,opt,name=event,proto3" json:"event,omitempty"`
+	Event *v1alpha.Event `protobuf:"bytes,1,opt,name=event,proto3" json:"event,omitempty"`
 	// CronJob for watch response.
 	CronJob *CronJob `protobuf:"bytes,2,opt,name=cronJob,proto3" json:"cronJob,omitempty"`
 	// Error object.
-	Error                *v1alpha.Error `protobuf:"bytes,3,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
-	XXX_sizecache        int32          `json:"-"`
+	Error                *v1.Error `protobuf:"bytes,3,opt,name=error,proto3" json:"error,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
 }
 
 func (m *WatchResponse) Reset()      { *m = WatchResponse{} }
@@ -775,7 +775,7 @@ func (m *WatchResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_WatchResponse proto.InternalMessageInfo
 
-func (m *WatchResponse) GetEvent() *v1alpha1.Event {
+func (m *WatchResponse) GetEvent() *v1alpha.Event {
 	if m != nil {
 		return m.Event
 	}
@@ -789,7 +789,7 @@ func (m *WatchResponse) GetCronJob() *CronJob {
 	return nil
 }
 
-func (m *WatchResponse) GetError() *v1alpha.Error {
+func (m *WatchResponse) GetError() *v1.Error {
 	if m != nil {
 		return m.Error
 	}
@@ -819,49 +819,49 @@ func init() {
 }
 
 var fileDescriptor_8e9a4a89a735bf31 = []byte{
-	// 665 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x96, 0xcb, 0x6e, 0xd3, 0x4c,
-	0x14, 0xc7, 0x3b, 0x4d, 0x2f, 0xf9, 0x4e, 0xda, 0x4f, 0x68, 0x10, 0x52, 0x6a, 0xb5, 0xd3, 0xca,
-	0x0b, 0x04, 0x42, 0xd8, 0xb4, 0x15, 0xa8, 0x08, 0x09, 0x94, 0x5e, 0xa8, 0x54, 0x0a, 0x95, 0x5c,
-	0x50, 0x25, 0x76, 0xbe, 0x4c, 0x9d, 0x94, 0xc4, 0x63, 0xec, 0x49, 0x61, 0xc9, 0x23, 0xf0, 0x00,
-	0x3c, 0x00, 0x8f, 0xc0, 0x0e, 0x96, 0x5d, 0xb2, 0x64, 0x49, 0xcc, 0x4b, 0xb0, 0x44, 0x1e, 0x8f,
-	0x1d, 0x3b, 0x71, 0xa0, 0x17, 0x29, 0xbb, 0xcc, 0x9c, 0xff, 0xfc, 0xce, 0xff, 0x1c, 0x9d, 0x99,
-	0x18, 0xb6, 0xdc, 0x16, 0x6f, 0x76, 0x2d, 0xcd, 0x66, 0x1d, 0xdd, 0x35, 0xdb, 0xf4, 0x7d, 0xc0,
-	0x75, 0xea, 0x50, 0xcf, 0x66, 0xde, 0x71, 0xc7, 0xed, 0x70, 0xdd, 0x7f, 0xe3, 0xea, 0xa6, 0xdf,
-	0x0a, 0x75, 0x3b, 0x60, 0xde, 0x09, 0xb3, 0x42, 0xfd, 0x74, 0xd5, 0x6c, 0xfb, 0x4d, 0x33, 0xde,
-	0xd5, 0xfc, 0x80, 0x71, 0x86, 0xaf, 0xa5, 0x31, 0x4d, 0xc6, 0x94, 0xbb, 0x79, 0x2c, 0x73, 0x99,
-	0x2e, 0x84, 0x56, 0xf7, 0x58, 0xac, 0xc4, 0x42, 0xfc, 0x4a, 0x00, 0xca, 0x93, 0xf3, 0xbb, 0x60,
-	0x01, 0x1d, 0x76, 0xa0, 0x34, 0xce, 0x0d, 0xa0, 0xa7, 0xd4, 0xe3, 0x25, 0x45, 0xa8, 0xa7, 0x30,
-	0xbb, 0x15, 0x30, 0x6f, 0x8f, 0x59, 0x78, 0x03, 0xaa, 0x1d, 0xca, 0x4d, 0xc7, 0xe4, 0x66, 0x1d,
-	0xad, 0xa0, 0x5b, 0xb5, 0xb5, 0x45, 0x2d, 0x4e, 0x9c, 0x96, 0xa7, 0x1d, 0x58, 0x27, 0xd4, 0xe6,
-	0xcf, 0xa5, 0xc6, 0xc8, 0xd4, 0x78, 0x15, 0xa6, 0x42, 0x9f, 0xda, 0xf5, 0x49, 0x71, 0x6a, 0x49,
-	0x1b, 0x6c, 0x8c, 0x26, 0x53, 0x1c, 0xfa, 0xd4, 0x36, 0x84, 0x54, 0xdd, 0x81, 0x5a, 0x6e, 0x13,
-	0x3f, 0x80, 0x6a, 0x68, 0x37, 0xa9, 0xd3, 0x6d, 0x53, 0x99, 0x5b, 0x19, 0xa6, 0x1c, 0x4a, 0x85,
-	0x91, 0x69, 0xd5, 0x9b, 0x50, 0x4d, 0x77, 0xb1, 0x02, 0xd5, 0xf8, 0x08, 0x7f, 0x69, 0x5a, 0x82,
-	0xf1, 0x9f, 0x91, 0xad, 0xd5, 0xa7, 0x00, 0xbb, 0x94, 0x1b, 0xf4, 0x6d, 0x97, 0x86, 0x1c, 0x6f,
-	0x00, 0xb8, 0x94, 0x1f, 0xf8, 0xbc, 0xc5, 0xbc, 0x50, 0xe6, 0xab, 0x17, 0x6b, 0xdd, 0xcd, 0xe2,
-	0x46, 0x4e, 0xab, 0x76, 0xa0, 0x26, 0x38, 0xa1, 0xcf, 0xbc, 0x90, 0xe2, 0x75, 0x98, 0xb5, 0x93,
-	0x2a, 0x24, 0x65, 0x61, 0x64, 0xed, 0x46, 0xaa, 0xc4, 0xb7, 0x61, 0x9a, 0x06, 0x01, 0x0b, 0x64,
-	0xbb, 0xae, 0x17, 0x13, 0xef, 0xc4, 0x21, 0x23, 0x51, 0xa8, 0x7b, 0x50, 0xdb, 0x6f, 0x85, 0x99,
-	0xef, 0x47, 0x50, 0x6b, 0xb7, 0xc2, 0x01, 0xe3, 0x0b, 0xc5, 0xf3, 0xfb, 0x7d, 0x81, 0x91, 0x57,
-	0xab, 0x3e, 0xcc, 0x25, 0x2c, 0xe9, 0xfd, 0x7e, 0xd2, 0xae, 0xd8, 0x6b, 0x1d, 0xad, 0x54, 0xfe,
-	0x6e, 0x3e, 0x93, 0x5e, 0xc4, 0x7d, 0x03, 0xa0, 0xe1, 0x38, 0xa9, 0xf9, 0xcb, 0xf4, 0x2a, 0xee,
-	0xb7, 0x40, 0x8c, 0xa9, 0xdf, 0xdb, 0x30, 0xff, 0xca, 0x77, 0x4c, 0x4e, 0xaf, 0x64, 0xda, 0x87,
-	0xff, 0x53, 0xca, 0xf8, 0x7c, 0x6f, 0xd3, 0x36, 0xbd, 0xba, 0xef, 0x94, 0x32, 0x26, 0xdf, 0x2f,
-	0x60, 0xee, 0xc8, 0xe4, 0x76, 0x33, 0xb5, 0xfd, 0x18, 0xe6, 0xde, 0xc5, 0xeb, 0xe2, 0x84, 0x2b,
-	0x45, 0xc2, 0x51, 0x4e, 0x61, 0x14, 0xf4, 0xea, 0x27, 0x04, 0xf3, 0x12, 0x28, 0x2b, 0xb8, 0x03,
-	0xd3, 0xe2, 0xed, 0x93, 0xa8, 0x1b, 0x5a, 0xf2, 0x12, 0xf6, 0xed, 0xc4, 0x4b, 0x23, 0xd1, 0xe4,
-	0xcb, 0x9d, 0xbc, 0x78, 0xb9, 0x95, 0x7f, 0x95, 0xbb, 0xf6, 0xb5, 0x02, 0x55, 0x79, 0x3e, 0xc4,
-	0x9b, 0x50, 0xd9, 0xa5, 0x1c, 0x2f, 0x0e, 0xa7, 0xe8, 0xbf, 0x54, 0xca, 0xd2, 0x88, 0xa8, 0xac,
-	0x6e, 0x07, 0xa6, 0xe2, 0x3b, 0x8d, 0x4b, 0x64, 0xb9, 0x77, 0x43, 0x21, 0xa3, 0xc2, 0x12, 0xb3,
-	0x09, 0x95, 0x86, 0xe3, 0x94, 0x59, 0xe9, 0xdf, 0xdf, 0x32, 0x2b, 0xf9, 0xab, 0xf9, 0x0c, 0x66,
-	0x92, 0xa1, 0xc7, 0xcb, 0xc3, 0xc2, 0xc2, 0xa5, 0x52, 0x56, 0x46, 0x0b, 0xfa, 0xb0, 0x64, 0x12,
-	0xcb, 0x60, 0x85, 0x49, 0x2f, 0x83, 0x0d, 0x0c, 0xf1, 0x1e, 0x4c, 0x8b, 0x99, 0xc0, 0x25, 0x6d,
-	0xc8, 0x4f, 0x9f, 0xb2, 0x3c, 0x32, 0x9e, 0x90, 0xee, 0xa1, 0x4d, 0xf7, 0xac, 0x47, 0xd0, 0x8f,
-	0x1e, 0x99, 0xf8, 0xdd, 0x23, 0xe8, 0x43, 0x44, 0xd0, 0xe7, 0x88, 0xa0, 0x2f, 0x11, 0x99, 0xf8,
-	0x16, 0x11, 0x74, 0x16, 0x11, 0xf4, 0x3d, 0x22, 0xe8, 0x67, 0x44, 0xd0, 0xc7, 0x5f, 0x64, 0xe2,
-	0xf5, 0xc3, 0x4b, 0x7f, 0x66, 0x58, 0x33, 0xe2, 0xef, 0x79, 0xfd, 0x4f, 0x00, 0x00, 0x00, 0xff,
-	0xff, 0x55, 0xf3, 0xb4, 0xde, 0xaa, 0x08, 0x00, 0x00,
+	// 664 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x56, 0xcd, 0x6e, 0xd3, 0x4c,
+	0x14, 0xed, 0x34, 0xfd, 0xc9, 0x77, 0xd3, 0x56, 0x9f, 0x06, 0x10, 0xc5, 0xa2, 0xd3, 0xca, 0x42,
+	0x08, 0x09, 0x61, 0x93, 0x46, 0x54, 0x2a, 0xbb, 0xb4, 0x8d, 0x2a, 0x4a, 0x51, 0x25, 0x17, 0x54,
+	0x89, 0x9d, 0x7f, 0xa6, 0x4e, 0xda, 0xc4, 0xe3, 0xda, 0x93, 0xc0, 0x92, 0x47, 0x60, 0xc7, 0x2b,
+	0xf0, 0x08, 0xec, 0x60, 0xd9, 0x25, 0x4b, 0x96, 0xd4, 0xbc, 0x04, 0x4b, 0xe4, 0xf1, 0x64, 0xe2,
+	0xb4, 0x4e, 0x95, 0x52, 0x95, 0x5d, 0xee, 0x9c, 0x73, 0xcf, 0x3d, 0xf7, 0xea, 0xce, 0xc4, 0xb0,
+	0xe9, 0xb7, 0x78, 0xb3, 0xeb, 0x18, 0x2e, 0xeb, 0x98, 0xbe, 0xdd, 0xa6, 0xef, 0x23, 0x6e, 0x52,
+	0x8f, 0x06, 0x2e, 0x0b, 0x0e, 0x3b, 0x7e, 0x87, 0x9b, 0xe1, 0xb1, 0x6f, 0xda, 0x61, 0x2b, 0x36,
+	0xdd, 0x88, 0x05, 0x47, 0xcc, 0x89, 0xcd, 0x5e, 0xd5, 0x6e, 0x87, 0x4d, 0x3b, 0x3d, 0x35, 0xc2,
+	0x88, 0x71, 0x86, 0xff, 0xef, 0x63, 0x86, 0xc4, 0xb4, 0x27, 0x79, 0x59, 0xe6, 0x33, 0x53, 0x10,
+	0x9d, 0xee, 0xa1, 0x88, 0x44, 0x20, 0x7e, 0x65, 0x02, 0xda, 0xf3, 0xf1, 0x5d, 0xb0, 0x88, 0x9a,
+	0xbd, 0xea, 0xa0, 0xb8, 0x56, 0x1f, 0x3b, 0x97, 0xf6, 0x68, 0xc0, 0x0b, 0xfc, 0xeb, 0x27, 0x30,
+	0xbb, 0x19, 0xb1, 0x60, 0x87, 0x39, 0xb8, 0x06, 0xe5, 0x0e, 0xe5, 0xb6, 0x67, 0x73, 0x7b, 0x11,
+	0xad, 0xa0, 0x47, 0x95, 0xd5, 0xbb, 0x46, 0x5a, 0xd3, 0xe8, 0x55, 0x8d, 0x3d, 0xe7, 0x88, 0xba,
+	0xfc, 0x95, 0x84, 0x2d, 0x45, 0xc4, 0x55, 0x98, 0x8a, 0x43, 0xea, 0x2e, 0x4e, 0x8a, 0x84, 0x25,
+	0xe3, 0xfc, 0x38, 0x0c, 0xa9, 0xbe, 0x1f, 0x52, 0xd7, 0x12, 0x54, 0xbd, 0x01, 0x95, 0xdc, 0x21,
+	0x5e, 0x83, 0x72, 0xec, 0x36, 0xa9, 0xd7, 0x6d, 0x53, 0x59, 0x56, 0xbb, 0xa8, 0xb2, 0x2f, 0x19,
+	0x96, 0xe2, 0xea, 0x0f, 0xa1, 0xdc, 0x3f, 0xc5, 0x1a, 0x94, 0xd3, 0x14, 0xfe, 0xda, 0x76, 0x84,
+	0xc6, 0x7f, 0x96, 0x8a, 0xf5, 0x3a, 0xc0, 0x36, 0xe5, 0x16, 0x3d, 0xe9, 0xd2, 0x98, 0xe3, 0x1a,
+	0x80, 0x4f, 0xf9, 0x5e, 0xc8, 0x5b, 0x2c, 0x88, 0x65, 0xbd, 0x5b, 0xaa, 0xcd, 0x6d, 0x05, 0x59,
+	0x39, 0x9a, 0xde, 0x84, 0x8a, 0x90, 0x88, 0x43, 0x16, 0xc4, 0x14, 0xd7, 0x60, 0xd6, 0xcd, 0x1a,
+	0x90, 0x02, 0xf7, 0x46, 0xb6, 0x6d, 0xf5, 0x99, 0xf8, 0x01, 0x4c, 0xd3, 0x28, 0x62, 0x91, 0x9c,
+	0xd4, 0x82, 0xaa, 0xd9, 0x48, 0x4f, 0xad, 0x0c, 0x4c, 0x67, 0xb3, 0xdb, 0x8a, 0x95, 0xdb, 0x35,
+	0xa8, 0xb4, 0x5b, 0xf1, 0x39, 0xbb, 0xb7, 0x55, 0xea, 0xee, 0x00, 0xb3, 0xf2, 0x44, 0xfd, 0x18,
+	0xe6, 0x32, 0x19, 0xe9, 0xf8, 0x59, 0x36, 0x9f, 0xd4, 0xe1, 0x22, 0x5a, 0x29, 0x5d, 0x6e, 0x59,
+	0x51, 0xc7, 0xf4, 0x5c, 0x07, 0xa8, 0x7b, 0xde, 0x60, 0xc0, 0x57, 0x1f, 0x4e, 0x3a, 0x60, 0x21,
+	0x71, 0xf3, 0x03, 0xde, 0x82, 0xf9, 0x37, 0xa1, 0x67, 0x73, 0x7a, 0x2d, 0xbf, 0xc7, 0xb0, 0xd0,
+	0x57, 0xf9, 0x27, 0x96, 0xb7, 0x68, 0x9b, 0x5e, 0xdf, 0x72, 0x5f, 0xe5, 0xe6, 0x2d, 0xbf, 0x80,
+	0xb9, 0x03, 0x9b, 0xbb, 0xcd, 0xbe, 0xe3, 0x75, 0x98, 0x7b, 0x97, 0xc6, 0xc3, 0x8b, 0x7c, 0x47,
+	0x25, 0x1f, 0xe4, 0x40, 0x6b, 0x88, 0xaa, 0x7f, 0x42, 0x30, 0x2f, 0xb5, 0xa4, 0xef, 0xc7, 0x30,
+	0x2d, 0x9e, 0x33, 0xa5, 0x92, 0x3d, 0x6e, 0xca, 0x73, 0x23, 0x0d, 0xad, 0x8c, 0x93, 0x6f, 0x72,
+	0xf2, 0xea, 0x4d, 0x96, 0x2e, 0x69, 0x72, 0xf5, 0x6b, 0x09, 0xca, 0x32, 0x35, 0xc6, 0x1b, 0x50,
+	0xda, 0xa6, 0x1c, 0xdf, 0xbf, 0xa8, 0x3e, 0x78, 0x7c, 0xb4, 0xa5, 0x11, 0xa8, 0x6c, 0xac, 0x01,
+	0x53, 0xe9, 0xad, 0xc5, 0x05, 0xb4, 0xdc, 0xa3, 0xa0, 0x91, 0x51, 0xb0, 0x94, 0xd9, 0x80, 0x52,
+	0xdd, 0xf3, 0x8a, 0xac, 0x0c, 0xae, 0x69, 0x91, 0x95, 0xfc, 0x0d, 0x7c, 0x09, 0x33, 0xd9, 0x82,
+	0xe3, 0xe5, 0x8b, 0xc4, 0xa1, 0x0b, 0xa4, 0xad, 0x8c, 0x26, 0x0c, 0xc4, 0xb2, 0xd5, 0x2b, 0x12,
+	0x1b, 0x5a, 0xed, 0x22, 0xb1, 0x73, 0x5b, 0xbb, 0x03, 0xd3, 0x62, 0x1d, 0x70, 0xc1, 0x18, 0xf2,
+	0x3b, 0xa7, 0x2d, 0x8f, 0xc4, 0x33, 0xa5, 0xa7, 0x68, 0xc3, 0x3f, 0x3d, 0x23, 0xe8, 0xc7, 0x19,
+	0x99, 0xf8, 0x7d, 0x46, 0xd0, 0x87, 0x84, 0xa0, 0xcf, 0x09, 0x41, 0x5f, 0x12, 0x32, 0xf1, 0x2d,
+	0x21, 0xe8, 0x34, 0x21, 0xe8, 0x7b, 0x42, 0xd0, 0xcf, 0x84, 0xa0, 0x8f, 0xbf, 0xc8, 0xc4, 0xdb,
+	0xf5, 0xbf, 0xfe, 0x5e, 0x70, 0x66, 0xc4, 0x9f, 0x6d, 0xed, 0x4f, 0x00, 0x00, 0x00, 0xff, 0xff,
+	0xb4, 0xe5, 0xb4, 0xb7, 0x73, 0x08, 0x00, 0x00,
 }
 
 func (this *CronJob) Equal(that interface{}) bool {
@@ -2041,7 +2041,7 @@ func encodeVarintApi(dAtA []byte, offset int, v uint64) int {
 func NewPopulatedCronJob(r randyApi, easy bool) *CronJob {
 	this := &CronJob{}
 	if r.Intn(10) != 0 {
-		this.Metadata = v1alpha.NewPopulatedObjectMetadata(r, easy)
+		this.Metadata = v1.NewPopulatedObjectMetadata(r, easy)
 	}
 	if r.Intn(10) != 0 {
 		this.Spec = NewPopulatedCronJobSpec(r, easy)
@@ -2072,7 +2072,7 @@ func NewPopulatedSchedule(r randyApi, easy bool) *Schedule {
 func NewPopulatedGetRequest(r randyApi, easy bool) *GetRequest {
 	this := &GetRequest{}
 	if r.Intn(10) != 0 {
-		this.GetOptions = v1alpha.NewPopulatedGetOptions(r, easy)
+		this.GetOptions = v1.NewPopulatedGetOptions(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2085,7 +2085,7 @@ func NewPopulatedGetResponse(r randyApi, easy bool) *GetResponse {
 		this.CronJob = NewPopulatedCronJob(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		this.Error = v1alpha.NewPopulatedError(r, easy)
+		this.Error = v1.NewPopulatedError(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2095,7 +2095,7 @@ func NewPopulatedGetResponse(r randyApi, easy bool) *GetResponse {
 func NewPopulatedListRequest(r randyApi, easy bool) *ListRequest {
 	this := &ListRequest{}
 	if r.Intn(10) != 0 {
-		this.ListOptions = v1alpha.NewPopulatedListOptions(r, easy)
+		this.ListOptions = v1.NewPopulatedListOptions(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2112,7 +2112,7 @@ func NewPopulatedListResponse(r randyApi, easy bool) *ListResponse {
 		}
 	}
 	if r.Intn(10) != 0 {
-		this.Error = v1alpha.NewPopulatedError(r, easy)
+		this.Error = v1.NewPopulatedError(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2135,7 +2135,7 @@ func NewPopulatedAddResponse(r randyApi, easy bool) *AddResponse {
 		this.CronJob = NewPopulatedCronJob(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		this.Error = v1alpha.NewPopulatedError(r, easy)
+		this.Error = v1.NewPopulatedError(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2158,7 +2158,7 @@ func NewPopulatedUpdateResponse(r randyApi, easy bool) *UpdateResponse {
 		this.CronJob = NewPopulatedCronJob(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		this.Error = v1alpha.NewPopulatedError(r, easy)
+		this.Error = v1.NewPopulatedError(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2181,7 +2181,7 @@ func NewPopulatedDeleteResponse(r randyApi, easy bool) *DeleteResponse {
 		this.CronJob = NewPopulatedCronJob(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		this.Error = v1alpha.NewPopulatedError(r, easy)
+		this.Error = v1.NewPopulatedError(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2191,7 +2191,7 @@ func NewPopulatedDeleteResponse(r randyApi, easy bool) *DeleteResponse {
 func NewPopulatedWatchRequest(r randyApi, easy bool) *WatchRequest {
 	this := &WatchRequest{}
 	if r.Intn(10) != 0 {
-		this.WatchOptions = v1alpha.NewPopulatedWatchOptions(r, easy)
+		this.WatchOptions = v1.NewPopulatedWatchOptions(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2201,13 +2201,13 @@ func NewPopulatedWatchRequest(r randyApi, easy bool) *WatchRequest {
 func NewPopulatedWatchResponse(r randyApi, easy bool) *WatchResponse {
 	this := &WatchResponse{}
 	if r.Intn(10) != 0 {
-		this.Event = v1alpha1.NewPopulatedEvent(r, easy)
+		this.Event = v1alpha.NewPopulatedEvent(r, easy)
 	}
 	if r.Intn(10) != 0 {
 		this.CronJob = NewPopulatedCronJob(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		this.Error = v1alpha.NewPopulatedError(r, easy)
+		this.Error = v1.NewPopulatedError(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2533,7 +2533,7 @@ func (this *CronJob) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CronJob{`,
-		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "ObjectMetadata", "v1alpha.ObjectMetadata", 1) + `,`,
+		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "ObjectMetadata", "v1.ObjectMetadata", 1) + `,`,
 		`Spec:` + strings.Replace(fmt.Sprintf("%v", this.Spec), "CronJobSpec", "CronJobSpec", 1) + `,`,
 		`}`,
 	}, "")
@@ -2564,7 +2564,7 @@ func (this *GetRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetRequest{`,
-		`GetOptions:` + strings.Replace(fmt.Sprintf("%v", this.GetOptions), "GetOptions", "v1alpha.GetOptions", 1) + `,`,
+		`GetOptions:` + strings.Replace(fmt.Sprintf("%v", this.GetOptions), "GetOptions", "v1.GetOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2575,7 +2575,7 @@ func (this *GetResponse) String() string {
 	}
 	s := strings.Join([]string{`&GetResponse{`,
 		`CronJob:` + strings.Replace(fmt.Sprintf("%v", this.CronJob), "CronJob", "CronJob", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1alpha.Error", 1) + `,`,
+		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2585,7 +2585,7 @@ func (this *ListRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ListRequest{`,
-		`ListOptions:` + strings.Replace(fmt.Sprintf("%v", this.ListOptions), "ListOptions", "v1alpha.ListOptions", 1) + `,`,
+		`ListOptions:` + strings.Replace(fmt.Sprintf("%v", this.ListOptions), "ListOptions", "v1.ListOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2596,7 +2596,7 @@ func (this *ListResponse) String() string {
 	}
 	s := strings.Join([]string{`&ListResponse{`,
 		`Cronjobs:` + strings.Replace(fmt.Sprintf("%v", this.Cronjobs), "CronJob", "CronJob", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1alpha.Error", 1) + `,`,
+		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2617,7 +2617,7 @@ func (this *AddResponse) String() string {
 	}
 	s := strings.Join([]string{`&AddResponse{`,
 		`CronJob:` + strings.Replace(fmt.Sprintf("%v", this.CronJob), "CronJob", "CronJob", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1alpha.Error", 1) + `,`,
+		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2638,7 +2638,7 @@ func (this *UpdateResponse) String() string {
 	}
 	s := strings.Join([]string{`&UpdateResponse{`,
 		`CronJob:` + strings.Replace(fmt.Sprintf("%v", this.CronJob), "CronJob", "CronJob", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1alpha.Error", 1) + `,`,
+		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2659,7 +2659,7 @@ func (this *DeleteResponse) String() string {
 	}
 	s := strings.Join([]string{`&DeleteResponse{`,
 		`CronJob:` + strings.Replace(fmt.Sprintf("%v", this.CronJob), "CronJob", "CronJob", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1alpha.Error", 1) + `,`,
+		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2669,7 +2669,7 @@ func (this *WatchRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&WatchRequest{`,
-		`WatchOptions:` + strings.Replace(fmt.Sprintf("%v", this.WatchOptions), "WatchOptions", "v1alpha.WatchOptions", 1) + `,`,
+		`WatchOptions:` + strings.Replace(fmt.Sprintf("%v", this.WatchOptions), "WatchOptions", "v1.WatchOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2679,9 +2679,9 @@ func (this *WatchResponse) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&WatchResponse{`,
-		`Event:` + strings.Replace(fmt.Sprintf("%v", this.Event), "Event", "v1alpha1.Event", 1) + `,`,
+		`Event:` + strings.Replace(fmt.Sprintf("%v", this.Event), "Event", "v1alpha.Event", 1) + `,`,
 		`CronJob:` + strings.Replace(fmt.Sprintf("%v", this.CronJob), "CronJob", "CronJob", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1alpha.Error", 1) + `,`,
+		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2750,7 +2750,7 @@ func (m *CronJob) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Metadata == nil {
-				m.Metadata = &v1alpha.ObjectMetadata{}
+				m.Metadata = &v1.ObjectMetadata{}
 			}
 			if err := m.Metadata.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -3028,7 +3028,7 @@ func (m *GetRequest) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.GetOptions == nil {
-				m.GetOptions = &v1alpha.GetOptions{}
+				m.GetOptions = &v1.GetOptions{}
 			}
 			if err := m.GetOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -3144,7 +3144,7 @@ func (m *GetResponse) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Error == nil {
-				m.Error = &v1alpha.Error{}
+				m.Error = &v1.Error{}
 			}
 			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -3227,7 +3227,7 @@ func (m *ListRequest) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.ListOptions == nil {
-				m.ListOptions = &v1alpha.ListOptions{}
+				m.ListOptions = &v1.ListOptions{}
 			}
 			if err := m.ListOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -3341,7 +3341,7 @@ func (m *ListResponse) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Error == nil {
-				m.Error = &v1alpha.Error{}
+				m.Error = &v1.Error{}
 			}
 			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -3540,7 +3540,7 @@ func (m *AddResponse) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Error == nil {
-				m.Error = &v1alpha.Error{}
+				m.Error = &v1.Error{}
 			}
 			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -3739,7 +3739,7 @@ func (m *UpdateResponse) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Error == nil {
-				m.Error = &v1alpha.Error{}
+				m.Error = &v1.Error{}
 			}
 			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -3938,7 +3938,7 @@ func (m *DeleteResponse) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Error == nil {
-				m.Error = &v1alpha.Error{}
+				m.Error = &v1.Error{}
 			}
 			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -4021,7 +4021,7 @@ func (m *WatchRequest) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.WatchOptions == nil {
-				m.WatchOptions = &v1alpha.WatchOptions{}
+				m.WatchOptions = &v1.WatchOptions{}
 			}
 			if err := m.WatchOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -4104,7 +4104,7 @@ func (m *WatchResponse) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Event == nil {
-				m.Event = &v1alpha1.Event{}
+				m.Event = &v1alpha.Event{}
 			}
 			if err := m.Event.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -4170,7 +4170,7 @@ func (m *WatchResponse) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Error == nil {
-				m.Error = &v1alpha.Error{}
+				m.Error = &v1.Error{}
 			}
 			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err

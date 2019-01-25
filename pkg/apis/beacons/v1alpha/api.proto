@@ -18,7 +18,7 @@ package beacons.v1alpha;
 option go_package = "github.com/galexrt/edenconfmgmt/pkg/apis/beacons/v1alpha";
 
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
-import "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha/api.proto";
+import "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1/api.proto";
 import "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha/api.proto";
 
 option (gogoproto.goproto_stringer_all) = false;
@@ -50,7 +50,7 @@ service Beacons {
 
 message Beacon {
     // Metadata for Beacon object.
-    core.v1alpha.ObjectMetadata metadata = 1;
+    core.v1.ObjectMetadata metadata = 1;
     // Spec for Beacon.
     BeaconSpec spec = 2;
 }
@@ -62,7 +62,7 @@ message BeaconSpec {
 // Get request content.
 message GetRequest {
     // GetOptions options for a GetRequest.
-    core.v1alpha.GetOptions getOptions = 1;
+    core.v1.GetOptions getOptions = 1;
 }
 
 // Get response content.
@@ -70,13 +70,13 @@ message GetResponse {
     // Beacon object.
     Beacon beacon = 1;
     // Error object.
-    core.v1alpha.Error error = 2;
+    core.v1.Error error = 2;
 }
 
 // List request content.
 message ListRequest {
     // ListOptions options for a ListRequest.
-    core.v1alpha.ListOptions listOptions = 1;
+    core.v1.ListOptions listOptions = 1;
 }
 
 // List response content.
@@ -84,7 +84,7 @@ message ListResponse {
     // Beacon list.
     repeated Beacon beacons = 1;
     // Error object.
-    core.v1alpha.Error error = 2;
+    core.v1.Error error = 2;
 }
 
 // Add Beacon request.
@@ -97,7 +97,7 @@ message AddResponse {
     // Beacon object.
     Beacon beacon = 1;
     // Error object.
-    core.v1alpha.Error error = 2;
+    core.v1.Error error = 2;
 }
 
 // Update
@@ -110,7 +110,7 @@ message UpdateResponse {
     // Beacon object.
     Beacon beacon = 1;
     // Error object.
-    core.v1alpha.Error error = 2;
+    core.v1.Error error = 2;
 }
 
 // Delete
@@ -123,13 +123,13 @@ message DeleteResponse {
     // Beacon object.
     Beacon beacon = 1;
     // Error object.
-    core.v1alpha.Error error = 2;
+    core.v1.Error error = 2;
 }
 
 // Watch
 message WatchRequest {
     // WatchOptions options for WatchRequest.
-    core.v1alpha.WatchOptions watchOptions = 1;
+    core.v1.WatchOptions watchOptions = 1;
 }
 
 message WatchResponse {
@@ -138,5 +138,5 @@ message WatchResponse {
     // Beacon for watch response.
     Beacon beacon = 2;
     // Error object.
-    core.v1alpha.Error error = 3;
+    core.v1.Error error = 3;
 }

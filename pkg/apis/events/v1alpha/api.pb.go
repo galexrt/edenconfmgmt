@@ -6,7 +6,7 @@ package v1alpha
 import (
 	context "context"
 	fmt "fmt"
-	v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha"
+	v1 "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	types "github.com/gogo/protobuf/types"
@@ -30,7 +30,7 @@ const _ = proto.GoGoProtoPackageIsVersion2 // please upgrade the proto package
 
 type Event struct {
 	// Metadata for the Event object.
-	Metadata *v1alpha.ObjectMetadata `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	Metadata *v1.ObjectMetadata `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
 	// Spec for Event.
 	Spec                 *EventSpec `protobuf:"bytes,2,opt,name=spec,proto3" json:"spec,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
@@ -69,7 +69,7 @@ func (m *Event) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Event proto.InternalMessageInfo
 
-func (m *Event) GetMetadata() *v1alpha.ObjectMetadata {
+func (m *Event) GetMetadata() *v1.ObjectMetadata {
 	if m != nil {
 		return m.Metadata
 	}
@@ -150,9 +150,9 @@ func (m *EventSpec) GetData() *types.Any {
 // Get
 type GetRequest struct {
 	// GetOptions options for a GetRequest.
-	GetOptions           *v1alpha.GetOptions `protobuf:"bytes,1,opt,name=getOptions,proto3" json:"getOptions,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}            `json:"-"`
-	XXX_sizecache        int32               `json:"-"`
+	GetOptions           *v1.GetOptions `protobuf:"bytes,1,opt,name=getOptions,proto3" json:"getOptions,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
+	XXX_sizecache        int32          `json:"-"`
 }
 
 func (m *GetRequest) Reset()      { *m = GetRequest{} }
@@ -187,7 +187,7 @@ func (m *GetRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetRequest proto.InternalMessageInfo
 
-func (m *GetRequest) GetGetOptions() *v1alpha.GetOptions {
+func (m *GetRequest) GetGetOptions() *v1.GetOptions {
 	if m != nil {
 		return m.GetOptions
 	}
@@ -198,9 +198,9 @@ type GetResponse struct {
 	// Event object.
 	Event *Event `protobuf:"bytes,1,opt,name=event,proto3" json:"event,omitempty"`
 	// Error object.
-	Error                *v1alpha.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
-	XXX_sizecache        int32          `json:"-"`
+	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
 }
 
 func (m *GetResponse) Reset()      { *m = GetResponse{} }
@@ -242,7 +242,7 @@ func (m *GetResponse) GetEvent() *Event {
 	return nil
 }
 
-func (m *GetResponse) GetError() *v1alpha.Error {
+func (m *GetResponse) GetError() *v1.Error {
 	if m != nil {
 		return m.Error
 	}
@@ -252,9 +252,9 @@ func (m *GetResponse) GetError() *v1alpha.Error {
 // List
 type ListRequest struct {
 	// ListOptions options for a ListRequest.
-	ListOptions          *v1alpha.ListOptions `protobuf:"bytes,1,opt,name=listOptions,proto3" json:"listOptions,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}             `json:"-"`
-	XXX_sizecache        int32                `json:"-"`
+	ListOptions          *v1.ListOptions `protobuf:"bytes,1,opt,name=listOptions,proto3" json:"listOptions,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
+	XXX_sizecache        int32           `json:"-"`
 }
 
 func (m *ListRequest) Reset()      { *m = ListRequest{} }
@@ -289,7 +289,7 @@ func (m *ListRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ListRequest proto.InternalMessageInfo
 
-func (m *ListRequest) GetListOptions() *v1alpha.ListOptions {
+func (m *ListRequest) GetListOptions() *v1.ListOptions {
 	if m != nil {
 		return m.ListOptions
 	}
@@ -300,9 +300,9 @@ type ListResponse struct {
 	// Event list.
 	Events []*Event `protobuf:"bytes,1,rep,name=events,proto3" json:"events,omitempty"`
 	// Error object.
-	Error                *v1alpha.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
-	XXX_sizecache        int32          `json:"-"`
+	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
 }
 
 func (m *ListResponse) Reset()      { *m = ListResponse{} }
@@ -344,7 +344,7 @@ func (m *ListResponse) GetEvents() []*Event {
 	return nil
 }
 
-func (m *ListResponse) GetError() *v1alpha.Error {
+func (m *ListResponse) GetError() *v1.Error {
 	if m != nil {
 		return m.Error
 	}
@@ -402,9 +402,9 @@ type AddResponse struct {
 	// Event object.
 	Event *Event `protobuf:"bytes,1,opt,name=event,proto3" json:"event,omitempty"`
 	// Error object.
-	Error                *v1alpha.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
-	XXX_sizecache        int32          `json:"-"`
+	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
 }
 
 func (m *AddResponse) Reset()      { *m = AddResponse{} }
@@ -446,7 +446,7 @@ func (m *AddResponse) GetEvent() *Event {
 	return nil
 }
 
-func (m *AddResponse) GetError() *v1alpha.Error {
+func (m *AddResponse) GetError() *v1.Error {
 	if m != nil {
 		return m.Error
 	}
@@ -504,9 +504,9 @@ type UpdateResponse struct {
 	// Event object.
 	Event *Event `protobuf:"bytes,1,opt,name=event,proto3" json:"event,omitempty"`
 	// Error object.
-	Error                *v1alpha.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
-	XXX_sizecache        int32          `json:"-"`
+	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
 }
 
 func (m *UpdateResponse) Reset()      { *m = UpdateResponse{} }
@@ -548,7 +548,7 @@ func (m *UpdateResponse) GetEvent() *Event {
 	return nil
 }
 
-func (m *UpdateResponse) GetError() *v1alpha.Error {
+func (m *UpdateResponse) GetError() *v1.Error {
 	if m != nil {
 		return m.Error
 	}
@@ -606,9 +606,9 @@ type DeleteResponse struct {
 	// Event object.
 	Event *Event `protobuf:"bytes,1,opt,name=event,proto3" json:"event,omitempty"`
 	// Error object.
-	Error                *v1alpha.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
-	XXX_sizecache        int32          `json:"-"`
+	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
 }
 
 func (m *DeleteResponse) Reset()      { *m = DeleteResponse{} }
@@ -650,7 +650,7 @@ func (m *DeleteResponse) GetEvent() *Event {
 	return nil
 }
 
-func (m *DeleteResponse) GetError() *v1alpha.Error {
+func (m *DeleteResponse) GetError() *v1.Error {
 	if m != nil {
 		return m.Error
 	}
@@ -660,9 +660,9 @@ func (m *DeleteResponse) GetError() *v1alpha.Error {
 // Watch
 type WatchRequest struct {
 	// WatchOptions options for WatchRequest.
-	WatchOptions         *v1alpha.WatchOptions `protobuf:"bytes,1,opt,name=watchOptions,proto3" json:"watchOptions,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}              `json:"-"`
-	XXX_sizecache        int32                 `json:"-"`
+	WatchOptions         *v1.WatchOptions `protobuf:"bytes,1,opt,name=watchOptions,proto3" json:"watchOptions,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_sizecache        int32            `json:"-"`
 }
 
 func (m *WatchRequest) Reset()      { *m = WatchRequest{} }
@@ -697,7 +697,7 @@ func (m *WatchRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_WatchRequest proto.InternalMessageInfo
 
-func (m *WatchRequest) GetWatchOptions() *v1alpha.WatchOptions {
+func (m *WatchRequest) GetWatchOptions() *v1.WatchOptions {
 	if m != nil {
 		return m.WatchOptions
 	}
@@ -708,9 +708,9 @@ type WatchResponse struct {
 	// Event for watch stream.
 	Event *Event `protobuf:"bytes,1,opt,name=event,proto3" json:"event,omitempty"`
 	// Error object.
-	Error                *v1alpha.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
-	XXX_sizecache        int32          `json:"-"`
+	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
 }
 
 func (m *WatchResponse) Reset()      { *m = WatchResponse{} }
@@ -752,7 +752,7 @@ func (m *WatchResponse) GetEvent() *Event {
 	return nil
 }
 
-func (m *WatchResponse) GetError() *v1alpha.Error {
+func (m *WatchResponse) GetError() *v1.Error {
 	if m != nil {
 		return m.Error
 	}
@@ -781,47 +781,47 @@ func init() {
 }
 
 var fileDescriptor_57c26361c2d00172 = []byte{
-	// 631 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x95, 0xcf, 0x6e, 0xd3, 0x40,
-	0x10, 0xc6, 0xbb, 0xe4, 0x0f, 0x74, 0xd2, 0xf6, 0xb0, 0x80, 0x94, 0x9a, 0x76, 0x55, 0xf9, 0x54,
-	0x84, 0x6a, 0x43, 0x39, 0x00, 0x02, 0x15, 0x05, 0xd1, 0x46, 0x42, 0x85, 0x4a, 0x46, 0xa8, 0x12,
-	0x37, 0xc7, 0x9e, 0x3a, 0x81, 0xd8, 0x6b, 0xec, 0x4d, 0x21, 0x37, 0x1e, 0x81, 0x97, 0x40, 0xe2,
-	0x11, 0x38, 0x72, 0xec, 0x91, 0x23, 0x47, 0x62, 0x5e, 0x82, 0x23, 0xf2, 0xda, 0x4e, 0xec, 0x38,
-	0x91, 0x68, 0xa4, 0xdc, 0xbc, 0x9e, 0x6f, 0xbe, 0xfd, 0xcd, 0x64, 0x26, 0x86, 0x96, 0xd3, 0x13,
-	0xdd, 0x41, 0x47, 0xb3, 0xb8, 0xab, 0x3b, 0x66, 0x1f, 0x3f, 0x05, 0x42, 0x47, 0x1b, 0x3d, 0x8b,
-	0x7b, 0x67, 0xae, 0xe3, 0x0a, 0xdd, 0x7f, 0xef, 0xe8, 0xa6, 0xdf, 0x0b, 0x75, 0x3c, 0x47, 0x4f,
-	0x84, 0xfa, 0xf9, 0x3d, 0xb3, 0xef, 0x77, 0xcd, 0xf8, 0x9d, 0xe6, 0x07, 0x5c, 0x70, 0xba, 0x91,
-	0x44, 0xb4, 0x34, 0xa2, 0xec, 0xe5, 0x2d, 0xb9, 0xc3, 0x75, 0x29, 0xeb, 0x0c, 0xce, 0xe4, 0x49,
-	0x1e, 0xe4, 0x53, 0x92, 0xae, 0x6c, 0x3a, 0x9c, 0x3b, 0x7d, 0x9c, 0xa8, 0x4c, 0x6f, 0x98, 0x86,
-	0x9e, 0xfe, 0x37, 0x9c, 0xc5, 0x03, 0x2c, 0xa3, 0xa9, 0x3e, 0xd4, 0x0e, 0x63, 0x38, 0xfa, 0x10,
-	0xae, 0xb9, 0x28, 0x4c, 0xdb, 0x14, 0x66, 0x93, 0xec, 0x90, 0xdd, 0xc6, 0xfe, 0x96, 0x16, 0xe7,
-	0x64, 0xd0, 0xda, 0x49, 0xe7, 0x1d, 0x5a, 0xe2, 0x65, 0xaa, 0x31, 0xc6, 0x6a, 0xba, 0x07, 0xd5,
-	0xd0, 0x47, 0xab, 0x79, 0x45, 0x66, 0x6d, 0x6a, 0xc5, 0x62, 0x35, 0x69, 0xff, 0xda, 0x47, 0xcb,
-	0x90, 0x32, 0xd5, 0x82, 0xd5, 0xf1, 0x2b, 0x4a, 0xa1, 0x2a, 0x86, 0x3e, 0xca, 0x1b, 0x57, 0x0d,
-	0xf9, 0x4c, 0x9b, 0x70, 0x35, 0x1c, 0xb8, 0xae, 0x19, 0x0c, 0xa5, 0xe5, 0xaa, 0x91, 0x1d, 0xe9,
-	0x2e, 0x54, 0x25, 0x5f, 0x45, 0xde, 0x74, 0x43, 0x4b, 0xfa, 0xa2, 0x65, 0x7d, 0xd1, 0x5a, 0xde,
-	0xd0, 0x90, 0x0a, 0xf5, 0x08, 0xa0, 0x8d, 0xc2, 0xc0, 0x0f, 0x03, 0x0c, 0xe3, 0xda, 0xc0, 0x41,
-	0x71, 0xe2, 0x8b, 0x1e, 0xf7, 0xc2, 0xb4, 0xba, 0x66, 0xb1, 0xba, 0xf6, 0x38, 0x6e, 0xe4, 0xb4,
-	0x2a, 0x42, 0x43, 0xfa, 0x84, 0x3e, 0xf7, 0x42, 0xa4, 0x77, 0xa0, 0x26, 0xab, 0x4b, 0x3d, 0x6e,
-	0xce, 0xac, 0xd5, 0x48, 0x34, 0xf4, 0x36, 0xd4, 0x30, 0x08, 0x78, 0x90, 0x36, 0xe6, 0x7a, 0xf1,
-	0xc2, 0xc3, 0x38, 0x64, 0x24, 0x0a, 0xf5, 0x05, 0x34, 0x8e, 0x7b, 0xe1, 0x98, 0xf7, 0x31, 0x34,
-	0xfa, 0xbd, 0x70, 0x0a, 0x78, 0xb3, 0x98, 0x7f, 0x3c, 0x11, 0x18, 0x79, 0xb5, 0xda, 0x85, 0xb5,
-	0xc4, 0x2b, 0x65, 0xde, 0x83, 0x7a, 0x42, 0xd9, 0x24, 0x3b, 0x95, 0xf9, 0xd0, 0xa9, 0xe8, 0x32,
-	0xd4, 0x8f, 0x00, 0x5a, 0xb6, 0x9d, 0x41, 0x5f, 0xa6, 0x37, 0x71, 0x5f, 0x65, 0xea, 0x92, 0xfb,
-	0xfa, 0x04, 0xd6, 0xdf, 0xf8, 0xb6, 0x29, 0x70, 0x21, 0xc8, 0x2e, 0x6c, 0x64, 0xd9, 0xcb, 0xe7,
-	0x7c, 0x8e, 0x7d, 0x5c, 0x9c, 0x33, 0xcb, 0x5e, 0x32, 0xe7, 0x2b, 0x58, 0x3b, 0x35, 0x85, 0xd5,
-	0xcd, 0x30, 0x0f, 0x60, 0xed, 0x63, 0x7c, 0x2e, 0x4e, 0xaa, 0x52, 0x74, 0x38, 0xcd, 0x29, 0x8c,
-	0x82, 0x5e, 0x75, 0x60, 0x3d, 0xf5, 0x5b, 0x2e, 0xf8, 0xfe, 0xd7, 0x0a, 0xd4, 0x0f, 0x93, 0x01,
-	0x3f, 0x80, 0x4a, 0x1b, 0x05, 0x55, 0xa6, 0xad, 0x27, 0xff, 0x17, 0xca, 0xad, 0x99, 0xb1, 0x14,
-	0xb1, 0x05, 0xd5, 0x78, 0xbf, 0x68, 0x49, 0x94, 0xdb, 0x60, 0x65, 0x6b, 0x76, 0x30, 0xb5, 0x38,
-	0x80, 0x4a, 0xcb, 0xb6, 0xcb, 0x08, 0x93, 0x6d, 0x2a, 0x23, 0xe4, 0xd7, 0xa5, 0x0d, 0xf5, 0x64,
-	0x30, 0xe9, 0xf6, 0xb4, 0xac, 0x30, 0xee, 0x0a, 0x9b, 0x17, 0x9e, 0x18, 0x25, 0x93, 0x53, 0x36,
-	0x2a, 0xcc, 0x63, 0xd9, 0x68, 0x6a, 0xe0, 0x8e, 0xa0, 0x26, 0x7f, 0x48, 0x5a, 0x2a, 0x3c, 0x3f,
-	0x2f, 0xca, 0xf6, 0x9c, 0x68, 0xe2, 0x72, 0x97, 0x3c, 0xc3, 0x8b, 0x11, 0x23, 0xbf, 0x46, 0x6c,
-	0xe5, 0xef, 0x88, 0x91, 0xcf, 0x11, 0x23, 0xdf, 0x22, 0x46, 0xbe, 0x47, 0x6c, 0xe5, 0x47, 0xc4,
-	0xc8, 0x45, 0xc4, 0xc8, 0xcf, 0x88, 0x91, 0xdf, 0x11, 0x23, 0x5f, 0xfe, 0xb0, 0x95, 0xb7, 0x0f,
-	0x16, 0xfc, 0x34, 0x77, 0xea, 0xf2, 0x93, 0x71, 0xff, 0x5f, 0x00, 0x00, 0x00, 0xff, 0xff, 0x4a,
-	0x2a, 0x22, 0x38, 0xdc, 0x07, 0x00, 0x00,
+	// 636 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x95, 0xcd, 0x6e, 0xd3, 0x40,
+	0x14, 0x85, 0x3b, 0xe4, 0x07, 0x7a, 0xd3, 0x76, 0x31, 0xb4, 0x22, 0x35, 0x74, 0x54, 0x59, 0x2c,
+	0x2a, 0xa1, 0xda, 0xb4, 0x95, 0x40, 0x45, 0xa8, 0x92, 0x11, 0x21, 0x42, 0x2a, 0xaa, 0x64, 0x84,
+	0x2a, 0xb1, 0xc2, 0xb1, 0xa7, 0x4e, 0x68, 0xec, 0x31, 0xf6, 0x24, 0x90, 0x1d, 0x8f, 0xc0, 0x4b,
+	0x20, 0xf1, 0x08, 0x2c, 0x59, 0x76, 0xc9, 0x92, 0x25, 0x31, 0x2f, 0xc1, 0x12, 0x79, 0xfc, 0x9b,
+	0x38, 0x91, 0x4a, 0xa4, 0xec, 0x3c, 0x3e, 0xe7, 0x9e, 0xf9, 0xee, 0xe4, 0x4e, 0x0c, 0x9a, 0xdd,
+	0xe3, 0xdd, 0x41, 0x47, 0x31, 0x99, 0xa3, 0xda, 0x46, 0x9f, 0x7e, 0xf2, 0xb9, 0x4a, 0x2d, 0xea,
+	0x9a, 0xcc, 0xbd, 0x70, 0x6c, 0x87, 0xab, 0xde, 0xa5, 0xad, 0x1a, 0x5e, 0x2f, 0x50, 0xe9, 0x90,
+	0xba, 0x3c, 0x50, 0x87, 0x07, 0x46, 0xdf, 0xeb, 0x1a, 0xd1, 0x3b, 0xc5, 0xf3, 0x19, 0x67, 0x78,
+	0x23, 0x56, 0x94, 0x44, 0x91, 0xf6, 0x8b, 0x91, 0xcc, 0x66, 0xaa, 0xb0, 0x75, 0x06, 0x17, 0x62,
+	0x25, 0x16, 0xe2, 0x29, 0x2e, 0x97, 0xb6, 0x6d, 0xc6, 0xec, 0x3e, 0xcd, 0x5d, 0x86, 0x3b, 0x4a,
+	0xa4, 0x27, 0xd7, 0x86, 0x33, 0x99, 0x4f, 0xd5, 0xe1, 0x41, 0x4e, 0x25, 0x5f, 0x42, 0xad, 0x15,
+	0x71, 0xe1, 0x23, 0xb8, 0xe5, 0x50, 0x6e, 0x58, 0x06, 0x37, 0x9a, 0x68, 0x17, 0xed, 0x35, 0x0e,
+	0xef, 0x28, 0x91, 0x5d, 0x19, 0x1e, 0x28, 0x67, 0x9d, 0xf7, 0xd4, 0xe4, 0xaf, 0x12, 0x59, 0xcf,
+	0x8c, 0x78, 0x1f, 0xaa, 0x81, 0x47, 0xcd, 0xe6, 0x0d, 0x51, 0xb0, 0xad, 0x4c, 0xb6, 0xa8, 0x88,
+	0xe4, 0xd7, 0x1e, 0x35, 0x75, 0x61, 0x93, 0x4d, 0x58, 0xcd, 0x5e, 0x61, 0x0c, 0x55, 0x3e, 0xf2,
+	0xa8, 0xd8, 0x6c, 0x55, 0x17, 0xcf, 0xb8, 0x09, 0x37, 0x83, 0x81, 0xe3, 0x18, 0xfe, 0x48, 0x44,
+	0xae, 0xea, 0xe9, 0x12, 0xef, 0x41, 0x55, 0xa0, 0x55, 0xc4, 0x4e, 0x9b, 0x4a, 0x7c, 0x1a, 0x4a,
+	0x7a, 0x1a, 0x8a, 0xe6, 0x8e, 0x74, 0xe1, 0x90, 0x35, 0x80, 0x36, 0xe5, 0x3a, 0xfd, 0x30, 0xa0,
+	0x41, 0xd4, 0x16, 0xd8, 0x94, 0x9f, 0x79, 0xbc, 0xc7, 0xdc, 0x20, 0x69, 0xec, 0x76, 0xd6, 0x58,
+	0x3b, 0x93, 0xf4, 0x82, 0x4d, 0x7e, 0x07, 0x0d, 0x11, 0x11, 0x78, 0xcc, 0x0d, 0x28, 0x7e, 0x00,
+	0x35, 0xd1, 0x58, 0x52, 0xbe, 0x35, 0xb3, 0x4d, 0x3d, 0xf6, 0xe0, 0xfb, 0x50, 0xa3, 0xbe, 0xcf,
+	0xfc, 0xe4, 0x4c, 0x36, 0xb2, 0xbd, 0x5a, 0xd1, 0x5b, 0x3d, 0x16, 0xe5, 0x16, 0x34, 0x4e, 0x7b,
+	0x41, 0x46, 0xf9, 0x08, 0x1a, 0xfd, 0x5e, 0x30, 0x85, 0xb9, 0x99, 0x95, 0x9e, 0xe6, 0x9a, 0x5e,
+	0x34, 0xca, 0x26, 0xac, 0xc5, 0x31, 0x09, 0xe9, 0x3e, 0xd4, 0x63, 0xb6, 0x26, 0xda, 0xad, 0xcc,
+	0x47, 0x4d, 0x4c, 0xd7, 0x64, 0x3d, 0x06, 0xd0, 0x2c, 0x2b, 0x45, 0xfd, 0x9f, 0xc3, 0x88, 0x0e,
+	0x52, 0x94, 0x2e, 0xef, 0x20, 0x9f, 0xc2, 0xfa, 0x1b, 0xcf, 0x32, 0x38, 0x5d, 0x88, 0xcf, 0x84,
+	0x8d, 0xb4, 0x7a, 0xa9, 0x88, 0xcf, 0x69, 0x9f, 0x2e, 0x8e, 0x98, 0x56, 0x2f, 0x0f, 0xf1, 0x25,
+	0xac, 0x9d, 0x1b, 0xdc, 0xec, 0xa6, 0x84, 0xc7, 0xb0, 0xf6, 0x31, 0x5a, 0x4f, 0x0e, 0xe4, 0x56,
+	0x56, 0x7c, 0x5e, 0x10, 0xf5, 0x09, 0xab, 0xdc, 0x81, 0xf5, 0x24, 0x6a, 0x69, 0xb8, 0x87, 0x5f,
+	0x2b, 0x50, 0x6f, 0xc5, 0x23, 0x7c, 0x02, 0x95, 0x36, 0xe5, 0x58, 0x9a, 0x4e, 0xcd, 0xff, 0x02,
+	0xa4, 0xbb, 0x33, 0xb5, 0x84, 0x4e, 0x83, 0x6a, 0x74, 0x83, 0x70, 0xc9, 0x54, 0xb8, 0x9e, 0xd2,
+	0xbd, 0xd9, 0x62, 0x12, 0x71, 0x02, 0x15, 0xcd, 0xb2, 0xca, 0x08, 0xf9, 0xa5, 0x29, 0x23, 0x14,
+	0x6f, 0x45, 0x1b, 0xea, 0xf1, 0x10, 0xe2, 0x9d, 0x69, 0xdb, 0xc4, 0x68, 0x4b, 0x64, 0x9e, 0x9c,
+	0x07, 0xc5, 0xa3, 0x52, 0x0e, 0x9a, 0x18, 0xc0, 0x72, 0xd0, 0xd4, 0x84, 0xbd, 0x80, 0x9a, 0xf8,
+	0x0d, 0x71, 0xa9, 0xf1, 0xe2, 0x94, 0x48, 0x3b, 0x73, 0xd4, 0x38, 0xe5, 0x21, 0x7a, 0x46, 0xaf,
+	0xc6, 0x04, 0xfd, 0x1a, 0x93, 0x95, 0xbf, 0x63, 0x82, 0x3e, 0x87, 0x04, 0x7d, 0x0b, 0x09, 0xfa,
+	0x1e, 0x92, 0x95, 0x1f, 0x21, 0x41, 0x57, 0x21, 0x41, 0x3f, 0x43, 0x82, 0x7e, 0x87, 0x04, 0x7d,
+	0xf9, 0x43, 0x56, 0xde, 0x3e, 0x5e, 0xf0, 0x1b, 0xdb, 0xa9, 0x8b, 0xaf, 0xc0, 0xd1, 0xbf, 0x00,
+	0x00, 0x00, 0xff, 0xff, 0x64, 0x05, 0x42, 0xba, 0xa5, 0x07, 0x00, 0x00,
 }
 
 func (this *Event) Equal(that interface{}) bool {
@@ -1958,7 +1958,7 @@ func encodeVarintApi(dAtA []byte, offset int, v uint64) int {
 func NewPopulatedEvent(r randyApi, easy bool) *Event {
 	this := &Event{}
 	if r.Intn(10) != 0 {
-		this.Metadata = v1alpha.NewPopulatedObjectMetadata(r, easy)
+		this.Metadata = v1.NewPopulatedObjectMetadata(r, easy)
 	}
 	if r.Intn(10) != 0 {
 		this.Spec = NewPopulatedEventSpec(r, easy)
@@ -1983,7 +1983,7 @@ func NewPopulatedEventSpec(r randyApi, easy bool) *EventSpec {
 func NewPopulatedGetRequest(r randyApi, easy bool) *GetRequest {
 	this := &GetRequest{}
 	if r.Intn(10) != 0 {
-		this.GetOptions = v1alpha.NewPopulatedGetOptions(r, easy)
+		this.GetOptions = v1.NewPopulatedGetOptions(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -1996,7 +1996,7 @@ func NewPopulatedGetResponse(r randyApi, easy bool) *GetResponse {
 		this.Event = NewPopulatedEvent(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		this.Error = v1alpha.NewPopulatedError(r, easy)
+		this.Error = v1.NewPopulatedError(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2006,7 +2006,7 @@ func NewPopulatedGetResponse(r randyApi, easy bool) *GetResponse {
 func NewPopulatedListRequest(r randyApi, easy bool) *ListRequest {
 	this := &ListRequest{}
 	if r.Intn(10) != 0 {
-		this.ListOptions = v1alpha.NewPopulatedListOptions(r, easy)
+		this.ListOptions = v1.NewPopulatedListOptions(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2023,7 +2023,7 @@ func NewPopulatedListResponse(r randyApi, easy bool) *ListResponse {
 		}
 	}
 	if r.Intn(10) != 0 {
-		this.Error = v1alpha.NewPopulatedError(r, easy)
+		this.Error = v1.NewPopulatedError(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2046,7 +2046,7 @@ func NewPopulatedAddResponse(r randyApi, easy bool) *AddResponse {
 		this.Event = NewPopulatedEvent(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		this.Error = v1alpha.NewPopulatedError(r, easy)
+		this.Error = v1.NewPopulatedError(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2069,7 +2069,7 @@ func NewPopulatedUpdateResponse(r randyApi, easy bool) *UpdateResponse {
 		this.Event = NewPopulatedEvent(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		this.Error = v1alpha.NewPopulatedError(r, easy)
+		this.Error = v1.NewPopulatedError(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2092,7 +2092,7 @@ func NewPopulatedDeleteResponse(r randyApi, easy bool) *DeleteResponse {
 		this.Event = NewPopulatedEvent(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		this.Error = v1alpha.NewPopulatedError(r, easy)
+		this.Error = v1.NewPopulatedError(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2102,7 +2102,7 @@ func NewPopulatedDeleteResponse(r randyApi, easy bool) *DeleteResponse {
 func NewPopulatedWatchRequest(r randyApi, easy bool) *WatchRequest {
 	this := &WatchRequest{}
 	if r.Intn(10) != 0 {
-		this.WatchOptions = v1alpha.NewPopulatedWatchOptions(r, easy)
+		this.WatchOptions = v1.NewPopulatedWatchOptions(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2115,7 +2115,7 @@ func NewPopulatedWatchResponse(r randyApi, easy bool) *WatchResponse {
 		this.Event = NewPopulatedEvent(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		this.Error = v1alpha.NewPopulatedError(r, easy)
+		this.Error = v1.NewPopulatedError(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2432,7 +2432,7 @@ func (this *Event) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&Event{`,
-		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "ObjectMetadata", "v1alpha.ObjectMetadata", 1) + `,`,
+		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "ObjectMetadata", "v1.ObjectMetadata", 1) + `,`,
 		`Spec:` + strings.Replace(fmt.Sprintf("%v", this.Spec), "EventSpec", "EventSpec", 1) + `,`,
 		`}`,
 	}, "")
@@ -2455,7 +2455,7 @@ func (this *GetRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetRequest{`,
-		`GetOptions:` + strings.Replace(fmt.Sprintf("%v", this.GetOptions), "GetOptions", "v1alpha.GetOptions", 1) + `,`,
+		`GetOptions:` + strings.Replace(fmt.Sprintf("%v", this.GetOptions), "GetOptions", "v1.GetOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2466,7 +2466,7 @@ func (this *GetResponse) String() string {
 	}
 	s := strings.Join([]string{`&GetResponse{`,
 		`Event:` + strings.Replace(fmt.Sprintf("%v", this.Event), "Event", "Event", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1alpha.Error", 1) + `,`,
+		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2476,7 +2476,7 @@ func (this *ListRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ListRequest{`,
-		`ListOptions:` + strings.Replace(fmt.Sprintf("%v", this.ListOptions), "ListOptions", "v1alpha.ListOptions", 1) + `,`,
+		`ListOptions:` + strings.Replace(fmt.Sprintf("%v", this.ListOptions), "ListOptions", "v1.ListOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2487,7 +2487,7 @@ func (this *ListResponse) String() string {
 	}
 	s := strings.Join([]string{`&ListResponse{`,
 		`Events:` + strings.Replace(fmt.Sprintf("%v", this.Events), "Event", "Event", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1alpha.Error", 1) + `,`,
+		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2508,7 +2508,7 @@ func (this *AddResponse) String() string {
 	}
 	s := strings.Join([]string{`&AddResponse{`,
 		`Event:` + strings.Replace(fmt.Sprintf("%v", this.Event), "Event", "Event", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1alpha.Error", 1) + `,`,
+		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2529,7 +2529,7 @@ func (this *UpdateResponse) String() string {
 	}
 	s := strings.Join([]string{`&UpdateResponse{`,
 		`Event:` + strings.Replace(fmt.Sprintf("%v", this.Event), "Event", "Event", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1alpha.Error", 1) + `,`,
+		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2550,7 +2550,7 @@ func (this *DeleteResponse) String() string {
 	}
 	s := strings.Join([]string{`&DeleteResponse{`,
 		`Event:` + strings.Replace(fmt.Sprintf("%v", this.Event), "Event", "Event", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1alpha.Error", 1) + `,`,
+		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2560,7 +2560,7 @@ func (this *WatchRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&WatchRequest{`,
-		`WatchOptions:` + strings.Replace(fmt.Sprintf("%v", this.WatchOptions), "WatchOptions", "v1alpha.WatchOptions", 1) + `,`,
+		`WatchOptions:` + strings.Replace(fmt.Sprintf("%v", this.WatchOptions), "WatchOptions", "v1.WatchOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2571,7 +2571,7 @@ func (this *WatchResponse) String() string {
 	}
 	s := strings.Join([]string{`&WatchResponse{`,
 		`Event:` + strings.Replace(fmt.Sprintf("%v", this.Event), "Event", "Event", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1alpha.Error", 1) + `,`,
+		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2640,7 +2640,7 @@ func (m *Event) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Metadata == nil {
-				m.Metadata = &v1alpha.ObjectMetadata{}
+				m.Metadata = &v1.ObjectMetadata{}
 			}
 			if err := m.Metadata.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -2897,7 +2897,7 @@ func (m *GetRequest) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.GetOptions == nil {
-				m.GetOptions = &v1alpha.GetOptions{}
+				m.GetOptions = &v1.GetOptions{}
 			}
 			if err := m.GetOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -3013,7 +3013,7 @@ func (m *GetResponse) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Error == nil {
-				m.Error = &v1alpha.Error{}
+				m.Error = &v1.Error{}
 			}
 			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -3096,7 +3096,7 @@ func (m *ListRequest) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.ListOptions == nil {
-				m.ListOptions = &v1alpha.ListOptions{}
+				m.ListOptions = &v1.ListOptions{}
 			}
 			if err := m.ListOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -3210,7 +3210,7 @@ func (m *ListResponse) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Error == nil {
-				m.Error = &v1alpha.Error{}
+				m.Error = &v1.Error{}
 			}
 			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -3409,7 +3409,7 @@ func (m *AddResponse) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Error == nil {
-				m.Error = &v1alpha.Error{}
+				m.Error = &v1.Error{}
 			}
 			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -3608,7 +3608,7 @@ func (m *UpdateResponse) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Error == nil {
-				m.Error = &v1alpha.Error{}
+				m.Error = &v1.Error{}
 			}
 			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -3807,7 +3807,7 @@ func (m *DeleteResponse) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Error == nil {
-				m.Error = &v1alpha.Error{}
+				m.Error = &v1.Error{}
 			}
 			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -3890,7 +3890,7 @@ func (m *WatchRequest) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.WatchOptions == nil {
-				m.WatchOptions = &v1alpha.WatchOptions{}
+				m.WatchOptions = &v1.WatchOptions{}
 			}
 			if err := m.WatchOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
@@ -4006,7 +4006,7 @@ func (m *WatchResponse) Unmarshal(dAtA []byte) error {
 				return io.ErrUnexpectedEOF
 			}
 			if m.Error == nil {
-				m.Error = &v1alpha.Error{}
+				m.Error = &v1.Error{}
 			}
 			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err

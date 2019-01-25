@@ -18,7 +18,7 @@ package cronjobs.v1alpha;
 option go_package = "github.com/galexrt/edenconfmgmt/pkg/apis/cronjobs/v1alpha";
 
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
-import "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha/api.proto";
+import "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1/api.proto";
 import "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha/api.proto";
 
 option (gogoproto.goproto_stringer_all) = false;
@@ -50,7 +50,7 @@ service CronJobs {
 
 message CronJob {
     // Metadata for CronJob object.
-    core.v1alpha.ObjectMetadata metadata = 1;
+    core.v1.ObjectMetadata metadata = 1;
     // Spec for CronJob.
     CronJobSpec spec = 2;
 }
@@ -68,27 +68,27 @@ message Schedule {
 // Get
 message GetRequest {
     // GetOptions options for a GetRequest.
-    core.v1alpha.GetOptions getOptions = 1;
+    core.v1.GetOptions getOptions = 1;
 }
 
 message GetResponse {
     // CronJob object.
     CronJob cronJob = 1;
     // Error object.
-    core.v1alpha.Error error = 2;
+    core.v1.Error error = 2;
 }
 
 // List
 message ListRequest {
     // ListOptions options for a ListRequest.
-    core.v1alpha.ListOptions listOptions = 1;
+    core.v1.ListOptions listOptions = 1;
 }
 
 message ListResponse {
     // Config list.
     repeated CronJob cronjobs = 1;
     // Error object.
-    core.v1alpha.Error error = 2;
+    core.v1.Error error = 2;
 }
 
 // Add
@@ -101,7 +101,7 @@ message AddResponse {
     // CronJob object.
     CronJob cronJob = 1;
     // Error object.
-    core.v1alpha.Error error = 2;
+    core.v1.Error error = 2;
 }
 
 // Update
@@ -114,7 +114,7 @@ message UpdateResponse {
     // CronJob object.
     CronJob cronJob = 1;
     // Error object.
-    core.v1alpha.Error error = 2;
+    core.v1.Error error = 2;
 }
 
 // Delete
@@ -127,13 +127,13 @@ message DeleteResponse {
     // CronJob object.
     CronJob cronJob = 1;
     // Error object.
-    core.v1alpha.Error error = 2;
+    core.v1.Error error = 2;
 }
 
 // Watch
 message WatchRequest {
     // WatchOptions options for WatchRequest.
-    core.v1alpha.WatchOptions watchOptions = 1;
+    core.v1.WatchOptions watchOptions = 1;
 }
 
 message WatchResponse {
@@ -142,5 +142,5 @@ message WatchResponse {
     // CronJob for watch response.
     CronJob cronJob = 2;
     // Error object.
-    core.v1alpha.Error error = 3;
+    core.v1.Error error = 3;
 }

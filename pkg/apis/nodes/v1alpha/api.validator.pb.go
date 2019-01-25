@@ -5,7 +5,7 @@ package v1alpha
 
 import (
 	fmt "fmt"
-	_ "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha"
+	_ "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1"
 	_ "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha"
 	_ "github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/internalclient"
 	_ "github.com/gogo/protobuf/gogoproto"
@@ -40,6 +40,24 @@ func (this *Node) Validate() error {
 	if this.Status != nil {
 		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Status); err != nil {
 			return github_com_mwitkow_go_proto_validators.FieldError("Status", err)
+		}
+	}
+	return nil
+}
+func (this *NodeList) Validate() error {
+	if nil == this.Metadata {
+		return github_com_mwitkow_go_proto_validators.FieldError("Metadata", fmt.Errorf("message must exist"))
+	}
+	if this.Metadata != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Metadata); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("Metadata", err)
+		}
+	}
+	for _, item := range this.Items {
+		if item != nil {
+			if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(item); err != nil {
+				return github_com_mwitkow_go_proto_validators.FieldError("Items", err)
+			}
 		}
 	}
 	return nil

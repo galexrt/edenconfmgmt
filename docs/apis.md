@@ -101,22 +101,25 @@
         * [UpdateResponse](#cronjobs.v1alpha.UpdateResponse)
         * [WatchRequest](#cronjobs.v1alpha.WatchRequest)
         * [WatchResponse](#cronjobs.v1alpha.WatchResponse)
-* [github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha/api.proto](#github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha/api.proto)
+* [github.com/galexrt/edenconfmgmt/pkg/apis/core/v1/api.proto](#github.com/galexrt/edenconfmgmt/pkg/apis/core/v1/api.proto)
     * Description: 
     * Messages
-        * [Condition](#core.v1alpha.Condition)
-        * [Conditions](#core.v1alpha.Conditions)
-        * [Error](#core.v1alpha.Error)
-        * [GetOptions](#core.v1alpha.GetOptions)
-        * [Include](#core.v1alpha.Include)
-        * [ListOptions](#core.v1alpha.ListOptions)
-        * [ObjectMetadata](#core.v1alpha.ObjectMetadata)
-        * [ObjectMetadata.AnnotationsEntry](#core.v1alpha.ObjectMetadata.AnnotationsEntry)
-        * [ObjectMetadata.LabelsEntry](#core.v1alpha.ObjectMetadata.LabelsEntry)
-        * [Retry](#core.v1alpha.Retry)
-        * [VersionRequest](#core.v1alpha.VersionRequest)
-        * [VersionResponse](#core.v1alpha.VersionResponse)
-        * [WatchOptions](#core.v1alpha.WatchOptions)
+        * [Condition](#core.v1.Condition)
+        * [Conditions](#core.v1.Conditions)
+        * [CreateOptions](#core.v1.CreateOptions)
+        * [DeleteOptions](#core.v1.DeleteOptions)
+        * [Error](#core.v1.Error)
+        * [GetOptions](#core.v1.GetOptions)
+        * [Include](#core.v1.Include)
+        * [ListOptions](#core.v1.ListOptions)
+        * [ObjectMetadata](#core.v1.ObjectMetadata)
+        * [ObjectMetadata.AnnotationsEntry](#core.v1.ObjectMetadata.AnnotationsEntry)
+        * [ObjectMetadata.LabelsEntry](#core.v1.ObjectMetadata.LabelsEntry)
+        * [Retry](#core.v1.Retry)
+        * [UpdateOptions](#core.v1.UpdateOptions)
+        * [VersionRequest](#core.v1.VersionRequest)
+        * [VersionResponse](#core.v1.VersionResponse)
+        * [WatchOptions](#core.v1.WatchOptions)
 * [github.com/galexrt/edenconfmgmt/pkg/apis/triggers/v1alpha/api.proto](#github.com/galexrt/edenconfmgmt/pkg/apis/triggers/v1alpha/api.proto)
     * Description: 
     * Services
@@ -201,6 +204,7 @@
         * [ListResponse](#nodes.v1alpha.ListResponse)
         * [Network](#nodes.v1alpha.Network)
         * [Node](#nodes.v1alpha.Node)
+        * [NodeList](#nodes.v1alpha.NodeList)
         * [Port](#nodes.v1alpha.Port)
         * [Spec](#nodes.v1alpha.Spec)
         * [Status](#nodes.v1alpha.Status)
@@ -254,7 +258,7 @@ Add Beacon request.
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | beacon | [Beacon](#beacons.v1alpha.Beacon) |  | Beacon object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="beacons.v1alpha.Beacon"></a>
 
 ### Beacon
@@ -263,7 +267,7 @@ Add Beacon request.
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| metadata | [core.v1alpha.ObjectMetadata](#core.v1alpha.ObjectMetadata) |  | Metadata for Beacon object. |
+| metadata | [core.v1.ObjectMetadata](#core.v1.ObjectMetadata) |  | Metadata for Beacon object. |
 | spec | [BeaconSpec](#beacons.v1alpha.BeaconSpec) |  | Spec for Beacon. |
 <a name="beacons.v1alpha.BeaconSpec"></a>
 
@@ -288,7 +292,7 @@ Delete
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | beacon | [Beacon](#beacons.v1alpha.Beacon) |  | Beacon object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="beacons.v1alpha.GetRequest"></a>
 
 ### GetRequest
@@ -297,7 +301,7 @@ Get request content.
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| getOptions | [core.v1alpha.GetOptions](#core.v1alpha.GetOptions) |  | GetOptions options for a GetRequest. |
+| getOptions | [core.v1.GetOptions](#core.v1.GetOptions) |  | GetOptions options for a GetRequest. |
 <a name="beacons.v1alpha.GetResponse"></a>
 
 ### GetResponse
@@ -307,7 +311,7 @@ Get response content.
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | beacon | [Beacon](#beacons.v1alpha.Beacon) |  | Beacon object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="beacons.v1alpha.ListRequest"></a>
 
 ### ListRequest
@@ -316,7 +320,7 @@ List request content.
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| listOptions | [core.v1alpha.ListOptions](#core.v1alpha.ListOptions) |  | ListOptions options for a ListRequest. |
+| listOptions | [core.v1.ListOptions](#core.v1.ListOptions) |  | ListOptions options for a ListRequest. |
 <a name="beacons.v1alpha.ListResponse"></a>
 
 ### ListResponse
@@ -326,7 +330,7 @@ List response content.
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | beacons | [Beacon](#beacons.v1alpha.Beacon) | repeated | Beacon list. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="beacons.v1alpha.UpdateRequest"></a>
 
 ### UpdateRequest
@@ -345,7 +349,7 @@ Update
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | beacon | [Beacon](#beacons.v1alpha.Beacon) |  | Beacon object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="beacons.v1alpha.WatchRequest"></a>
 
 ### WatchRequest
@@ -354,7 +358,7 @@ Watch
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| watchOptions | [core.v1alpha.WatchOptions](#core.v1alpha.WatchOptions) |  | WatchOptions options for WatchRequest. |
+| watchOptions | [core.v1.WatchOptions](#core.v1.WatchOptions) |  | WatchOptions options for WatchRequest. |
 <a name="beacons.v1alpha.WatchResponse"></a>
 
 ### WatchResponse
@@ -365,7 +369,7 @@ Watch
 | ----- | ---- | ----- | ----------- |
 | event | [events.v1alpha.Event](#events.v1alpha.Event) |  | Beacon info for watch response. |
 | beacon | [Beacon](#beacons.v1alpha.Beacon) |  | Beacon for watch response. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <!-- end messages -->
 
 <!-- end enums -->
@@ -417,7 +421,7 @@ Add
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | event | [Event](#events.v1alpha.Event) |  | Event object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="events.v1alpha.DeleteRequest"></a>
 
 ### DeleteRequest
@@ -436,7 +440,7 @@ Delete
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | event | [Event](#events.v1alpha.Event) |  | Event object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="events.v1alpha.Event"></a>
 
 ### Event
@@ -445,7 +449,7 @@ Delete
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| metadata | [core.v1alpha.ObjectMetadata](#core.v1alpha.ObjectMetadata) |  | Metadata for the Event object. |
+| metadata | [core.v1.ObjectMetadata](#core.v1.ObjectMetadata) |  | Metadata for the Event object. |
 | spec | [EventSpec](#events.v1alpha.EventSpec) |  | Spec for Event. |
 <a name="events.v1alpha.EventSpec"></a>
 
@@ -466,7 +470,7 @@ Get
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| getOptions | [core.v1alpha.GetOptions](#core.v1alpha.GetOptions) |  | GetOptions options for a GetRequest. |
+| getOptions | [core.v1.GetOptions](#core.v1.GetOptions) |  | GetOptions options for a GetRequest. |
 <a name="events.v1alpha.GetResponse"></a>
 
 ### GetResponse
@@ -476,7 +480,7 @@ Get
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | event | [Event](#events.v1alpha.Event) |  | Event object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="events.v1alpha.ListRequest"></a>
 
 ### ListRequest
@@ -485,7 +489,7 @@ List
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| listOptions | [core.v1alpha.ListOptions](#core.v1alpha.ListOptions) |  | ListOptions options for a ListRequest. |
+| listOptions | [core.v1.ListOptions](#core.v1.ListOptions) |  | ListOptions options for a ListRequest. |
 <a name="events.v1alpha.ListResponse"></a>
 
 ### ListResponse
@@ -495,7 +499,7 @@ List
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | events | [Event](#events.v1alpha.Event) | repeated | Event list. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="events.v1alpha.UpdateRequest"></a>
 
 ### UpdateRequest
@@ -514,7 +518,7 @@ Update
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | event | [Event](#events.v1alpha.Event) |  | Event object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="events.v1alpha.WatchRequest"></a>
 
 ### WatchRequest
@@ -523,7 +527,7 @@ Watch
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| watchOptions | [core.v1alpha.WatchOptions](#core.v1alpha.WatchOptions) |  | WatchOptions options for WatchRequest. |
+| watchOptions | [core.v1.WatchOptions](#core.v1.WatchOptions) |  | WatchOptions options for WatchRequest. |
 <a name="events.v1alpha.WatchResponse"></a>
 
 ### WatchResponse
@@ -533,7 +537,7 @@ Watch
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | event | [Event](#events.v1alpha.Event) |  | Event for watch stream. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <!-- end messages -->
 
 <!-- end enums -->
@@ -585,7 +589,7 @@ Add
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | variable | [Variable](#variables.v1alpha.Variable) |  | Variable object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="variables.v1alpha.DeleteRequest"></a>
 
 ### DeleteRequest
@@ -604,7 +608,7 @@ Delete
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | variable | [Variable](#variables.v1alpha.Variable) |  | Variable object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="variables.v1alpha.GetRequest"></a>
 
 ### GetRequest
@@ -613,7 +617,7 @@ Get
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| getOptions | [core.v1alpha.GetOptions](#core.v1alpha.GetOptions) |  | GetOptions options for a GetRequest. |
+| getOptions | [core.v1.GetOptions](#core.v1.GetOptions) |  | GetOptions options for a GetRequest. |
 <a name="variables.v1alpha.GetResponse"></a>
 
 ### GetResponse
@@ -623,7 +627,7 @@ Get
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | variable | [Variable](#variables.v1alpha.Variable) |  | Variable object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="variables.v1alpha.ListRequest"></a>
 
 ### ListRequest
@@ -632,7 +636,7 @@ List
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| listOptions | [core.v1alpha.ListOptions](#core.v1alpha.ListOptions) |  | ListOptions options for a ListRequest. |
+| listOptions | [core.v1.ListOptions](#core.v1.ListOptions) |  | ListOptions options for a ListRequest. |
 <a name="variables.v1alpha.ListResponse"></a>
 
 ### ListResponse
@@ -642,7 +646,7 @@ List
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | variables | [Variable](#variables.v1alpha.Variable) | repeated | Variable list. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="variables.v1alpha.UpdateRequest"></a>
 
 ### UpdateRequest
@@ -661,7 +665,7 @@ Update
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | variable | [Variable](#variables.v1alpha.Variable) |  | Variable object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="variables.v1alpha.Variable"></a>
 
 ### Variable
@@ -670,7 +674,7 @@ Update
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| metadata | [core.v1alpha.ObjectMetadata](#core.v1alpha.ObjectMetadata) |  | Metadata for Variable object. |
+| metadata | [core.v1.ObjectMetadata](#core.v1.ObjectMetadata) |  | Metadata for Variable object. |
 | spec | [VariableSpec](#variables.v1alpha.VariableSpec) |  | Spec for Variable. |
 <a name="variables.v1alpha.VariableSpec"></a>
 
@@ -700,7 +704,7 @@ Watch
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| watchOptions | [core.v1alpha.WatchOptions](#core.v1alpha.WatchOptions) |  | WatchOptions options for WatchRequest. |
+| watchOptions | [core.v1.WatchOptions](#core.v1.WatchOptions) |  | WatchOptions options for WatchRequest. |
 <a name="variables.v1alpha.WatchResponse"></a>
 
 ### WatchResponse
@@ -711,7 +715,7 @@ Watch
 | ----- | ---- | ----- | ----------- |
 | event | [events.v1alpha.Event](#events.v1alpha.Event) |  | Variable info for watch response. |
 | variable | [Variable](#variables.v1alpha.Variable) |  | Variable for watch response. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <!-- end messages -->
 
 <!-- end enums -->
@@ -763,7 +767,7 @@ Add
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | clusterVariable | [ClusterVariable](#clustervariables.v1alpha.ClusterVariable) |  | ClusterVariable object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="clustervariables.v1alpha.ClusterVariable"></a>
 
 ### ClusterVariable
@@ -772,7 +776,7 @@ Add
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| metadata | [core.v1alpha.ObjectMetadata](#core.v1alpha.ObjectMetadata) |  | Metadata for ClusterVariable object. |
+| metadata | [core.v1.ObjectMetadata](#core.v1.ObjectMetadata) |  | Metadata for ClusterVariable object. |
 | spec | [VariableSpec](#clustervariables.v1alpha.VariableSpec) |  | Spec for ClusterVariable. |
 <a name="clustervariables.v1alpha.DeleteRequest"></a>
 
@@ -792,7 +796,7 @@ Delete
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | clusterVariable | [ClusterVariable](#clustervariables.v1alpha.ClusterVariable) |  | ClusterVariable object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="clustervariables.v1alpha.GetRequest"></a>
 
 ### GetRequest
@@ -801,7 +805,7 @@ Get
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| getOptions | [core.v1alpha.GetOptions](#core.v1alpha.GetOptions) |  | GetOptions options for a GetRequest. |
+| getOptions | [core.v1.GetOptions](#core.v1.GetOptions) |  | GetOptions options for a GetRequest. |
 <a name="clustervariables.v1alpha.GetResponse"></a>
 
 ### GetResponse
@@ -811,7 +815,7 @@ Get
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | clusterVariable | [ClusterVariable](#clustervariables.v1alpha.ClusterVariable) |  | ClusterVariable object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="clustervariables.v1alpha.ListRequest"></a>
 
 ### ListRequest
@@ -820,7 +824,7 @@ List
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| listOptions | [core.v1alpha.ListOptions](#core.v1alpha.ListOptions) |  | ListOptions options for a ListRequest. |
+| listOptions | [core.v1.ListOptions](#core.v1.ListOptions) |  | ListOptions options for a ListRequest. |
 <a name="clustervariables.v1alpha.ListResponse"></a>
 
 ### ListResponse
@@ -830,7 +834,7 @@ List
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | clustervariables | [ClusterVariable](#clustervariables.v1alpha.ClusterVariable) | repeated | ClusterVariable list. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="clustervariables.v1alpha.UpdateRequest"></a>
 
 ### UpdateRequest
@@ -849,7 +853,7 @@ Update
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | clusterVariable | [ClusterVariable](#clustervariables.v1alpha.ClusterVariable) |  | ClusterVariable object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="clustervariables.v1alpha.VariableSpec"></a>
 
 ### VariableSpec
@@ -878,7 +882,7 @@ Watch
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| watchOptions | [core.v1alpha.WatchOptions](#core.v1alpha.WatchOptions) |  | WatchOptions options for WatchRequest. |
+| watchOptions | [core.v1.WatchOptions](#core.v1.WatchOptions) |  | WatchOptions options for WatchRequest. |
 <a name="clustervariables.v1alpha.WatchResponse"></a>
 
 ### WatchResponse
@@ -889,7 +893,7 @@ Watch
 | ----- | ---- | ----- | ----------- |
 | event | [events.v1alpha.Event](#events.v1alpha.Event) |  | ClusterVariable info for watch response. |
 | clusterVariable | [ClusterVariable](#clustervariables.v1alpha.ClusterVariable) |  | ClusterVariable for watch response. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <!-- end messages -->
 
 <!-- end enums -->
@@ -941,7 +945,7 @@ Add
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | cronJob | [CronJob](#cronjobs.v1alpha.CronJob) |  | CronJob object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="cronjobs.v1alpha.CronJob"></a>
 
 ### CronJob
@@ -950,7 +954,7 @@ Add
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| metadata | [core.v1alpha.ObjectMetadata](#core.v1alpha.ObjectMetadata) |  | Metadata for CronJob object. |
+| metadata | [core.v1.ObjectMetadata](#core.v1.ObjectMetadata) |  | Metadata for CronJob object. |
 | spec | [CronJobSpec](#cronjobs.v1alpha.CronJobSpec) |  | Spec for CronJob. |
 <a name="cronjobs.v1alpha.CronJobSpec"></a>
 
@@ -979,7 +983,7 @@ Delete
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | cronJob | [CronJob](#cronjobs.v1alpha.CronJob) |  | CronJob object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="cronjobs.v1alpha.GetRequest"></a>
 
 ### GetRequest
@@ -988,7 +992,7 @@ Get
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| getOptions | [core.v1alpha.GetOptions](#core.v1alpha.GetOptions) |  | GetOptions options for a GetRequest. |
+| getOptions | [core.v1.GetOptions](#core.v1.GetOptions) |  | GetOptions options for a GetRequest. |
 <a name="cronjobs.v1alpha.GetResponse"></a>
 
 ### GetResponse
@@ -998,7 +1002,7 @@ Get
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | cronJob | [CronJob](#cronjobs.v1alpha.CronJob) |  | CronJob object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="cronjobs.v1alpha.ListRequest"></a>
 
 ### ListRequest
@@ -1007,7 +1011,7 @@ List
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| listOptions | [core.v1alpha.ListOptions](#core.v1alpha.ListOptions) |  | ListOptions options for a ListRequest. |
+| listOptions | [core.v1.ListOptions](#core.v1.ListOptions) |  | ListOptions options for a ListRequest. |
 <a name="cronjobs.v1alpha.ListResponse"></a>
 
 ### ListResponse
@@ -1017,7 +1021,7 @@ List
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | cronjobs | [CronJob](#cronjobs.v1alpha.CronJob) | repeated | Config list. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="cronjobs.v1alpha.Schedule"></a>
 
 ### Schedule
@@ -1045,7 +1049,7 @@ Update
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | cronJob | [CronJob](#cronjobs.v1alpha.CronJob) |  | CronJob object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="cronjobs.v1alpha.WatchRequest"></a>
 
 ### WatchRequest
@@ -1054,7 +1058,7 @@ Watch
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| watchOptions | [core.v1alpha.WatchOptions](#core.v1alpha.WatchOptions) |  | WatchOptions options for WatchRequest. |
+| watchOptions | [core.v1.WatchOptions](#core.v1.WatchOptions) |  | WatchOptions options for WatchRequest. |
 <a name="cronjobs.v1alpha.WatchResponse"></a>
 
 ### WatchResponse
@@ -1065,7 +1069,7 @@ Watch
 | ----- | ---- | ----- | ----------- |
 | event | [events.v1alpha.Event](#events.v1alpha.Event) |  | Event info for watch response. |
 | cronJob | [CronJob](#cronjobs.v1alpha.CronJob) |  | CronJob for watch response. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <!-- end messages -->
 
 <!-- end enums -->
@@ -1092,14 +1096,14 @@ Watch
 
 
 
-<a name="github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha/api.proto"></a>
+<a name="github.com/galexrt/edenconfmgmt/pkg/apis/core/v1/api.proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
-## github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha/api.proto
+## github.com/galexrt/edenconfmgmt/pkg/apis/core/v1/api.proto
 
 
 
-<a name="core.v1alpha.Condition"></a>
+<a name="core.v1.Condition"></a>
 
 ### Condition
 
@@ -1108,8 +1112,8 @@ Watch
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | condition | [string](#string) |  |  |
-| retry | [Retry](#core.v1alpha.Retry) |  |  |
-<a name="core.v1alpha.Conditions"></a>
+| retry | [Retry](#core.v1.Retry) |  |  |
+<a name="core.v1.Conditions"></a>
 
 ### Conditions
 
@@ -1117,9 +1121,23 @@ Watch
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| when | [Condition](#core.v1alpha.Condition) |  | `when` condition. |
-| success | [Condition](#core.v1alpha.Condition) |  | `success` condition. |
-<a name="core.v1alpha.Error"></a>
+| when | [Condition](#core.v1.Condition) |  | `when` condition. |
+| success | [Condition](#core.v1.Condition) |  | `success` condition. |
+<a name="core.v1.CreateOptions"></a>
+
+### CreateOptions
+
+
+<a name="core.v1.DeleteOptions"></a>
+
+### DeleteOptions
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| labelSelectors | [string](#string) | repeated | Label selector in string form. |
+<a name="core.v1.Error"></a>
 
 ### Error
 
@@ -1129,7 +1147,7 @@ Watch
 | ----- | ---- | ----- | ----------- |
 | code | [int64](#int64) |  | Code status code. |
 | message | [string](#string) |  | Message error message (can be empty). |
-<a name="core.v1alpha.GetOptions"></a>
+<a name="core.v1.GetOptions"></a>
 
 ### GetOptions
 
@@ -1140,7 +1158,7 @@ Watch
 | name | [string](#string) |  | Name used for listing. |
 | namespace | [string](#string) |  | Namespace used for listing. |
 | labelSelectors | [string](#string) | repeated | Label selector in string form. |
-<a name="core.v1alpha.Include"></a>
+<a name="core.v1.Include"></a>
 
 ### Include
 
@@ -1150,7 +1168,7 @@ Watch
 | ----- | ---- | ----- | ----------- |
 | name | [string](#string) |  | Name of include (if no paths are given, will be used as file name/path). |
 | paths | [string](#string) | repeated | List of paths. |
-<a name="core.v1alpha.ListOptions"></a>
+<a name="core.v1.ListOptions"></a>
 
 ### ListOptions
 
@@ -1158,8 +1176,9 @@ Watch
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
+| namespace | [string](#string) |  | Namespace used for listing. |
 | labelSelectors | [string](#string) | repeated | Label selector in string form. |
-<a name="core.v1alpha.ObjectMetadata"></a>
+<a name="core.v1.ObjectMetadata"></a>
 
 ### ObjectMetadata
 
@@ -1171,9 +1190,9 @@ Watch
 | kind | [string](#string) |  | Kind of object. |
 | uuid | [string](#string) |  | UUID of object. |
 | name | [string](#string) |  | Name of object. |
-| labels | [ObjectMetadata.LabelsEntry](#core.v1alpha.ObjectMetadata.LabelsEntry) | repeated | Labels of object. |
-| annotations | [ObjectMetadata.AnnotationsEntry](#core.v1alpha.ObjectMetadata.AnnotationsEntry) | repeated | Annotations of object. |
-<a name="core.v1alpha.ObjectMetadata.AnnotationsEntry"></a>
+| labels | [ObjectMetadata.LabelsEntry](#core.v1.ObjectMetadata.LabelsEntry) | repeated | Labels of object. |
+| annotations | [ObjectMetadata.AnnotationsEntry](#core.v1.ObjectMetadata.AnnotationsEntry) | repeated | Annotations of object. |
+<a name="core.v1.ObjectMetadata.AnnotationsEntry"></a>
 
 ### ObjectMetadata.AnnotationsEntry
 
@@ -1183,7 +1202,7 @@ Watch
 | ----- | ---- | ----- | ----------- |
 | key | [string](#string) |  |  |
 | value | [string](#string) |  |  |
-<a name="core.v1alpha.ObjectMetadata.LabelsEntry"></a>
+<a name="core.v1.ObjectMetadata.LabelsEntry"></a>
 
 ### ObjectMetadata.LabelsEntry
 
@@ -1193,7 +1212,7 @@ Watch
 | ----- | ---- | ----- | ----------- |
 | key | [string](#string) |  |  |
 | value | [string](#string) |  |  |
-<a name="core.v1alpha.Retry"></a>
+<a name="core.v1.Retry"></a>
 
 ### Retry
 
@@ -1203,12 +1222,17 @@ Watch
 | ----- | ---- | ----- | ----------- |
 | interval | [google.protobuf.Duration](#google.protobuf.Duration) |  |  |
 | limit | [int64](#int64) |  |  |
-<a name="core.v1alpha.VersionRequest"></a>
+<a name="core.v1.UpdateOptions"></a>
+
+### UpdateOptions
+
+
+<a name="core.v1.VersionRequest"></a>
 
 ### VersionRequest
 
 
-<a name="core.v1alpha.VersionResponse"></a>
+<a name="core.v1.VersionResponse"></a>
 
 ### VersionResponse
 
@@ -1221,7 +1245,7 @@ Watch
 | minor | [int64](#int64) |  | Semversion minor number. |
 | patch | [int64](#int64) |  | Semversion patch number. |
 | state | [string](#string) |  | API state (e.g., alpha, beta, stable). |
-<a name="core.v1alpha.WatchOptions"></a>
+<a name="core.v1.WatchOptions"></a>
 
 ### WatchOptions
 
@@ -1258,7 +1282,7 @@ Watch
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | action | [string](#string) |  | Action name. |
-| conditions | [core.v1alpha.Conditions](#core.v1alpha.Conditions) |  | Conditions. |
+| conditions | [core.v1.Conditions](#core.v1.Conditions) |  | Conditions. |
 | runOptions | [RunOptions](#triggers.v1alpha.RunOptions) |  | RunOptions |
 | parameters | [google.protobuf.Any](#google.protobuf.Any) | repeated | Map of string interface{} to be given to the action. |
 <a name="triggers.v1alpha.AddRequest"></a>
@@ -1279,7 +1303,7 @@ Add
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | task | [Trigger](#triggers.v1alpha.Trigger) |  | Trigger object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="triggers.v1alpha.DeleteRequest"></a>
 
 ### DeleteRequest
@@ -1298,7 +1322,7 @@ Delete
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | task | [Trigger](#triggers.v1alpha.Trigger) |  | Trigger object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="triggers.v1alpha.GetRequest"></a>
 
 ### GetRequest
@@ -1307,7 +1331,7 @@ Get
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| getOptions | [core.v1alpha.GetOptions](#core.v1alpha.GetOptions) |  | GetOptions options for a GetRequest. |
+| getOptions | [core.v1.GetOptions](#core.v1.GetOptions) |  | GetOptions options for a GetRequest. |
 <a name="triggers.v1alpha.GetResponse"></a>
 
 ### GetResponse
@@ -1317,7 +1341,7 @@ Get
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | task | [Trigger](#triggers.v1alpha.Trigger) |  | Trigger object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="triggers.v1alpha.ListRequest"></a>
 
 ### ListRequest
@@ -1326,7 +1350,7 @@ List
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| listOptions | [core.v1alpha.ListOptions](#core.v1alpha.ListOptions) |  | ListOptions options for a ListRequest. |
+| listOptions | [core.v1.ListOptions](#core.v1.ListOptions) |  | ListOptions options for a ListRequest. |
 <a name="triggers.v1alpha.ListResponse"></a>
 
 ### ListResponse
@@ -1336,7 +1360,7 @@ List
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | triggers | [Trigger](#triggers.v1alpha.Trigger) | repeated | Trigger list. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="triggers.v1alpha.RunOptions"></a>
 
 ### RunOptions
@@ -1386,7 +1410,7 @@ List
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| metadata | [core.v1alpha.ObjectMetadata](#core.v1alpha.ObjectMetadata) |  | Metadata for Trigger object. |
+| metadata | [core.v1.ObjectMetadata](#core.v1.ObjectMetadata) |  | Metadata for Trigger object. |
 | spec | [TriggerSpec](#triggers.v1alpha.TriggerSpec) |  | Spec for Trigger. |
 <a name="triggers.v1alpha.TriggerSpec"></a>
 
@@ -1416,7 +1440,7 @@ Update
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | task | [Trigger](#triggers.v1alpha.Trigger) |  | Trigger object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="triggers.v1alpha.WatchRequest"></a>
 
 ### WatchRequest
@@ -1425,7 +1449,7 @@ Watch
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| watchOptions | [core.v1alpha.WatchOptions](#core.v1alpha.WatchOptions) |  | WatchOptions options for WatchRequest. |
+| watchOptions | [core.v1.WatchOptions](#core.v1.WatchOptions) |  | WatchOptions options for WatchRequest. |
 <a name="triggers.v1alpha.WatchResponse"></a>
 
 ### WatchResponse
@@ -1436,7 +1460,7 @@ Watch
 | ----- | ---- | ----- | ----------- |
 | event | [events.v1alpha.Event](#events.v1alpha.Event) |  | Trigger info for watch response. |
 | task | [Trigger](#triggers.v1alpha.Trigger) |  | Trigger for watch response. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <!-- end messages -->
 
 <!-- end enums -->
@@ -1488,7 +1512,7 @@ Add
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | agentConfig | [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig) |  | AgentConfig object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="agentagentconfigs.v1alpha.AgentConfig"></a>
 
 ### AgentConfig
@@ -1497,7 +1521,7 @@ AgentConfig object base.
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| metadata | [core.v1alpha.ObjectMetadata](#core.v1alpha.ObjectMetadata) |  | Metadata for AgentConfig object. |
+| metadata | [core.v1.ObjectMetadata](#core.v1.ObjectMetadata) |  | Metadata for AgentConfig object. |
 | spec | [AgentConfigSpec](#agentagentconfigs.v1alpha.AgentConfigSpec) |  | Spec for AgentConfig. |
 <a name="agentagentconfigs.v1alpha.AgentConfigSpec"></a>
 
@@ -1537,7 +1561,7 @@ Delete
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | agentConfig | [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig) |  | AgentConfig object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="agentagentconfigs.v1alpha.ETCD"></a>
 
 ### ETCD
@@ -1555,7 +1579,7 @@ Get
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| getOptions | [core.v1alpha.GetOptions](#core.v1alpha.GetOptions) |  | GetOptions options for a GetRequest. |
+| getOptions | [core.v1.GetOptions](#core.v1.GetOptions) |  | GetOptions options for a GetRequest. |
 <a name="agentagentconfigs.v1alpha.GetResponse"></a>
 
 ### GetResponse
@@ -1565,7 +1589,7 @@ Get
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | agentConfig | [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig) |  | AgentConfig object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="agentagentconfigs.v1alpha.ListRequest"></a>
 
 ### ListRequest
@@ -1574,7 +1598,7 @@ List
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| listOptions | [core.v1alpha.ListOptions](#core.v1alpha.ListOptions) |  | ListOptions options for a ListRequest. |
+| listOptions | [core.v1.ListOptions](#core.v1.ListOptions) |  | ListOptions options for a ListRequest. |
 <a name="agentagentconfigs.v1alpha.ListResponse"></a>
 
 ### ListResponse
@@ -1584,7 +1608,7 @@ List
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | agentConfigs | [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig) | repeated | AgentConfig list. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="agentagentconfigs.v1alpha.UpdateRequest"></a>
 
 ### UpdateRequest
@@ -1603,7 +1627,7 @@ Update
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | agentConfig | [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig) |  | AgentConfig object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="agentagentconfigs.v1alpha.WatchRequest"></a>
 
 ### WatchRequest
@@ -1612,7 +1636,7 @@ Watch
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| watchOptions | [core.v1alpha.WatchOptions](#core.v1alpha.WatchOptions) |  | WatchOptions options for WatchRequest. |
+| watchOptions | [core.v1.WatchOptions](#core.v1.WatchOptions) |  | WatchOptions options for WatchRequest. |
 <a name="agentagentconfigs.v1alpha.WatchResponse"></a>
 
 ### WatchResponse
@@ -1623,7 +1647,7 @@ Watch
 | ----- | ---- | ----- | ----------- |
 | event | [events.v1alpha.Event](#events.v1alpha.Event) |  | Event info for watch response. |
 | agentConfig | [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig) |  | AgentConfig object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <!-- end messages -->
 
 <!-- end enums -->
@@ -1666,7 +1690,7 @@ Watch
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | action | [string](#string) |  | Action name. |
-| conditions | [core.v1alpha.Conditions](#core.v1alpha.Conditions) |  | Conditions. |
+| conditions | [core.v1.Conditions](#core.v1.Conditions) |  | Conditions. |
 | runOptions | [RunOptions](#taskbooks.v1alpha.RunOptions) |  | RunOptions |
 | parameters | [google.protobuf.Any](#google.protobuf.Any) | repeated | Map of string interface{} to be given to the action. |
 <a name="taskbooks.v1alpha.AddRequest"></a>
@@ -1687,7 +1711,7 @@ Add
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | task | [TaskBook](#taskbooks.v1alpha.TaskBook) |  | TaskBook object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="taskbooks.v1alpha.DeleteRequest"></a>
 
 ### DeleteRequest
@@ -1706,7 +1730,7 @@ Delete
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | task | [TaskBook](#taskbooks.v1alpha.TaskBook) |  | TaskBook object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="taskbooks.v1alpha.GetRequest"></a>
 
 ### GetRequest
@@ -1715,7 +1739,7 @@ Get
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| getOptions | [core.v1alpha.GetOptions](#core.v1alpha.GetOptions) |  | GetOptions options for a GetRequest. |
+| getOptions | [core.v1.GetOptions](#core.v1.GetOptions) |  | GetOptions options for a GetRequest. |
 <a name="taskbooks.v1alpha.GetResponse"></a>
 
 ### GetResponse
@@ -1725,7 +1749,7 @@ Get
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | task | [TaskBook](#taskbooks.v1alpha.TaskBook) |  | TaskBook object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="taskbooks.v1alpha.ListRequest"></a>
 
 ### ListRequest
@@ -1734,7 +1758,7 @@ List
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| listOptions | [core.v1alpha.ListOptions](#core.v1alpha.ListOptions) |  | ListOptions options for a ListRequest. |
+| listOptions | [core.v1.ListOptions](#core.v1.ListOptions) |  | ListOptions options for a ListRequest. |
 <a name="taskbooks.v1alpha.ListResponse"></a>
 
 ### ListResponse
@@ -1744,7 +1768,7 @@ List
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | taskbooks | [TaskBook](#taskbooks.v1alpha.TaskBook) | repeated | TaskBook list. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="taskbooks.v1alpha.RunOptions"></a>
 
 ### RunOptions
@@ -1794,7 +1818,7 @@ List
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| metadata | [core.v1alpha.ObjectMetadata](#core.v1alpha.ObjectMetadata) |  | Metadata for TaskBook object. |
+| metadata | [core.v1.ObjectMetadata](#core.v1.ObjectMetadata) |  | Metadata for TaskBook object. |
 | spec | [TaskBookSpec](#taskbooks.v1alpha.TaskBookSpec) |  | Spec for TaskBook. |
 <a name="taskbooks.v1alpha.TaskBookSpec"></a>
 
@@ -1824,7 +1848,7 @@ Update
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | task | [TaskBook](#taskbooks.v1alpha.TaskBook) |  | TaskBook object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="taskbooks.v1alpha.WatchRequest"></a>
 
 ### WatchRequest
@@ -1833,7 +1857,7 @@ Watch
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| watchOptions | [core.v1alpha.WatchOptions](#core.v1alpha.WatchOptions) |  | WatchOptions options for WatchRequest. |
+| watchOptions | [core.v1.WatchOptions](#core.v1.WatchOptions) |  | WatchOptions options for WatchRequest. |
 <a name="taskbooks.v1alpha.WatchResponse"></a>
 
 ### WatchResponse
@@ -1844,7 +1868,7 @@ Watch
 | ----- | ---- | ----- | ----------- |
 | event | [events.v1alpha.Event](#events.v1alpha.Event) |  | TaskBook info for watch response. |
 | task | [TaskBook](#taskbooks.v1alpha.TaskBook) |  | TaskBook for watch response. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <!-- end messages -->
 
 <!-- end enums -->
@@ -1896,7 +1920,7 @@ Add
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | node | [Node](#nodes.v1alpha.Node) |  | Node object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="nodes.v1alpha.DeleteRequest"></a>
 
 ### DeleteRequest
@@ -1915,7 +1939,7 @@ Delete
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | node | [Node](#nodes.v1alpha.Node) |  | Node object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="nodes.v1alpha.GetRequest"></a>
 
 ### GetRequest
@@ -1924,7 +1948,7 @@ Get
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| getOptions | [core.v1alpha.GetOptions](#core.v1alpha.GetOptions) |  | GetOptions options for a GetRequest. |
+| getOptions | [core.v1.GetOptions](#core.v1.GetOptions) |  | GetOptions options for a GetRequest. |
 <a name="nodes.v1alpha.GetResponse"></a>
 
 ### GetResponse
@@ -1934,7 +1958,7 @@ Get
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | node | [Node](#nodes.v1alpha.Node) |  | Node object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="nodes.v1alpha.ListRequest"></a>
 
 ### ListRequest
@@ -1943,7 +1967,7 @@ List
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| listOptions | [core.v1alpha.ListOptions](#core.v1alpha.ListOptions) |  | ListOptions options for a ListRequest. |
+| listOptions | [core.v1.ListOptions](#core.v1.ListOptions) |  | ListOptions options for a ListRequest. |
 <a name="nodes.v1alpha.ListResponse"></a>
 
 ### ListResponse
@@ -1953,7 +1977,7 @@ List
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | nodes | [Node](#nodes.v1alpha.Node) | repeated | Node list. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="nodes.v1alpha.Network"></a>
 
 ### Network
@@ -1973,9 +1997,19 @@ List
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| metadata | [core.v1alpha.ObjectMetadata](#core.v1alpha.ObjectMetadata) |  | Metadata for Node object. |
+| metadata | [core.v1.ObjectMetadata](#core.v1.ObjectMetadata) |  | Metadata for Node object. |
 | spec | [Spec](#nodes.v1alpha.Spec) |  | Spec for Node. |
 | status | [Status](#nodes.v1alpha.Status) |  | Status for Node. |
+<a name="nodes.v1alpha.NodeList"></a>
+
+### NodeList
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| metadata | [core.v1.ObjectMetadata](#core.v1.ObjectMetadata) |  | Metadata for NodeList object. |
+| items | [Node](#nodes.v1alpha.Node) | repeated | List of Node objects. |
 <a name="nodes.v1alpha.Port"></a>
 
 ### Port
@@ -2023,7 +2057,7 @@ Update
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | node | [Node](#nodes.v1alpha.Node) |  | Node object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="nodes.v1alpha.WatchRequest"></a>
 
 ### WatchRequest
@@ -2032,7 +2066,7 @@ Watch
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| watchOptions | [core.v1alpha.WatchOptions](#core.v1alpha.WatchOptions) |  | WatchOptions options for WatchRequest. |
+| watchOptions | [core.v1.WatchOptions](#core.v1.WatchOptions) |  | WatchOptions options for WatchRequest. |
 <a name="nodes.v1alpha.WatchResponse"></a>
 
 ### WatchResponse
@@ -2043,7 +2077,7 @@ Watch
 | ----- | ---- | ----- | ----------- |
 | event | [events.v1alpha.Event](#events.v1alpha.Event) |  | Event info for watch response. |
 | node | [Node](#nodes.v1alpha.Node) |  | Node for watch response. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <!-- end messages -->
 
 <!-- end enums -->
@@ -2095,7 +2129,7 @@ Add
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | secret | [Secret](#secrets.v1alpha.Secret) |  | Secret object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="secrets.v1alpha.DeleteRequest"></a>
 
 ### DeleteRequest
@@ -2114,7 +2148,7 @@ Delete
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | secret | [Secret](#secrets.v1alpha.Secret) |  | Secret object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="secrets.v1alpha.GetRequest"></a>
 
 ### GetRequest
@@ -2123,7 +2157,7 @@ Get
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| getOptions | [core.v1alpha.GetOptions](#core.v1alpha.GetOptions) |  | GetOptions options for a GetRequest. |
+| getOptions | [core.v1.GetOptions](#core.v1.GetOptions) |  | GetOptions options for a GetRequest. |
 <a name="secrets.v1alpha.GetResponse"></a>
 
 ### GetResponse
@@ -2133,7 +2167,7 @@ Get
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | secret | [Secret](#secrets.v1alpha.Secret) |  | Secret object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="secrets.v1alpha.ListRequest"></a>
 
 ### ListRequest
@@ -2142,7 +2176,7 @@ List
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| listOptions | [core.v1alpha.ListOptions](#core.v1alpha.ListOptions) |  | ListOptions options for a ListRequest. |
+| listOptions | [core.v1.ListOptions](#core.v1.ListOptions) |  | ListOptions options for a ListRequest. |
 <a name="secrets.v1alpha.ListResponse"></a>
 
 ### ListResponse
@@ -2152,7 +2186,7 @@ List
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | secrets | [Secret](#secrets.v1alpha.Secret) | repeated | Secret list. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="secrets.v1alpha.Secret"></a>
 
 ### Secret
@@ -2161,7 +2195,7 @@ List
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| metadata | [core.v1alpha.ObjectMetadata](#core.v1alpha.ObjectMetadata) |  | Metadata for Secret object. |
+| metadata | [core.v1.ObjectMetadata](#core.v1.ObjectMetadata) |  | Metadata for Secret object. |
 | spec | [SecretSpec](#secrets.v1alpha.SecretSpec) |  | Spec for Secret. |
 <a name="secrets.v1alpha.SecretSpec"></a>
 
@@ -2201,7 +2235,7 @@ Update
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | secret | [Secret](#secrets.v1alpha.Secret) |  | Secret object. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="secrets.v1alpha.WatchRequest"></a>
 
 ### WatchRequest
@@ -2210,7 +2244,7 @@ Watch
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| watchOptions | [core.v1alpha.WatchOptions](#core.v1alpha.WatchOptions) |  | WatchOptions options for WatchRequest. |
+| watchOptions | [core.v1.WatchOptions](#core.v1.WatchOptions) |  | WatchOptions options for WatchRequest. |
 <a name="secrets.v1alpha.WatchResponse"></a>
 
 ### WatchResponse
@@ -2221,7 +2255,7 @@ Watch
 | ----- | ---- | ----- | ----------- |
 | event | [events.v1alpha.Event](#events.v1alpha.Event) |  | Secret info for watch response. |
 | secret | [Secret](#secrets.v1alpha.Secret) |  | Secret for watch response. |
-| error | [core.v1alpha.Error](#core.v1alpha.Error) |  | Error object. |
+| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <!-- end messages -->
 
 <!-- end enums -->

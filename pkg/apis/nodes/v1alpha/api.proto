@@ -20,7 +20,7 @@ option go_package = "github.com/galexrt/edenconfmgmt/pkg/apis/nodes/v1alpha";
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "github.com/mwitkow/go-proto-validators/validator.proto";
 import "github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/internalclient/client.proto";
-import "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha/api.proto";
+import "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1/api.proto";
 import "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha/api.proto";
 
 option (gogoproto.goproto_stringer_all) = false;
@@ -54,11 +54,18 @@ message Node {
     option (internalclient.options).generate = true;
     option (internalclient.options).namespaced = false;
     // Metadata for Node object.
-    core.v1alpha.ObjectMetadata metadata = 1 [(validator.field) = {msg_exists : true}];
+    core.v1.ObjectMetadata metadata = 1 [(validator.field) = {msg_exists : true}];
     // Spec for Node.
     Spec spec = 2 [(validator.field) = {msg_exists : true}];
     // Status for Node.
     Status status = 3;
+}
+
+message NodeList {
+    // Metadata for NodeList object.
+    core.v1.ObjectMetadata metadata = 1 [(validator.field) = {msg_exists : true}];
+    // List of Node objects.
+    repeated Node items = 2;
 }
 
 message Spec {
@@ -92,27 +99,27 @@ message Status {
 // Get
 message GetRequest {
     // GetOptions options for a GetRequest.
-    core.v1alpha.GetOptions getOptions = 1;
+    core.v1.GetOptions getOptions = 1;
 }
 
 message GetResponse {
     // Node object.
     Node node = 1;
     // Error object.
-    core.v1alpha.Error error = 2;
+    core.v1.Error error = 2;
 }
 
 // List
 message ListRequest {
     // ListOptions options for a ListRequest.
-    core.v1alpha.ListOptions listOptions = 1;
+    core.v1.ListOptions listOptions = 1;
 }
 
 message ListResponse {
     // Node list.
     repeated Node nodes = 1;
     // Error object.
-    core.v1alpha.Error error = 2;
+    core.v1.Error error = 2;
 }
 
 // Add
@@ -125,7 +132,7 @@ message AddResponse {
     // Node object.
     Node node = 1;
     // Error object.
-    core.v1alpha.Error error = 2;
+    core.v1.Error error = 2;
 }
 
 // Update
@@ -138,7 +145,7 @@ message UpdateResponse {
     // Node object.
     Node node = 1;
     // Error object.
-    core.v1alpha.Error error = 2;
+    core.v1.Error error = 2;
 }
 
 // Delete
@@ -151,13 +158,13 @@ message DeleteResponse {
     // Node object.
     Node node = 1;
     // Error object.
-    core.v1alpha.Error error = 2;
+    core.v1.Error error = 2;
 }
 
 // Watch
 message WatchRequest {
     // WatchOptions options for WatchRequest.
-    core.v1alpha.WatchOptions watchOptions = 1;
+    core.v1.WatchOptions watchOptions = 1;
 }
 
 message WatchResponse {
@@ -166,5 +173,5 @@ message WatchResponse {
     // Node for watch response.
     Node node = 2;
     // Error object.
-    core.v1alpha.Error error = 3;
+    core.v1.Error error = 3;
 }

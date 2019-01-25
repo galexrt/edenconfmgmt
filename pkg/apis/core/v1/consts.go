@@ -14,21 +14,13 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package utilsapi
+package v1
 
-import (
-	core_v1 "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1"
+const (
+	// Kind the name of the object kind (singular).
+	Kind = "Core"
+	// KindPlural the name of the object kind (plural).
+	KindPlural = "Core"
+	// APIVersion of the API.
+	APIVersion = "v1"
 )
-
-// ErrorToErrorResponse translates a Golang error to an error core object
-func ErrorToErrorResponse(err error) *core_v1.Error {
-	message := ""
-	if err != nil {
-		message = err.Error()
-	}
-	// TODO Try to create an useful code for the response.
-	return &core_v1.Error{
-		Code:    -1,
-		Message: message,
-	}
-}

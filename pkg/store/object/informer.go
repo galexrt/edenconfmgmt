@@ -14,13 +14,26 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package v1alpha
+package object
 
-const (
-	// Kind the name of the object kind (singular).
-	Kind = "Core"
-	// KindPlural the name of the object kind (plural).
-	KindPlural = "Core"
-	// APIVersion of the API.
-	APIVersion = "v1alpha"
+import (
+	"github.com/galexrt/edenconfmgmt/pkg/store/cache"
 )
+
+// InformerResult result returned by the channel.
+type InformerResult struct {
+	Closed  bool
+	Errors  []error
+	State   cache.ResultState
+	Key     string
+	Value   []byte
+	Version int64
+}
+
+type Informer struct {
+}
+
+// NewInformer returns a new Informer object.
+func NewInformer() *Informer {
+	return &Informer{}
+}

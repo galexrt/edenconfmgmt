@@ -25,7 +25,7 @@ import (
 	"syscall"
 	"time"
 
-	core_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha"
+	core_v1 "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1"
 	nodes_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/nodes/v1alpha"
 	"github.com/galexrt/edenconfmgmt/pkg/common"
 	"github.com/spf13/cobra"
@@ -79,7 +79,7 @@ func Shutdown(cmd *cobra.Command, args []string) error {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 	getReq := &nodes_v1alpha.GetRequest{
-		GetOptions: &core_v1alpha.GetOptions{
+		GetOptions: &core_v1.GetOptions{
 			Name: hostname,
 		},
 	}

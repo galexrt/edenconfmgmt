@@ -23,7 +23,7 @@ import (
 	"os"
 	"time"
 
-	core_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1alpha"
+	core_v1 "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1"
 	nodes_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/nodes/v1alpha"
 	"github.com/galexrt/edenconfmgmt/pkg/common"
 	"github.com/spf13/cobra"
@@ -55,7 +55,7 @@ var (
 
 			addResponse, err := nodesClient.Add(ctx, &nodes_v1alpha.AddRequest{
 				Node: &nodes_v1alpha.Node{
-					Metadata: &core_v1alpha.ObjectMetadata{},
+					Metadata: &core_v1.ObjectMetadata{},
 					Spec:     &nodes_v1alpha.Spec{},
 				},
 			})

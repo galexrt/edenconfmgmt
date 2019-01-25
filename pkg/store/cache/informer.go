@@ -18,6 +18,7 @@ package cache
 
 import (
 	"context"
+	"fmt"
 	"path"
 	"strings"
 	"sync"
@@ -28,7 +29,7 @@ import (
 	"go.uber.org/zap"
 )
 
-// Informer
+// Informer keeps track of watches and the receivers  of those watches.
 type Informer struct {
 	channel    map[string]*chanContainer
 	receivers  map[string]*receiverList
@@ -60,7 +61,7 @@ func NewInformer(dataStore data.Store, cacheStore data.Store, logger *zap.Logger
 	}
 }
 
-// Start
+// Start start the watch compaction logic.
 func (inf *Informer) Start(stopCh chan struct{}) error {
 	var err error
 	for {
@@ -72,7 +73,7 @@ func (inf *Informer) Start(stopCh chan struct{}) error {
 	}
 }
 
-// DataStoreChExists
+// DataStoreChExists return if a dataStoreCh exists in the system.
 func (inf *Informer) DataStoreChExists(key string) bool {
 	if st := inf.getDataStoreCh(key); st != nil {
 		return true
@@ -128,9 +129,12 @@ func (inf *Informer) getReceiverChs(key string) []*receiverList {
 	return receivers
 }
 
-// Watch
+// Watch return a Watch for a given path (`key`).
 func (inf *Informer) Watch(ctx context.Context, key string, dataStoreCh clientv3.WatchChan) (chan *InformerResult, error) {
 	if _, ok := inf.channel[key]; !ok {
+		if dataStoreCh == nil {
+			return nil, fmt.Errorf("no dataStoreCh given and none in the dataStoreCh list ")
+		}
 		inf.channel[key] = &chanContainer{
 			watch: dataStoreCh,
 		}
@@ -167,6 +171,7 @@ func (inf *Informer) watch(ctx context.Context, key string) {
 				version := event.Kv.Version
 				inf.wg.Add(1)
 				go func(key string, state ResultState, value []byte) {
+					defer inf.wg.Done()
 					switch state {
 					case ResultStateCreated:
 						fallthrough
@@ -179,31 +184,36 @@ func (inf *Informer) watch(ctx context.Context, key string) {
 					}
 				}(key, state, value)
 				inf.wg.Add(1)
-				go func(key string, state ResultState, value []byte, version int64) {
-					result := &InformerResult{
-						Errors:  errs,
-						Closed:  resp.Canceled,
-						Key:     key,
-						State:   state,
-						Value:   value,
-						Version: version,
-					}
-					// TODO should we lock the list here?
-					receivers := inf.getReceiverChs(key)
-					for _, rcvs := range receivers {
-						rcvs.RLock()
-						for _, rcv := range rcvs.list {
-							rcv <- result
-						}
-						rcvs.RUnlock()
-					}
-				}(key, state, value, version)
+				go func() {
+					defer inf.wg.Done()
+					inf.sendInformerResult(errs, key, resp.Canceled, state, value, version)
+				}()
 			}
 			if resp.Canceled {
 				inf.logger.Warn("dataStore event has been canceled", zap.Error(resp.Err()))
 				return
 			}
 		}
+	}
+}
+
+func (inf *Informer) sendInformerResult(errs []error, key string, canceled bool, state ResultState, value []byte, version int64) {
+	result := &InformerResult{
+		Errors:  errs,
+		Closed:  canceled,
+		Key:     key,
+		State:   state,
+		Value:   value,
+		Version: version,
+	}
+	// TODO should we lock the list here?
+	receivers := inf.getReceiverChs(key)
+	for _, rcvs := range receivers {
+		rcvs.RLock()
+		for _, rcv := range rcvs.list {
+			rcv <- result
+		}
+		rcvs.RUnlock()
 	}
 }
 
