@@ -6,8 +6,6 @@ package v1alpha
 import (
 	context "context"
 	fmt "fmt"
-	math "math"
-
 	_ "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1"
 	github_com_galexrt_edenconfmgmt_pkg_apis_core_v1 "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1"
 	_ "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha"
@@ -17,6 +15,7 @@ import (
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	_ "github.com/mwitkow/go-proto-validators"
+	math "math"
 )
 
 // Reference imports to suppress errors if they are not otherwise used.
