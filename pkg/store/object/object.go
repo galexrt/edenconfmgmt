@@ -18,53 +18,103 @@ package object
 
 import (
 	"context"
+	"fmt"
+	"sync"
 
 	core_v1 "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1"
 	"github.com/galexrt/edenconfmgmt/pkg/store/cache"
+	"go.uber.org/zap"
 )
 
 // Store object to hold objects and info about these objects.
 type Store struct {
-	store *cache.Store
-	apis  map[string]*apiInfo
+	cache  *cache.Store
+	wg     sync.WaitGroup
+	logger *zap.Logger
+	apis   map[string]*apiInfo
 }
 
 type apiInfo struct {
-	name   map[string]string
+	cache  map[string][]byte
+	names  map[string]string
 	labels map[string]string
 }
 
 // New return a new object Store
-func New(store *cache.Store) *Store {
+func New(store *cache.Store, logger *zap.Logger) *Store {
 	return &Store{
-		store: store,
+		cache:  store,
+		logger: logger.Named("pkg/store/object:Store"),
 	}
+}
+
+// Init
+func (s *Store) Init() error {
+	// TODO Should we "init" the object caches by:
+	// a) getting all objects from the s.cache
+	// b) start a watch for each api registered
+	for k, v := range s.apis {
+		err := s.warmupAPICache(k, v)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
+
+func (s *Store) warmupAPICache(api string, info *apiInfo) error {
+	_, err := s.cache.List(context.Background(), "nope")
+
+	return err
+}
+
+// Start
+func (s *Store) Start(stopCh chan struct{}) error {
+	s.wg.Add(1)
+	go func() {
+		defer s.wg.Done()
+		s.cache.Start(stopCh)
+		s.cache.Close()
+	}()
+	s.wg.Done()
+	return nil
+}
+
+// Register register an API
+func (s *Store) Register(name string) error {
+	s.apis[name] = &apiInfo{}
+	return nil
 }
 
 // Get
-func (s *Store) Get(ctx context.Context, opts *core_v1.GetOptions) (interface{}, error) {
-	//namespace := opts.Namespace
+func (s *Store) Get(ctx context.Context, opts *core_v1.GetOptions) ([]byte, error) {
+	namespace := opts.Namespace
+	_ = namespace
 	if opts.Name != "" {
-		//
+		resp, err := s.cache.Get(ctx, "/"+opts.Name)
+		if err != nil {
+			return nil, err
+		}
+		return resp, nil
 	} else if opts.LabelSelectors != nil {
-
+		//
 	}
-	return nil, nil
+	return nil, fmt.Errorf("no name nor label selector set")
 }
 
 // List
-func (s *Store) List(ctx context.Context, opts *core_v1.ListOptions) ([]interface{}, error) {
+func (s *Store) List(ctx context.Context, opts *core_v1.ListOptions) ([][]byte, error) {
 	return nil, nil
 }
 
 // Create
-func (s *Store) Create(ctx context.Context, opts *core_v1.CreateOptions) (interface{}, error) {
-	return nil, nil
+func (s *Store) Create(ctx context.Context, obj []byte, opts *core_v1.CreateOptions) error {
+	return s.cache.Put(ctx, "/my-cool-node", obj)
 }
 
 // Update
-func (s *Store) Update(ctx context.Context, opts *core_v1.UpdateOptions) (interface{}, error) {
-	return nil, nil
+func (s *Store) Update(ctx context.Context, obj []byte, opts *core_v1.UpdateOptions) error {
+	return nil
 }
 
 // Delete

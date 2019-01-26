@@ -18,7 +18,9 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"io"
+	"log"
 	"net"
 	"net/http"
 	"os"
@@ -31,6 +33,7 @@ import (
 	configs_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/agentconfigs/v1alpha"
 	beacons_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/beacons/v1alpha"
 	clustervariables_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/clustervariables/v1alpha"
+	core_v1 "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1"
 	cronjobs_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/cronjobs/v1alpha"
 	events_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha"
 	nodes_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/nodes/v1alpha"
@@ -38,15 +41,15 @@ import (
 	taskbooks_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/taskbooks/v1alpha"
 	triggers_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/triggers/v1alpha"
 	variables_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/variables/v1alpha"
+	"github.com/galexrt/edenconfmgmt/pkg/store/cache"
 	"github.com/galexrt/edenconfmgmt/pkg/utils"
 
 	_ "net/http/pprof"
 
 	"github.com/galexrt/edenconfmgmt/pkg/auth"
 	"github.com/galexrt/edenconfmgmt/pkg/common"
-	"github.com/galexrt/edenconfmgmt/pkg/store/cache"
-	"github.com/galexrt/edenconfmgmt/pkg/store/data"
 	store_data_adapters "github.com/galexrt/edenconfmgmt/pkg/store/data/adapters"
+	"github.com/galexrt/edenconfmgmt/pkg/store/object"
 	grpc_middleware "github.com/grpc-ecosystem/go-grpc-middleware"
 	grpc_zap "github.com/grpc-ecosystem/go-grpc-middleware/logging/zap"
 	grpc_recovery "github.com/grpc-ecosystem/go-grpc-middleware/recovery"
@@ -96,6 +99,21 @@ var (
 		},
 		RunE: Run,
 	}
+	shutdownCmd = &cobra.Command{
+		Use:   "shutdown",
+		Short: "Trigger shutdown of edenconfmgmt daemon",
+		PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
+			// TODO Implement atomic/dynamic log level
+			var level zapcore.Level
+			if err := (&level).UnmarshalText([]byte(viper.GetString(flagLogLevel))); err != nil {
+				return err
+			}
+			logger = common.GetLogger(&level)
+			return nil
+		},
+		RunE: Shutdown,
+	}
+
 	// Logger for logging.
 	logger *zap.Logger
 	// Prometheus metrics registry.
@@ -168,17 +186,17 @@ func Run(cmd *cobra.Command, args []string) error {
 	signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM)
 
 	dataStoreHandlerName := strings.ToLower(viper.GetString(flagDataStore))
-	dataStore, err := store_data_adapters.Get(dataStoreHandlerName, flagDataStore+"-")
+	dataStoreAdapter, err := store_data_adapters.Get(dataStoreHandlerName, flagDataStore+"-")
 	if err != nil {
 		logger.Fatal("failed to create store handler", zap.String("storehandler", dataStoreHandlerName), zap.Error(err))
 	}
 	cacheStoreHandlerName := strings.ToLower(viper.GetString(flagCacheStore))
-	var cacheStore data.Store
-	cacheStore, err = store_data_adapters.Get(cacheStoreHandlerName, flagCacheStore+"-")
+	cacheStoreAdapter, err := store_data_adapters.Get(cacheStoreHandlerName, flagCacheStore+"-")
 	if err != nil {
 		logger.Fatal("failed to create store handler", zap.String("storehandler", cacheStoreHandlerName), zap.Error(err))
 	}
-	store := cache.New(dataStore, cacheStore, logger)
+	cacheStore := cache.New(dataStoreAdapter, cacheStoreAdapter, logger)
+	objectStore := object.New(cacheStore, logger)
 
 	var tracer opentracing.Tracer
 	if false {
@@ -225,7 +243,7 @@ func Run(cmd *cobra.Command, args []string) error {
 	grpc_zap.ReplaceGrpcLogger(logger)
 
 	// Register APIs to grpc server
-	registerGRPCAPIs(grpcServer, store)
+	registerGRPCAPIs(grpcServer, objectStore)
 
 	// Initialize Prometheus GRPC metrics.
 	grpcMetrics.InitializeMetrics(grpcServer)
@@ -269,7 +287,7 @@ func Run(cmd *cobra.Command, args []string) error {
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
-		if err := magicRun(stopCh, store); err != nil {
+		if err := magicRun(stopCh, objectStore); err != nil {
 			logger.Error("magic run returned error", zap.Error(err))
 			closer.Close(stopCh)
 		}
@@ -297,35 +315,83 @@ func Run(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-func registerGRPCAPIs(srv *grpc.Server, store *cache.Store) {
+func registerGRPCAPIs(srv *grpc.Server, objectStore *object.Store) {
 	// Beacons
-	beaconsServer := beacons_v1alpha.New()
+	beaconsServer := beacons_v1alpha.NewBeaconsService(objectStore)
 	beacons_v1alpha.RegisterBeaconsServer(srv, beaconsServer)
 	// ClusterVariables
-	clusterVariablesServer := clustervariables_v1alpha.New()
+	clusterVariablesServer := clustervariables_v1alpha.NewClusterVariablesService(objectStore)
 	clustervariables_v1alpha.RegisterClusterVariablesServer(srv, clusterVariablesServer)
 	// AgentConfigs
-	configServer := configs_v1alpha.New()
-	configs_v1alpha.RegisterAgentConfigsServer(srv, configServer)
+	agentConfigServer := configs_v1alpha.NewAgentConfigsService(objectStore)
+	configs_v1alpha.RegisterAgentConfigsServer(srv, agentConfigServer)
 	// CronJobs
-	cronJobsServer := cronjobs_v1alpha.New()
+	cronJobsServer := cronjobs_v1alpha.NewCronJobsService(objectStore)
 	cronjobs_v1alpha.RegisterCronJobsServer(srv, cronJobsServer)
 	// Events
-	eventsServer := events_v1alpha.New()
+	eventsServer := events_v1alpha.NewEventsService(objectStore)
 	events_v1alpha.RegisterEventsServer(srv, eventsServer)
 	// Nodes
-	nodesServer := nodes_v1alpha.New()
+	nodesServer := nodes_v1alpha.NewNodesService(objectStore)
 	nodes_v1alpha.RegisterNodesServer(srv, nodesServer)
 	// Secrets
-	secretsServer := secrets_v1alpha.New()
+	secretsServer := secrets_v1alpha.NewSecretsService(objectStore)
 	secrets_v1alpha.RegisterSecretsServer(srv, secretsServer)
 	// TaskBooks
-	taskBooksServer := taskbooks_v1alpha.New()
+	taskBooksServer := taskbooks_v1alpha.NewTaskBooksService(objectStore)
 	taskbooks_v1alpha.RegisterTaskBooksServer(srv, taskBooksServer)
 	// Triggers
-	triggersServer := triggers_v1alpha.New()
+	triggersServer := triggers_v1alpha.NewTriggersService(objectStore)
 	triggers_v1alpha.RegisterTriggersServer(srv, triggersServer)
 	// Variables
-	variablesServer := variables_v1alpha.New()
+	variablesServer := variables_v1alpha.NewVariablesService(objectStore)
 	variables_v1alpha.RegisterVariablesServer(srv, variablesServer)
+}
+
+// Shutdown command
+func Shutdown(cmd *cobra.Command, args []string) error {
+	stopCh := make(chan struct{})
+	sigCh := make(chan os.Signal)
+	signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM)
+	sigCounter := 0
+	go func() {
+		for {
+			<-sigCh
+			signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM)
+			logger.Info("signal received, ignoring ...")
+			if sigCounter > 0 {
+				close(stopCh)
+			}
+			sigCounter++
+		}
+	}()
+
+	opts := []grpc.DialOption{
+		grpc.WithInsecure(),
+	}
+	cc, err := grpc.Dial("127.0.0.1:1337", opts...)
+	if err != nil {
+		log.Fatalf("fail to dial: %v", err)
+	}
+	defer cc.Close()
+	nodesClient := nodes_v1alpha.NewNodesClient(cc)
+
+	hostname, err := os.Hostname()
+	if err != nil {
+		return err
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+	getReq := &nodes_v1alpha.GetRequest{
+		Options: &core_v1.GetOptions{
+			Name: hostname,
+		},
+	}
+	getResponse, err := nodesClient.Get(ctx, getReq)
+	fmt.Printf("Nodes.Get(): %+v - %+v\n", getResponse, err)
+	// TODO mark node as (shut)down(ed) with reason (e.g., shutdown of server, service restart)
+	//getResponse.Node.Spec
+
+	return nil
 }

@@ -7,9 +7,11 @@ import (
 	fmt "fmt"
 	_ "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1"
 	_ "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha"
+	_ "github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/apiserver"
 	_ "github.com/gogo/protobuf/gogoproto"
 	github_com_gogo_protobuf_proto "github.com/gogo/protobuf/proto"
 	proto "github.com/gogo/protobuf/proto"
+	_ "github.com/mwitkow/go-proto-validators"
 	math "math"
 	math_rand "math/rand"
 	testing "testing"
@@ -50,6 +52,46 @@ func BenchmarkAgentConfigProtoUnmarshal(b *testing.B) {
 		datas[i] = dAtA
 	}
 	msg := &AgentConfig{}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		total += len(datas[i%10000])
+		if err := github_com_gogo_protobuf_proto.Unmarshal(datas[i%10000], msg); err != nil {
+			panic(err)
+		}
+	}
+	b.SetBytes(int64(total / b.N))
+}
+
+func BenchmarkAgentConfigListProtoMarshal(b *testing.B) {
+	popr := math_rand.New(math_rand.NewSource(616))
+	total := 0
+	pops := make([]*AgentConfigList, 10000)
+	for i := 0; i < 10000; i++ {
+		pops[i] = NewPopulatedAgentConfigList(popr, false)
+	}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		dAtA, err := github_com_gogo_protobuf_proto.Marshal(pops[i%10000])
+		if err != nil {
+			panic(err)
+		}
+		total += len(dAtA)
+	}
+	b.SetBytes(int64(total / b.N))
+}
+
+func BenchmarkAgentConfigListProtoUnmarshal(b *testing.B) {
+	popr := math_rand.New(math_rand.NewSource(616))
+	total := 0
+	datas := make([][]byte, 10000)
+	for i := 0; i < 10000; i++ {
+		dAtA, err := github_com_gogo_protobuf_proto.Marshal(NewPopulatedAgentConfigList(popr, false))
+		if err != nil {
+			panic(err)
+		}
+		datas[i] = dAtA
+	}
+	msg := &AgentConfigList{}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		total += len(datas[i%10000])
@@ -340,12 +382,12 @@ func BenchmarkListResponseProtoUnmarshal(b *testing.B) {
 	b.SetBytes(int64(total / b.N))
 }
 
-func BenchmarkAddRequestProtoMarshal(b *testing.B) {
+func BenchmarkCreateRequestProtoMarshal(b *testing.B) {
 	popr := math_rand.New(math_rand.NewSource(616))
 	total := 0
-	pops := make([]*AddRequest, 10000)
+	pops := make([]*CreateRequest, 10000)
 	for i := 0; i < 10000; i++ {
-		pops[i] = NewPopulatedAddRequest(popr, false)
+		pops[i] = NewPopulatedCreateRequest(popr, false)
 	}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -358,18 +400,18 @@ func BenchmarkAddRequestProtoMarshal(b *testing.B) {
 	b.SetBytes(int64(total / b.N))
 }
 
-func BenchmarkAddRequestProtoUnmarshal(b *testing.B) {
+func BenchmarkCreateRequestProtoUnmarshal(b *testing.B) {
 	popr := math_rand.New(math_rand.NewSource(616))
 	total := 0
 	datas := make([][]byte, 10000)
 	for i := 0; i < 10000; i++ {
-		dAtA, err := github_com_gogo_protobuf_proto.Marshal(NewPopulatedAddRequest(popr, false))
+		dAtA, err := github_com_gogo_protobuf_proto.Marshal(NewPopulatedCreateRequest(popr, false))
 		if err != nil {
 			panic(err)
 		}
 		datas[i] = dAtA
 	}
-	msg := &AddRequest{}
+	msg := &CreateRequest{}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		total += len(datas[i%10000])
@@ -380,12 +422,12 @@ func BenchmarkAddRequestProtoUnmarshal(b *testing.B) {
 	b.SetBytes(int64(total / b.N))
 }
 
-func BenchmarkAddResponseProtoMarshal(b *testing.B) {
+func BenchmarkCreateResponseProtoMarshal(b *testing.B) {
 	popr := math_rand.New(math_rand.NewSource(616))
 	total := 0
-	pops := make([]*AddResponse, 10000)
+	pops := make([]*CreateResponse, 10000)
 	for i := 0; i < 10000; i++ {
-		pops[i] = NewPopulatedAddResponse(popr, false)
+		pops[i] = NewPopulatedCreateResponse(popr, false)
 	}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -398,18 +440,18 @@ func BenchmarkAddResponseProtoMarshal(b *testing.B) {
 	b.SetBytes(int64(total / b.N))
 }
 
-func BenchmarkAddResponseProtoUnmarshal(b *testing.B) {
+func BenchmarkCreateResponseProtoUnmarshal(b *testing.B) {
 	popr := math_rand.New(math_rand.NewSource(616))
 	total := 0
 	datas := make([][]byte, 10000)
 	for i := 0; i < 10000; i++ {
-		dAtA, err := github_com_gogo_protobuf_proto.Marshal(NewPopulatedAddResponse(popr, false))
+		dAtA, err := github_com_gogo_protobuf_proto.Marshal(NewPopulatedCreateResponse(popr, false))
 		if err != nil {
 			panic(err)
 		}
 		datas[i] = dAtA
 	}
-	msg := &AddResponse{}
+	msg := &CreateResponse{}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		total += len(datas[i%10000])
@@ -674,6 +716,20 @@ func BenchmarkAgentConfigSize(b *testing.B) {
 	b.SetBytes(int64(total / b.N))
 }
 
+func BenchmarkAgentConfigListSize(b *testing.B) {
+	popr := math_rand.New(math_rand.NewSource(616))
+	total := 0
+	pops := make([]*AgentConfigList, 1000)
+	for i := 0; i < 1000; i++ {
+		pops[i] = NewPopulatedAgentConfigList(popr, false)
+	}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		total += pops[i%1000].Size()
+	}
+	b.SetBytes(int64(total / b.N))
+}
+
 func BenchmarkAgentConfigSpecSize(b *testing.B) {
 	popr := math_rand.New(math_rand.NewSource(616))
 	total := 0
@@ -772,12 +828,12 @@ func BenchmarkListResponseSize(b *testing.B) {
 	b.SetBytes(int64(total / b.N))
 }
 
-func BenchmarkAddRequestSize(b *testing.B) {
+func BenchmarkCreateRequestSize(b *testing.B) {
 	popr := math_rand.New(math_rand.NewSource(616))
 	total := 0
-	pops := make([]*AddRequest, 1000)
+	pops := make([]*CreateRequest, 1000)
 	for i := 0; i < 1000; i++ {
-		pops[i] = NewPopulatedAddRequest(popr, false)
+		pops[i] = NewPopulatedCreateRequest(popr, false)
 	}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
@@ -786,12 +842,12 @@ func BenchmarkAddRequestSize(b *testing.B) {
 	b.SetBytes(int64(total / b.N))
 }
 
-func BenchmarkAddResponseSize(b *testing.B) {
+func BenchmarkCreateResponseSize(b *testing.B) {
 	popr := math_rand.New(math_rand.NewSource(616))
 	total := 0
-	pops := make([]*AddResponse, 1000)
+	pops := make([]*CreateResponse, 1000)
 	for i := 0; i < 1000; i++ {
-		pops[i] = NewPopulatedAddResponse(popr, false)
+		pops[i] = NewPopulatedCreateResponse(popr, false)
 	}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {

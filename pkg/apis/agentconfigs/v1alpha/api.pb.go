@@ -8,8 +8,10 @@ import (
 	fmt "fmt"
 	v1 "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1"
 	v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha"
+	_ "github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/apiserver"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
+	_ "github.com/mwitkow/go-proto-validators"
 	grpc "google.golang.org/grpc"
 	io "io"
 	math "math"
@@ -84,6 +86,61 @@ func (m *AgentConfig) GetSpec() *AgentConfigSpec {
 	return nil
 }
 
+type AgentConfigList struct {
+	// Metadata for AgentConfigList object.
+	Metadata *v1.ObjectMetadata `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	// List of AgentConfig objects.
+	Items                []*AgentConfig `protobuf:"bytes,2,rep,name=items,proto3" json:"items,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
+	XXX_sizecache        int32          `json:"-"`
+}
+
+func (m *AgentConfigList) Reset()      { *m = AgentConfigList{} }
+func (*AgentConfigList) ProtoMessage() {}
+func (*AgentConfigList) Descriptor() ([]byte, []int) {
+	return fileDescriptor_448ea882d04077a6, []int{1}
+}
+func (m *AgentConfigList) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *AgentConfigList) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_AgentConfigList.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalTo(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *AgentConfigList) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AgentConfigList.Merge(m, src)
+}
+func (m *AgentConfigList) XXX_Size() int {
+	return m.Size()
+}
+func (m *AgentConfigList) XXX_DiscardUnknown() {
+	xxx_messageInfo_AgentConfigList.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AgentConfigList proto.InternalMessageInfo
+
+func (m *AgentConfigList) GetMetadata() *v1.ObjectMetadata {
+	if m != nil {
+		return m.Metadata
+	}
+	return nil
+}
+
+func (m *AgentConfigList) GetItems() []*AgentConfig {
+	if m != nil {
+		return m.Items
+	}
+	return nil
+}
+
 type AgentConfigSpec struct {
 	// DataStore.
 	DataStore            *DataStore `protobuf:"bytes,1,opt,name=dataStore,proto3" json:"dataStore,omitempty"`
@@ -94,7 +151,7 @@ type AgentConfigSpec struct {
 func (m *AgentConfigSpec) Reset()      { *m = AgentConfigSpec{} }
 func (*AgentConfigSpec) ProtoMessage() {}
 func (*AgentConfigSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_448ea882d04077a6, []int{1}
+	return fileDescriptor_448ea882d04077a6, []int{2}
 }
 func (m *AgentConfigSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -145,7 +202,7 @@ type DataStore struct {
 func (m *DataStore) Reset()      { *m = DataStore{} }
 func (*DataStore) ProtoMessage() {}
 func (*DataStore) Descriptor() ([]byte, []int) {
-	return fileDescriptor_448ea882d04077a6, []int{2}
+	return fileDescriptor_448ea882d04077a6, []int{3}
 }
 func (m *DataStore) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -205,7 +262,7 @@ type ETCD struct {
 func (m *ETCD) Reset()      { *m = ETCD{} }
 func (*ETCD) ProtoMessage() {}
 func (*ETCD) Descriptor() ([]byte, []int) {
-	return fileDescriptor_448ea882d04077a6, []int{3}
+	return fileDescriptor_448ea882d04077a6, []int{4}
 }
 func (m *ETCD) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -243,8 +300,8 @@ func (m *ETCD) GetEndpoints() string {
 
 // Get
 type GetRequest struct {
-	// GetOptions options for a GetRequest.
-	GetOptions           *v1.GetOptions `protobuf:"bytes,1,opt,name=getOptions,proto3" json:"getOptions,omitempty"`
+	// core_v1.GetOptions
+	Options              *v1.GetOptions `protobuf:"bytes,1,opt,name=options,proto3" json:"options,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
 	XXX_sizecache        int32          `json:"-"`
 }
@@ -252,7 +309,7 @@ type GetRequest struct {
 func (m *GetRequest) Reset()      { *m = GetRequest{} }
 func (*GetRequest) ProtoMessage() {}
 func (*GetRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_448ea882d04077a6, []int{4}
+	return fileDescriptor_448ea882d04077a6, []int{5}
 }
 func (m *GetRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -281,26 +338,24 @@ func (m *GetRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetRequest proto.InternalMessageInfo
 
-func (m *GetRequest) GetGetOptions() *v1.GetOptions {
+func (m *GetRequest) GetOptions() *v1.GetOptions {
 	if m != nil {
-		return m.GetOptions
+		return m.Options
 	}
 	return nil
 }
 
 type GetResponse struct {
 	// AgentConfig object.
-	AgentConfig *AgentConfig `protobuf:"bytes,1,opt,name=agentConfig,proto3" json:"agentConfig,omitempty"`
-	// Error object.
-	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
+	AgentConfig          *AgentConfig `protobuf:"bytes,1,opt,name=agentConfig,proto3" json:"agentConfig,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}     `json:"-"`
+	XXX_sizecache        int32        `json:"-"`
 }
 
 func (m *GetResponse) Reset()      { *m = GetResponse{} }
 func (*GetResponse) ProtoMessage() {}
 func (*GetResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_448ea882d04077a6, []int{5}
+	return fileDescriptor_448ea882d04077a6, []int{6}
 }
 func (m *GetResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -336,17 +391,10 @@ func (m *GetResponse) GetAgentConfig() *AgentConfig {
 	return nil
 }
 
-func (m *GetResponse) GetError() *v1.Error {
-	if m != nil {
-		return m.Error
-	}
-	return nil
-}
-
 // List
 type ListRequest struct {
-	// ListOptions options for a ListRequest.
-	ListOptions          *v1.ListOptions `protobuf:"bytes,1,opt,name=listOptions,proto3" json:"listOptions,omitempty"`
+	// core_v1.ListOptions
+	Options              *v1.ListOptions `protobuf:"bytes,1,opt,name=options,proto3" json:"options,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
 	XXX_sizecache        int32           `json:"-"`
 }
@@ -354,7 +402,7 @@ type ListRequest struct {
 func (m *ListRequest) Reset()      { *m = ListRequest{} }
 func (*ListRequest) ProtoMessage() {}
 func (*ListRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_448ea882d04077a6, []int{6}
+	return fileDescriptor_448ea882d04077a6, []int{7}
 }
 func (m *ListRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -383,26 +431,24 @@ func (m *ListRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ListRequest proto.InternalMessageInfo
 
-func (m *ListRequest) GetListOptions() *v1.ListOptions {
+func (m *ListRequest) GetOptions() *v1.ListOptions {
 	if m != nil {
-		return m.ListOptions
+		return m.Options
 	}
 	return nil
 }
 
 type ListResponse struct {
 	// AgentConfig list.
-	AgentConfigs []*AgentConfig `protobuf:"bytes,1,rep,name=agentConfigs,proto3" json:"agentConfigs,omitempty"`
-	// Error object.
-	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
+	AgentConfigList      *AgentConfigList `protobuf:"bytes,1,opt,name=agentConfigList,proto3" json:"agentConfigList,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
+	XXX_sizecache        int32            `json:"-"`
 }
 
 func (m *ListResponse) Reset()      { *m = ListResponse{} }
 func (*ListResponse) ProtoMessage() {}
 func (*ListResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_448ea882d04077a6, []int{7}
+	return fileDescriptor_448ea882d04077a6, []int{8}
 }
 func (m *ListResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -431,39 +477,87 @@ func (m *ListResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ListResponse proto.InternalMessageInfo
 
-func (m *ListResponse) GetAgentConfigs() []*AgentConfig {
+func (m *ListResponse) GetAgentConfigList() *AgentConfigList {
 	if m != nil {
-		return m.AgentConfigs
+		return m.AgentConfigList
 	}
 	return nil
 }
 
-func (m *ListResponse) GetError() *v1.Error {
+// Create
+type CreateRequest struct {
+	// core_v1.CreateOptions
+	Options *v1.CreateOptions `protobuf:"bytes,1,opt,name=options,proto3" json:"options,omitempty"`
+	// AgentConfig object.
+	AgentConfig          *AgentConfig `protobuf:"bytes,2,opt,name=agentConfig,proto3" json:"agentConfig,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}     `json:"-"`
+	XXX_sizecache        int32        `json:"-"`
+}
+
+func (m *CreateRequest) Reset()      { *m = CreateRequest{} }
+func (*CreateRequest) ProtoMessage() {}
+func (*CreateRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_448ea882d04077a6, []int{9}
+}
+func (m *CreateRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CreateRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_CreateRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalTo(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *CreateRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateRequest.Merge(m, src)
+}
+func (m *CreateRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *CreateRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateRequest proto.InternalMessageInfo
+
+func (m *CreateRequest) GetOptions() *v1.CreateOptions {
 	if m != nil {
-		return m.Error
+		return m.Options
 	}
 	return nil
 }
 
-// Add
-type AddRequest struct {
+func (m *CreateRequest) GetAgentConfig() *AgentConfig {
+	if m != nil {
+		return m.AgentConfig
+	}
+	return nil
+}
+
+type CreateResponse struct {
 	// AgentConfig object.
 	AgentConfig          *AgentConfig `protobuf:"bytes,1,opt,name=agentConfig,proto3" json:"agentConfig,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}     `json:"-"`
 	XXX_sizecache        int32        `json:"-"`
 }
 
-func (m *AddRequest) Reset()      { *m = AddRequest{} }
-func (*AddRequest) ProtoMessage() {}
-func (*AddRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_448ea882d04077a6, []int{8}
+func (m *CreateResponse) Reset()      { *m = CreateResponse{} }
+func (*CreateResponse) ProtoMessage() {}
+func (*CreateResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_448ea882d04077a6, []int{10}
 }
-func (m *AddRequest) XXX_Unmarshal(b []byte) error {
+func (m *CreateResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *AddRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *CreateResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_AddRequest.Marshal(b, m, deterministic)
+		return xxx_messageInfo_CreateResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalTo(b)
@@ -473,84 +567,31 @@ func (m *AddRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return b[:n], nil
 	}
 }
-func (m *AddRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AddRequest.Merge(m, src)
+func (m *CreateResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateResponse.Merge(m, src)
 }
-func (m *AddRequest) XXX_Size() int {
+func (m *CreateResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *AddRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_AddRequest.DiscardUnknown(m)
+func (m *CreateResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_AddRequest proto.InternalMessageInfo
+var xxx_messageInfo_CreateResponse proto.InternalMessageInfo
 
-func (m *AddRequest) GetAgentConfig() *AgentConfig {
+func (m *CreateResponse) GetAgentConfig() *AgentConfig {
 	if m != nil {
 		return m.AgentConfig
-	}
-	return nil
-}
-
-type AddResponse struct {
-	// AgentConfig object.
-	AgentConfig *AgentConfig `protobuf:"bytes,1,opt,name=agentConfig,proto3" json:"agentConfig,omitempty"`
-	// Error object.
-	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
-}
-
-func (m *AddResponse) Reset()      { *m = AddResponse{} }
-func (*AddResponse) ProtoMessage() {}
-func (*AddResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_448ea882d04077a6, []int{9}
-}
-func (m *AddResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *AddResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_AddResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *AddResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AddResponse.Merge(m, src)
-}
-func (m *AddResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *AddResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_AddResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_AddResponse proto.InternalMessageInfo
-
-func (m *AddResponse) GetAgentConfig() *AgentConfig {
-	if m != nil {
-		return m.AgentConfig
-	}
-	return nil
-}
-
-func (m *AddResponse) GetError() *v1.Error {
-	if m != nil {
-		return m.Error
 	}
 	return nil
 }
 
 // Update
 type UpdateRequest struct {
+	// core_v1.UpdateOptions
+	Options *v1.UpdateOptions `protobuf:"bytes,1,opt,name=options,proto3" json:"options,omitempty"`
 	// AgentConfig object.
-	AgentConfig          *AgentConfig `protobuf:"bytes,1,opt,name=agentConfig,proto3" json:"agentConfig,omitempty"`
+	AgentConfig          *AgentConfig `protobuf:"bytes,2,opt,name=agentConfig,proto3" json:"agentConfig,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}     `json:"-"`
 	XXX_sizecache        int32        `json:"-"`
 }
@@ -558,7 +599,7 @@ type UpdateRequest struct {
 func (m *UpdateRequest) Reset()      { *m = UpdateRequest{} }
 func (*UpdateRequest) ProtoMessage() {}
 func (*UpdateRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_448ea882d04077a6, []int{10}
+	return fileDescriptor_448ea882d04077a6, []int{11}
 }
 func (m *UpdateRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -587,6 +628,13 @@ func (m *UpdateRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_UpdateRequest proto.InternalMessageInfo
 
+func (m *UpdateRequest) GetOptions() *v1.UpdateOptions {
+	if m != nil {
+		return m.Options
+	}
+	return nil
+}
+
 func (m *UpdateRequest) GetAgentConfig() *AgentConfig {
 	if m != nil {
 		return m.AgentConfig
@@ -596,17 +644,15 @@ func (m *UpdateRequest) GetAgentConfig() *AgentConfig {
 
 type UpdateResponse struct {
 	// AgentConfig object.
-	AgentConfig *AgentConfig `protobuf:"bytes,1,opt,name=agentConfig,proto3" json:"agentConfig,omitempty"`
-	// Error object.
-	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
+	AgentConfig          *AgentConfig `protobuf:"bytes,1,opt,name=agentConfig,proto3" json:"agentConfig,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}     `json:"-"`
+	XXX_sizecache        int32        `json:"-"`
 }
 
 func (m *UpdateResponse) Reset()      { *m = UpdateResponse{} }
 func (*UpdateResponse) ProtoMessage() {}
 func (*UpdateResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_448ea882d04077a6, []int{11}
+	return fileDescriptor_448ea882d04077a6, []int{12}
 }
 func (m *UpdateResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -642,17 +688,12 @@ func (m *UpdateResponse) GetAgentConfig() *AgentConfig {
 	return nil
 }
 
-func (m *UpdateResponse) GetError() *v1.Error {
-	if m != nil {
-		return m.Error
-	}
-	return nil
-}
-
 // Delete
 type DeleteRequest struct {
+	// core_v1.DeleteOptions
+	Options *v1.DeleteOptions `protobuf:"bytes,1,opt,name=options,proto3" json:"options,omitempty"`
 	// AgentConfig object.
-	AgentConfig          *AgentConfig `protobuf:"bytes,1,opt,name=agentConfig,proto3" json:"agentConfig,omitempty"`
+	AgentConfig          *AgentConfig `protobuf:"bytes,2,opt,name=agentConfig,proto3" json:"agentConfig,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}     `json:"-"`
 	XXX_sizecache        int32        `json:"-"`
 }
@@ -660,7 +701,7 @@ type DeleteRequest struct {
 func (m *DeleteRequest) Reset()      { *m = DeleteRequest{} }
 func (*DeleteRequest) ProtoMessage() {}
 func (*DeleteRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_448ea882d04077a6, []int{12}
+	return fileDescriptor_448ea882d04077a6, []int{13}
 }
 func (m *DeleteRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -689,6 +730,13 @@ func (m *DeleteRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_DeleteRequest proto.InternalMessageInfo
 
+func (m *DeleteRequest) GetOptions() *v1.DeleteOptions {
+	if m != nil {
+		return m.Options
+	}
+	return nil
+}
+
 func (m *DeleteRequest) GetAgentConfig() *AgentConfig {
 	if m != nil {
 		return m.AgentConfig
@@ -698,17 +746,15 @@ func (m *DeleteRequest) GetAgentConfig() *AgentConfig {
 
 type DeleteResponse struct {
 	// AgentConfig object.
-	AgentConfig *AgentConfig `protobuf:"bytes,1,opt,name=agentConfig,proto3" json:"agentConfig,omitempty"`
-	// Error object.
-	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
+	AgentConfig          *AgentConfig `protobuf:"bytes,1,opt,name=agentConfig,proto3" json:"agentConfig,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}     `json:"-"`
+	XXX_sizecache        int32        `json:"-"`
 }
 
 func (m *DeleteResponse) Reset()      { *m = DeleteResponse{} }
 func (*DeleteResponse) ProtoMessage() {}
 func (*DeleteResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_448ea882d04077a6, []int{13}
+	return fileDescriptor_448ea882d04077a6, []int{14}
 }
 func (m *DeleteResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -744,17 +790,10 @@ func (m *DeleteResponse) GetAgentConfig() *AgentConfig {
 	return nil
 }
 
-func (m *DeleteResponse) GetError() *v1.Error {
-	if m != nil {
-		return m.Error
-	}
-	return nil
-}
-
 // Watch
 type WatchRequest struct {
-	// WatchOptions options for WatchRequest.
-	WatchOptions         *v1.WatchOptions `protobuf:"bytes,1,opt,name=watchOptions,proto3" json:"watchOptions,omitempty"`
+	// core_v1.WatchOptions
+	Options              *v1.WatchOptions `protobuf:"bytes,1,opt,name=options,proto3" json:"options,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
 	XXX_sizecache        int32            `json:"-"`
 }
@@ -762,7 +801,7 @@ type WatchRequest struct {
 func (m *WatchRequest) Reset()      { *m = WatchRequest{} }
 func (*WatchRequest) ProtoMessage() {}
 func (*WatchRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_448ea882d04077a6, []int{14}
+	return fileDescriptor_448ea882d04077a6, []int{15}
 }
 func (m *WatchRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -791,9 +830,9 @@ func (m *WatchRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_WatchRequest proto.InternalMessageInfo
 
-func (m *WatchRequest) GetWatchOptions() *v1.WatchOptions {
+func (m *WatchRequest) GetOptions() *v1.WatchOptions {
 	if m != nil {
-		return m.WatchOptions
+		return m.Options
 	}
 	return nil
 }
@@ -802,17 +841,15 @@ type WatchResponse struct {
 	// Event info for watch response.
 	Event *v1alpha.Event `protobuf:"bytes,1,opt,name=event,proto3" json:"event,omitempty"`
 	// AgentConfig object.
-	AgentConfig *AgentConfig `protobuf:"bytes,2,opt,name=agentConfig,proto3" json:"agentConfig,omitempty"`
-	// Error object.
-	Error                *v1.Error `protobuf:"bytes,3,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
+	AgentConfig          *AgentConfig `protobuf:"bytes,2,opt,name=agentConfig,proto3" json:"agentConfig,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}     `json:"-"`
+	XXX_sizecache        int32        `json:"-"`
 }
 
 func (m *WatchResponse) Reset()      { *m = WatchResponse{} }
 func (*WatchResponse) ProtoMessage() {}
 func (*WatchResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_448ea882d04077a6, []int{15}
+	return fileDescriptor_448ea882d04077a6, []int{16}
 }
 func (m *WatchResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -855,15 +892,9 @@ func (m *WatchResponse) GetAgentConfig() *AgentConfig {
 	return nil
 }
 
-func (m *WatchResponse) GetError() *v1.Error {
-	if m != nil {
-		return m.Error
-	}
-	return nil
-}
-
 func init() {
 	proto.RegisterType((*AgentConfig)(nil), "agentagentconfigs.v1alpha.AgentConfig")
+	proto.RegisterType((*AgentConfigList)(nil), "agentagentconfigs.v1alpha.AgentConfigList")
 	proto.RegisterType((*AgentConfigSpec)(nil), "agentagentconfigs.v1alpha.AgentConfigSpec")
 	proto.RegisterType((*DataStore)(nil), "agentagentconfigs.v1alpha.DataStore")
 	proto.RegisterType((*ETCD)(nil), "agentagentconfigs.v1alpha.ETCD")
@@ -871,8 +902,8 @@ func init() {
 	proto.RegisterType((*GetResponse)(nil), "agentagentconfigs.v1alpha.GetResponse")
 	proto.RegisterType((*ListRequest)(nil), "agentagentconfigs.v1alpha.ListRequest")
 	proto.RegisterType((*ListResponse)(nil), "agentagentconfigs.v1alpha.ListResponse")
-	proto.RegisterType((*AddRequest)(nil), "agentagentconfigs.v1alpha.AddRequest")
-	proto.RegisterType((*AddResponse)(nil), "agentagentconfigs.v1alpha.AddResponse")
+	proto.RegisterType((*CreateRequest)(nil), "agentagentconfigs.v1alpha.CreateRequest")
+	proto.RegisterType((*CreateResponse)(nil), "agentagentconfigs.v1alpha.CreateResponse")
 	proto.RegisterType((*UpdateRequest)(nil), "agentagentconfigs.v1alpha.UpdateRequest")
 	proto.RegisterType((*UpdateResponse)(nil), "agentagentconfigs.v1alpha.UpdateResponse")
 	proto.RegisterType((*DeleteRequest)(nil), "agentagentconfigs.v1alpha.DeleteRequest")
@@ -886,53 +917,58 @@ func init() {
 }
 
 var fileDescriptor_448ea882d04077a6 = []byte{
-	// 727 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xc4, 0x56, 0x4f, 0x6f, 0xd3, 0x4a,
-	0x10, 0xef, 0x36, 0x49, 0xf5, 0x32, 0x49, 0xfb, 0xa4, 0x7d, 0x7d, 0x7a, 0x7d, 0x16, 0x32, 0xc8,
-	0x2a, 0xa5, 0x80, 0xb0, 0x69, 0x2b, 0x21, 0x81, 0x04, 0x52, 0xfa, 0x47, 0x01, 0x54, 0x54, 0x69,
-	0xdb, 0x52, 0x81, 0xe0, 0xe0, 0xd8, 0x5b, 0xd7, 0x6d, 0xe2, 0x35, 0xf6, 0x26, 0xc0, 0x01, 0xa9,
-	0xe2, 0x13, 0xf0, 0x31, 0x38, 0x20, 0x71, 0xe5, 0xc8, 0xb1, 0x47, 0x8e, 0x1c, 0xa9, 0xf9, 0x12,
-	0x1c, 0xd1, 0xae, 0x1d, 0xdb, 0x89, 0xc0, 0x0d, 0xa2, 0xa8, 0x37, 0xcf, 0xce, 0x6f, 0x7e, 0x33,
-	0xbf, 0x59, 0xcf, 0xd8, 0xd0, 0x74, 0x5c, 0xbe, 0xd7, 0x6d, 0xe9, 0x16, 0xeb, 0x18, 0x8e, 0xd9,
-	0xa6, 0x2f, 0x02, 0x6e, 0x50, 0x9b, 0x7a, 0x16, 0xf3, 0x76, 0x3b, 0x4e, 0x87, 0x1b, 0xfe, 0x81,
-	0x63, 0x98, 0xbe, 0x1b, 0x1a, 0xa6, 0x43, 0x3d, 0x2e, 0x8e, 0x5d, 0x27, 0x34, 0x7a, 0x0b, 0x66,
-	0xdb, 0xdf, 0x33, 0x85, 0x47, 0xf7, 0x03, 0xc6, 0x19, 0xfe, 0x5f, 0xfa, 0xf3, 0x20, 0x3d, 0x01,
-	0x29, 0xd7, 0xf2, 0x39, 0x98, 0xc3, 0x0c, 0x19, 0xd1, 0xea, 0xee, 0x4a, 0x4b, 0x1a, 0xf2, 0x29,
-	0x66, 0x52, 0x6e, 0x8d, 0x5c, 0x92, 0xc5, 0x02, 0x6a, 0xf4, 0x16, 0xb2, 0x2a, 0x94, 0xc6, 0xc8,
-	0xb1, 0xb4, 0x47, 0x3d, 0xfe, 0x03, 0x21, 0xda, 0x6b, 0x04, 0xb5, 0x86, 0x90, 0xb1, 0x22, 0x65,
-	0xe0, 0x25, 0xf8, 0xab, 0x43, 0xb9, 0x69, 0x9b, 0xdc, 0x9c, 0x41, 0x17, 0xd0, 0x7c, 0x6d, 0xf1,
-	0x3f, 0x5d, 0x24, 0xd6, 0x7b, 0x0b, 0xfa, 0x46, 0x6b, 0x9f, 0x5a, 0xfc, 0x41, 0xe2, 0x26, 0x29,
-	0x10, 0xdf, 0x81, 0x72, 0xe8, 0x53, 0x6b, 0x66, 0x5c, 0x06, 0x5c, 0xd1, 0x7f, 0xda, 0x1c, 0x3d,
-	0x97, 0x6a, 0xd3, 0xa7, 0x16, 0x91, 0x71, 0xda, 0x36, 0xfc, 0x3d, 0xe4, 0xc0, 0xcb, 0x50, 0x15,
-	0xd4, 0x9b, 0x9c, 0x05, 0x34, 0x29, 0x64, 0xb6, 0x80, 0x77, 0xb5, 0x8f, 0x25, 0x59, 0x98, 0xb6,
-	0x0f, 0xd5, 0xf4, 0x1c, 0x63, 0x28, 0xf3, 0x97, 0x7e, 0xcc, 0x55, 0x25, 0xf2, 0x19, 0x4f, 0x43,
-	0xc5, 0x62, 0x5d, 0x8f, 0xcb, 0xc2, 0x4b, 0x24, 0x36, 0xf0, 0x12, 0x94, 0x29, 0xb7, 0xec, 0x99,
-	0x92, 0xcc, 0x7a, 0xbe, 0x20, 0xeb, 0xda, 0xd6, 0xca, 0x2a, 0x91, 0x60, 0x6d, 0x16, 0xca, 0xc2,
-	0xc2, 0xe7, 0xa0, 0x4a, 0x3d, 0xdb, 0x67, 0xae, 0xc7, 0xc3, 0x24, 0x57, 0x76, 0xa0, 0x35, 0x00,
-	0x9a, 0x94, 0x13, 0xfa, 0xac, 0x4b, 0x43, 0x91, 0x08, 0x1c, 0xca, 0x37, 0x7c, 0xee, 0x32, 0x2f,
-	0x4c, 0x44, 0xfe, 0x93, 0x76, 0xbb, 0x99, 0xba, 0x48, 0x0e, 0xa6, 0xbd, 0x82, 0x9a, 0xa4, 0x08,
-	0x7d, 0xe6, 0x85, 0x14, 0xdf, 0x85, 0x9a, 0x99, 0xb5, 0x2e, 0x21, 0x99, 0x1b, 0xed, 0x06, 0x48,
-	0x3e, 0x14, 0xcf, 0x42, 0x85, 0x06, 0x01, 0x0b, 0x92, 0x5b, 0x9c, 0x4a, 0x0b, 0x59, 0x13, 0xa7,
-	0x24, 0x76, 0x6a, 0x6b, 0x50, 0x5b, 0x77, 0xc3, 0x54, 0xc2, 0x0d, 0xa8, 0xb5, 0xdd, 0x70, 0x48,
-	0xc3, 0x74, 0x1a, 0xba, 0x9e, 0xf9, 0x48, 0x1e, 0xa8, 0x1d, 0x22, 0xa8, 0xc7, 0x3c, 0x89, 0x8e,
-	0xfb, 0x50, 0xcf, 0x15, 0x23, 0x98, 0x4a, 0xbf, 0x20, 0x64, 0x20, 0x76, 0x44, 0x25, 0x0f, 0x01,
-	0x1a, 0xb6, 0xdd, 0x17, 0x72, 0x6a, 0x7d, 0x14, 0x17, 0x24, 0x79, 0xcf, 0xe8, 0x82, 0x1e, 0xc1,
-	0xe4, 0xb6, 0x6f, 0x9b, 0x9c, 0x9e, 0xbe, 0xb2, 0x43, 0x04, 0x53, 0x7d, 0xee, 0xb3, 0x53, 0xb7,
-	0x4a, 0xdb, 0xf4, 0x4f, 0xa9, 0xeb, 0x73, 0x9f, 0x91, 0xba, 0x7b, 0x50, 0xdf, 0x31, 0xb9, 0xb5,
-	0xd7, 0x17, 0x77, 0x13, 0xea, 0xcf, 0x85, 0x3d, 0x38, 0x5e, 0xff, 0xa6, 0xc1, 0x3b, 0x39, 0x27,
-	0x19, 0x80, 0x6a, 0xef, 0x10, 0x4c, 0x26, 0x5c, 0x89, 0x98, 0xab, 0x50, 0x91, 0x5f, 0x81, 0x94,
-	0x25, 0xfe, 0x26, 0x64, 0xcb, 0x4c, 0x98, 0x24, 0xc6, 0x0c, 0x2b, 0x1f, 0x3f, 0x05, 0xe5, 0xa5,
-	0x02, 0xe5, 0x8b, 0xef, 0xcb, 0x50, 0x6f, 0xe4, 0x67, 0x78, 0x0b, 0x4a, 0x4d, 0xca, 0xf1, 0xc5,
-	0x82, 0x94, 0xd9, 0x26, 0x55, 0xe6, 0x4e, 0x82, 0x25, 0x3d, 0xd8, 0x81, 0xb2, 0xd8, 0x3a, 0xb8,
-	0x08, 0x9f, 0x5b, 0x6f, 0xca, 0xa5, 0x13, 0x71, 0x09, 0xf1, 0x16, 0x94, 0x1a, 0xb6, 0x5d, 0x58,
-	0x6e, 0xb6, 0x6c, 0x0a, 0xcb, 0xcd, 0xef, 0x8e, 0xa7, 0x30, 0x11, 0xcf, 0x1b, 0x9e, 0x2f, 0x88,
-	0x18, 0x18, 0x77, 0xe5, 0xf2, 0x08, 0xc8, 0x8c, 0x3e, 0x7e, 0xe1, 0x0b, 0xe9, 0x07, 0xe6, 0xad,
-	0x90, 0x7e, 0x68, 0x7a, 0x9e, 0x40, 0x45, 0xbe, 0x81, 0xb8, 0xa8, 0x8b, 0xf9, 0xf7, 0x5d, 0x99,
-	0x3f, 0x19, 0x18, 0x73, 0x5f, 0x47, 0xcb, 0x07, 0x47, 0xc7, 0x2a, 0xfa, 0x7c, 0xac, 0x8e, 0x7d,
-	0x3b, 0x56, 0xd1, 0x61, 0xa4, 0xa2, 0xb7, 0x91, 0x8a, 0x3e, 0x44, 0xea, 0xd8, 0xc7, 0x48, 0x45,
-	0x47, 0x91, 0x8a, 0x3e, 0x45, 0x2a, 0xfa, 0x12, 0xa9, 0xe8, 0xcd, 0x57, 0x75, 0xec, 0xf1, 0xed,
-	0xdf, 0xfa, 0xf1, 0x6b, 0x4d, 0xc8, 0x9f, 0xa5, 0xa5, 0xef, 0x01, 0x00, 0x00, 0xff, 0xff, 0x20,
-	0x62, 0xc7, 0x44, 0x40, 0x0a, 0x00, 0x00,
+	// 809 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x56, 0x4d, 0x4f, 0xdc, 0x46,
+	0x18, 0x66, 0xf6, 0xab, 0xec, 0xbb, 0x50, 0xa4, 0x29, 0x6d, 0xb7, 0xab, 0xca, 0x20, 0x8b, 0xd2,
+	0x6d, 0xab, 0xb5, 0xf9, 0x90, 0x7a, 0x80, 0xd2, 0x8a, 0x8f, 0x6a, 0x7b, 0x68, 0x85, 0x64, 0x40,
+	0x48, 0xa8, 0x1c, 0xbc, 0xde, 0xc1, 0x18, 0x76, 0x3d, 0xae, 0x3d, 0xbb, 0xb4, 0xb7, 0x9e, 0x22,
+	0x45, 0xc9, 0x21, 0x3f, 0x23, 0x3f, 0x81, 0x63, 0x8e, 0x28, 0xa7, 0x1c, 0x73, 0x4b, 0x70, 0xfe,
+	0x44, 0x8e, 0x91, 0x67, 0x6c, 0xaf, 0xd7, 0x24, 0xc6, 0x4a, 0xe0, 0xb4, 0x1e, 0xcf, 0xf3, 0x3e,
+	0xf3, 0x3c, 0xcf, 0xbe, 0x33, 0x63, 0x68, 0x9b, 0x16, 0x3b, 0x1d, 0x74, 0x14, 0x83, 0xf6, 0x55,
+	0x53, 0xef, 0x91, 0x7f, 0x5d, 0xa6, 0x92, 0x2e, 0xb1, 0x0d, 0x6a, 0x9f, 0xf4, 0xcd, 0x3e, 0x53,
+	0x9d, 0x73, 0x53, 0xd5, 0x1d, 0xcb, 0x53, 0x75, 0x93, 0xd8, 0x2c, 0x78, 0x6d, 0x99, 0x9e, 0x3a,
+	0x5c, 0xd6, 0x7b, 0xce, 0xa9, 0x1e, 0xcc, 0x28, 0x8e, 0x4b, 0x19, 0xc5, 0xdf, 0xf0, 0xf9, 0x24,
+	0x48, 0x09, 0x41, 0x8d, 0x56, 0x72, 0x0d, 0x6a, 0x52, 0x95, 0x57, 0x74, 0x06, 0x27, 0x7c, 0xc4,
+	0x07, 0xfc, 0x49, 0x30, 0x35, 0x72, 0x49, 0x32, 0x5d, 0xc7, 0x50, 0x9d, 0xde, 0xc0, 0xb4, 0x6c,
+	0x8f, 0xeb, 0x23, 0xee, 0x90, 0xb8, 0xaa, 0xf8, 0x09, 0x89, 0x7e, 0x4e, 0x10, 0xf5, 0x2f, 0x2c,
+	0x76, 0x4e, 0x2f, 0x54, 0x93, 0xb6, 0xf8, 0x64, 0x6b, 0xa8, 0xf7, 0xac, 0xae, 0xce, 0xa8, 0xeb,
+	0xa9, 0xf1, 0x63, 0x58, 0xb7, 0x96, 0x3b, 0x13, 0x83, 0xba, 0x44, 0x1d, 0x2e, 0x8f, 0x62, 0x68,
+	0x6c, 0xe6, 0xae, 0x25, 0x43, 0x62, 0xb3, 0xf7, 0x24, 0x29, 0x3f, 0x44, 0x50, 0xdb, 0x0c, 0x72,
+	0xdc, 0xe6, 0x39, 0xe2, 0x55, 0x98, 0xec, 0x13, 0xa6, 0x77, 0x75, 0xa6, 0xd7, 0xd1, 0x3c, 0x6a,
+	0xd6, 0x56, 0xbe, 0x56, 0x82, 0x85, 0x95, 0xe1, 0xb2, 0xb2, 0xdb, 0x39, 0x23, 0x06, 0xfb, 0x2b,
+	0x9c, 0xd6, 0x62, 0x20, 0xfe, 0x15, 0x4a, 0x9e, 0x43, 0x8c, 0x7a, 0x81, 0x17, 0xfc, 0xa8, 0x7c,
+	0xf0, 0xdf, 0x51, 0x12, 0x4b, 0xed, 0x39, 0xc4, 0xd0, 0x78, 0xdd, 0x5a, 0xf9, 0xf9, 0x5e, 0x61,
+	0x12, 0xc9, 0x8f, 0x11, 0xcc, 0x24, 0x00, 0x7f, 0x5a, 0x1e, 0xc3, 0xeb, 0xb9, 0xf5, 0x6c, 0x55,
+	0xfc, 0x57, 0x73, 0x85, 0x79, 0x94, 0xd0, 0xf5, 0x0b, 0x94, 0x2d, 0x46, 0xfa, 0x5e, 0xbd, 0x30,
+	0x5f, 0x6c, 0xd6, 0x56, 0x16, 0xf3, 0x09, 0xd3, 0x44, 0x91, 0x7c, 0x30, 0xa6, 0x26, 0x90, 0x8b,
+	0xb7, 0xa0, 0x1a, 0x10, 0xef, 0x31, 0xea, 0x92, 0x50, 0xce, 0x42, 0x06, 0xe9, 0x4e, 0x84, 0xd5,
+	0x46, 0x65, 0xf2, 0x19, 0x54, 0xe3, 0xf7, 0x18, 0x43, 0x89, 0xfd, 0xe7, 0x08, 0xae, 0xaa, 0xc6,
+	0x9f, 0xf1, 0x2c, 0x94, 0x0d, 0x3a, 0xb0, 0x19, 0x8f, 0xb3, 0xa8, 0x89, 0x01, 0x5e, 0x85, 0x12,
+	0x61, 0x46, 0xb7, 0x5e, 0xe4, 0xab, 0xce, 0x65, 0xac, 0xfa, 0xfb, 0xfe, 0xf6, 0x8e, 0xc6, 0xc1,
+	0xf2, 0x02, 0x94, 0x82, 0x11, 0xfe, 0x16, 0xaa, 0xc4, 0xee, 0x3a, 0xd4, 0xb2, 0x99, 0x17, 0xae,
+	0x35, 0x7a, 0x21, 0xaf, 0x03, 0xb4, 0x09, 0xd3, 0xc8, 0x3f, 0x03, 0xe2, 0x31, 0xdc, 0x82, 0xcf,
+	0xa8, 0xc3, 0x2c, 0x6a, 0x7b, 0xa1, 0xc3, 0x2f, 0xe2, 0xc0, 0xdb, 0x84, 0xed, 0x8a, 0x29, 0x2d,
+	0xc2, 0xc8, 0x87, 0x50, 0xe3, 0xc5, 0x9e, 0x43, 0x6d, 0x8f, 0xe0, 0x3f, 0xa0, 0xa6, 0x8f, 0x42,
+	0x0b, 0x19, 0xf2, 0x06, 0x9f, 0x2c, 0x95, 0x37, 0xa0, 0x16, 0x74, 0x40, 0x24, 0x4b, 0x49, 0xcb,
+	0x9a, 0x8d, 0x65, 0x05, 0xb0, 0x1b, 0xba, 0xba, 0x30, 0x25, 0xca, 0x43, 0x61, 0xfb, 0x30, 0xa3,
+	0x8f, 0xf7, 0x56, 0xc8, 0x93, 0xb3, 0x5d, 0x39, 0x59, 0x9a, 0x42, 0x7e, 0x84, 0x60, 0x7a, 0xdb,
+	0x25, 0x3a, 0x23, 0x91, 0xce, 0xa5, 0xb4, 0xce, 0xaf, 0x62, 0x9d, 0x02, 0x98, 0x56, 0x9a, 0x8e,
+	0xac, 0xf0, 0xf1, 0x91, 0x1d, 0xc1, 0xe7, 0x91, 0x98, 0x3b, 0xff, 0x3b, 0x02, 0xa7, 0x07, 0x4e,
+	0x37, 0x9f, 0x53, 0x01, 0xbc, 0x5f, 0xa7, 0x91, 0x98, 0x7b, 0x71, 0xba, 0x43, 0x7a, 0x24, 0x97,
+	0x53, 0x01, 0xbc, 0x5f, 0xa7, 0x91, 0x98, 0x3b, 0x77, 0xfa, 0x1b, 0x4c, 0x1d, 0xea, 0xcc, 0x38,
+	0x8d, 0x7c, 0xaa, 0x69, 0x9f, 0x5f, 0xc6, 0x3e, 0x39, 0xee, 0xc6, 0x26, 0x7b, 0x80, 0x60, 0x3a,
+	0x64, 0x08, 0xc5, 0xfd, 0x04, 0x65, 0x7e, 0xd7, 0xc4, 0x04, 0xe2, 0xe6, 0x19, 0x1d, 0x4e, 0xc1,
+	0x50, 0x13, 0x98, 0xbb, 0x4b, 0x69, 0xe5, 0xb2, 0x04, 0x53, 0x89, 0x49, 0x0f, 0xef, 0x43, 0xb1,
+	0x4d, 0x18, 0xfe, 0x2e, 0x83, 0x6c, 0x74, 0xe6, 0x35, 0x16, 0x6f, 0x83, 0x85, 0xee, 0x0e, 0xa1,
+	0xc4, 0x6f, 0xa5, 0x2c, 0x7c, 0xe2, 0xd0, 0x6a, 0x7c, 0x7f, 0x2b, 0x2e, 0x24, 0x3e, 0x86, 0x8a,
+	0xd8, 0xb9, 0xb8, 0x99, 0x51, 0x32, 0x76, 0xd2, 0x34, 0x7e, 0xc8, 0x81, 0x1c, 0xd1, 0x8b, 0xed,
+	0x92, 0x49, 0x3f, 0xb6, 0xbd, 0x33, 0xe9, 0x53, 0x7b, 0xef, 0x18, 0x2a, 0xa2, 0x47, 0x33, 0xe9,
+	0xc7, 0xf6, 0x54, 0x26, 0x7d, 0xaa, 0xe1, 0xff, 0x86, 0x32, 0x6f, 0x32, 0x9c, 0x15, 0x67, 0xb2,
+	0x91, 0x1b, 0xcd, 0xdb, 0x81, 0x82, 0x7b, 0x09, 0x6d, 0x9d, 0x5f, 0x5d, 0x4b, 0xe8, 0xe5, 0xb5,
+	0x34, 0xf1, 0xf6, 0x5a, 0x42, 0xff, 0xfb, 0x12, 0x7a, 0xea, 0x4b, 0xe8, 0xd2, 0x97, 0x26, 0x9e,
+	0xf9, 0x12, 0xba, 0xf2, 0x25, 0xf4, 0xc2, 0x97, 0xd0, 0x6b, 0x5f, 0x42, 0x4f, 0xde, 0x48, 0x13,
+	0x47, 0x1b, 0x9f, 0xf4, 0x09, 0xdb, 0xa9, 0xf0, 0xaf, 0xae, 0xd5, 0x77, 0x01, 0x00, 0x00, 0xff,
+	0xff, 0xe1, 0x7d, 0xcf, 0xf0, 0x0a, 0x0b, 0x00, 0x00,
 }
 
 func (this *AgentConfig) Equal(that interface{}) bool {
@@ -959,6 +995,38 @@ func (this *AgentConfig) Equal(that interface{}) bool {
 	}
 	if !this.Spec.Equal(that1.Spec) {
 		return false
+	}
+	return true
+}
+func (this *AgentConfigList) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*AgentConfigList)
+	if !ok {
+		that2, ok := that.(AgentConfigList)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Metadata.Equal(that1.Metadata) {
+		return false
+	}
+	if len(this.Items) != len(that1.Items) {
+		return false
+	}
+	for i := range this.Items {
+		if !this.Items[i].Equal(that1.Items[i]) {
+			return false
+		}
 	}
 	return true
 }
@@ -1059,7 +1127,7 @@ func (this *GetRequest) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.GetOptions.Equal(that1.GetOptions) {
+	if !this.Options.Equal(that1.Options) {
 		return false
 	}
 	return true
@@ -1086,9 +1154,6 @@ func (this *GetResponse) Equal(that interface{}) bool {
 	if !this.AgentConfig.Equal(that1.AgentConfig) {
 		return false
 	}
-	if !this.Error.Equal(that1.Error) {
-		return false
-	}
 	return true
 }
 func (this *ListRequest) Equal(that interface{}) bool {
@@ -1110,7 +1175,7 @@ func (this *ListRequest) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.ListOptions.Equal(that1.ListOptions) {
+	if !this.Options.Equal(that1.Options) {
 		return false
 	}
 	return true
@@ -1134,27 +1199,46 @@ func (this *ListResponse) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if len(this.AgentConfigs) != len(that1.AgentConfigs) {
-		return false
-	}
-	for i := range this.AgentConfigs {
-		if !this.AgentConfigs[i].Equal(that1.AgentConfigs[i]) {
-			return false
-		}
-	}
-	if !this.Error.Equal(that1.Error) {
+	if !this.AgentConfigList.Equal(that1.AgentConfigList) {
 		return false
 	}
 	return true
 }
-func (this *AddRequest) Equal(that interface{}) bool {
+func (this *CreateRequest) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*AddRequest)
+	that1, ok := that.(*CreateRequest)
 	if !ok {
-		that2, ok := that.(AddRequest)
+		that2, ok := that.(CreateRequest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Options.Equal(that1.Options) {
+		return false
+	}
+	if !this.AgentConfig.Equal(that1.AgentConfig) {
+		return false
+	}
+	return true
+}
+func (this *CreateResponse) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateResponse)
+	if !ok {
+		that2, ok := that.(CreateResponse)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1167,33 +1251,6 @@ func (this *AddRequest) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.AgentConfig.Equal(that1.AgentConfig) {
-		return false
-	}
-	return true
-}
-func (this *AddResponse) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*AddResponse)
-	if !ok {
-		that2, ok := that.(AddResponse)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.AgentConfig.Equal(that1.AgentConfig) {
-		return false
-	}
-	if !this.Error.Equal(that1.Error) {
 		return false
 	}
 	return true
@@ -1215,6 +1272,9 @@ func (this *UpdateRequest) Equal(that interface{}) bool {
 	if that1 == nil {
 		return this == nil
 	} else if this == nil {
+		return false
+	}
+	if !this.Options.Equal(that1.Options) {
 		return false
 	}
 	if !this.AgentConfig.Equal(that1.AgentConfig) {
@@ -1244,9 +1304,6 @@ func (this *UpdateResponse) Equal(that interface{}) bool {
 	if !this.AgentConfig.Equal(that1.AgentConfig) {
 		return false
 	}
-	if !this.Error.Equal(that1.Error) {
-		return false
-	}
 	return true
 }
 func (this *DeleteRequest) Equal(that interface{}) bool {
@@ -1266,6 +1323,9 @@ func (this *DeleteRequest) Equal(that interface{}) bool {
 	if that1 == nil {
 		return this == nil
 	} else if this == nil {
+		return false
+	}
+	if !this.Options.Equal(that1.Options) {
 		return false
 	}
 	if !this.AgentConfig.Equal(that1.AgentConfig) {
@@ -1295,9 +1355,6 @@ func (this *DeleteResponse) Equal(that interface{}) bool {
 	if !this.AgentConfig.Equal(that1.AgentConfig) {
 		return false
 	}
-	if !this.Error.Equal(that1.Error) {
-		return false
-	}
 	return true
 }
 func (this *WatchRequest) Equal(that interface{}) bool {
@@ -1319,7 +1376,7 @@ func (this *WatchRequest) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.WatchOptions.Equal(that1.WatchOptions) {
+	if !this.Options.Equal(that1.Options) {
 		return false
 	}
 	return true
@@ -1349,9 +1406,6 @@ func (this *WatchResponse) Equal(that interface{}) bool {
 	if !this.AgentConfig.Equal(that1.AgentConfig) {
 		return false
 	}
-	if !this.Error.Equal(that1.Error) {
-		return false
-	}
 	return true
 }
 
@@ -1371,8 +1425,8 @@ type AgentConfigsClient interface {
 	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
 	// List AgentConfigs.
 	List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
-	// Add a AgentConfig.
-	Add(ctx context.Context, in *AddRequest, opts ...grpc.CallOption) (*AddResponse, error)
+	// Create a AgentConfig.
+	Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error)
 	// Update a AgentConfig.
 	Update(ctx context.Context, in *UpdateRequest, opts ...grpc.CallOption) (*UpdateResponse, error)
 	// Delete a AgentConfig.
@@ -1407,9 +1461,9 @@ func (c *agentConfigsClient) List(ctx context.Context, in *ListRequest, opts ...
 	return out, nil
 }
 
-func (c *agentConfigsClient) Add(ctx context.Context, in *AddRequest, opts ...grpc.CallOption) (*AddResponse, error) {
-	out := new(AddResponse)
-	err := c.cc.Invoke(ctx, "/agentagentconfigs.v1alpha.AgentConfigs/Add", in, out, opts...)
+func (c *agentConfigsClient) Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error) {
+	out := new(CreateResponse)
+	err := c.cc.Invoke(ctx, "/agentagentconfigs.v1alpha.AgentConfigs/Create", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1472,8 +1526,8 @@ type AgentConfigsServer interface {
 	Get(context.Context, *GetRequest) (*GetResponse, error)
 	// List AgentConfigs.
 	List(context.Context, *ListRequest) (*ListResponse, error)
-	// Add a AgentConfig.
-	Add(context.Context, *AddRequest) (*AddResponse, error)
+	// Create a AgentConfig.
+	Create(context.Context, *CreateRequest) (*CreateResponse, error)
 	// Update a AgentConfig.
 	Update(context.Context, *UpdateRequest) (*UpdateResponse, error)
 	// Delete a AgentConfig.
@@ -1522,20 +1576,20 @@ func _AgentConfigs_List_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AgentConfigs_Add_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddRequest)
+func _AgentConfigs_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(AgentConfigsServer).Add(ctx, in)
+		return srv.(AgentConfigsServer).Create(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/agentagentconfigs.v1alpha.AgentConfigs/Add",
+		FullMethod: "/agentagentconfigs.v1alpha.AgentConfigs/Create",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AgentConfigsServer).Add(ctx, req.(*AddRequest))
+		return srv.(AgentConfigsServer).Create(ctx, req.(*CreateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1610,8 +1664,8 @@ var _AgentConfigs_serviceDesc = grpc.ServiceDesc{
 			Handler:    _AgentConfigs_List_Handler,
 		},
 		{
-			MethodName: "Add",
-			Handler:    _AgentConfigs_Add_Handler,
+			MethodName: "Create",
+			Handler:    _AgentConfigs_Create_Handler,
 		},
 		{
 			MethodName: "Update",
@@ -1670,6 +1724,46 @@ func (m *AgentConfig) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
+func (m *AgentConfigList) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *AgentConfigList) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Metadata != nil {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintApi(dAtA, i, uint64(m.Metadata.Size()))
+		n3, err := m.Metadata.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n3
+	}
+	if len(m.Items) > 0 {
+		for _, msg := range m.Items {
+			dAtA[i] = 0x12
+			i++
+			i = encodeVarintApi(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	return i, nil
+}
+
 func (m *AgentConfigSpec) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1689,11 +1783,11 @@ func (m *AgentConfigSpec) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintApi(dAtA, i, uint64(m.DataStore.Size()))
-		n3, err := m.DataStore.MarshalTo(dAtA[i:])
+		n4, err := m.DataStore.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n3
+		i += n4
 	}
 	return i, nil
 }
@@ -1728,11 +1822,11 @@ func (m *DataStore) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintApi(dAtA, i, uint64(m.Etcd.Size()))
-		n4, err := m.Etcd.MarshalTo(dAtA[i:])
+		n5, err := m.Etcd.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n4
+		i += n5
 	}
 	return i, nil
 }
@@ -1776,15 +1870,15 @@ func (m *GetRequest) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.GetOptions != nil {
+	if m.Options != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.GetOptions.Size()))
-		n5, err := m.GetOptions.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Options.Size()))
+		n6, err := m.Options.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n5
+		i += n6
 	}
 	return i, nil
 }
@@ -1808,17 +1902,7 @@ func (m *GetResponse) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintApi(dAtA, i, uint64(m.AgentConfig.Size()))
-		n6, err := m.AgentConfig.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n6
-	}
-	if m.Error != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Error.Size()))
-		n7, err := m.Error.MarshalTo(dAtA[i:])
+		n7, err := m.AgentConfig.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -1842,11 +1926,11 @@ func (m *ListRequest) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.ListOptions != nil {
+	if m.Options != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.ListOptions.Size()))
-		n8, err := m.ListOptions.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Options.Size()))
+		n8, err := m.Options.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -1870,23 +1954,11 @@ func (m *ListResponse) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if len(m.AgentConfigs) > 0 {
-		for _, msg := range m.AgentConfigs {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintApi(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	if m.Error != nil {
-		dAtA[i] = 0x12
+	if m.AgentConfigList != nil {
+		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Error.Size()))
-		n9, err := m.Error.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.AgentConfigList.Size()))
+		n9, err := m.AgentConfigList.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -1895,7 +1967,7 @@ func (m *ListResponse) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
-func (m *AddRequest) Marshal() (dAtA []byte, err error) {
+func (m *CreateRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalTo(dAtA)
@@ -1905,41 +1977,23 @@ func (m *AddRequest) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *AddRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *CreateRequest) MarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.AgentConfig != nil {
+	if m.Options != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.AgentConfig.Size()))
-		n10, err := m.AgentConfig.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Options.Size()))
+		n10, err := m.Options.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
 		i += n10
 	}
-	return i, nil
-}
-
-func (m *AddResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *AddResponse) MarshalTo(dAtA []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
 	if m.AgentConfig != nil {
-		dAtA[i] = 0xa
+		dAtA[i] = 0x12
 		i++
 		i = encodeVarintApi(dAtA, i, uint64(m.AgentConfig.Size()))
 		n11, err := m.AgentConfig.MarshalTo(dAtA[i:])
@@ -1948,11 +2002,29 @@ func (m *AddResponse) MarshalTo(dAtA []byte) (int, error) {
 		}
 		i += n11
 	}
-	if m.Error != nil {
-		dAtA[i] = 0x12
+	return i, nil
+}
+
+func (m *CreateResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CreateResponse) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.AgentConfig != nil {
+		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Error.Size()))
-		n12, err := m.Error.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.AgentConfig.Size()))
+		n12, err := m.AgentConfig.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -1976,15 +2048,25 @@ func (m *UpdateRequest) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.AgentConfig != nil {
+	if m.Options != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.AgentConfig.Size()))
-		n13, err := m.AgentConfig.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Options.Size()))
+		n13, err := m.Options.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
 		i += n13
+	}
+	if m.AgentConfig != nil {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintApi(dAtA, i, uint64(m.AgentConfig.Size()))
+		n14, err := m.AgentConfig.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n14
 	}
 	return i, nil
 }
@@ -2008,17 +2090,7 @@ func (m *UpdateResponse) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintApi(dAtA, i, uint64(m.AgentConfig.Size()))
-		n14, err := m.AgentConfig.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n14
-	}
-	if m.Error != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Error.Size()))
-		n15, err := m.Error.MarshalTo(dAtA[i:])
+		n15, err := m.AgentConfig.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -2042,15 +2114,25 @@ func (m *DeleteRequest) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.AgentConfig != nil {
+	if m.Options != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.AgentConfig.Size()))
-		n16, err := m.AgentConfig.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Options.Size()))
+		n16, err := m.Options.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
 		i += n16
+	}
+	if m.AgentConfig != nil {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintApi(dAtA, i, uint64(m.AgentConfig.Size()))
+		n17, err := m.AgentConfig.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n17
 	}
 	return i, nil
 }
@@ -2074,17 +2156,7 @@ func (m *DeleteResponse) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintApi(dAtA, i, uint64(m.AgentConfig.Size()))
-		n17, err := m.AgentConfig.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n17
-	}
-	if m.Error != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Error.Size()))
-		n18, err := m.Error.MarshalTo(dAtA[i:])
+		n18, err := m.AgentConfig.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -2108,11 +2180,11 @@ func (m *WatchRequest) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.WatchOptions != nil {
+	if m.Options != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.WatchOptions.Size()))
-		n19, err := m.WatchOptions.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Options.Size()))
+		n19, err := m.Options.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -2156,16 +2228,6 @@ func (m *WatchResponse) MarshalTo(dAtA []byte) (int, error) {
 		}
 		i += n21
 	}
-	if m.Error != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Error.Size()))
-		n22, err := m.Error.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n22
-	}
 	return i, nil
 }
 
@@ -2185,6 +2247,23 @@ func NewPopulatedAgentConfig(r randyApi, easy bool) *AgentConfig {
 	}
 	if r.Intn(10) != 0 {
 		this.Spec = NewPopulatedAgentConfigSpec(r, easy)
+	}
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
+func NewPopulatedAgentConfigList(r randyApi, easy bool) *AgentConfigList {
+	this := &AgentConfigList{}
+	if r.Intn(10) != 0 {
+		this.Metadata = v1.NewPopulatedObjectMetadata(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		v1 := r.Intn(5)
+		this.Items = make([]*AgentConfig, v1)
+		for i := 0; i < v1; i++ {
+			this.Items[i] = NewPopulatedAgentConfig(r, easy)
+		}
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2227,7 +2306,7 @@ func NewPopulatedETCD(r randyApi, easy bool) *ETCD {
 func NewPopulatedGetRequest(r randyApi, easy bool) *GetRequest {
 	this := &GetRequest{}
 	if r.Intn(10) != 0 {
-		this.GetOptions = v1.NewPopulatedGetOptions(r, easy)
+		this.Options = v1.NewPopulatedGetOptions(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2239,9 +2318,6 @@ func NewPopulatedGetResponse(r randyApi, easy bool) *GetResponse {
 	if r.Intn(10) != 0 {
 		this.AgentConfig = NewPopulatedAgentConfig(r, easy)
 	}
-	if r.Intn(10) != 0 {
-		this.Error = v1.NewPopulatedError(r, easy)
-	}
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
@@ -2250,7 +2326,7 @@ func NewPopulatedGetResponse(r randyApi, easy bool) *GetResponse {
 func NewPopulatedListRequest(r randyApi, easy bool) *ListRequest {
 	this := &ListRequest{}
 	if r.Intn(10) != 0 {
-		this.ListOptions = v1.NewPopulatedListOptions(r, easy)
+		this.Options = v1.NewPopulatedListOptions(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2260,22 +2336,18 @@ func NewPopulatedListRequest(r randyApi, easy bool) *ListRequest {
 func NewPopulatedListResponse(r randyApi, easy bool) *ListResponse {
 	this := &ListResponse{}
 	if r.Intn(10) != 0 {
-		v1 := r.Intn(5)
-		this.AgentConfigs = make([]*AgentConfig, v1)
-		for i := 0; i < v1; i++ {
-			this.AgentConfigs[i] = NewPopulatedAgentConfig(r, easy)
-		}
-	}
-	if r.Intn(10) != 0 {
-		this.Error = v1.NewPopulatedError(r, easy)
+		this.AgentConfigList = NewPopulatedAgentConfigList(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
 }
 
-func NewPopulatedAddRequest(r randyApi, easy bool) *AddRequest {
-	this := &AddRequest{}
+func NewPopulatedCreateRequest(r randyApi, easy bool) *CreateRequest {
+	this := &CreateRequest{}
+	if r.Intn(10) != 0 {
+		this.Options = v1.NewPopulatedCreateOptions(r, easy)
+	}
 	if r.Intn(10) != 0 {
 		this.AgentConfig = NewPopulatedAgentConfig(r, easy)
 	}
@@ -2284,13 +2356,10 @@ func NewPopulatedAddRequest(r randyApi, easy bool) *AddRequest {
 	return this
 }
 
-func NewPopulatedAddResponse(r randyApi, easy bool) *AddResponse {
-	this := &AddResponse{}
+func NewPopulatedCreateResponse(r randyApi, easy bool) *CreateResponse {
+	this := &CreateResponse{}
 	if r.Intn(10) != 0 {
 		this.AgentConfig = NewPopulatedAgentConfig(r, easy)
-	}
-	if r.Intn(10) != 0 {
-		this.Error = v1.NewPopulatedError(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2299,6 +2368,9 @@ func NewPopulatedAddResponse(r randyApi, easy bool) *AddResponse {
 
 func NewPopulatedUpdateRequest(r randyApi, easy bool) *UpdateRequest {
 	this := &UpdateRequest{}
+	if r.Intn(10) != 0 {
+		this.Options = v1.NewPopulatedUpdateOptions(r, easy)
+	}
 	if r.Intn(10) != 0 {
 		this.AgentConfig = NewPopulatedAgentConfig(r, easy)
 	}
@@ -2312,9 +2384,6 @@ func NewPopulatedUpdateResponse(r randyApi, easy bool) *UpdateResponse {
 	if r.Intn(10) != 0 {
 		this.AgentConfig = NewPopulatedAgentConfig(r, easy)
 	}
-	if r.Intn(10) != 0 {
-		this.Error = v1.NewPopulatedError(r, easy)
-	}
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
@@ -2322,6 +2391,9 @@ func NewPopulatedUpdateResponse(r randyApi, easy bool) *UpdateResponse {
 
 func NewPopulatedDeleteRequest(r randyApi, easy bool) *DeleteRequest {
 	this := &DeleteRequest{}
+	if r.Intn(10) != 0 {
+		this.Options = v1.NewPopulatedDeleteOptions(r, easy)
+	}
 	if r.Intn(10) != 0 {
 		this.AgentConfig = NewPopulatedAgentConfig(r, easy)
 	}
@@ -2335,9 +2407,6 @@ func NewPopulatedDeleteResponse(r randyApi, easy bool) *DeleteResponse {
 	if r.Intn(10) != 0 {
 		this.AgentConfig = NewPopulatedAgentConfig(r, easy)
 	}
-	if r.Intn(10) != 0 {
-		this.Error = v1.NewPopulatedError(r, easy)
-	}
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
@@ -2346,7 +2415,7 @@ func NewPopulatedDeleteResponse(r randyApi, easy bool) *DeleteResponse {
 func NewPopulatedWatchRequest(r randyApi, easy bool) *WatchRequest {
 	this := &WatchRequest{}
 	if r.Intn(10) != 0 {
-		this.WatchOptions = v1.NewPopulatedWatchOptions(r, easy)
+		this.Options = v1.NewPopulatedWatchOptions(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2360,9 +2429,6 @@ func NewPopulatedWatchResponse(r randyApi, easy bool) *WatchResponse {
 	}
 	if r.Intn(10) != 0 {
 		this.AgentConfig = NewPopulatedAgentConfig(r, easy)
-	}
-	if r.Intn(10) != 0 {
-		this.Error = v1.NewPopulatedError(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2458,6 +2524,25 @@ func (m *AgentConfig) Size() (n int) {
 	return n
 }
 
+func (m *AgentConfigList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Metadata != nil {
+		l = m.Metadata.Size()
+		n += 1 + l + sovApi(uint64(l))
+	}
+	if len(m.Items) > 0 {
+		for _, e := range m.Items {
+			l = e.Size()
+			n += 1 + l + sovApi(uint64(l))
+		}
+	}
+	return n
+}
+
 func (m *AgentConfigSpec) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2510,8 +2595,8 @@ func (m *GetRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.GetOptions != nil {
-		l = m.GetOptions.Size()
+	if m.Options != nil {
+		l = m.Options.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -2527,10 +2612,6 @@ func (m *GetResponse) Size() (n int) {
 		l = m.AgentConfig.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
-	if m.Error != nil {
-		l = m.Error.Size()
-		n += 1 + l + sovApi(uint64(l))
-	}
 	return n
 }
 
@@ -2540,8 +2621,8 @@ func (m *ListRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.ListOptions != nil {
-		l = m.ListOptions.Size()
+	if m.Options != nil {
+		l = m.Options.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -2553,25 +2634,23 @@ func (m *ListResponse) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if len(m.AgentConfigs) > 0 {
-		for _, e := range m.AgentConfigs {
-			l = e.Size()
-			n += 1 + l + sovApi(uint64(l))
-		}
-	}
-	if m.Error != nil {
-		l = m.Error.Size()
+	if m.AgentConfigList != nil {
+		l = m.AgentConfigList.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
 }
 
-func (m *AddRequest) Size() (n int) {
+func (m *CreateRequest) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
+	if m.Options != nil {
+		l = m.Options.Size()
+		n += 1 + l + sovApi(uint64(l))
+	}
 	if m.AgentConfig != nil {
 		l = m.AgentConfig.Size()
 		n += 1 + l + sovApi(uint64(l))
@@ -2579,7 +2658,7 @@ func (m *AddRequest) Size() (n int) {
 	return n
 }
 
-func (m *AddResponse) Size() (n int) {
+func (m *CreateResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -2587,10 +2666,6 @@ func (m *AddResponse) Size() (n int) {
 	_ = l
 	if m.AgentConfig != nil {
 		l = m.AgentConfig.Size()
-		n += 1 + l + sovApi(uint64(l))
-	}
-	if m.Error != nil {
-		l = m.Error.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -2602,6 +2677,10 @@ func (m *UpdateRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
+	if m.Options != nil {
+		l = m.Options.Size()
+		n += 1 + l + sovApi(uint64(l))
+	}
 	if m.AgentConfig != nil {
 		l = m.AgentConfig.Size()
 		n += 1 + l + sovApi(uint64(l))
@@ -2619,10 +2698,6 @@ func (m *UpdateResponse) Size() (n int) {
 		l = m.AgentConfig.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
-	if m.Error != nil {
-		l = m.Error.Size()
-		n += 1 + l + sovApi(uint64(l))
-	}
 	return n
 }
 
@@ -2632,6 +2707,10 @@ func (m *DeleteRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
+	if m.Options != nil {
+		l = m.Options.Size()
+		n += 1 + l + sovApi(uint64(l))
+	}
 	if m.AgentConfig != nil {
 		l = m.AgentConfig.Size()
 		n += 1 + l + sovApi(uint64(l))
@@ -2649,10 +2728,6 @@ func (m *DeleteResponse) Size() (n int) {
 		l = m.AgentConfig.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
-	if m.Error != nil {
-		l = m.Error.Size()
-		n += 1 + l + sovApi(uint64(l))
-	}
 	return n
 }
 
@@ -2662,8 +2737,8 @@ func (m *WatchRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.WatchOptions != nil {
-		l = m.WatchOptions.Size()
+	if m.Options != nil {
+		l = m.Options.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -2681,10 +2756,6 @@ func (m *WatchResponse) Size() (n int) {
 	}
 	if m.AgentConfig != nil {
 		l = m.AgentConfig.Size()
-		n += 1 + l + sovApi(uint64(l))
-	}
-	if m.Error != nil {
-		l = m.Error.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -2710,6 +2781,17 @@ func (this *AgentConfig) String() string {
 	s := strings.Join([]string{`&AgentConfig{`,
 		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "ObjectMetadata", "v1.ObjectMetadata", 1) + `,`,
 		`Spec:` + strings.Replace(fmt.Sprintf("%v", this.Spec), "AgentConfigSpec", "AgentConfigSpec", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *AgentConfigList) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&AgentConfigList{`,
+		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "ObjectMetadata", "v1.ObjectMetadata", 1) + `,`,
+		`Items:` + strings.Replace(fmt.Sprintf("%v", this.Items), "AgentConfig", "AgentConfig", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2751,7 +2833,7 @@ func (this *GetRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetRequest{`,
-		`GetOptions:` + strings.Replace(fmt.Sprintf("%v", this.GetOptions), "GetOptions", "v1.GetOptions", 1) + `,`,
+		`Options:` + strings.Replace(fmt.Sprintf("%v", this.Options), "GetOptions", "v1.GetOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2762,7 +2844,6 @@ func (this *GetResponse) String() string {
 	}
 	s := strings.Join([]string{`&GetResponse{`,
 		`AgentConfig:` + strings.Replace(fmt.Sprintf("%v", this.AgentConfig), "AgentConfig", "AgentConfig", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2772,7 +2853,7 @@ func (this *ListRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ListRequest{`,
-		`ListOptions:` + strings.Replace(fmt.Sprintf("%v", this.ListOptions), "ListOptions", "v1.ListOptions", 1) + `,`,
+		`Options:` + strings.Replace(fmt.Sprintf("%v", this.Options), "ListOptions", "v1.ListOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2782,29 +2863,28 @@ func (this *ListResponse) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ListResponse{`,
-		`AgentConfigs:` + strings.Replace(fmt.Sprintf("%v", this.AgentConfigs), "AgentConfig", "AgentConfig", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
+		`AgentConfigList:` + strings.Replace(fmt.Sprintf("%v", this.AgentConfigList), "AgentConfigList", "AgentConfigList", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *AddRequest) String() string {
+func (this *CreateRequest) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&AddRequest{`,
+	s := strings.Join([]string{`&CreateRequest{`,
+		`Options:` + strings.Replace(fmt.Sprintf("%v", this.Options), "CreateOptions", "v1.CreateOptions", 1) + `,`,
 		`AgentConfig:` + strings.Replace(fmt.Sprintf("%v", this.AgentConfig), "AgentConfig", "AgentConfig", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *AddResponse) String() string {
+func (this *CreateResponse) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&AddResponse{`,
+	s := strings.Join([]string{`&CreateResponse{`,
 		`AgentConfig:` + strings.Replace(fmt.Sprintf("%v", this.AgentConfig), "AgentConfig", "AgentConfig", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2814,6 +2894,7 @@ func (this *UpdateRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&UpdateRequest{`,
+		`Options:` + strings.Replace(fmt.Sprintf("%v", this.Options), "UpdateOptions", "v1.UpdateOptions", 1) + `,`,
 		`AgentConfig:` + strings.Replace(fmt.Sprintf("%v", this.AgentConfig), "AgentConfig", "AgentConfig", 1) + `,`,
 		`}`,
 	}, "")
@@ -2825,7 +2906,6 @@ func (this *UpdateResponse) String() string {
 	}
 	s := strings.Join([]string{`&UpdateResponse{`,
 		`AgentConfig:` + strings.Replace(fmt.Sprintf("%v", this.AgentConfig), "AgentConfig", "AgentConfig", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2835,6 +2915,7 @@ func (this *DeleteRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&DeleteRequest{`,
+		`Options:` + strings.Replace(fmt.Sprintf("%v", this.Options), "DeleteOptions", "v1.DeleteOptions", 1) + `,`,
 		`AgentConfig:` + strings.Replace(fmt.Sprintf("%v", this.AgentConfig), "AgentConfig", "AgentConfig", 1) + `,`,
 		`}`,
 	}, "")
@@ -2846,7 +2927,6 @@ func (this *DeleteResponse) String() string {
 	}
 	s := strings.Join([]string{`&DeleteResponse{`,
 		`AgentConfig:` + strings.Replace(fmt.Sprintf("%v", this.AgentConfig), "AgentConfig", "AgentConfig", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2856,7 +2936,7 @@ func (this *WatchRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&WatchRequest{`,
-		`WatchOptions:` + strings.Replace(fmt.Sprintf("%v", this.WatchOptions), "WatchOptions", "v1.WatchOptions", 1) + `,`,
+		`Options:` + strings.Replace(fmt.Sprintf("%v", this.Options), "WatchOptions", "v1.WatchOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2868,7 +2948,6 @@ func (this *WatchResponse) String() string {
 	s := strings.Join([]string{`&WatchResponse{`,
 		`Event:` + strings.Replace(fmt.Sprintf("%v", this.Event), "Event", "v1alpha.Event", 1) + `,`,
 		`AgentConfig:` + strings.Replace(fmt.Sprintf("%v", this.AgentConfig), "AgentConfig", "AgentConfig", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2973,6 +3052,120 @@ func (m *AgentConfig) Unmarshal(dAtA []byte) error {
 				m.Spec = &AgentConfigSpec{}
 			}
 			if err := m.Spec.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipApi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthApi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *AgentConfigList) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowApi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: AgentConfigList: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: AgentConfigList: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Metadata", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Metadata == nil {
+				m.Metadata = &v1.ObjectMetadata{}
+			}
+			if err := m.Metadata.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Items", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Items = append(m.Items, &AgentConfig{})
+			if err := m.Items[len(m.Items)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -3321,7 +3514,7 @@ func (m *GetRequest) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field GetOptions", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Options", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -3345,10 +3538,10 @@ func (m *GetRequest) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.GetOptions == nil {
-				m.GetOptions = &v1.GetOptions{}
+			if m.Options == nil {
+				m.Options = &v1.GetOptions{}
 			}
-			if err := m.GetOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Options.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -3435,39 +3628,6 @@ func (m *GetResponse) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Error == nil {
-				m.Error = &v1.Error{}
-			}
-			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipApi(dAtA[iNdEx:])
@@ -3520,7 +3680,7 @@ func (m *ListRequest) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ListOptions", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Options", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -3544,10 +3704,10 @@ func (m *ListRequest) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.ListOptions == nil {
-				m.ListOptions = &v1.ListOptions{}
+			if m.Options == nil {
+				m.Options = &v1.ListOptions{}
 			}
-			if err := m.ListOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Options.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -3603,7 +3763,7 @@ func (m *ListResponse) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field AgentConfigs", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field AgentConfigList", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -3627,41 +3787,10 @@ func (m *ListResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.AgentConfigs = append(m.AgentConfigs, &AgentConfig{})
-			if err := m.AgentConfigs[len(m.AgentConfigs)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
+			if m.AgentConfigList == nil {
+				m.AgentConfigList = &AgentConfigList{}
 			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Error == nil {
-				m.Error = &v1.Error{}
-			}
-			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.AgentConfigList.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -3686,7 +3815,7 @@ func (m *ListResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *AddRequest) Unmarshal(dAtA []byte) error {
+func (m *CreateRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -3709,13 +3838,46 @@ func (m *AddRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: AddRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: CreateRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: AddRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: CreateRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Options", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Options == nil {
+				m.Options = &v1.CreateOptions{}
+			}
+			if err := m.Options.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field AgentConfig", wireType)
 			}
@@ -3769,7 +3931,7 @@ func (m *AddRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *AddResponse) Unmarshal(dAtA []byte) error {
+func (m *CreateResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -3792,10 +3954,10 @@ func (m *AddResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: AddResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: CreateResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: AddResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: CreateResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -3828,39 +3990,6 @@ func (m *AddResponse) Unmarshal(dAtA []byte) error {
 				m.AgentConfig = &AgentConfig{}
 			}
 			if err := m.AgentConfig.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Error == nil {
-				m.Error = &v1.Error{}
-			}
-			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -3915,6 +4044,39 @@ func (m *UpdateRequest) Unmarshal(dAtA []byte) error {
 		}
 		switch fieldNum {
 		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Options", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Options == nil {
+				m.Options = &v1.UpdateOptions{}
+			}
+			if err := m.Options.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field AgentConfig", wireType)
 			}
@@ -4030,39 +4192,6 @@ func (m *UpdateResponse) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Error == nil {
-				m.Error = &v1.Error{}
-			}
-			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipApi(dAtA[iNdEx:])
@@ -4114,6 +4243,39 @@ func (m *DeleteRequest) Unmarshal(dAtA []byte) error {
 		}
 		switch fieldNum {
 		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Options", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Options == nil {
+				m.Options = &v1.DeleteOptions{}
+			}
+			if err := m.Options.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field AgentConfig", wireType)
 			}
@@ -4229,39 +4391,6 @@ func (m *DeleteResponse) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Error == nil {
-				m.Error = &v1.Error{}
-			}
-			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipApi(dAtA[iNdEx:])
@@ -4314,7 +4443,7 @@ func (m *WatchRequest) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field WatchOptions", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Options", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -4338,10 +4467,10 @@ func (m *WatchRequest) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.WatchOptions == nil {
-				m.WatchOptions = &v1.WatchOptions{}
+			if m.Options == nil {
+				m.Options = &v1.WatchOptions{}
 			}
-			if err := m.WatchOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Options.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -4458,39 +4587,6 @@ func (m *WatchResponse) Unmarshal(dAtA []byte) error {
 				m.AgentConfig = &AgentConfig{}
 			}
 			if err := m.AgentConfig.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Error == nil {
-				m.Error = &v1.Error{}
-			}
-			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

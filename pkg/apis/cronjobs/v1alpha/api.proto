@@ -18,6 +18,8 @@ package cronjobs.v1alpha;
 option go_package = "github.com/galexrt/edenconfmgmt/pkg/apis/cronjobs/v1alpha";
 
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/apiserver/server.proto";
+import "github.com/mwitkow/go-proto-validators/validator.proto";
 import "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1/api.proto";
 import "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha/api.proto";
 
@@ -38,8 +40,8 @@ service CronJobs {
     rpc Get (GetRequest) returns (GetResponse);
     // List CronJobs.
     rpc List (ListRequest) returns (ListResponse);
-    // Add a Job.
-    rpc Add (AddRequest) returns (AddResponse);
+    // Create a Job.
+    rpc Create (CreateRequest) returns (CreateResponse);
     // Update a Job.
     rpc Update (UpdateRequest) returns (UpdateResponse);
     // Delete a Job.
@@ -49,10 +51,18 @@ service CronJobs {
 }
 
 message CronJob {
+    option (apiserver.options).generate = true;
     // Metadata for CronJob object.
     core.v1.ObjectMetadata metadata = 1;
     // Spec for CronJob.
     CronJobSpec spec = 2;
+}
+
+message CronJobList {
+    // Metadata for CronJobList object.
+    core.v1.ObjectMetadata metadata = 1 [(validator.field) = {msg_exists : true}];
+    // List of CronJob objects.
+    repeated CronJob items = 2;
 }
 
 message CronJobSpec {
@@ -67,73 +77,69 @@ message Schedule {
 
 // Get
 message GetRequest {
-    // GetOptions options for a GetRequest.
-    core.v1.GetOptions getOptions = 1;
+    // core_v1.GetOptions
+    core.v1.GetOptions options = 1;
 }
 
 message GetResponse {
     // CronJob object.
     CronJob cronJob = 1;
-    // Error object.
-    core.v1.Error error = 2;
 }
 
 // List
 message ListRequest {
-    // ListOptions options for a ListRequest.
-    core.v1.ListOptions listOptions = 1;
+    // core_v1.ListOptions
+    core.v1.ListOptions options = 1;
 }
 
 message ListResponse {
     // Config list.
-    repeated CronJob cronjobs = 1;
-    // Error object.
-    core.v1.Error error = 2;
+    CronJobList cronJobList = 1;
 }
 
-// Add
-message AddRequest {
-    // CronJob object.
-    CronJob cronJob = 1;
+// Create
+message CreateRequest {
+    // core_v1.CreateOptions
+    core.v1.CreateOptions options = 1;
+    // CronJob
+    CronJob cronJob = 2;
 }
 
-message AddResponse {
+message CreateResponse {
     // CronJob object.
     CronJob cronJob = 1;
-    // Error object.
-    core.v1.Error error = 2;
 }
 
 // Update
 message UpdateRequest {
+    // core_v1.CreateOptions
+    core.v1.UpdateOptions options = 1;
     // CronJob object.
-    CronJob cronJob = 1;
+    CronJob cronJob = 2;
 }
 
 message UpdateResponse {
     // CronJob object.
     CronJob cronJob = 1;
-    // Error object.
-    core.v1.Error error = 2;
 }
 
 // Delete
 message DeleteRequest {
+    // core_v1.DeleteOptions
+    core.v1.DeleteOptions options = 1;
     // CronJob object.
-    CronJob cronJob = 1;
+    CronJob cronJob = 2;
 }
 
 message DeleteResponse {
     // CronJob object.
     CronJob cronJob = 1;
-    // Error object.
-    core.v1.Error error = 2;
 }
 
 // Watch
 message WatchRequest {
-    // WatchOptions options for WatchRequest.
-    core.v1.WatchOptions watchOptions = 1;
+    // core_v1.WatchOptions
+    core.v1.WatchOptions options = 1;
 }
 
 message WatchResponse {
@@ -141,6 +147,4 @@ message WatchResponse {
     events.v1alpha.Event event = 1;
     // CronJob for watch response.
     CronJob cronJob = 2;
-    // Error object.
-    core.v1.Error error = 3;
 }

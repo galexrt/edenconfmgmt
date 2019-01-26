@@ -17,7 +17,12 @@ limitations under the License.
 package object
 
 import (
+	"sync"
+
 	"github.com/galexrt/edenconfmgmt/pkg/store/cache"
+	"github.com/galexrt/edenconfmgmt/pkg/store/data"
+	"go.etcd.io/etcd/clientv3"
+	"go.uber.org/zap"
 )
 
 // InformerResult result returned by the channel.
@@ -26,14 +31,40 @@ type InformerResult struct {
 	Errors  []error
 	State   cache.ResultState
 	Key     string
-	Value   []byte
+	Value   interface{}
 	Version int64
 }
 
-type Informer struct {
+type chanContainer struct {
+	watch clientv3.WatchChan
+	link  *chanContainer
 }
 
-// NewInformer returns a new Informer object.
-func NewInformer() *Informer {
-	return &Informer{}
+type receiverList struct {
+	list       []chan *InformerResult
+	usageCount uint64
+	sync.RWMutex
 }
+
+// Informer keeps track of watches and the receivers of those watches.
+type Informer struct {
+	channel    map[string]*chanContainer
+	receivers  map[string]*receiverList
+	dataStore  data.Store
+	cacheStore data.Store
+	wg         sync.WaitGroup
+	logger     *zap.Logger
+}
+
+// NewInformer returns a new Informer.
+func NewInformer(dataStore data.Store, cacheStore data.Store, logger *zap.Logger) *Informer {
+	return &Informer{
+		channel:    map[string]*chanContainer{},
+		receivers:  map[string]*receiverList{},
+		dataStore:  dataStore,
+		cacheStore: cacheStore,
+		logger:     logger.Named("pkg/store/object:Informer"),
+	}
+}
+
+// TODO "Copy" pkg/store/cache" functions

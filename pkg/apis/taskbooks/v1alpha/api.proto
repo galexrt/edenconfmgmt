@@ -19,6 +19,8 @@ option go_package = "github.com/galexrt/edenconfmgmt/pkg/apis/taskbooks/v1alpha"
 
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "google/protobuf/any.proto";
+import "github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/apiserver/server.proto";
+import "github.com/mwitkow/go-proto-validators/validator.proto";
 import "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1/api.proto";
 import "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha/api.proto";
 
@@ -39,8 +41,8 @@ service TaskBooks {
     rpc Get (GetRequest) returns (GetResponse);
     // List TaskBooks.
     rpc List (ListRequest) returns (ListResponse);
-    // Add a TaskBook.
-    rpc Add (AddRequest) returns (AddResponse);
+    // Create a TaskBook.
+    rpc Create (CreateRequest) returns (CreateResponse);
     // Update a TaskBook.
     rpc Update (UpdateRequest) returns (UpdateResponse);
     // Delete a TaskBook.
@@ -50,10 +52,18 @@ service TaskBooks {
 }
 
 message TaskBook {
+    option (apiserver.options).generate = true;
     // Metadata for TaskBook object.
     core.v1.ObjectMetadata metadata = 1;
     // Spec for TaskBook.
     TaskBookSpec spec = 2;
+}
+
+message TaskBookList {
+    // Metadata for TaskBookList object.
+    core.v1.ObjectMetadata metadata = 1 [(validator.field) = {msg_exists : true}];
+    // List of TaskBook objects.
+    repeated TaskBook items = 2;
 }
 
 message TaskBookSpec {
@@ -102,79 +112,73 @@ message Action {
 // Get
 message GetRequest {
     // GetOptions options for a GetRequest.
-    core.v1.GetOptions getOptions = 1;
+    core.v1.GetOptions options = 1;
 }
 
 message GetResponse {
     // TaskBook object.
-    TaskBook task = 1;
-    // Error object.
-    core.v1.Error error = 2;
+    TaskBook taskBook = 1;
 }
 
 // List
 message ListRequest {
-    // ListOptions options for a ListRequest.
-    core.v1.ListOptions listOptions = 1;
+    // core_v1.ListOptions
+    core.v1.ListOptions options = 1;
 }
 
 message ListResponse {
     // TaskBook list.
-    repeated TaskBook taskbooks = 1;
-    // Error object.
-    core.v1.Error error = 2;
+    TaskBookList taskBookList = 1;
 }
 
-// Add
-message AddRequest {
+// Create
+message CreateRequest {
+    // core_v1.CreateOptions
+    core.v1.CreateOptions options = 1;
     // TaskBook object.
-    TaskBook task = 1;
+    TaskBook taskBook = 2;
 }
 
-message AddResponse {
+message CreateResponse {
     // TaskBook object.
-    TaskBook task = 1;
-    // Error object.
-    core.v1.Error error = 2;
+    TaskBook taskBook = 1;
 }
 
 // Update
 message UpdateRequest {
+    // core_v1.UpdateOptions
+    core.v1.UpdateOptions options = 1;
     // TaskBook object.
-    TaskBook task = 1;
+    TaskBook taskBook = 2;
 }
 
 message UpdateResponse {
     // TaskBook object.
-    TaskBook task = 1;
-    // Error object.
-    core.v1.Error error = 2;
+    TaskBook taskBook = 1;
 }
 
 // Delete
 message DeleteRequest {
+    // core_v1.DeleteOptions
+    core.v1.DeleteOptions options = 1;
     // TaskBook object.
-    TaskBook task = 1;
+    TaskBook taskBook = 2;
 }
 
 message DeleteResponse {
     // TaskBook object.
-    TaskBook task = 1;
-    // Error object.
-    core.v1.Error error = 2;
+    TaskBook taskBook = 1;
 }
 
 // Watch
 message WatchRequest {
-    // WatchOptions options for WatchRequest.
-    core.v1.WatchOptions watchOptions = 1;
+    // core_v1.WatchOptions
+    core.v1.WatchOptions options = 1;
 }
 
 message WatchResponse {
     // TaskBook info for watch response.
     events.v1alpha.Event event = 1;
     // TaskBook for watch response.
-    TaskBook task = 2;
-    // Error object.
-    core.v1.Error error = 3;
+    TaskBook taskBook = 2;
 }

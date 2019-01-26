@@ -53,7 +53,7 @@ var (
 			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 			defer cancel()
 
-			addResponse, err := nodesClient.Add(ctx, &nodes_v1alpha.AddRequest{
+			addResponse, err := nodesClient.Add(ctx, &nodes_v1alpha.CreateRequest{
 				Node: &nodes_v1alpha.Node{
 					Metadata: &core_v1.ObjectMetadata{},
 					Spec:     &nodes_v1alpha.Spec{},

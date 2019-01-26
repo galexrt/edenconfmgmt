@@ -9,7 +9,7 @@ import (
 	"strconv"
 	"strings"
 
-	internalclient_plugin "github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/internalclient"
+	apiserver_plugin "github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/apiserver"
 	"github.com/gogo/protobuf/proto"
 	"github.com/gogo/protobuf/protoc-gen-gogo/generator"
 )
@@ -21,9 +21,8 @@ func main() {
 	if err != nil {
 		gen.Error(err, "reading input")
 	}
-
 	if err = proto.Unmarshal(data, gen.Request); err != nil {
-		gen.Error(err, "parsing input proto")
+		gen.Error(err, "parsing proto input")
 	}
 
 	if len(gen.Request.FileToGenerate) == 0 {
@@ -49,10 +48,10 @@ func main() {
 	gen.WrapTypes()
 	gen.SetPackageNames()
 	gen.BuildTypeNameMap()
-	gen.GeneratePlugin(internalclient_plugin.NewPlugin(useGogoImport))
+	gen.GeneratePlugin(apiserver_plugin.NewPlugin(useGogoImport))
 
 	for i := 0; i < len(gen.Response.File); i++ {
-		gen.Response.File[i].Name = proto.String(strings.Replace(*gen.Response.File[i].Name, ".pb.go", ".internalclient.pb.go", -1))
+		gen.Response.File[i].Name = proto.String(strings.Replace(*gen.Response.File[i].Name, ".pb.go", ".apiserver.pb.go", -1))
 	}
 
 	// Send back the results.

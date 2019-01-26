@@ -25,12 +25,17 @@ import (
 func Concat(errors ...error) error {
 	if len(errors) > 0 {
 		errsConcat := "failed to close datastore and cachestore: "
+		onlyNullErrs := true
 		for _, e := range errors {
 			if e == nil {
 				continue
 			}
+			onlyNullErrs = false
 			errsConcat += e.Error()
 			errsConcat += "; "
+		}
+		if onlyNullErrs {
+			return nil
 		}
 		return fmt.Errorf(strings.TrimRight(errsConcat, "; "))
 	}

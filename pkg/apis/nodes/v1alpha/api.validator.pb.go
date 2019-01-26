@@ -7,7 +7,7 @@ import (
 	fmt "fmt"
 	_ "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1"
 	_ "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha"
-	_ "github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/internalclient"
+	_ "github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/apiserver"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	_ "github.com/mwitkow/go-proto-validators"
@@ -87,9 +87,9 @@ func (this *Status) Validate() error {
 	return nil
 }
 func (this *GetRequest) Validate() error {
-	if this.GetOptions != nil {
-		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.GetOptions); err != nil {
-			return github_com_mwitkow_go_proto_validators.FieldError("GetOptions", err)
+	if this.Options != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Options); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("Options", err)
 		}
 	}
 	return nil
@@ -100,37 +100,30 @@ func (this *GetResponse) Validate() error {
 			return github_com_mwitkow_go_proto_validators.FieldError("Node", err)
 		}
 	}
-	if this.Error != nil {
-		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Error); err != nil {
-			return github_com_mwitkow_go_proto_validators.FieldError("Error", err)
-		}
-	}
 	return nil
 }
 func (this *ListRequest) Validate() error {
-	if this.ListOptions != nil {
-		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.ListOptions); err != nil {
-			return github_com_mwitkow_go_proto_validators.FieldError("ListOptions", err)
+	if this.Options != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Options); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("Options", err)
 		}
 	}
 	return nil
 }
 func (this *ListResponse) Validate() error {
-	for _, item := range this.Nodes {
-		if item != nil {
-			if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(item); err != nil {
-				return github_com_mwitkow_go_proto_validators.FieldError("Nodes", err)
-			}
-		}
-	}
-	if this.Error != nil {
-		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Error); err != nil {
-			return github_com_mwitkow_go_proto_validators.FieldError("Error", err)
+	if this.NodeList != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.NodeList); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("NodeList", err)
 		}
 	}
 	return nil
 }
-func (this *AddRequest) Validate() error {
+func (this *CreateRequest) Validate() error {
+	if this.Options != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Options); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("Options", err)
+		}
+	}
 	if nil == this.Node {
 		return github_com_mwitkow_go_proto_validators.FieldError("Node", fmt.Errorf("message must exist"))
 	}
@@ -141,20 +134,20 @@ func (this *AddRequest) Validate() error {
 	}
 	return nil
 }
-func (this *AddResponse) Validate() error {
+func (this *CreateResponse) Validate() error {
 	if this.Node != nil {
 		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Node); err != nil {
 			return github_com_mwitkow_go_proto_validators.FieldError("Node", err)
 		}
 	}
-	if this.Error != nil {
-		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Error); err != nil {
-			return github_com_mwitkow_go_proto_validators.FieldError("Error", err)
-		}
-	}
 	return nil
 }
 func (this *UpdateRequest) Validate() error {
+	if this.Options != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Options); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("Options", err)
+		}
+	}
 	if this.Node != nil {
 		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Node); err != nil {
 			return github_com_mwitkow_go_proto_validators.FieldError("Node", err)
@@ -168,14 +161,14 @@ func (this *UpdateResponse) Validate() error {
 			return github_com_mwitkow_go_proto_validators.FieldError("Node", err)
 		}
 	}
-	if this.Error != nil {
-		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Error); err != nil {
-			return github_com_mwitkow_go_proto_validators.FieldError("Error", err)
-		}
-	}
 	return nil
 }
 func (this *DeleteRequest) Validate() error {
+	if this.Options != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Options); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("Options", err)
+		}
+	}
 	if this.Node != nil {
 		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Node); err != nil {
 			return github_com_mwitkow_go_proto_validators.FieldError("Node", err)
@@ -189,17 +182,12 @@ func (this *DeleteResponse) Validate() error {
 			return github_com_mwitkow_go_proto_validators.FieldError("Node", err)
 		}
 	}
-	if this.Error != nil {
-		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Error); err != nil {
-			return github_com_mwitkow_go_proto_validators.FieldError("Error", err)
-		}
-	}
 	return nil
 }
 func (this *WatchRequest) Validate() error {
-	if this.WatchOptions != nil {
-		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.WatchOptions); err != nil {
-			return github_com_mwitkow_go_proto_validators.FieldError("WatchOptions", err)
+	if this.Options != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Options); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("Options", err)
 		}
 	}
 	return nil
@@ -213,11 +201,6 @@ func (this *WatchResponse) Validate() error {
 	if this.Node != nil {
 		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Node); err != nil {
 			return github_com_mwitkow_go_proto_validators.FieldError("Node", err)
-		}
-	}
-	if this.Error != nil {
-		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Error); err != nil {
-			return github_com_mwitkow_go_proto_validators.FieldError("Error", err)
 		}
 	}
 	return nil

@@ -19,6 +19,8 @@ option go_package = "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha";
 
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "google/protobuf/any.proto";
+import "github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/apiserver/server.proto";
+import "github.com/mwitkow/go-proto-validators/validator.proto";
 import "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1/api.proto";
 
 option (gogoproto.goproto_stringer_all) = false;
@@ -38,8 +40,8 @@ service Events {
     rpc Get (GetRequest) returns (GetResponse);
     // List Events.
     rpc List (ListRequest) returns (ListResponse);
-    // Add a Event.
-    rpc Add (AddRequest) returns (AddResponse);
+    // Create a Event.
+    rpc Create (CreateRequest) returns (CreateResponse);
     // Update a Event.
     rpc Update (UpdateRequest) returns (UpdateResponse);
     // Delete a Event.
@@ -49,10 +51,18 @@ service Events {
 }
 
 message Event {
+    option (apiserver.options).generate = true;
     // Metadata for the Event object.
     core.v1.ObjectMetadata metadata = 1;
     // Spec for Event.
     EventSpec spec = 2;
+}
+
+message EventList {
+    // Metadata for EventList object.
+    core.v1.ObjectMetadata metadata = 1 [(validator.field) = {msg_exists : true}];
+    // List of Event objects.
+    repeated Event items = 2;
 }
 
 message EventSpec {
@@ -66,78 +76,72 @@ message EventSpec {
 
 // Get
 message GetRequest {
-    // GetOptions options for a GetRequest.
-    core.v1.GetOptions getOptions = 1;
+    // core_v1.GetOptions
+    core.v1.GetOptions options = 1;
 }
 
 message GetResponse {
     // Event object.
     Event event = 1;
-    // Error object.
-    core.v1.Error error = 2;
 }
 
 // List
 message ListRequest {
-    // ListOptions options for a ListRequest.
-    core.v1.ListOptions listOptions = 1;
+    // core_v1.ListOptions
+    core.v1.ListOptions options = 1;
 }
 
 message ListResponse {
     // Event list.
-    repeated Event events = 1;
-    // Error object.
-    core.v1.Error error = 2;
+    EventList eventList = 1;
 }
 
-// Add
-message AddRequest {
+// Create
+message CreateRequest {
+    // core_v1.CreateOptions
+    core.v1.CreateOptions options = 1;
     // Event object.
-    Event event = 1;
+    Event event = 2;
 }
 
-message AddResponse {
+message CreateResponse {
     // Event object.
     Event event = 1;
-    // Error object.
-    core.v1.Error error = 2;
 }
 
 // Update
 message UpdateRequest {
+    // core_v1.UpdateOptions
+    core.v1.UpdateOptions options = 1;
     // Event object.
-    Event event = 1;
+    Event event = 2;
 }
 
 message UpdateResponse {
     // Event object.
     Event event = 1;
-    // Error object.
-    core.v1.Error error = 2;
 }
 
 // Delete
 message DeleteRequest {
+    // core_v1.DeleteOptions
+    core.v1.DeleteOptions options = 1;
     // Event object.
-    Event event = 1;
+    Event event = 2;
 }
 
 message DeleteResponse {
     // Event object.
     Event event = 1;
-    // Error object.
-    core.v1.Error error = 2;
 }
 
 // Watch
 message WatchRequest {
-    // WatchOptions options for WatchRequest.
-    core.v1.WatchOptions watchOptions = 1;
+    // core_v1.WatchOptions
+    core.v1.WatchOptions options = 1;
 }
 
 message WatchResponse {
     // Event for watch stream.
     Event event = 1;
-    // Error object.
-    core.v1.Error error = 2;
 }

@@ -7,8 +7,10 @@ import (
 	fmt "fmt"
 	_ "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1"
 	_ "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha"
+	_ "github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/apiserver"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
+	_ "github.com/mwitkow/go-proto-validators"
 	github_com_mwitkow_go_proto_validators "github.com/mwitkow/go-proto-validators"
 	math "math"
 )
@@ -31,6 +33,24 @@ func (this *CronJob) Validate() error {
 	}
 	return nil
 }
+func (this *CronJobList) Validate() error {
+	if nil == this.Metadata {
+		return github_com_mwitkow_go_proto_validators.FieldError("Metadata", fmt.Errorf("message must exist"))
+	}
+	if this.Metadata != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Metadata); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("Metadata", err)
+		}
+	}
+	for _, item := range this.Items {
+		if item != nil {
+			if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(item); err != nil {
+				return github_com_mwitkow_go_proto_validators.FieldError("Items", err)
+			}
+		}
+	}
+	return nil
+}
 func (this *CronJobSpec) Validate() error {
 	if this.Schedule != nil {
 		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Schedule); err != nil {
@@ -43,9 +63,9 @@ func (this *Schedule) Validate() error {
 	return nil
 }
 func (this *GetRequest) Validate() error {
-	if this.GetOptions != nil {
-		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.GetOptions); err != nil {
-			return github_com_mwitkow_go_proto_validators.FieldError("GetOptions", err)
+	if this.Options != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Options); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("Options", err)
 		}
 	}
 	return nil
@@ -56,37 +76,30 @@ func (this *GetResponse) Validate() error {
 			return github_com_mwitkow_go_proto_validators.FieldError("CronJob", err)
 		}
 	}
-	if this.Error != nil {
-		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Error); err != nil {
-			return github_com_mwitkow_go_proto_validators.FieldError("Error", err)
-		}
-	}
 	return nil
 }
 func (this *ListRequest) Validate() error {
-	if this.ListOptions != nil {
-		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.ListOptions); err != nil {
-			return github_com_mwitkow_go_proto_validators.FieldError("ListOptions", err)
+	if this.Options != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Options); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("Options", err)
 		}
 	}
 	return nil
 }
 func (this *ListResponse) Validate() error {
-	for _, item := range this.Cronjobs {
-		if item != nil {
-			if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(item); err != nil {
-				return github_com_mwitkow_go_proto_validators.FieldError("Cronjobs", err)
-			}
-		}
-	}
-	if this.Error != nil {
-		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Error); err != nil {
-			return github_com_mwitkow_go_proto_validators.FieldError("Error", err)
+	if this.CronJobList != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.CronJobList); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("CronJobList", err)
 		}
 	}
 	return nil
 }
-func (this *AddRequest) Validate() error {
+func (this *CreateRequest) Validate() error {
+	if this.Options != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Options); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("Options", err)
+		}
+	}
 	if this.CronJob != nil {
 		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.CronJob); err != nil {
 			return github_com_mwitkow_go_proto_validators.FieldError("CronJob", err)
@@ -94,20 +107,20 @@ func (this *AddRequest) Validate() error {
 	}
 	return nil
 }
-func (this *AddResponse) Validate() error {
+func (this *CreateResponse) Validate() error {
 	if this.CronJob != nil {
 		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.CronJob); err != nil {
 			return github_com_mwitkow_go_proto_validators.FieldError("CronJob", err)
-		}
-	}
-	if this.Error != nil {
-		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Error); err != nil {
-			return github_com_mwitkow_go_proto_validators.FieldError("Error", err)
 		}
 	}
 	return nil
 }
 func (this *UpdateRequest) Validate() error {
+	if this.Options != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Options); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("Options", err)
+		}
+	}
 	if this.CronJob != nil {
 		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.CronJob); err != nil {
 			return github_com_mwitkow_go_proto_validators.FieldError("CronJob", err)
@@ -121,14 +134,14 @@ func (this *UpdateResponse) Validate() error {
 			return github_com_mwitkow_go_proto_validators.FieldError("CronJob", err)
 		}
 	}
-	if this.Error != nil {
-		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Error); err != nil {
-			return github_com_mwitkow_go_proto_validators.FieldError("Error", err)
-		}
-	}
 	return nil
 }
 func (this *DeleteRequest) Validate() error {
+	if this.Options != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Options); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("Options", err)
+		}
+	}
 	if this.CronJob != nil {
 		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.CronJob); err != nil {
 			return github_com_mwitkow_go_proto_validators.FieldError("CronJob", err)
@@ -142,17 +155,12 @@ func (this *DeleteResponse) Validate() error {
 			return github_com_mwitkow_go_proto_validators.FieldError("CronJob", err)
 		}
 	}
-	if this.Error != nil {
-		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Error); err != nil {
-			return github_com_mwitkow_go_proto_validators.FieldError("Error", err)
-		}
-	}
 	return nil
 }
 func (this *WatchRequest) Validate() error {
-	if this.WatchOptions != nil {
-		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.WatchOptions); err != nil {
-			return github_com_mwitkow_go_proto_validators.FieldError("WatchOptions", err)
+	if this.Options != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Options); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("Options", err)
 		}
 	}
 	return nil
@@ -166,11 +174,6 @@ func (this *WatchResponse) Validate() error {
 	if this.CronJob != nil {
 		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.CronJob); err != nil {
 			return github_com_mwitkow_go_proto_validators.FieldError("CronJob", err)
-		}
-	}
-	if this.Error != nil {
-		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Error); err != nil {
-			return github_com_mwitkow_go_proto_validators.FieldError("Error", err)
 		}
 	}
 	return nil

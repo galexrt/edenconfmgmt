@@ -8,10 +8,12 @@ import (
 	fmt "fmt"
 	v1 "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1"
 	v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha"
+	_ "github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/apiserver"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	github_com_gogo_protobuf_sortkeys "github.com/gogo/protobuf/sortkeys"
 	types "github.com/gogo/protobuf/types"
+	_ "github.com/mwitkow/go-proto-validators"
 	grpc "google.golang.org/grpc"
 	io "io"
 	math "math"
@@ -85,6 +87,61 @@ func (m *Variable) GetSpec() *VariableSpec {
 	return nil
 }
 
+type VariableList struct {
+	// Metadata for VariableList object.
+	Metadata *v1.ObjectMetadata `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	// List of Variable objects.
+	Items                []*Variable `protobuf:"bytes,2,rep,name=items,proto3" json:"items,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
+	XXX_sizecache        int32       `json:"-"`
+}
+
+func (m *VariableList) Reset()      { *m = VariableList{} }
+func (*VariableList) ProtoMessage() {}
+func (*VariableList) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6d9255d344b41b48, []int{1}
+}
+func (m *VariableList) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *VariableList) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_VariableList.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalTo(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *VariableList) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_VariableList.Merge(m, src)
+}
+func (m *VariableList) XXX_Size() int {
+	return m.Size()
+}
+func (m *VariableList) XXX_DiscardUnknown() {
+	xxx_messageInfo_VariableList.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_VariableList proto.InternalMessageInfo
+
+func (m *VariableList) GetMetadata() *v1.ObjectMetadata {
+	if m != nil {
+		return m.Metadata
+	}
+	return nil
+}
+
+func (m *VariableList) GetItems() []*Variable {
+	if m != nil {
+		return m.Items
+	}
+	return nil
+}
+
 // Variables variables file structure. This covers the "Variables File" and "'From Host' Static Variable File".
 type VariableSpec struct {
 	// Variables.
@@ -98,7 +155,7 @@ type VariableSpec struct {
 func (m *VariableSpec) Reset()      { *m = VariableSpec{} }
 func (*VariableSpec) ProtoMessage() {}
 func (*VariableSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6d9255d344b41b48, []int{1}
+	return fileDescriptor_6d9255d344b41b48, []int{2}
 }
 func (m *VariableSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -143,8 +200,8 @@ func (m *VariableSpec) GetType() string {
 
 // Get
 type GetRequest struct {
-	// GetOptions options for a GetRequest.
-	GetOptions           *v1.GetOptions `protobuf:"bytes,1,opt,name=getOptions,proto3" json:"getOptions,omitempty"`
+	// core_v1.GetOptions
+	Options              *v1.GetOptions `protobuf:"bytes,1,opt,name=options,proto3" json:"options,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
 	XXX_sizecache        int32          `json:"-"`
 }
@@ -152,7 +209,7 @@ type GetRequest struct {
 func (m *GetRequest) Reset()      { *m = GetRequest{} }
 func (*GetRequest) ProtoMessage() {}
 func (*GetRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6d9255d344b41b48, []int{2}
+	return fileDescriptor_6d9255d344b41b48, []int{3}
 }
 func (m *GetRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -181,18 +238,16 @@ func (m *GetRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetRequest proto.InternalMessageInfo
 
-func (m *GetRequest) GetGetOptions() *v1.GetOptions {
+func (m *GetRequest) GetOptions() *v1.GetOptions {
 	if m != nil {
-		return m.GetOptions
+		return m.Options
 	}
 	return nil
 }
 
 type GetResponse struct {
 	// Variable object.
-	Variable *Variable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
-	// Error object.
-	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
+	Variable             *Variable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
 	XXX_sizecache        int32     `json:"-"`
 }
@@ -200,7 +255,7 @@ type GetResponse struct {
 func (m *GetResponse) Reset()      { *m = GetResponse{} }
 func (*GetResponse) ProtoMessage() {}
 func (*GetResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6d9255d344b41b48, []int{3}
+	return fileDescriptor_6d9255d344b41b48, []int{4}
 }
 func (m *GetResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -236,17 +291,10 @@ func (m *GetResponse) GetVariable() *Variable {
 	return nil
 }
 
-func (m *GetResponse) GetError() *v1.Error {
-	if m != nil {
-		return m.Error
-	}
-	return nil
-}
-
 // List
 type ListRequest struct {
-	// ListOptions options for a ListRequest.
-	ListOptions          *v1.ListOptions `protobuf:"bytes,1,opt,name=listOptions,proto3" json:"listOptions,omitempty"`
+	// core_v1.ListOptions
+	Options              *v1.ListOptions `protobuf:"bytes,1,opt,name=options,proto3" json:"options,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
 	XXX_sizecache        int32           `json:"-"`
 }
@@ -254,7 +302,7 @@ type ListRequest struct {
 func (m *ListRequest) Reset()      { *m = ListRequest{} }
 func (*ListRequest) ProtoMessage() {}
 func (*ListRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6d9255d344b41b48, []int{4}
+	return fileDescriptor_6d9255d344b41b48, []int{5}
 }
 func (m *ListRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -283,26 +331,24 @@ func (m *ListRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ListRequest proto.InternalMessageInfo
 
-func (m *ListRequest) GetListOptions() *v1.ListOptions {
+func (m *ListRequest) GetOptions() *v1.ListOptions {
 	if m != nil {
-		return m.ListOptions
+		return m.Options
 	}
 	return nil
 }
 
 type ListResponse struct {
 	// Variable list.
-	Variables []*Variable `protobuf:"bytes,1,rep,name=variables,proto3" json:"variables,omitempty"`
-	// Error object.
-	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
+	VariableList         *VariableList `protobuf:"bytes,1,opt,name=variableList,proto3" json:"variableList,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
+	XXX_sizecache        int32         `json:"-"`
 }
 
 func (m *ListResponse) Reset()      { *m = ListResponse{} }
 func (*ListResponse) ProtoMessage() {}
 func (*ListResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6d9255d344b41b48, []int{5}
+	return fileDescriptor_6d9255d344b41b48, []int{6}
 }
 func (m *ListResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -331,39 +377,87 @@ func (m *ListResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ListResponse proto.InternalMessageInfo
 
-func (m *ListResponse) GetVariables() []*Variable {
+func (m *ListResponse) GetVariableList() *VariableList {
 	if m != nil {
-		return m.Variables
+		return m.VariableList
 	}
 	return nil
 }
 
-func (m *ListResponse) GetError() *v1.Error {
+// Create
+type CreateRequest struct {
+	// core_v1.CreateOptions
+	Options *v1.CreateOptions `protobuf:"bytes,1,opt,name=options,proto3" json:"options,omitempty"`
+	// Variable object.
+	Variable             *Variable `protobuf:"bytes,2,opt,name=variable,proto3" json:"variable,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
+}
+
+func (m *CreateRequest) Reset()      { *m = CreateRequest{} }
+func (*CreateRequest) ProtoMessage() {}
+func (*CreateRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6d9255d344b41b48, []int{7}
+}
+func (m *CreateRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CreateRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_CreateRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalTo(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *CreateRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateRequest.Merge(m, src)
+}
+func (m *CreateRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *CreateRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateRequest proto.InternalMessageInfo
+
+func (m *CreateRequest) GetOptions() *v1.CreateOptions {
 	if m != nil {
-		return m.Error
+		return m.Options
 	}
 	return nil
 }
 
-// Add
-type AddRequest struct {
+func (m *CreateRequest) GetVariable() *Variable {
+	if m != nil {
+		return m.Variable
+	}
+	return nil
+}
+
+type CreateResponse struct {
 	// Variable object.
 	Variable             *Variable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
 	XXX_sizecache        int32     `json:"-"`
 }
 
-func (m *AddRequest) Reset()      { *m = AddRequest{} }
-func (*AddRequest) ProtoMessage() {}
-func (*AddRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6d9255d344b41b48, []int{6}
+func (m *CreateResponse) Reset()      { *m = CreateResponse{} }
+func (*CreateResponse) ProtoMessage() {}
+func (*CreateResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6d9255d344b41b48, []int{8}
 }
-func (m *AddRequest) XXX_Unmarshal(b []byte) error {
+func (m *CreateResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *AddRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *CreateResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_AddRequest.Marshal(b, m, deterministic)
+		return xxx_messageInfo_CreateResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalTo(b)
@@ -373,84 +467,31 @@ func (m *AddRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return b[:n], nil
 	}
 }
-func (m *AddRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AddRequest.Merge(m, src)
+func (m *CreateResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateResponse.Merge(m, src)
 }
-func (m *AddRequest) XXX_Size() int {
+func (m *CreateResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *AddRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_AddRequest.DiscardUnknown(m)
+func (m *CreateResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_AddRequest proto.InternalMessageInfo
+var xxx_messageInfo_CreateResponse proto.InternalMessageInfo
 
-func (m *AddRequest) GetVariable() *Variable {
+func (m *CreateResponse) GetVariable() *Variable {
 	if m != nil {
 		return m.Variable
-	}
-	return nil
-}
-
-type AddResponse struct {
-	// Variable object.
-	Variable *Variable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
-	// Error object.
-	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
-}
-
-func (m *AddResponse) Reset()      { *m = AddResponse{} }
-func (*AddResponse) ProtoMessage() {}
-func (*AddResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6d9255d344b41b48, []int{7}
-}
-func (m *AddResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *AddResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_AddResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *AddResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AddResponse.Merge(m, src)
-}
-func (m *AddResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *AddResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_AddResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_AddResponse proto.InternalMessageInfo
-
-func (m *AddResponse) GetVariable() *Variable {
-	if m != nil {
-		return m.Variable
-	}
-	return nil
-}
-
-func (m *AddResponse) GetError() *v1.Error {
-	if m != nil {
-		return m.Error
 	}
 	return nil
 }
 
 // Update
 type UpdateRequest struct {
+	// core_v1.UpdateOptions
+	Options *v1.UpdateOptions `protobuf:"bytes,1,opt,name=options,proto3" json:"options,omitempty"`
 	// Variable object.
-	Variable             *Variable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
+	Variable             *Variable `protobuf:"bytes,2,opt,name=variable,proto3" json:"variable,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
 	XXX_sizecache        int32     `json:"-"`
 }
@@ -458,7 +499,7 @@ type UpdateRequest struct {
 func (m *UpdateRequest) Reset()      { *m = UpdateRequest{} }
 func (*UpdateRequest) ProtoMessage() {}
 func (*UpdateRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6d9255d344b41b48, []int{8}
+	return fileDescriptor_6d9255d344b41b48, []int{9}
 }
 func (m *UpdateRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -487,6 +528,13 @@ func (m *UpdateRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_UpdateRequest proto.InternalMessageInfo
 
+func (m *UpdateRequest) GetOptions() *v1.UpdateOptions {
+	if m != nil {
+		return m.Options
+	}
+	return nil
+}
+
 func (m *UpdateRequest) GetVariable() *Variable {
 	if m != nil {
 		return m.Variable
@@ -496,9 +544,7 @@ func (m *UpdateRequest) GetVariable() *Variable {
 
 type UpdateResponse struct {
 	// Variable object.
-	Variable *Variable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
-	// Error object.
-	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
+	Variable             *Variable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
 	XXX_sizecache        int32     `json:"-"`
 }
@@ -506,7 +552,7 @@ type UpdateResponse struct {
 func (m *UpdateResponse) Reset()      { *m = UpdateResponse{} }
 func (*UpdateResponse) ProtoMessage() {}
 func (*UpdateResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6d9255d344b41b48, []int{9}
+	return fileDescriptor_6d9255d344b41b48, []int{10}
 }
 func (m *UpdateResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -542,17 +588,12 @@ func (m *UpdateResponse) GetVariable() *Variable {
 	return nil
 }
 
-func (m *UpdateResponse) GetError() *v1.Error {
-	if m != nil {
-		return m.Error
-	}
-	return nil
-}
-
 // Delete
 type DeleteRequest struct {
+	// core_v1.DeleteOptions
+	Options *v1.DeleteOptions `protobuf:"bytes,1,opt,name=options,proto3" json:"options,omitempty"`
 	// Variable object.
-	Variable             *Variable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
+	Variable             *Variable `protobuf:"bytes,2,opt,name=variable,proto3" json:"variable,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
 	XXX_sizecache        int32     `json:"-"`
 }
@@ -560,7 +601,7 @@ type DeleteRequest struct {
 func (m *DeleteRequest) Reset()      { *m = DeleteRequest{} }
 func (*DeleteRequest) ProtoMessage() {}
 func (*DeleteRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6d9255d344b41b48, []int{10}
+	return fileDescriptor_6d9255d344b41b48, []int{11}
 }
 func (m *DeleteRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -589,6 +630,13 @@ func (m *DeleteRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_DeleteRequest proto.InternalMessageInfo
 
+func (m *DeleteRequest) GetOptions() *v1.DeleteOptions {
+	if m != nil {
+		return m.Options
+	}
+	return nil
+}
+
 func (m *DeleteRequest) GetVariable() *Variable {
 	if m != nil {
 		return m.Variable
@@ -598,9 +646,7 @@ func (m *DeleteRequest) GetVariable() *Variable {
 
 type DeleteResponse struct {
 	// Variable object.
-	Variable *Variable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
-	// Error object.
-	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
+	Variable             *Variable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
 	XXX_sizecache        int32     `json:"-"`
 }
@@ -608,7 +654,7 @@ type DeleteResponse struct {
 func (m *DeleteResponse) Reset()      { *m = DeleteResponse{} }
 func (*DeleteResponse) ProtoMessage() {}
 func (*DeleteResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6d9255d344b41b48, []int{11}
+	return fileDescriptor_6d9255d344b41b48, []int{12}
 }
 func (m *DeleteResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -644,17 +690,10 @@ func (m *DeleteResponse) GetVariable() *Variable {
 	return nil
 }
 
-func (m *DeleteResponse) GetError() *v1.Error {
-	if m != nil {
-		return m.Error
-	}
-	return nil
-}
-
 // Watch
 type WatchRequest struct {
 	// WatchOptions options for WatchRequest.
-	WatchOptions         *v1.WatchOptions `protobuf:"bytes,1,opt,name=watchOptions,proto3" json:"watchOptions,omitempty"`
+	Options              *v1.WatchOptions `protobuf:"bytes,1,opt,name=options,proto3" json:"options,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
 	XXX_sizecache        int32            `json:"-"`
 }
@@ -662,7 +701,7 @@ type WatchRequest struct {
 func (m *WatchRequest) Reset()      { *m = WatchRequest{} }
 func (*WatchRequest) ProtoMessage() {}
 func (*WatchRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6d9255d344b41b48, []int{12}
+	return fileDescriptor_6d9255d344b41b48, []int{13}
 }
 func (m *WatchRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -691,9 +730,9 @@ func (m *WatchRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_WatchRequest proto.InternalMessageInfo
 
-func (m *WatchRequest) GetWatchOptions() *v1.WatchOptions {
+func (m *WatchRequest) GetOptions() *v1.WatchOptions {
 	if m != nil {
-		return m.WatchOptions
+		return m.Options
 	}
 	return nil
 }
@@ -702,9 +741,7 @@ type WatchResponse struct {
 	// Variable info for watch response.
 	Event *v1alpha.Event `protobuf:"bytes,1,opt,name=event,proto3" json:"event,omitempty"`
 	// Variable for watch response.
-	Variable *Variable `protobuf:"bytes,2,opt,name=variable,proto3" json:"variable,omitempty"`
-	// Error object.
-	Error                *v1.Error `protobuf:"bytes,3,opt,name=error,proto3" json:"error,omitempty"`
+	Variable             *Variable `protobuf:"bytes,2,opt,name=variable,proto3" json:"variable,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
 	XXX_sizecache        int32     `json:"-"`
 }
@@ -712,7 +749,7 @@ type WatchResponse struct {
 func (m *WatchResponse) Reset()      { *m = WatchResponse{} }
 func (*WatchResponse) ProtoMessage() {}
 func (*WatchResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_6d9255d344b41b48, []int{13}
+	return fileDescriptor_6d9255d344b41b48, []int{14}
 }
 func (m *WatchResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -755,23 +792,17 @@ func (m *WatchResponse) GetVariable() *Variable {
 	return nil
 }
 
-func (m *WatchResponse) GetError() *v1.Error {
-	if m != nil {
-		return m.Error
-	}
-	return nil
-}
-
 func init() {
 	proto.RegisterType((*Variable)(nil), "variables.v1alpha.Variable")
+	proto.RegisterType((*VariableList)(nil), "variables.v1alpha.VariableList")
 	proto.RegisterType((*VariableSpec)(nil), "variables.v1alpha.VariableSpec")
 	proto.RegisterMapType((map[string]*types.Any)(nil), "variables.v1alpha.VariableSpec.VariablesEntry")
 	proto.RegisterType((*GetRequest)(nil), "variables.v1alpha.GetRequest")
 	proto.RegisterType((*GetResponse)(nil), "variables.v1alpha.GetResponse")
 	proto.RegisterType((*ListRequest)(nil), "variables.v1alpha.ListRequest")
 	proto.RegisterType((*ListResponse)(nil), "variables.v1alpha.ListResponse")
-	proto.RegisterType((*AddRequest)(nil), "variables.v1alpha.AddRequest")
-	proto.RegisterType((*AddResponse)(nil), "variables.v1alpha.AddResponse")
+	proto.RegisterType((*CreateRequest)(nil), "variables.v1alpha.CreateRequest")
+	proto.RegisterType((*CreateResponse)(nil), "variables.v1alpha.CreateResponse")
 	proto.RegisterType((*UpdateRequest)(nil), "variables.v1alpha.UpdateRequest")
 	proto.RegisterType((*UpdateResponse)(nil), "variables.v1alpha.UpdateResponse")
 	proto.RegisterType((*DeleteRequest)(nil), "variables.v1alpha.DeleteRequest")
@@ -785,52 +816,57 @@ func init() {
 }
 
 var fileDescriptor_6d9255d344b41b48 = []byte{
-	// 709 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x56, 0xc1, 0x6e, 0xd3, 0x4c,
-	0x10, 0xee, 0x36, 0x4d, 0xd5, 0x4c, 0xd2, 0xea, 0xff, 0x97, 0x22, 0x8a, 0x11, 0x6e, 0x88, 0x38,
-	0x54, 0x20, 0x6c, 0xda, 0x48, 0x40, 0x7b, 0x0b, 0x4a, 0x14, 0x90, 0x52, 0x55, 0x5a, 0x04, 0x95,
-	0xb8, 0x39, 0xf1, 0xd6, 0x09, 0x75, 0xbc, 0xc6, 0xde, 0x04, 0x72, 0xe3, 0x11, 0xb8, 0xf3, 0x02,
-	0x3c, 0x02, 0x47, 0x0e, 0x1c, 0x7a, 0xe0, 0xc0, 0x91, 0x23, 0x35, 0x2f, 0xc1, 0x11, 0x79, 0x6d,
-	0xaf, 0x9d, 0xd6, 0x0d, 0x55, 0x41, 0xbd, 0x79, 0xf7, 0xfb, 0xe6, 0xdb, 0x6f, 0x66, 0x67, 0x27,
-	0x81, 0xa6, 0x35, 0xe0, 0xfd, 0x51, 0x57, 0xeb, 0xb1, 0xa1, 0x6e, 0x19, 0x36, 0x7d, 0xeb, 0x71,
-	0x9d, 0x9a, 0xd4, 0xe9, 0x31, 0xe7, 0x60, 0x68, 0x0d, 0xb9, 0xee, 0x1e, 0x5a, 0xba, 0xe1, 0x0e,
-	0x7c, 0x7d, 0x6c, 0x78, 0x03, 0xa3, 0x6b, 0x53, 0x5f, 0x1f, 0x6f, 0x1a, 0xb6, 0xdb, 0x37, 0xc2,
-	0x6d, 0xcd, 0xf5, 0x18, 0x67, 0xf8, 0x7f, 0x09, 0x6a, 0x31, 0xa8, 0xdc, 0xcb, 0x0a, 0x33, 0x8b,
-	0xe9, 0x82, 0xd9, 0x1d, 0x1d, 0x88, 0x95, 0x58, 0x88, 0xaf, 0x48, 0x41, 0xb9, 0x6e, 0x31, 0x66,
-	0xd9, 0x34, 0x65, 0x19, 0xce, 0x24, 0x86, 0x76, 0xce, 0x6d, 0xb1, 0xc7, 0x3c, 0xaa, 0x8f, 0x37,
-	0x53, 0x63, 0x4a, 0xe3, 0xdc, 0xb1, 0x74, 0x4c, 0x1d, 0x9e, 0x93, 0x5b, 0x8d, 0xc3, 0xd2, 0x8b,
-	0x38, 0x3b, 0x5c, 0x87, 0xa5, 0x21, 0xe5, 0x86, 0x69, 0x70, 0x63, 0x0d, 0x55, 0xd1, 0x46, 0x79,
-	0xeb, 0x9a, 0x16, 0x1e, 0xaa, 0x8d, 0x37, 0xb5, 0xbd, 0xee, 0x2b, 0xda, 0xe3, 0xbb, 0x31, 0x4c,
-	0x24, 0x11, 0xd7, 0x61, 0xc1, 0x77, 0x69, 0x6f, 0x6d, 0x5e, 0x04, 0xac, 0x6b, 0xa7, 0x6a, 0xa5,
-	0x25, 0xfa, 0xcf, 0x5c, 0xda, 0x23, 0x82, 0x5c, 0xfb, 0x82, 0xa0, 0x92, 0xdd, 0xc6, 0x1d, 0x28,
-	0xc9, 0xc0, 0x35, 0x54, 0x2d, 0x6c, 0x94, 0xb7, 0xb4, 0x3f, 0x48, 0xc9, 0x85, 0xdf, 0x72, 0xb8,
-	0x37, 0x21, 0xa9, 0x00, 0xc6, 0xb0, 0xc0, 0x27, 0x2e, 0x15, 0x9e, 0x4a, 0x44, 0x7c, 0x2b, 0x04,
-	0x56, 0xa6, 0x03, 0xf0, 0x7f, 0x50, 0x38, 0xa4, 0x13, 0x91, 0x69, 0x89, 0x84, 0x9f, 0xf8, 0x0e,
-	0x14, 0xc7, 0x86, 0x3d, 0xa2, 0x71, 0x32, 0xab, 0x5a, 0x74, 0x6d, 0x5a, 0x72, 0x6d, 0x5a, 0xc3,
-	0x99, 0x90, 0x88, 0xb2, 0x33, 0xff, 0x08, 0xd5, 0x1a, 0x00, 0x6d, 0xca, 0x09, 0x7d, 0x3d, 0xa2,
-	0x3e, 0xc7, 0x75, 0x00, 0x8b, 0xf2, 0x3d, 0x97, 0x0f, 0x98, 0xe3, 0xc7, 0x05, 0xbc, 0x22, 0x0b,
-	0xd8, 0x96, 0x10, 0xc9, 0xd0, 0x6a, 0x36, 0x94, 0x85, 0x84, 0xef, 0x32, 0xc7, 0xa7, 0xf8, 0x21,
-	0x2c, 0x25, 0x69, 0xc4, 0x0a, 0x37, 0x66, 0x94, 0x81, 0x48, 0x32, 0xbe, 0x0d, 0x45, 0xea, 0x79,
-	0xcc, 0x8b, 0xad, 0xaf, 0xc8, 0x73, 0x5b, 0xe1, 0x2e, 0x89, 0xc0, 0x5a, 0x0b, 0xca, 0x9d, 0x81,
-	0x2f, 0x1d, 0x3f, 0x80, 0xb2, 0x3d, 0xf0, 0x4f, 0x58, 0x5e, 0x95, 0xa1, 0x9d, 0x14, 0x23, 0x59,
-	0x62, 0x8d, 0x41, 0x25, 0x92, 0x89, 0x5d, 0x6f, 0x9f, 0xbe, 0xbd, 0x99, 0xb6, 0x33, 0x57, 0x75,
-	0x5e, 0xdf, 0xd0, 0x30, 0xcd, 0xc4, 0xf6, 0x45, 0x8b, 0x14, 0x16, 0x5b, 0xc8, 0x5c, 0x4e, 0xb1,
-	0x9f, 0xc0, 0xf2, 0x73, 0xd7, 0x34, 0x38, 0xfd, 0x6b, 0xdf, 0x0c, 0x56, 0x12, 0xa5, 0x4b, 0xb3,
-	0xde, 0xa4, 0x36, 0xfd, 0x37, 0xd6, 0x13, 0xa5, 0xcb, 0xb1, 0xfe, 0x14, 0x2a, 0xfb, 0x06, 0xef,
-	0xf5, 0x13, 0xe7, 0xdb, 0x50, 0x79, 0x13, 0xae, 0xa7, 0x9b, 0xfc, 0xaa, 0x0c, 0xde, 0xcf, 0x80,
-	0x64, 0x8a, 0x5a, 0xfb, 0x80, 0x60, 0x39, 0xd6, 0x8a, 0xbd, 0xdf, 0x85, 0xa2, 0x98, 0xa4, 0x52,
-	0x25, 0x9a, 0xab, 0xd2, 0x75, 0x2b, 0x5c, 0x92, 0x88, 0x33, 0x95, 0xe8, 0xfc, 0x85, 0x12, 0x2d,
-	0xcc, 0x48, 0x74, 0xeb, 0x6b, 0x01, 0x4a, 0x72, 0xa2, 0xe1, 0x26, 0x14, 0xda, 0x94, 0xe3, 0x9b,
-	0x39, 0x27, 0xa4, 0x23, 0x4a, 0x51, 0xcf, 0x82, 0xe3, 0xfc, 0xda, 0xb0, 0x10, 0x3e, 0x6c, 0x9c,
-	0xc7, 0xcb, 0x0c, 0x0e, 0x65, 0xfd, 0x4c, 0x3c, 0x16, 0x6a, 0x42, 0xa1, 0x61, 0x9a, 0xb9, 0x76,
-	0xd2, 0x87, 0x9c, 0x6b, 0x27, 0xfb, 0x40, 0x77, 0x61, 0x31, 0xea, 0x7b, 0x5c, 0xcd, 0x61, 0x4e,
-	0x3d, 0x2e, 0xe5, 0xd6, 0x0c, 0x46, 0x2a, 0x17, 0xf5, 0x62, 0xae, 0xdc, 0x54, 0xc3, 0xe7, 0xca,
-	0x9d, 0x68, 0xe4, 0x0e, 0x14, 0x45, 0x77, 0xe0, 0xbc, 0x6a, 0x64, 0x7b, 0x50, 0xa9, 0x9e, 0x4d,
-	0x88, 0xb4, 0xee, 0xa3, 0xc7, 0xfd, 0xa3, 0x63, 0x15, 0x7d, 0x3f, 0x56, 0xe7, 0x7e, 0x1d, 0xab,
-	0xe8, 0x5d, 0xa0, 0xa2, 0x8f, 0x81, 0x8a, 0x3e, 0x05, 0xea, 0xdc, 0xe7, 0x40, 0x45, 0x47, 0x81,
-	0x8a, 0xbe, 0x05, 0x2a, 0xfa, 0x11, 0xa8, 0xe8, 0xfd, 0x4f, 0x75, 0xee, 0xe5, 0xce, 0xc5, 0xff,
-	0xd8, 0x74, 0x17, 0xc5, 0xcf, 0x59, 0xfd, 0x77, 0x00, 0x00, 0x00, 0xff, 0xff, 0xff, 0x46, 0x6d,
-	0x8e, 0x1d, 0x09, 0x00, 0x00,
+	// 797 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x56, 0xcb, 0x6e, 0xdb, 0x46,
+	0x14, 0xf5, 0x48, 0x96, 0x2a, 0x5d, 0xc9, 0x46, 0xcb, 0xba, 0xad, 0xca, 0xa2, 0xb4, 0xaa, 0x95,
+	0xd1, 0x42, 0xa4, 0x65, 0x03, 0x6d, 0x21, 0x23, 0x08, 0xfc, 0x8a, 0x10, 0xc0, 0x86, 0x01, 0x1a,
+	0x49, 0x80, 0xec, 0x28, 0x6a, 0x4c, 0x31, 0xa6, 0x48, 0x86, 0x1c, 0xd1, 0x91, 0x03, 0x04, 0xf9,
+	0x84, 0x7c, 0x46, 0x3e, 0x21, 0xcb, 0x2c, 0xb2, 0x30, 0xb2, 0xca, 0x26, 0x40, 0x76, 0x89, 0x99,
+	0x9f, 0xc8, 0x32, 0xe0, 0xcc, 0x90, 0x7a, 0x98, 0x56, 0x14, 0xdb, 0x2b, 0xcd, 0xe8, 0x9e, 0x7b,
+	0xe6, 0x9c, 0xc3, 0xcb, 0x91, 0x60, 0xc7, 0x30, 0x49, 0xb7, 0xdf, 0x96, 0x75, 0xa7, 0xa7, 0x18,
+	0x9a, 0x85, 0x9f, 0x78, 0x44, 0xc1, 0x1d, 0x6c, 0xeb, 0x8e, 0x7d, 0xd4, 0x33, 0x7a, 0x44, 0x71,
+	0x8f, 0x0d, 0x45, 0x73, 0x4d, 0x5f, 0x09, 0x34, 0xcf, 0xd4, 0xda, 0x16, 0xf6, 0x95, 0xa0, 0xa1,
+	0x59, 0x6e, 0x57, 0x8b, 0xbe, 0x96, 0x5d, 0xcf, 0x21, 0x8e, 0xf0, 0x53, 0x52, 0x94, 0x79, 0x51,
+	0xac, 0x8f, 0x12, 0x3b, 0x86, 0xa3, 0x50, 0x64, 0xbb, 0x7f, 0x44, 0x77, 0x74, 0x43, 0x57, 0x8c,
+	0x41, 0xfc, 0xdd, 0x70, 0x1c, 0xc3, 0xc2, 0x43, 0x94, 0x66, 0x0f, 0x78, 0xa9, 0x35, 0x8b, 0x44,
+	0xc3, 0x73, 0x75, 0xc5, 0xb5, 0xfa, 0x86, 0x69, 0xfb, 0x54, 0x2f, 0xf6, 0x02, 0xec, 0x29, 0xec,
+	0x83, 0x13, 0xfd, 0x3b, 0x42, 0xd4, 0x3b, 0x31, 0xc9, 0xb1, 0x73, 0xa2, 0x18, 0x4e, 0x9d, 0x16,
+	0xeb, 0x81, 0x66, 0x99, 0x1d, 0x8d, 0x38, 0x5e, 0xe4, 0x94, 0x2f, 0x79, 0x5f, 0x73, 0xe6, 0x8c,
+	0x74, 0xc7, 0xc3, 0x4a, 0xd0, 0x18, 0x26, 0x23, 0x6e, 0xce, 0xdc, 0x8b, 0x03, 0x6c, 0x93, 0x94,
+	0x70, 0x6b, 0x4f, 0xa1, 0x70, 0x9f, 0xc7, 0x2b, 0xac, 0x43, 0xa1, 0x87, 0x89, 0xd6, 0xd1, 0x88,
+	0x56, 0x41, 0x55, 0xb4, 0x52, 0x5a, 0xfb, 0x4d, 0x8e, 0x0e, 0x95, 0x83, 0x86, 0x7c, 0xd0, 0x7e,
+	0x84, 0x75, 0xb2, 0xcf, 0xcb, 0x6a, 0x02, 0x14, 0xd6, 0x61, 0xde, 0x77, 0xb1, 0x5e, 0xc9, 0xd0,
+	0x86, 0x65, 0xf9, 0xc2, 0xc3, 0x92, 0x63, 0xfe, 0x43, 0x17, 0xeb, 0x2a, 0x05, 0x37, 0x73, 0x6f,
+	0x0f, 0x33, 0x05, 0x54, 0x7b, 0x06, 0xe5, 0xb8, 0xb8, 0x67, 0xfa, 0x44, 0xd8, 0x98, 0x59, 0xc0,
+	0x56, 0x3e, 0xfc, 0xb8, 0x9c, 0xa9, 0xa2, 0x11, 0x21, 0x0d, 0xc8, 0x99, 0x04, 0xf7, 0xfc, 0x4a,
+	0xa6, 0x9a, 0x5d, 0x29, 0xad, 0xfd, 0x31, 0x45, 0x89, 0xca, 0x90, 0xb5, 0x37, 0x68, 0x28, 0x20,
+	0x52, 0x27, 0xec, 0x41, 0x31, 0xe9, 0xaa, 0x20, 0xca, 0x23, 0x7f, 0xc3, 0x51, 0xb2, 0xf1, 0x77,
+	0x6d, 0xe2, 0x0d, 0xd4, 0x21, 0x81, 0x20, 0xc0, 0x3c, 0x19, 0xb8, 0x98, 0x46, 0x53, 0x54, 0xe9,
+	0x5a, 0x54, 0x61, 0x71, 0xbc, 0x41, 0xf8, 0x11, 0xb2, 0xc7, 0x78, 0x40, 0xfd, 0x16, 0xd5, 0x68,
+	0x29, 0xfc, 0x0d, 0xb9, 0x40, 0xb3, 0xfa, 0x98, 0x67, 0xba, 0x24, 0xb3, 0xf1, 0x95, 0xe3, 0xf1,
+	0x95, 0x37, 0xed, 0x81, 0xca, 0x20, 0xcd, 0xcc, 0xff, 0xa8, 0xb6, 0x01, 0xd0, 0xc2, 0x44, 0xc5,
+	0x8f, 0xfb, 0xd8, 0x27, 0x42, 0x1d, 0x7e, 0x70, 0x5c, 0x62, 0x3a, 0xb6, 0xcf, 0x33, 0xfc, 0x39,
+	0xc9, 0xb0, 0x85, 0xc9, 0x01, 0x2b, 0xa9, 0x31, 0xa6, 0x76, 0x07, 0x4a, 0xb4, 0xd9, 0x77, 0x1d,
+	0xdb, 0xc7, 0xc2, 0x7f, 0x50, 0x88, 0x0d, 0xf0, 0xf6, 0xa9, 0x41, 0x26, 0xe0, 0xda, 0x2d, 0x28,
+	0x45, 0xcf, 0x30, 0x56, 0x21, 0x4f, 0xaa, 0x58, 0x4a, 0x54, 0x44, 0xb0, 0x0b, 0x32, 0x0e, 0xa1,
+	0xcc, 0xda, 0xb9, 0x8e, 0x6d, 0x28, 0x07, 0x23, 0xa3, 0xc1, 0x49, 0xa6, 0x8d, 0x17, 0x6d, 0x1f,
+	0x6b, 0xaa, 0x9d, 0xc2, 0xc2, 0xb6, 0x87, 0x35, 0x82, 0x63, 0x55, 0xab, 0x93, 0xaa, 0x7e, 0x4d,
+	0x54, 0x31, 0xe0, 0xa4, 0xae, 0xb1, 0x3c, 0x32, 0xdf, 0x93, 0xc7, 0x5d, 0x58, 0x8c, 0xcf, 0xbe,
+	0x6e, 0xb4, 0xa7, 0xb0, 0x70, 0xcf, 0xed, 0xcc, 0x66, 0x83, 0x01, 0x6f, 0xd4, 0x46, 0x7c, 0xf6,
+	0x0d, 0xd8, 0xd8, 0xc1, 0x16, 0x9e, 0xc9, 0x06, 0x03, 0xde, 0xa8, 0x8d, 0xf8, 0xec, 0xeb, 0xda,
+	0xb8, 0x0d, 0xe5, 0x07, 0x1a, 0xd1, 0xbb, 0xb1, 0x0b, 0x65, 0xd2, 0xc5, 0x2f, 0x89, 0x0b, 0x8a,
+	0xbb, 0x30, 0xea, 0x7d, 0x58, 0xe0, 0x04, 0x5c, 0xca, 0x3f, 0x90, 0xa3, 0xf7, 0x73, 0xd2, 0xcf,
+	0x6e, 0xeb, 0x44, 0xc4, 0x6e, 0xb4, 0x55, 0x19, 0xe6, 0xca, 0x11, 0xac, 0xbd, 0xcf, 0x42, 0x31,
+	0xb9, 0x7a, 0x84, 0x1d, 0xc8, 0xb6, 0x30, 0x11, 0xfe, 0x4c, 0xe9, 0x1d, 0xde, 0x25, 0xa2, 0x74,
+	0x59, 0x99, 0x2b, 0x6f, 0xc1, 0x3c, 0xbd, 0xb8, 0xd3, 0x70, 0x23, 0xb7, 0x81, 0xb8, 0x7c, 0x69,
+	0x9d, 0x13, 0xed, 0x43, 0x9e, 0xbd, 0x2d, 0x42, 0x35, 0x05, 0x3a, 0xf6, 0x12, 0x8b, 0x7f, 0x4d,
+	0x41, 0x0c, 0xe9, 0xd8, 0xd4, 0xa6, 0xd2, 0x8d, 0xbd, 0x4c, 0xa9, 0x74, 0x13, 0x23, 0xbf, 0x0f,
+	0x79, 0x36, 0x3d, 0xa9, 0x74, 0x63, 0x43, 0x9d, 0x4a, 0x37, 0x31, 0x7a, 0x7b, 0x90, 0xa3, 0x03,
+	0x20, 0xa4, 0xc5, 0x32, 0x3a, 0x5b, 0x62, 0xf5, 0x72, 0x00, 0xe3, 0x5a, 0x45, 0x5b, 0xdd, 0xb3,
+	0x73, 0x09, 0x7d, 0x38, 0x97, 0xe6, 0xbe, 0x9c, 0x4b, 0xe8, 0x79, 0x28, 0xa1, 0x97, 0xa1, 0x84,
+	0x5e, 0x85, 0xd2, 0xdc, 0xeb, 0x50, 0x42, 0x67, 0xa1, 0x84, 0xde, 0x85, 0x12, 0xfa, 0x14, 0x4a,
+	0xe8, 0xc5, 0x67, 0x69, 0xee, 0x61, 0xf3, 0xea, 0x7f, 0xc9, 0xda, 0x79, 0xfa, 0x03, 0xb4, 0xfe,
+	0x35, 0x00, 0x00, 0xff, 0xff, 0xc0, 0x0e, 0x76, 0xf7, 0xd7, 0x09, 0x00, 0x00,
 }
 
 func (this *Variable) Equal(that interface{}) bool {
@@ -857,6 +893,38 @@ func (this *Variable) Equal(that interface{}) bool {
 	}
 	if !this.Spec.Equal(that1.Spec) {
 		return false
+	}
+	return true
+}
+func (this *VariableList) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*VariableList)
+	if !ok {
+		that2, ok := that.(VariableList)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Metadata.Equal(that1.Metadata) {
+		return false
+	}
+	if len(this.Items) != len(that1.Items) {
+		return false
+	}
+	for i := range this.Items {
+		if !this.Items[i].Equal(that1.Items[i]) {
+			return false
+		}
 	}
 	return true
 }
@@ -911,7 +979,7 @@ func (this *GetRequest) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.GetOptions.Equal(that1.GetOptions) {
+	if !this.Options.Equal(that1.Options) {
 		return false
 	}
 	return true
@@ -938,9 +1006,6 @@ func (this *GetResponse) Equal(that interface{}) bool {
 	if !this.Variable.Equal(that1.Variable) {
 		return false
 	}
-	if !this.Error.Equal(that1.Error) {
-		return false
-	}
 	return true
 }
 func (this *ListRequest) Equal(that interface{}) bool {
@@ -962,7 +1027,7 @@ func (this *ListRequest) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.ListOptions.Equal(that1.ListOptions) {
+	if !this.Options.Equal(that1.Options) {
 		return false
 	}
 	return true
@@ -986,27 +1051,46 @@ func (this *ListResponse) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if len(this.Variables) != len(that1.Variables) {
-		return false
-	}
-	for i := range this.Variables {
-		if !this.Variables[i].Equal(that1.Variables[i]) {
-			return false
-		}
-	}
-	if !this.Error.Equal(that1.Error) {
+	if !this.VariableList.Equal(that1.VariableList) {
 		return false
 	}
 	return true
 }
-func (this *AddRequest) Equal(that interface{}) bool {
+func (this *CreateRequest) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*AddRequest)
+	that1, ok := that.(*CreateRequest)
 	if !ok {
-		that2, ok := that.(AddRequest)
+		that2, ok := that.(CreateRequest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Options.Equal(that1.Options) {
+		return false
+	}
+	if !this.Variable.Equal(that1.Variable) {
+		return false
+	}
+	return true
+}
+func (this *CreateResponse) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateResponse)
+	if !ok {
+		that2, ok := that.(CreateResponse)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1019,33 +1103,6 @@ func (this *AddRequest) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.Variable.Equal(that1.Variable) {
-		return false
-	}
-	return true
-}
-func (this *AddResponse) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*AddResponse)
-	if !ok {
-		that2, ok := that.(AddResponse)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Variable.Equal(that1.Variable) {
-		return false
-	}
-	if !this.Error.Equal(that1.Error) {
 		return false
 	}
 	return true
@@ -1067,6 +1124,9 @@ func (this *UpdateRequest) Equal(that interface{}) bool {
 	if that1 == nil {
 		return this == nil
 	} else if this == nil {
+		return false
+	}
+	if !this.Options.Equal(that1.Options) {
 		return false
 	}
 	if !this.Variable.Equal(that1.Variable) {
@@ -1096,9 +1156,6 @@ func (this *UpdateResponse) Equal(that interface{}) bool {
 	if !this.Variable.Equal(that1.Variable) {
 		return false
 	}
-	if !this.Error.Equal(that1.Error) {
-		return false
-	}
 	return true
 }
 func (this *DeleteRequest) Equal(that interface{}) bool {
@@ -1118,6 +1175,9 @@ func (this *DeleteRequest) Equal(that interface{}) bool {
 	if that1 == nil {
 		return this == nil
 	} else if this == nil {
+		return false
+	}
+	if !this.Options.Equal(that1.Options) {
 		return false
 	}
 	if !this.Variable.Equal(that1.Variable) {
@@ -1147,9 +1207,6 @@ func (this *DeleteResponse) Equal(that interface{}) bool {
 	if !this.Variable.Equal(that1.Variable) {
 		return false
 	}
-	if !this.Error.Equal(that1.Error) {
-		return false
-	}
 	return true
 }
 func (this *WatchRequest) Equal(that interface{}) bool {
@@ -1171,7 +1228,7 @@ func (this *WatchRequest) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.WatchOptions.Equal(that1.WatchOptions) {
+	if !this.Options.Equal(that1.Options) {
 		return false
 	}
 	return true
@@ -1201,9 +1258,6 @@ func (this *WatchResponse) Equal(that interface{}) bool {
 	if !this.Variable.Equal(that1.Variable) {
 		return false
 	}
-	if !this.Error.Equal(that1.Error) {
-		return false
-	}
 	return true
 }
 
@@ -1223,8 +1277,8 @@ type VariablesClient interface {
 	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
 	// List Variable.
 	List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
-	// Add a Variable.
-	Add(ctx context.Context, in *AddRequest, opts ...grpc.CallOption) (*AddResponse, error)
+	// Create a Variable.
+	Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error)
 	// Update a Variable.
 	Update(ctx context.Context, in *UpdateRequest, opts ...grpc.CallOption) (*UpdateResponse, error)
 	// Delete a Variable.
@@ -1259,9 +1313,9 @@ func (c *variablesClient) List(ctx context.Context, in *ListRequest, opts ...grp
 	return out, nil
 }
 
-func (c *variablesClient) Add(ctx context.Context, in *AddRequest, opts ...grpc.CallOption) (*AddResponse, error) {
-	out := new(AddResponse)
-	err := c.cc.Invoke(ctx, "/variables.v1alpha.Variables/Add", in, out, opts...)
+func (c *variablesClient) Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error) {
+	out := new(CreateResponse)
+	err := c.cc.Invoke(ctx, "/variables.v1alpha.Variables/Create", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1324,8 +1378,8 @@ type VariablesServer interface {
 	Get(context.Context, *GetRequest) (*GetResponse, error)
 	// List Variable.
 	List(context.Context, *ListRequest) (*ListResponse, error)
-	// Add a Variable.
-	Add(context.Context, *AddRequest) (*AddResponse, error)
+	// Create a Variable.
+	Create(context.Context, *CreateRequest) (*CreateResponse, error)
 	// Update a Variable.
 	Update(context.Context, *UpdateRequest) (*UpdateResponse, error)
 	// Delete a Variable.
@@ -1374,20 +1428,20 @@ func _Variables_List_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Variables_Add_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddRequest)
+func _Variables_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(VariablesServer).Add(ctx, in)
+		return srv.(VariablesServer).Create(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/variables.v1alpha.Variables/Add",
+		FullMethod: "/variables.v1alpha.Variables/Create",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(VariablesServer).Add(ctx, req.(*AddRequest))
+		return srv.(VariablesServer).Create(ctx, req.(*CreateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1462,8 +1516,8 @@ var _Variables_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Variables_List_Handler,
 		},
 		{
-			MethodName: "Add",
-			Handler:    _Variables_Add_Handler,
+			MethodName: "Create",
+			Handler:    _Variables_Create_Handler,
 		},
 		{
 			MethodName: "Update",
@@ -1522,6 +1576,46 @@ func (m *Variable) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
+func (m *VariableList) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *VariableList) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Metadata != nil {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintApi(dAtA, i, uint64(m.Metadata.Size()))
+		n3, err := m.Metadata.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n3
+	}
+	if len(m.Items) > 0 {
+		for _, msg := range m.Items {
+			dAtA[i] = 0x12
+			i++
+			i = encodeVarintApi(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	return i, nil
+}
+
 func (m *VariableSpec) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1557,11 +1651,11 @@ func (m *VariableSpec) MarshalTo(dAtA []byte) (int, error) {
 				dAtA[i] = 0x12
 				i++
 				i = encodeVarintApi(dAtA, i, uint64(v.Size()))
-				n3, err := v.MarshalTo(dAtA[i:])
+				n4, err := v.MarshalTo(dAtA[i:])
 				if err != nil {
 					return 0, err
 				}
-				i += n3
+				i += n4
 			}
 		}
 	}
@@ -1589,15 +1683,15 @@ func (m *GetRequest) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.GetOptions != nil {
+	if m.Options != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.GetOptions.Size()))
-		n4, err := m.GetOptions.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Options.Size()))
+		n5, err := m.Options.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n4
+		i += n5
 	}
 	return i, nil
 }
@@ -1621,17 +1715,7 @@ func (m *GetResponse) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintApi(dAtA, i, uint64(m.Variable.Size()))
-		n5, err := m.Variable.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n5
-	}
-	if m.Error != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Error.Size()))
-		n6, err := m.Error.MarshalTo(dAtA[i:])
+		n6, err := m.Variable.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -1655,11 +1739,11 @@ func (m *ListRequest) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.ListOptions != nil {
+	if m.Options != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.ListOptions.Size()))
-		n7, err := m.ListOptions.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Options.Size()))
+		n7, err := m.Options.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -1683,23 +1767,11 @@ func (m *ListResponse) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if len(m.Variables) > 0 {
-		for _, msg := range m.Variables {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintApi(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	if m.Error != nil {
-		dAtA[i] = 0x12
+	if m.VariableList != nil {
+		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Error.Size()))
-		n8, err := m.Error.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.VariableList.Size()))
+		n8, err := m.VariableList.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -1708,7 +1780,7 @@ func (m *ListResponse) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
-func (m *AddRequest) Marshal() (dAtA []byte, err error) {
+func (m *CreateRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalTo(dAtA)
@@ -1718,41 +1790,23 @@ func (m *AddRequest) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *AddRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *CreateRequest) MarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.Variable != nil {
+	if m.Options != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Variable.Size()))
-		n9, err := m.Variable.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Options.Size()))
+		n9, err := m.Options.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
 		i += n9
 	}
-	return i, nil
-}
-
-func (m *AddResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *AddResponse) MarshalTo(dAtA []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
 	if m.Variable != nil {
-		dAtA[i] = 0xa
+		dAtA[i] = 0x12
 		i++
 		i = encodeVarintApi(dAtA, i, uint64(m.Variable.Size()))
 		n10, err := m.Variable.MarshalTo(dAtA[i:])
@@ -1761,11 +1815,29 @@ func (m *AddResponse) MarshalTo(dAtA []byte) (int, error) {
 		}
 		i += n10
 	}
-	if m.Error != nil {
-		dAtA[i] = 0x12
+	return i, nil
+}
+
+func (m *CreateResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CreateResponse) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Variable != nil {
+		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Error.Size()))
-		n11, err := m.Error.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Variable.Size()))
+		n11, err := m.Variable.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -1789,15 +1861,25 @@ func (m *UpdateRequest) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.Variable != nil {
+	if m.Options != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Variable.Size()))
-		n12, err := m.Variable.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Options.Size()))
+		n12, err := m.Options.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
 		i += n12
+	}
+	if m.Variable != nil {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintApi(dAtA, i, uint64(m.Variable.Size()))
+		n13, err := m.Variable.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n13
 	}
 	return i, nil
 }
@@ -1821,17 +1903,7 @@ func (m *UpdateResponse) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintApi(dAtA, i, uint64(m.Variable.Size()))
-		n13, err := m.Variable.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n13
-	}
-	if m.Error != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Error.Size()))
-		n14, err := m.Error.MarshalTo(dAtA[i:])
+		n14, err := m.Variable.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -1855,15 +1927,25 @@ func (m *DeleteRequest) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.Variable != nil {
+	if m.Options != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Variable.Size()))
-		n15, err := m.Variable.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Options.Size()))
+		n15, err := m.Options.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
 		i += n15
+	}
+	if m.Variable != nil {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintApi(dAtA, i, uint64(m.Variable.Size()))
+		n16, err := m.Variable.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n16
 	}
 	return i, nil
 }
@@ -1887,17 +1969,7 @@ func (m *DeleteResponse) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintApi(dAtA, i, uint64(m.Variable.Size()))
-		n16, err := m.Variable.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n16
-	}
-	if m.Error != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Error.Size()))
-		n17, err := m.Error.MarshalTo(dAtA[i:])
+		n17, err := m.Variable.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -1921,11 +1993,11 @@ func (m *WatchRequest) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.WatchOptions != nil {
+	if m.Options != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.WatchOptions.Size()))
-		n18, err := m.WatchOptions.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Options.Size()))
+		n18, err := m.Options.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -1969,16 +2041,6 @@ func (m *WatchResponse) MarshalTo(dAtA []byte) (int, error) {
 		}
 		i += n20
 	}
-	if m.Error != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Error.Size()))
-		n21, err := m.Error.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n21
-	}
 	return i, nil
 }
 
@@ -2004,12 +2066,29 @@ func NewPopulatedVariable(r randyApi, easy bool) *Variable {
 	return this
 }
 
+func NewPopulatedVariableList(r randyApi, easy bool) *VariableList {
+	this := &VariableList{}
+	if r.Intn(10) != 0 {
+		this.Metadata = v1.NewPopulatedObjectMetadata(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		v1 := r.Intn(5)
+		this.Items = make([]*Variable, v1)
+		for i := 0; i < v1; i++ {
+			this.Items[i] = NewPopulatedVariable(r, easy)
+		}
+	}
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
 func NewPopulatedVariableSpec(r randyApi, easy bool) *VariableSpec {
 	this := &VariableSpec{}
 	if r.Intn(10) != 0 {
-		v1 := r.Intn(10)
+		v2 := r.Intn(10)
 		this.Variables = make(map[string]*types.Any)
-		for i := 0; i < v1; i++ {
+		for i := 0; i < v2; i++ {
 			this.Variables[randStringApi(r)] = types.NewPopulatedAny(r, easy)
 		}
 	}
@@ -2022,7 +2101,7 @@ func NewPopulatedVariableSpec(r randyApi, easy bool) *VariableSpec {
 func NewPopulatedGetRequest(r randyApi, easy bool) *GetRequest {
 	this := &GetRequest{}
 	if r.Intn(10) != 0 {
-		this.GetOptions = v1.NewPopulatedGetOptions(r, easy)
+		this.Options = v1.NewPopulatedGetOptions(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2034,9 +2113,6 @@ func NewPopulatedGetResponse(r randyApi, easy bool) *GetResponse {
 	if r.Intn(10) != 0 {
 		this.Variable = NewPopulatedVariable(r, easy)
 	}
-	if r.Intn(10) != 0 {
-		this.Error = v1.NewPopulatedError(r, easy)
-	}
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
@@ -2045,7 +2121,7 @@ func NewPopulatedGetResponse(r randyApi, easy bool) *GetResponse {
 func NewPopulatedListRequest(r randyApi, easy bool) *ListRequest {
 	this := &ListRequest{}
 	if r.Intn(10) != 0 {
-		this.ListOptions = v1.NewPopulatedListOptions(r, easy)
+		this.Options = v1.NewPopulatedListOptions(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2055,22 +2131,18 @@ func NewPopulatedListRequest(r randyApi, easy bool) *ListRequest {
 func NewPopulatedListResponse(r randyApi, easy bool) *ListResponse {
 	this := &ListResponse{}
 	if r.Intn(10) != 0 {
-		v2 := r.Intn(5)
-		this.Variables = make([]*Variable, v2)
-		for i := 0; i < v2; i++ {
-			this.Variables[i] = NewPopulatedVariable(r, easy)
-		}
-	}
-	if r.Intn(10) != 0 {
-		this.Error = v1.NewPopulatedError(r, easy)
+		this.VariableList = NewPopulatedVariableList(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
 }
 
-func NewPopulatedAddRequest(r randyApi, easy bool) *AddRequest {
-	this := &AddRequest{}
+func NewPopulatedCreateRequest(r randyApi, easy bool) *CreateRequest {
+	this := &CreateRequest{}
+	if r.Intn(10) != 0 {
+		this.Options = v1.NewPopulatedCreateOptions(r, easy)
+	}
 	if r.Intn(10) != 0 {
 		this.Variable = NewPopulatedVariable(r, easy)
 	}
@@ -2079,13 +2151,10 @@ func NewPopulatedAddRequest(r randyApi, easy bool) *AddRequest {
 	return this
 }
 
-func NewPopulatedAddResponse(r randyApi, easy bool) *AddResponse {
-	this := &AddResponse{}
+func NewPopulatedCreateResponse(r randyApi, easy bool) *CreateResponse {
+	this := &CreateResponse{}
 	if r.Intn(10) != 0 {
 		this.Variable = NewPopulatedVariable(r, easy)
-	}
-	if r.Intn(10) != 0 {
-		this.Error = v1.NewPopulatedError(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2094,6 +2163,9 @@ func NewPopulatedAddResponse(r randyApi, easy bool) *AddResponse {
 
 func NewPopulatedUpdateRequest(r randyApi, easy bool) *UpdateRequest {
 	this := &UpdateRequest{}
+	if r.Intn(10) != 0 {
+		this.Options = v1.NewPopulatedUpdateOptions(r, easy)
+	}
 	if r.Intn(10) != 0 {
 		this.Variable = NewPopulatedVariable(r, easy)
 	}
@@ -2107,9 +2179,6 @@ func NewPopulatedUpdateResponse(r randyApi, easy bool) *UpdateResponse {
 	if r.Intn(10) != 0 {
 		this.Variable = NewPopulatedVariable(r, easy)
 	}
-	if r.Intn(10) != 0 {
-		this.Error = v1.NewPopulatedError(r, easy)
-	}
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
@@ -2117,6 +2186,9 @@ func NewPopulatedUpdateResponse(r randyApi, easy bool) *UpdateResponse {
 
 func NewPopulatedDeleteRequest(r randyApi, easy bool) *DeleteRequest {
 	this := &DeleteRequest{}
+	if r.Intn(10) != 0 {
+		this.Options = v1.NewPopulatedDeleteOptions(r, easy)
+	}
 	if r.Intn(10) != 0 {
 		this.Variable = NewPopulatedVariable(r, easy)
 	}
@@ -2130,9 +2202,6 @@ func NewPopulatedDeleteResponse(r randyApi, easy bool) *DeleteResponse {
 	if r.Intn(10) != 0 {
 		this.Variable = NewPopulatedVariable(r, easy)
 	}
-	if r.Intn(10) != 0 {
-		this.Error = v1.NewPopulatedError(r, easy)
-	}
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
@@ -2141,7 +2210,7 @@ func NewPopulatedDeleteResponse(r randyApi, easy bool) *DeleteResponse {
 func NewPopulatedWatchRequest(r randyApi, easy bool) *WatchRequest {
 	this := &WatchRequest{}
 	if r.Intn(10) != 0 {
-		this.WatchOptions = v1.NewPopulatedWatchOptions(r, easy)
+		this.Options = v1.NewPopulatedWatchOptions(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2155,9 +2224,6 @@ func NewPopulatedWatchResponse(r randyApi, easy bool) *WatchResponse {
 	}
 	if r.Intn(10) != 0 {
 		this.Variable = NewPopulatedVariable(r, easy)
-	}
-	if r.Intn(10) != 0 {
-		this.Error = v1.NewPopulatedError(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2253,6 +2319,25 @@ func (m *Variable) Size() (n int) {
 	return n
 }
 
+func (m *VariableList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Metadata != nil {
+		l = m.Metadata.Size()
+		n += 1 + l + sovApi(uint64(l))
+	}
+	if len(m.Items) > 0 {
+		for _, e := range m.Items {
+			l = e.Size()
+			n += 1 + l + sovApi(uint64(l))
+		}
+	}
+	return n
+}
+
 func (m *VariableSpec) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2285,8 +2370,8 @@ func (m *GetRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.GetOptions != nil {
-		l = m.GetOptions.Size()
+	if m.Options != nil {
+		l = m.Options.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -2302,10 +2387,6 @@ func (m *GetResponse) Size() (n int) {
 		l = m.Variable.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
-	if m.Error != nil {
-		l = m.Error.Size()
-		n += 1 + l + sovApi(uint64(l))
-	}
 	return n
 }
 
@@ -2315,8 +2396,8 @@ func (m *ListRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.ListOptions != nil {
-		l = m.ListOptions.Size()
+	if m.Options != nil {
+		l = m.Options.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -2328,25 +2409,23 @@ func (m *ListResponse) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if len(m.Variables) > 0 {
-		for _, e := range m.Variables {
-			l = e.Size()
-			n += 1 + l + sovApi(uint64(l))
-		}
-	}
-	if m.Error != nil {
-		l = m.Error.Size()
+	if m.VariableList != nil {
+		l = m.VariableList.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
 }
 
-func (m *AddRequest) Size() (n int) {
+func (m *CreateRequest) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
+	if m.Options != nil {
+		l = m.Options.Size()
+		n += 1 + l + sovApi(uint64(l))
+	}
 	if m.Variable != nil {
 		l = m.Variable.Size()
 		n += 1 + l + sovApi(uint64(l))
@@ -2354,7 +2433,7 @@ func (m *AddRequest) Size() (n int) {
 	return n
 }
 
-func (m *AddResponse) Size() (n int) {
+func (m *CreateResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -2362,10 +2441,6 @@ func (m *AddResponse) Size() (n int) {
 	_ = l
 	if m.Variable != nil {
 		l = m.Variable.Size()
-		n += 1 + l + sovApi(uint64(l))
-	}
-	if m.Error != nil {
-		l = m.Error.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -2377,6 +2452,10 @@ func (m *UpdateRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
+	if m.Options != nil {
+		l = m.Options.Size()
+		n += 1 + l + sovApi(uint64(l))
+	}
 	if m.Variable != nil {
 		l = m.Variable.Size()
 		n += 1 + l + sovApi(uint64(l))
@@ -2394,10 +2473,6 @@ func (m *UpdateResponse) Size() (n int) {
 		l = m.Variable.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
-	if m.Error != nil {
-		l = m.Error.Size()
-		n += 1 + l + sovApi(uint64(l))
-	}
 	return n
 }
 
@@ -2407,6 +2482,10 @@ func (m *DeleteRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
+	if m.Options != nil {
+		l = m.Options.Size()
+		n += 1 + l + sovApi(uint64(l))
+	}
 	if m.Variable != nil {
 		l = m.Variable.Size()
 		n += 1 + l + sovApi(uint64(l))
@@ -2424,10 +2503,6 @@ func (m *DeleteResponse) Size() (n int) {
 		l = m.Variable.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
-	if m.Error != nil {
-		l = m.Error.Size()
-		n += 1 + l + sovApi(uint64(l))
-	}
 	return n
 }
 
@@ -2437,8 +2512,8 @@ func (m *WatchRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.WatchOptions != nil {
-		l = m.WatchOptions.Size()
+	if m.Options != nil {
+		l = m.Options.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -2456,10 +2531,6 @@ func (m *WatchResponse) Size() (n int) {
 	}
 	if m.Variable != nil {
 		l = m.Variable.Size()
-		n += 1 + l + sovApi(uint64(l))
-	}
-	if m.Error != nil {
-		l = m.Error.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -2485,6 +2556,17 @@ func (this *Variable) String() string {
 	s := strings.Join([]string{`&Variable{`,
 		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "ObjectMetadata", "v1.ObjectMetadata", 1) + `,`,
 		`Spec:` + strings.Replace(fmt.Sprintf("%v", this.Spec), "VariableSpec", "VariableSpec", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *VariableList) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&VariableList{`,
+		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "ObjectMetadata", "v1.ObjectMetadata", 1) + `,`,
+		`Items:` + strings.Replace(fmt.Sprintf("%v", this.Items), "Variable", "Variable", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2515,7 +2597,7 @@ func (this *GetRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetRequest{`,
-		`GetOptions:` + strings.Replace(fmt.Sprintf("%v", this.GetOptions), "GetOptions", "v1.GetOptions", 1) + `,`,
+		`Options:` + strings.Replace(fmt.Sprintf("%v", this.Options), "GetOptions", "v1.GetOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2526,7 +2608,6 @@ func (this *GetResponse) String() string {
 	}
 	s := strings.Join([]string{`&GetResponse{`,
 		`Variable:` + strings.Replace(fmt.Sprintf("%v", this.Variable), "Variable", "Variable", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2536,7 +2617,7 @@ func (this *ListRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ListRequest{`,
-		`ListOptions:` + strings.Replace(fmt.Sprintf("%v", this.ListOptions), "ListOptions", "v1.ListOptions", 1) + `,`,
+		`Options:` + strings.Replace(fmt.Sprintf("%v", this.Options), "ListOptions", "v1.ListOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2546,29 +2627,28 @@ func (this *ListResponse) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ListResponse{`,
-		`Variables:` + strings.Replace(fmt.Sprintf("%v", this.Variables), "Variable", "Variable", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
+		`VariableList:` + strings.Replace(fmt.Sprintf("%v", this.VariableList), "VariableList", "VariableList", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *AddRequest) String() string {
+func (this *CreateRequest) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&AddRequest{`,
+	s := strings.Join([]string{`&CreateRequest{`,
+		`Options:` + strings.Replace(fmt.Sprintf("%v", this.Options), "CreateOptions", "v1.CreateOptions", 1) + `,`,
 		`Variable:` + strings.Replace(fmt.Sprintf("%v", this.Variable), "Variable", "Variable", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *AddResponse) String() string {
+func (this *CreateResponse) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&AddResponse{`,
+	s := strings.Join([]string{`&CreateResponse{`,
 		`Variable:` + strings.Replace(fmt.Sprintf("%v", this.Variable), "Variable", "Variable", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2578,6 +2658,7 @@ func (this *UpdateRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&UpdateRequest{`,
+		`Options:` + strings.Replace(fmt.Sprintf("%v", this.Options), "UpdateOptions", "v1.UpdateOptions", 1) + `,`,
 		`Variable:` + strings.Replace(fmt.Sprintf("%v", this.Variable), "Variable", "Variable", 1) + `,`,
 		`}`,
 	}, "")
@@ -2589,7 +2670,6 @@ func (this *UpdateResponse) String() string {
 	}
 	s := strings.Join([]string{`&UpdateResponse{`,
 		`Variable:` + strings.Replace(fmt.Sprintf("%v", this.Variable), "Variable", "Variable", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2599,6 +2679,7 @@ func (this *DeleteRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&DeleteRequest{`,
+		`Options:` + strings.Replace(fmt.Sprintf("%v", this.Options), "DeleteOptions", "v1.DeleteOptions", 1) + `,`,
 		`Variable:` + strings.Replace(fmt.Sprintf("%v", this.Variable), "Variable", "Variable", 1) + `,`,
 		`}`,
 	}, "")
@@ -2610,7 +2691,6 @@ func (this *DeleteResponse) String() string {
 	}
 	s := strings.Join([]string{`&DeleteResponse{`,
 		`Variable:` + strings.Replace(fmt.Sprintf("%v", this.Variable), "Variable", "Variable", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2620,7 +2700,7 @@ func (this *WatchRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&WatchRequest{`,
-		`WatchOptions:` + strings.Replace(fmt.Sprintf("%v", this.WatchOptions), "WatchOptions", "v1.WatchOptions", 1) + `,`,
+		`Options:` + strings.Replace(fmt.Sprintf("%v", this.Options), "WatchOptions", "v1.WatchOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2632,7 +2712,6 @@ func (this *WatchResponse) String() string {
 	s := strings.Join([]string{`&WatchResponse{`,
 		`Event:` + strings.Replace(fmt.Sprintf("%v", this.Event), "Event", "v1alpha.Event", 1) + `,`,
 		`Variable:` + strings.Replace(fmt.Sprintf("%v", this.Variable), "Variable", "Variable", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2737,6 +2816,120 @@ func (m *Variable) Unmarshal(dAtA []byte) error {
 				m.Spec = &VariableSpec{}
 			}
 			if err := m.Spec.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipApi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthApi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *VariableList) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowApi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: VariableList: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: VariableList: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Metadata", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Metadata == nil {
+				m.Metadata = &v1.ObjectMetadata{}
+			}
+			if err := m.Metadata.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Items", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Items = append(m.Items, &Variable{})
+			if err := m.Items[len(m.Items)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -2994,7 +3187,7 @@ func (m *GetRequest) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field GetOptions", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Options", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -3018,10 +3211,10 @@ func (m *GetRequest) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.GetOptions == nil {
-				m.GetOptions = &v1.GetOptions{}
+			if m.Options == nil {
+				m.Options = &v1.GetOptions{}
 			}
-			if err := m.GetOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Options.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -3108,39 +3301,6 @@ func (m *GetResponse) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Error == nil {
-				m.Error = &v1.Error{}
-			}
-			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipApi(dAtA[iNdEx:])
@@ -3193,7 +3353,7 @@ func (m *ListRequest) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ListOptions", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Options", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -3217,10 +3377,10 @@ func (m *ListRequest) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.ListOptions == nil {
-				m.ListOptions = &v1.ListOptions{}
+			if m.Options == nil {
+				m.Options = &v1.ListOptions{}
 			}
-			if err := m.ListOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Options.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -3276,7 +3436,7 @@ func (m *ListResponse) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Variables", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field VariableList", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -3300,41 +3460,10 @@ func (m *ListResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Variables = append(m.Variables, &Variable{})
-			if err := m.Variables[len(m.Variables)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
+			if m.VariableList == nil {
+				m.VariableList = &VariableList{}
 			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Error == nil {
-				m.Error = &v1.Error{}
-			}
-			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.VariableList.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -3359,7 +3488,7 @@ func (m *ListResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *AddRequest) Unmarshal(dAtA []byte) error {
+func (m *CreateRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -3382,13 +3511,46 @@ func (m *AddRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: AddRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: CreateRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: AddRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: CreateRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Options", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Options == nil {
+				m.Options = &v1.CreateOptions{}
+			}
+			if err := m.Options.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Variable", wireType)
 			}
@@ -3442,7 +3604,7 @@ func (m *AddRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *AddResponse) Unmarshal(dAtA []byte) error {
+func (m *CreateResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -3465,10 +3627,10 @@ func (m *AddResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: AddResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: CreateResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: AddResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: CreateResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -3501,39 +3663,6 @@ func (m *AddResponse) Unmarshal(dAtA []byte) error {
 				m.Variable = &Variable{}
 			}
 			if err := m.Variable.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Error == nil {
-				m.Error = &v1.Error{}
-			}
-			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -3588,6 +3717,39 @@ func (m *UpdateRequest) Unmarshal(dAtA []byte) error {
 		}
 		switch fieldNum {
 		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Options", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Options == nil {
+				m.Options = &v1.UpdateOptions{}
+			}
+			if err := m.Options.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Variable", wireType)
 			}
@@ -3703,39 +3865,6 @@ func (m *UpdateResponse) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Error == nil {
-				m.Error = &v1.Error{}
-			}
-			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipApi(dAtA[iNdEx:])
@@ -3787,6 +3916,39 @@ func (m *DeleteRequest) Unmarshal(dAtA []byte) error {
 		}
 		switch fieldNum {
 		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Options", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Options == nil {
+				m.Options = &v1.DeleteOptions{}
+			}
+			if err := m.Options.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Variable", wireType)
 			}
@@ -3902,39 +4064,6 @@ func (m *DeleteResponse) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Error == nil {
-				m.Error = &v1.Error{}
-			}
-			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipApi(dAtA[iNdEx:])
@@ -3987,7 +4116,7 @@ func (m *WatchRequest) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field WatchOptions", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Options", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -4011,10 +4140,10 @@ func (m *WatchRequest) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.WatchOptions == nil {
-				m.WatchOptions = &v1.WatchOptions{}
+			if m.Options == nil {
+				m.Options = &v1.WatchOptions{}
 			}
-			if err := m.WatchOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Options.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -4131,39 +4260,6 @@ func (m *WatchResponse) Unmarshal(dAtA []byte) error {
 				m.Variable = &Variable{}
 			}
 			if err := m.Variable.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Error == nil {
-				m.Error = &v1.Error{}
-			}
-			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

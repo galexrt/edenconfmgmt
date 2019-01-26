@@ -14,18 +14,18 @@ FORCE:
 
 all: prepare build
 
-prepare: protoc-gen-gogofast protoc-gen-doc go-proto-validators
+prepare: protoc-gen-gogofast protoc-gen-doc protoc-gen-govalidators protoc-gen-apiserver
 
 build: proto-gen
 
 protoc-gen-gogofast:
 	$(GO) get $(GO_GET_FLAGS) github.com/gogo/protobuf/protoc-gen-gogofast
 
-go-proto-validators:
+protoc-gen-govalidators:
 	$(GO) get $(GO_GET_FLAGS) github.com/mwitkow/go-proto-validators/protoc-gen-govalidators
 
-protoc-gen-internalclient:
-	$(GO) get $(GO_GET_FLAGS) github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/internalclient/protoc-gen-internalclient
+protoc-gen-apiserver:
+	$(GO) get $(GO_GET_FLAGS) github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/apiserver/protoc-gen-apiserver
 
 protoc-gen-doc:
 	$(GO) get $(GO_GET_FLAGS) github.com/pseudomuto/protoc-gen-doc/cmd/protoc-gen-doc
@@ -78,7 +78,7 @@ Mgoogle/protobuf/timestamp.proto=github.com/gogo/protobuf/types,\
 Mgoogle/protobuf/wrappers.proto=github.com/gogo/protobuf/types,\
 plugins=grpc:$$GOPATH/src/ \
 		--govalidators_out=gogoimport=true:$$GOPATH/src/ \
-		--internalclient_out=gogoimport=true:$$GOPATH/src/ \
+		--apiserver_out=gogoimport=true:$$GOPATH/src/ \
 		github.com/galexrt/edenconfmgmt/$^
 	go fmt github.com/galexrt/edenconfmgmt/$(dir $^)...
 

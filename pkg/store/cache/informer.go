@@ -29,7 +29,7 @@ import (
 	"go.uber.org/zap"
 )
 
-// Informer keeps track of watches and the receivers  of those watches.
+// Informer keeps track of watches and the receivers of those watches.
 type Informer struct {
 	channel    map[string]*chanContainer
 	receivers  map[string]*receiverList
@@ -81,14 +81,13 @@ func (inf *Informer) DataStoreChExists(key string) bool {
 	return false
 }
 
+// getDataStoreCh
+// Example `inf.channel` keys:
+// * /registry/myapi/
+// * /registry/otherapi/
+// When asked for `key: /registry/otherapi/my-object`, the second key's
+// value would get returned.
 func (inf *Informer) getDataStoreCh(key string) *chanContainer {
-	/*
-		Example `inf.channel` keys:
-		* /registry/myapi/
-		* /registry/otherapi/
-		When asked for `key: /registry/otherapi/my-object`, the second key's
-		value would get returned.
-	*/
 	currentPath := "/"
 	components := strings.Split(key, "/")
 	for _, c := range components {
@@ -101,14 +100,13 @@ func (inf *Informer) getDataStoreCh(key string) *chanContainer {
 	return nil
 }
 
+// getReceiverChs
+// Example `inf.receivers` keys:
+// * /registry/myapi/
+// * /registry/otherapi/
+// When asked for `key: /registry/otherapi/my-object`, the second key's
+// value would get returned.
 func (inf *Informer) getReceiverChs(key string) []*receiverList {
-	/*
-		Example `inf.receivers` keys:
-		* /registry/myapi/
-		* /registry/otherapi/
-		When asked for `key: /registry/otherapi/my-object`, the second key's
-		value would get returned.
-	*/
 	receivers := []*receiverList{}
 
 	for recvPath := range inf.receivers {

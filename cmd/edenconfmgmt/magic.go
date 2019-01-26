@@ -27,7 +27,7 @@ import (
 
 	core_v1 "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1"
 	nodes_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/nodes/v1alpha"
-	"github.com/galexrt/edenconfmgmt/pkg/store/cache"
+	"github.com/galexrt/edenconfmgmt/pkg/store/object"
 	jsoniter "github.com/json-iterator/go"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
@@ -35,43 +35,77 @@ import (
 
 var json = jsoniter.ConfigCompatibleWithStandardLibrary
 
-func magicRun(stopCh chan struct{}, store *cache.Store) error {
+func magicRun(stopCh chan struct{}, store *object.Store) error {
 	logger.Info("magicRun started")
 	// Watch for node changes of itself
 
+	opts := []grpc.DialOption{
+		grpc.WithInsecure(),
+	}
+	grpcClient, err := grpc.Dial("127.0.0.1:1337", opts...)
+	if err != nil {
+		log.Fatalf("fail to dial: %v", err)
+	}
+	defer grpcClient.Close()
+	nodesClient := nodes_v1alpha.NewNodesClient(grpcClient)
+
+	go func() {
+		<-stopCh
+		grpcClient.Close()
+	}()
+
 	go func() {
 		for {
-			fmt.Printf("store.PUT NOW TEST\n")
-			ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 			defer cancel()
-			err := store.Put(ctx, "/test123/my-object", time.Now().String())
+
+			fmt.Printf("---> store.PUT NOW TEST\n")
+			obj := &nodes_v1alpha.Node{
+				Metadata: &core_v1.ObjectMetadata{
+					Name: "my-cool-node",
+				},
+				Spec: &nodes_v1alpha.Spec{
+					Network: &nodes_v1alpha.Network{
+						Fqdn: "my-cool-node.example.com",
+					},
+				},
+			}
+			_, err = nodesClient.Create(ctx, &nodes_v1alpha.CreateRequest{
+				Node: obj,
+			})
 			if err != nil {
-				fmt.Printf("store.Put ERROR: %+v\n", err)
+				fmt.Printf("---> store.Put ERROR: %+v\n", err)
 				time.Sleep(5 * time.Second)
 				return
 			}
-			resp, ok, err := store.Get(ctx, "/test123/my-object")
+			fmt.Printf("---> store.Put Done\n")
+			resp, err := nodesClient.Get(ctx, &nodes_v1alpha.GetRequest{
+				Options: &core_v1.GetOptions{
+					Name: "my-cool-node",
+				}})
 			if err != nil {
-				fmt.Printf("store.Get ERROR: %+v\n", err)
+				fmt.Printf("---> store.Get ERROR: %+v\n", err)
 				time.Sleep(5 * time.Second)
 				return
 			}
-			fmt.Printf("store.Get TEST: OKAY: %+v; RESULT: %+v\n", ok, resp)
+			fmt.Printf("---> store.Get TEST: RESULT: %+v\n", resp)
 			time.Sleep(5 * time.Second)
 		}
 	}()
 
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel()
-	watcher, err := store.Watch(ctx, "/test123/")
-	fmt.Printf("WATCH ERROR: %+v\n", err)
+	watcher, err := nodesClient.Watch(ctx, &nodes_v1alpha.WatchRequest{
+		Options: &core_v1.WatchOptions{
+			Name: "my-cool-node",
+		}})
+	fmt.Printf("---> WATCH ERROR: %+v\n", err)
 
 	for {
-		select {
-		case res := <-watcher:
-			fmt.Printf("WATCH RESULT: %+v\n", res)
-		case <-stopCh:
-			return nil
+		res, err := watcher.Recv()
+		fmt.Printf("---> WATCH RESULT: %+v, err: %+v\n", res, err)
+		if err != nil && err != grpc.ErrServerStopped {
+			return err
 		}
 	}
 
@@ -114,7 +148,7 @@ func magicRun(stopCh chan struct{}, store *cache.Store) error {
 				}
 			}()
 
-			maxTry := 3
+			/*maxTry := 3
 			for try := 1; try <= maxTry; try++ {
 				if _, err := registerNode(nodesClient, hostname); err != nil {
 					logger.Error(fmt.Sprintf("failed to register node (try %d of %d)", try, maxTry), zap.Error(err))
@@ -125,13 +159,10 @@ func magicRun(stopCh chan struct{}, store *cache.Store) error {
 					continue
 				}
 				break
-			}
-
-			// TODO add node "I am alive" loop
-			go keepAliveNode(stopCh)
+			}*/
 
 			in := &nodes_v1alpha.WatchRequest{
-				WatchOptions: &core_v1.WatchOptions{
+				Options: &core_v1.WatchOptions{
 					Name: hostname,
 				},
 			}
@@ -155,25 +186,4 @@ func magicRun(stopCh chan struct{}, store *cache.Store) error {
 			}
 		}
 	}
-}
-
-func registerNode(nodesClient nodes_v1alpha.NodesClient, hostname string) (*nodes_v1alpha.AddResponse, error) {
-	// TODO
-	addRequest := &nodes_v1alpha.AddRequest{
-		Node: &nodes_v1alpha.Node{
-			Metadata: &core_v1.ObjectMetadata{
-				Kind:       nodes_v1alpha.Kind,
-				ApiVersion: nodes_v1alpha.APIVersion,
-				Name:       hostname,
-			},
-		},
-	}
-
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-	return nodesClient.Add(ctx, addRequest)
-}
-
-func keepAliveNode(stopCh chan struct{}) {
-	// TODO
 }

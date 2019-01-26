@@ -3,72 +3,15 @@
 
 ## Table of Contents
 
-* [github.com/galexrt/edenconfmgmt/pkg/apis/beacons/v1alpha/api.proto](#github.com/galexrt/edenconfmgmt/pkg/apis/beacons/v1alpha/api.proto)
-    * Description: 
-    * Services
-        * [Beacons](#beacons.v1alpha.Beacons)
-    * Messages
-        * [AddRequest](#beacons.v1alpha.AddRequest)
-        * [AddResponse](#beacons.v1alpha.AddResponse)
-        * [Beacon](#beacons.v1alpha.Beacon)
-        * [BeaconSpec](#beacons.v1alpha.BeaconSpec)
-        * [DeleteRequest](#beacons.v1alpha.DeleteRequest)
-        * [DeleteResponse](#beacons.v1alpha.DeleteResponse)
-        * [GetRequest](#beacons.v1alpha.GetRequest)
-        * [GetResponse](#beacons.v1alpha.GetResponse)
-        * [ListRequest](#beacons.v1alpha.ListRequest)
-        * [ListResponse](#beacons.v1alpha.ListResponse)
-        * [UpdateRequest](#beacons.v1alpha.UpdateRequest)
-        * [UpdateResponse](#beacons.v1alpha.UpdateResponse)
-        * [WatchRequest](#beacons.v1alpha.WatchRequest)
-        * [WatchResponse](#beacons.v1alpha.WatchResponse)
-* [github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha/api.proto](#github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha/api.proto)
-    * Description: 
-    * Services
-        * [Events](#events.v1alpha.Events)
-    * Messages
-        * [AddRequest](#events.v1alpha.AddRequest)
-        * [AddResponse](#events.v1alpha.AddResponse)
-        * [DeleteRequest](#events.v1alpha.DeleteRequest)
-        * [DeleteResponse](#events.v1alpha.DeleteResponse)
-        * [Event](#events.v1alpha.Event)
-        * [EventSpec](#events.v1alpha.EventSpec)
-        * [GetRequest](#events.v1alpha.GetRequest)
-        * [GetResponse](#events.v1alpha.GetResponse)
-        * [ListRequest](#events.v1alpha.ListRequest)
-        * [ListResponse](#events.v1alpha.ListResponse)
-        * [UpdateRequest](#events.v1alpha.UpdateRequest)
-        * [UpdateResponse](#events.v1alpha.UpdateResponse)
-        * [WatchRequest](#events.v1alpha.WatchRequest)
-        * [WatchResponse](#events.v1alpha.WatchResponse)
-* [github.com/galexrt/edenconfmgmt/pkg/apis/variables/v1alpha/api.proto](#github.com/galexrt/edenconfmgmt/pkg/apis/variables/v1alpha/api.proto)
-    * Description: 
-    * Services
-        * [Variables](#variables.v1alpha.Variables)
-    * Messages
-        * [AddRequest](#variables.v1alpha.AddRequest)
-        * [AddResponse](#variables.v1alpha.AddResponse)
-        * [DeleteRequest](#variables.v1alpha.DeleteRequest)
-        * [DeleteResponse](#variables.v1alpha.DeleteResponse)
-        * [GetRequest](#variables.v1alpha.GetRequest)
-        * [GetResponse](#variables.v1alpha.GetResponse)
-        * [ListRequest](#variables.v1alpha.ListRequest)
-        * [ListResponse](#variables.v1alpha.ListResponse)
-        * [UpdateRequest](#variables.v1alpha.UpdateRequest)
-        * [UpdateResponse](#variables.v1alpha.UpdateResponse)
-        * [Variable](#variables.v1alpha.Variable)
-        * [VariableSpec](#variables.v1alpha.VariableSpec)
-        * [VariableSpec.VariablesEntry](#variables.v1alpha.VariableSpec.VariablesEntry)
-        * [WatchRequest](#variables.v1alpha.WatchRequest)
-        * [WatchResponse](#variables.v1alpha.WatchResponse)
 * [github.com/galexrt/edenconfmgmt/pkg/apis/clustervariables/v1alpha/api.proto](#github.com/galexrt/edenconfmgmt/pkg/apis/clustervariables/v1alpha/api.proto)
     * Description: 
     * Services
         * [ClusterVariables](#clustervariables.v1alpha.ClusterVariables)
     * Messages
-        * [AddRequest](#clustervariables.v1alpha.AddRequest)
-        * [AddResponse](#clustervariables.v1alpha.AddResponse)
         * [ClusterVariable](#clustervariables.v1alpha.ClusterVariable)
+        * [ClusterVariableList](#clustervariables.v1alpha.ClusterVariableList)
+        * [CreateRequest](#clustervariables.v1alpha.CreateRequest)
+        * [CreateResponse](#clustervariables.v1alpha.CreateResponse)
         * [DeleteRequest](#clustervariables.v1alpha.DeleteRequest)
         * [DeleteResponse](#clustervariables.v1alpha.DeleteResponse)
         * [GetRequest](#clustervariables.v1alpha.GetRequest)
@@ -81,14 +24,56 @@
         * [VariableSpec.ClustervariablesEntry](#clustervariables.v1alpha.VariableSpec.ClustervariablesEntry)
         * [WatchRequest](#clustervariables.v1alpha.WatchRequest)
         * [WatchResponse](#clustervariables.v1alpha.WatchResponse)
+* [github.com/galexrt/edenconfmgmt/pkg/apis/secrets/v1alpha/api.proto](#github.com/galexrt/edenconfmgmt/pkg/apis/secrets/v1alpha/api.proto)
+    * Description: 
+    * Services
+        * [Secrets](#secrets.v1alpha.Secrets)
+    * Messages
+        * [CreateRequest](#secrets.v1alpha.CreateRequest)
+        * [CreateResponse](#secrets.v1alpha.CreateResponse)
+        * [DeleteRequest](#secrets.v1alpha.DeleteRequest)
+        * [DeleteResponse](#secrets.v1alpha.DeleteResponse)
+        * [GetRequest](#secrets.v1alpha.GetRequest)
+        * [GetResponse](#secrets.v1alpha.GetResponse)
+        * [ListRequest](#secrets.v1alpha.ListRequest)
+        * [ListResponse](#secrets.v1alpha.ListResponse)
+        * [Secret](#secrets.v1alpha.Secret)
+        * [SecretList](#secrets.v1alpha.SecretList)
+        * [SecretSpec](#secrets.v1alpha.SecretSpec)
+        * [SecretSpec.SecretsEntry](#secrets.v1alpha.SecretSpec.SecretsEntry)
+        * [UpdateRequest](#secrets.v1alpha.UpdateRequest)
+        * [UpdateResponse](#secrets.v1alpha.UpdateResponse)
+        * [WatchRequest](#secrets.v1alpha.WatchRequest)
+        * [WatchResponse](#secrets.v1alpha.WatchResponse)
+* [github.com/galexrt/edenconfmgmt/pkg/apis/beacons/v1alpha/api.proto](#github.com/galexrt/edenconfmgmt/pkg/apis/beacons/v1alpha/api.proto)
+    * Description: 
+    * Services
+        * [Beacons](#beacons.v1alpha.Beacons)
+    * Messages
+        * [Beacon](#beacons.v1alpha.Beacon)
+        * [BeaconList](#beacons.v1alpha.BeaconList)
+        * [BeaconSpec](#beacons.v1alpha.BeaconSpec)
+        * [CreateRequest](#beacons.v1alpha.CreateRequest)
+        * [CreateResponse](#beacons.v1alpha.CreateResponse)
+        * [DeleteRequest](#beacons.v1alpha.DeleteRequest)
+        * [DeleteResponse](#beacons.v1alpha.DeleteResponse)
+        * [GetRequest](#beacons.v1alpha.GetRequest)
+        * [GetResponse](#beacons.v1alpha.GetResponse)
+        * [ListRequest](#beacons.v1alpha.ListRequest)
+        * [ListResponse](#beacons.v1alpha.ListResponse)
+        * [UpdateRequest](#beacons.v1alpha.UpdateRequest)
+        * [UpdateResponse](#beacons.v1alpha.UpdateResponse)
+        * [WatchRequest](#beacons.v1alpha.WatchRequest)
+        * [WatchResponse](#beacons.v1alpha.WatchResponse)
 * [github.com/galexrt/edenconfmgmt/pkg/apis/cronjobs/v1alpha/api.proto](#github.com/galexrt/edenconfmgmt/pkg/apis/cronjobs/v1alpha/api.proto)
     * Description: 
     * Services
         * [CronJobs](#cronjobs.v1alpha.CronJobs)
     * Messages
-        * [AddRequest](#cronjobs.v1alpha.AddRequest)
-        * [AddResponse](#cronjobs.v1alpha.AddResponse)
+        * [CreateRequest](#cronjobs.v1alpha.CreateRequest)
+        * [CreateResponse](#cronjobs.v1alpha.CreateResponse)
         * [CronJob](#cronjobs.v1alpha.CronJob)
+        * [CronJobList](#cronjobs.v1alpha.CronJobList)
         * [CronJobSpec](#cronjobs.v1alpha.CronJobSpec)
         * [DeleteRequest](#cronjobs.v1alpha.DeleteRequest)
         * [DeleteResponse](#cronjobs.v1alpha.DeleteResponse)
@@ -101,6 +86,92 @@
         * [UpdateResponse](#cronjobs.v1alpha.UpdateResponse)
         * [WatchRequest](#cronjobs.v1alpha.WatchRequest)
         * [WatchResponse](#cronjobs.v1alpha.WatchResponse)
+* [github.com/galexrt/edenconfmgmt/pkg/apis/nodes/v1alpha/api.proto](#github.com/galexrt/edenconfmgmt/pkg/apis/nodes/v1alpha/api.proto)
+    * Description: 
+    * Services
+        * [Nodes](#nodes.v1alpha.Nodes)
+    * Messages
+        * [CreateRequest](#nodes.v1alpha.CreateRequest)
+        * [CreateResponse](#nodes.v1alpha.CreateResponse)
+        * [DeleteRequest](#nodes.v1alpha.DeleteRequest)
+        * [DeleteResponse](#nodes.v1alpha.DeleteResponse)
+        * [GetRequest](#nodes.v1alpha.GetRequest)
+        * [GetResponse](#nodes.v1alpha.GetResponse)
+        * [ListRequest](#nodes.v1alpha.ListRequest)
+        * [ListResponse](#nodes.v1alpha.ListResponse)
+        * [Network](#nodes.v1alpha.Network)
+        * [Node](#nodes.v1alpha.Node)
+        * [NodeList](#nodes.v1alpha.NodeList)
+        * [Port](#nodes.v1alpha.Port)
+        * [Spec](#nodes.v1alpha.Spec)
+        * [Status](#nodes.v1alpha.Status)
+        * [UpdateRequest](#nodes.v1alpha.UpdateRequest)
+        * [UpdateResponse](#nodes.v1alpha.UpdateResponse)
+        * [WatchRequest](#nodes.v1alpha.WatchRequest)
+        * [WatchResponse](#nodes.v1alpha.WatchResponse)
+* [github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha/api.proto](#github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha/api.proto)
+    * Description: 
+    * Services
+        * [Events](#events.v1alpha.Events)
+    * Messages
+        * [CreateRequest](#events.v1alpha.CreateRequest)
+        * [CreateResponse](#events.v1alpha.CreateResponse)
+        * [DeleteRequest](#events.v1alpha.DeleteRequest)
+        * [DeleteResponse](#events.v1alpha.DeleteResponse)
+        * [Event](#events.v1alpha.Event)
+        * [EventList](#events.v1alpha.EventList)
+        * [EventSpec](#events.v1alpha.EventSpec)
+        * [GetRequest](#events.v1alpha.GetRequest)
+        * [GetResponse](#events.v1alpha.GetResponse)
+        * [ListRequest](#events.v1alpha.ListRequest)
+        * [ListResponse](#events.v1alpha.ListResponse)
+        * [UpdateRequest](#events.v1alpha.UpdateRequest)
+        * [UpdateResponse](#events.v1alpha.UpdateResponse)
+        * [WatchRequest](#events.v1alpha.WatchRequest)
+        * [WatchResponse](#events.v1alpha.WatchResponse)
+* [github.com/galexrt/edenconfmgmt/pkg/apis/agentconfigs/v1alpha/api.proto](#github.com/galexrt/edenconfmgmt/pkg/apis/agentconfigs/v1alpha/api.proto)
+    * Description: 
+    * Services
+        * [AgentConfigs](#agentagentconfigs.v1alpha.AgentConfigs)
+    * Messages
+        * [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig)
+        * [AgentConfigList](#agentagentconfigs.v1alpha.AgentConfigList)
+        * [AgentConfigSpec](#agentagentconfigs.v1alpha.AgentConfigSpec)
+        * [CreateRequest](#agentagentconfigs.v1alpha.CreateRequest)
+        * [CreateResponse](#agentagentconfigs.v1alpha.CreateResponse)
+        * [DataStore](#agentagentconfigs.v1alpha.DataStore)
+        * [DeleteRequest](#agentagentconfigs.v1alpha.DeleteRequest)
+        * [DeleteResponse](#agentagentconfigs.v1alpha.DeleteResponse)
+        * [ETCD](#agentagentconfigs.v1alpha.ETCD)
+        * [GetRequest](#agentagentconfigs.v1alpha.GetRequest)
+        * [GetResponse](#agentagentconfigs.v1alpha.GetResponse)
+        * [ListRequest](#agentagentconfigs.v1alpha.ListRequest)
+        * [ListResponse](#agentagentconfigs.v1alpha.ListResponse)
+        * [UpdateRequest](#agentagentconfigs.v1alpha.UpdateRequest)
+        * [UpdateResponse](#agentagentconfigs.v1alpha.UpdateResponse)
+        * [WatchRequest](#agentagentconfigs.v1alpha.WatchRequest)
+        * [WatchResponse](#agentagentconfigs.v1alpha.WatchResponse)
+* [github.com/galexrt/edenconfmgmt/pkg/apis/variables/v1alpha/api.proto](#github.com/galexrt/edenconfmgmt/pkg/apis/variables/v1alpha/api.proto)
+    * Description: 
+    * Services
+        * [Variables](#variables.v1alpha.Variables)
+    * Messages
+        * [CreateRequest](#variables.v1alpha.CreateRequest)
+        * [CreateResponse](#variables.v1alpha.CreateResponse)
+        * [DeleteRequest](#variables.v1alpha.DeleteRequest)
+        * [DeleteResponse](#variables.v1alpha.DeleteResponse)
+        * [GetRequest](#variables.v1alpha.GetRequest)
+        * [GetResponse](#variables.v1alpha.GetResponse)
+        * [ListRequest](#variables.v1alpha.ListRequest)
+        * [ListResponse](#variables.v1alpha.ListResponse)
+        * [UpdateRequest](#variables.v1alpha.UpdateRequest)
+        * [UpdateResponse](#variables.v1alpha.UpdateResponse)
+        * [Variable](#variables.v1alpha.Variable)
+        * [VariableList](#variables.v1alpha.VariableList)
+        * [VariableSpec](#variables.v1alpha.VariableSpec)
+        * [VariableSpec.VariablesEntry](#variables.v1alpha.VariableSpec.VariablesEntry)
+        * [WatchRequest](#variables.v1alpha.WatchRequest)
+        * [WatchResponse](#variables.v1alpha.WatchResponse)
 * [github.com/galexrt/edenconfmgmt/pkg/apis/core/v1/api.proto](#github.com/galexrt/edenconfmgmt/pkg/apis/core/v1/api.proto)
     * Description: 
     * Messages
@@ -126,8 +197,8 @@
         * [Triggers](#triggers.v1alpha.Triggers)
     * Messages
         * [Action](#triggers.v1alpha.Action)
-        * [AddRequest](#triggers.v1alpha.AddRequest)
-        * [AddResponse](#triggers.v1alpha.AddResponse)
+        * [CreateRequest](#triggers.v1alpha.CreateRequest)
+        * [CreateResponse](#triggers.v1alpha.CreateResponse)
         * [DeleteRequest](#triggers.v1alpha.DeleteRequest)
         * [DeleteResponse](#triggers.v1alpha.DeleteResponse)
         * [GetRequest](#triggers.v1alpha.GetRequest)
@@ -139,40 +210,20 @@
         * [Step](#triggers.v1alpha.Step)
         * [Target](#triggers.v1alpha.Target)
         * [Trigger](#triggers.v1alpha.Trigger)
+        * [TriggerList](#triggers.v1alpha.TriggerList)
         * [TriggerSpec](#triggers.v1alpha.TriggerSpec)
         * [UpdateRequest](#triggers.v1alpha.UpdateRequest)
         * [UpdateResponse](#triggers.v1alpha.UpdateResponse)
         * [WatchRequest](#triggers.v1alpha.WatchRequest)
         * [WatchResponse](#triggers.v1alpha.WatchResponse)
-* [github.com/galexrt/edenconfmgmt/pkg/apis/agentconfigs/v1alpha/api.proto](#github.com/galexrt/edenconfmgmt/pkg/apis/agentconfigs/v1alpha/api.proto)
-    * Description: 
-    * Services
-        * [AgentConfigs](#agentagentconfigs.v1alpha.AgentConfigs)
-    * Messages
-        * [AddRequest](#agentagentconfigs.v1alpha.AddRequest)
-        * [AddResponse](#agentagentconfigs.v1alpha.AddResponse)
-        * [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig)
-        * [AgentConfigSpec](#agentagentconfigs.v1alpha.AgentConfigSpec)
-        * [DataStore](#agentagentconfigs.v1alpha.DataStore)
-        * [DeleteRequest](#agentagentconfigs.v1alpha.DeleteRequest)
-        * [DeleteResponse](#agentagentconfigs.v1alpha.DeleteResponse)
-        * [ETCD](#agentagentconfigs.v1alpha.ETCD)
-        * [GetRequest](#agentagentconfigs.v1alpha.GetRequest)
-        * [GetResponse](#agentagentconfigs.v1alpha.GetResponse)
-        * [ListRequest](#agentagentconfigs.v1alpha.ListRequest)
-        * [ListResponse](#agentagentconfigs.v1alpha.ListResponse)
-        * [UpdateRequest](#agentagentconfigs.v1alpha.UpdateRequest)
-        * [UpdateResponse](#agentagentconfigs.v1alpha.UpdateResponse)
-        * [WatchRequest](#agentagentconfigs.v1alpha.WatchRequest)
-        * [WatchResponse](#agentagentconfigs.v1alpha.WatchResponse)
 * [github.com/galexrt/edenconfmgmt/pkg/apis/taskbooks/v1alpha/api.proto](#github.com/galexrt/edenconfmgmt/pkg/apis/taskbooks/v1alpha/api.proto)
     * Description: 
     * Services
         * [TaskBooks](#taskbooks.v1alpha.TaskBooks)
     * Messages
         * [Action](#taskbooks.v1alpha.Action)
-        * [AddRequest](#taskbooks.v1alpha.AddRequest)
-        * [AddResponse](#taskbooks.v1alpha.AddResponse)
+        * [CreateRequest](#taskbooks.v1alpha.CreateRequest)
+        * [CreateResponse](#taskbooks.v1alpha.CreateResponse)
         * [DeleteRequest](#taskbooks.v1alpha.DeleteRequest)
         * [DeleteResponse](#taskbooks.v1alpha.DeleteResponse)
         * [GetRequest](#taskbooks.v1alpha.GetRequest)
@@ -184,563 +235,12 @@
         * [Step](#taskbooks.v1alpha.Step)
         * [Target](#taskbooks.v1alpha.Target)
         * [TaskBook](#taskbooks.v1alpha.TaskBook)
+        * [TaskBookList](#taskbooks.v1alpha.TaskBookList)
         * [TaskBookSpec](#taskbooks.v1alpha.TaskBookSpec)
         * [UpdateRequest](#taskbooks.v1alpha.UpdateRequest)
         * [UpdateResponse](#taskbooks.v1alpha.UpdateResponse)
         * [WatchRequest](#taskbooks.v1alpha.WatchRequest)
-        * [WatchResponse](#taskbooks.v1alpha.WatchResponse)
-* [github.com/galexrt/edenconfmgmt/pkg/apis/nodes/v1alpha/api.proto](#github.com/galexrt/edenconfmgmt/pkg/apis/nodes/v1alpha/api.proto)
-    * Description: 
-    * Services
-        * [Nodes](#nodes.v1alpha.Nodes)
-    * Messages
-        * [AddRequest](#nodes.v1alpha.AddRequest)
-        * [AddResponse](#nodes.v1alpha.AddResponse)
-        * [DeleteRequest](#nodes.v1alpha.DeleteRequest)
-        * [DeleteResponse](#nodes.v1alpha.DeleteResponse)
-        * [GetRequest](#nodes.v1alpha.GetRequest)
-        * [GetResponse](#nodes.v1alpha.GetResponse)
-        * [ListRequest](#nodes.v1alpha.ListRequest)
-        * [ListResponse](#nodes.v1alpha.ListResponse)
-        * [Network](#nodes.v1alpha.Network)
-        * [Node](#nodes.v1alpha.Node)
-        * [NodeList](#nodes.v1alpha.NodeList)
-        * [Port](#nodes.v1alpha.Port)
-        * [Spec](#nodes.v1alpha.Spec)
-        * [Status](#nodes.v1alpha.Status)
-        * [UpdateRequest](#nodes.v1alpha.UpdateRequest)
-        * [UpdateResponse](#nodes.v1alpha.UpdateResponse)
-        * [WatchRequest](#nodes.v1alpha.WatchRequest)
-        * [WatchResponse](#nodes.v1alpha.WatchResponse)
-* [github.com/galexrt/edenconfmgmt/pkg/apis/secrets/v1alpha/api.proto](#github.com/galexrt/edenconfmgmt/pkg/apis/secrets/v1alpha/api.proto)
-    * Description: 
-    * Services
-        * [Secrets](#secrets.v1alpha.Secrets)
-    * Messages
-        * [AddRequest](#secrets.v1alpha.AddRequest)
-        * [AddResponse](#secrets.v1alpha.AddResponse)
-        * [DeleteRequest](#secrets.v1alpha.DeleteRequest)
-        * [DeleteResponse](#secrets.v1alpha.DeleteResponse)
-        * [GetRequest](#secrets.v1alpha.GetRequest)
-        * [GetResponse](#secrets.v1alpha.GetResponse)
-        * [ListRequest](#secrets.v1alpha.ListRequest)
-        * [ListResponse](#secrets.v1alpha.ListResponse)
-        * [Secret](#secrets.v1alpha.Secret)
-        * [SecretSpec](#secrets.v1alpha.SecretSpec)
-        * [SecretSpec.SecretsEntry](#secrets.v1alpha.SecretSpec.SecretsEntry)
-        * [UpdateRequest](#secrets.v1alpha.UpdateRequest)
-        * [UpdateResponse](#secrets.v1alpha.UpdateResponse)
-        * [WatchRequest](#secrets.v1alpha.WatchRequest)
-        * [WatchResponse](#secrets.v1alpha.WatchResponse)* [Scalar Value Types](#scalar-value-types)
-
-<a name="github.com/galexrt/edenconfmgmt/pkg/apis/beacons/v1alpha/api.proto"></a>
-<p align="right"><a href="#top">Top</a></p>
-
-## github.com/galexrt/edenconfmgmt/pkg/apis/beacons/v1alpha/api.proto
-
-
-
-<a name="beacons.v1alpha.AddRequest"></a>
-
-### AddRequest
-
-Add Beacon request.
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| beacon | [Beacon](#beacons.v1alpha.Beacon) |  | Beacon object. |
-<a name="beacons.v1alpha.AddResponse"></a>
-
-### AddResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| beacon | [Beacon](#beacons.v1alpha.Beacon) |  | Beacon object. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
-<a name="beacons.v1alpha.Beacon"></a>
-
-### Beacon
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| metadata | [core.v1.ObjectMetadata](#core.v1.ObjectMetadata) |  | Metadata for Beacon object. |
-| spec | [BeaconSpec](#beacons.v1alpha.BeaconSpec) |  | Spec for Beacon. |
-<a name="beacons.v1alpha.BeaconSpec"></a>
-
-### BeaconSpec
-
-TODO
-<a name="beacons.v1alpha.DeleteRequest"></a>
-
-### DeleteRequest
-
-Delete
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| beacon | [Beacon](#beacons.v1alpha.Beacon) |  | Beacon object. |
-<a name="beacons.v1alpha.DeleteResponse"></a>
-
-### DeleteResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| beacon | [Beacon](#beacons.v1alpha.Beacon) |  | Beacon object. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
-<a name="beacons.v1alpha.GetRequest"></a>
-
-### GetRequest
-
-Get request content.
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| getOptions | [core.v1.GetOptions](#core.v1.GetOptions) |  | GetOptions options for a GetRequest. |
-<a name="beacons.v1alpha.GetResponse"></a>
-
-### GetResponse
-
-Get response content.
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| beacon | [Beacon](#beacons.v1alpha.Beacon) |  | Beacon object. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
-<a name="beacons.v1alpha.ListRequest"></a>
-
-### ListRequest
-
-List request content.
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| listOptions | [core.v1.ListOptions](#core.v1.ListOptions) |  | ListOptions options for a ListRequest. |
-<a name="beacons.v1alpha.ListResponse"></a>
-
-### ListResponse
-
-List response content.
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| beacons | [Beacon](#beacons.v1alpha.Beacon) | repeated | Beacon list. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
-<a name="beacons.v1alpha.UpdateRequest"></a>
-
-### UpdateRequest
-
-Update
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| beacon | [Beacon](#beacons.v1alpha.Beacon) |  | Beacon object. |
-<a name="beacons.v1alpha.UpdateResponse"></a>
-
-### UpdateResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| beacon | [Beacon](#beacons.v1alpha.Beacon) |  | Beacon object. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
-<a name="beacons.v1alpha.WatchRequest"></a>
-
-### WatchRequest
-
-Watch
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| watchOptions | [core.v1.WatchOptions](#core.v1.WatchOptions) |  | WatchOptions options for WatchRequest. |
-<a name="beacons.v1alpha.WatchResponse"></a>
-
-### WatchResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| event | [events.v1alpha.Event](#events.v1alpha.Event) |  | Beacon info for watch response. |
-| beacon | [Beacon](#beacons.v1alpha.Beacon) |  | Beacon for watch response. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
-<!-- end messages -->
-
-<!-- end enums -->
-
- <!-- end HasExtensions -->
-
-
-<a name="beacons.v1alpha.Beacons"></a>
-
-### Beacons
-
-
-
-| Method Name | Request Type | Response Type | Description |
-| ----------- | ------------ | ------------- | ------------|
-| Get | [GetRequest](#beacons.v1alpha.GetRequest) | [GetResponse](#beacons.v1alpha.GetResponse) | Get a Beacon. |
-| List | [ListRequest](#beacons.v1alpha.ListRequest) | [ListResponse](#beacons.v1alpha.ListResponse) | List Beacons. |
-| Add | [AddRequest](#beacons.v1alpha.AddRequest) | [AddResponse](#beacons.v1alpha.AddResponse) | Add a Beacon. |
-| Update | [UpdateRequest](#beacons.v1alpha.UpdateRequest) | [UpdateResponse](#beacons.v1alpha.UpdateResponse) | Update a Beacon. |
-| Delete | [DeleteRequest](#beacons.v1alpha.DeleteRequest) | [DeleteResponse](#beacons.v1alpha.DeleteResponse) | Delete a Beacon. |
-| Watch | [WatchRequest](#beacons.v1alpha.WatchRequest) | [WatchResponse](#beacons.v1alpha.WatchResponse) stream | Watch Beacon. |
-
- <!-- end services -->
-
-
-
-<a name="github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha/api.proto"></a>
-<p align="right"><a href="#top">Top</a></p>
-
-## github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha/api.proto
-
-
-
-<a name="events.v1alpha.AddRequest"></a>
-
-### AddRequest
-
-Add
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| event | [Event](#events.v1alpha.Event) |  | Event object. |
-<a name="events.v1alpha.AddResponse"></a>
-
-### AddResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| event | [Event](#events.v1alpha.Event) |  | Event object. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
-<a name="events.v1alpha.DeleteRequest"></a>
-
-### DeleteRequest
-
-Delete
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| event | [Event](#events.v1alpha.Event) |  | Event object. |
-<a name="events.v1alpha.DeleteResponse"></a>
-
-### DeleteResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| event | [Event](#events.v1alpha.Event) |  | Event object. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
-<a name="events.v1alpha.Event"></a>
-
-### Event
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| metadata | [core.v1.ObjectMetadata](#core.v1.ObjectMetadata) |  | Metadata for the Event object. |
-| spec | [EventSpec](#events.v1alpha.EventSpec) |  | Spec for Event. |
-<a name="events.v1alpha.EventSpec"></a>
-
-### EventSpec
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| type | [string](#string) |  | Type of the Event. |
-| summary | [string](#string) |  | Summary of Event. |
-| data | [google.protobuf.Any](#google.protobuf.Any) |  | Data of Event. |
-<a name="events.v1alpha.GetRequest"></a>
-
-### GetRequest
-
-Get
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| getOptions | [core.v1.GetOptions](#core.v1.GetOptions) |  | GetOptions options for a GetRequest. |
-<a name="events.v1alpha.GetResponse"></a>
-
-### GetResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| event | [Event](#events.v1alpha.Event) |  | Event object. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
-<a name="events.v1alpha.ListRequest"></a>
-
-### ListRequest
-
-List
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| listOptions | [core.v1.ListOptions](#core.v1.ListOptions) |  | ListOptions options for a ListRequest. |
-<a name="events.v1alpha.ListResponse"></a>
-
-### ListResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| events | [Event](#events.v1alpha.Event) | repeated | Event list. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
-<a name="events.v1alpha.UpdateRequest"></a>
-
-### UpdateRequest
-
-Update
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| event | [Event](#events.v1alpha.Event) |  | Event object. |
-<a name="events.v1alpha.UpdateResponse"></a>
-
-### UpdateResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| event | [Event](#events.v1alpha.Event) |  | Event object. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
-<a name="events.v1alpha.WatchRequest"></a>
-
-### WatchRequest
-
-Watch
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| watchOptions | [core.v1.WatchOptions](#core.v1.WatchOptions) |  | WatchOptions options for WatchRequest. |
-<a name="events.v1alpha.WatchResponse"></a>
-
-### WatchResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| event | [Event](#events.v1alpha.Event) |  | Event for watch stream. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
-<!-- end messages -->
-
-<!-- end enums -->
-
- <!-- end HasExtensions -->
-
-
-<a name="events.v1alpha.Events"></a>
-
-### Events
-
-
-
-| Method Name | Request Type | Response Type | Description |
-| ----------- | ------------ | ------------- | ------------|
-| Get | [GetRequest](#events.v1alpha.GetRequest) | [GetResponse](#events.v1alpha.GetResponse) | Get a Event. |
-| List | [ListRequest](#events.v1alpha.ListRequest) | [ListResponse](#events.v1alpha.ListResponse) | List Events. |
-| Add | [AddRequest](#events.v1alpha.AddRequest) | [AddResponse](#events.v1alpha.AddResponse) | Add a Event. |
-| Update | [UpdateRequest](#events.v1alpha.UpdateRequest) | [UpdateResponse](#events.v1alpha.UpdateResponse) | Update a Event. |
-| Delete | [DeleteRequest](#events.v1alpha.DeleteRequest) | [DeleteResponse](#events.v1alpha.DeleteResponse) | Delete a Event. |
-| Watch | [WatchRequest](#events.v1alpha.WatchRequest) | [WatchResponse](#events.v1alpha.WatchResponse) stream | Watch for Events. |
-
- <!-- end services -->
-
-
-
-<a name="github.com/galexrt/edenconfmgmt/pkg/apis/variables/v1alpha/api.proto"></a>
-<p align="right"><a href="#top">Top</a></p>
-
-## github.com/galexrt/edenconfmgmt/pkg/apis/variables/v1alpha/api.proto
-
-
-
-<a name="variables.v1alpha.AddRequest"></a>
-
-### AddRequest
-
-Add
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| variable | [Variable](#variables.v1alpha.Variable) |  | Variable object. |
-<a name="variables.v1alpha.AddResponse"></a>
-
-### AddResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| variable | [Variable](#variables.v1alpha.Variable) |  | Variable object. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
-<a name="variables.v1alpha.DeleteRequest"></a>
-
-### DeleteRequest
-
-Delete
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| variable | [Variable](#variables.v1alpha.Variable) |  | Variable object. |
-<a name="variables.v1alpha.DeleteResponse"></a>
-
-### DeleteResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| variable | [Variable](#variables.v1alpha.Variable) |  | Variable object. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
-<a name="variables.v1alpha.GetRequest"></a>
-
-### GetRequest
-
-Get
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| getOptions | [core.v1.GetOptions](#core.v1.GetOptions) |  | GetOptions options for a GetRequest. |
-<a name="variables.v1alpha.GetResponse"></a>
-
-### GetResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| variable | [Variable](#variables.v1alpha.Variable) |  | Variable object. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
-<a name="variables.v1alpha.ListRequest"></a>
-
-### ListRequest
-
-List
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| listOptions | [core.v1.ListOptions](#core.v1.ListOptions) |  | ListOptions options for a ListRequest. |
-<a name="variables.v1alpha.ListResponse"></a>
-
-### ListResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| variables | [Variable](#variables.v1alpha.Variable) | repeated | Variable list. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
-<a name="variables.v1alpha.UpdateRequest"></a>
-
-### UpdateRequest
-
-Update
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| variable | [Variable](#variables.v1alpha.Variable) |  | Variable object. |
-<a name="variables.v1alpha.UpdateResponse"></a>
-
-### UpdateResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| variable | [Variable](#variables.v1alpha.Variable) |  | Variable object. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
-<a name="variables.v1alpha.Variable"></a>
-
-### Variable
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| metadata | [core.v1.ObjectMetadata](#core.v1.ObjectMetadata) |  | Metadata for Variable object. |
-| spec | [VariableSpec](#variables.v1alpha.VariableSpec) |  | Spec for Variable. |
-<a name="variables.v1alpha.VariableSpec"></a>
-
-### VariableSpec
-
-Variables variables file structure. This covers the "Variables File" and "'From Host' Static Variable File".
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| variables | [VariableSpec.VariablesEntry](#variables.v1alpha.VariableSpec.VariablesEntry) | repeated | Variables. |
-| type | [string](#string) |  | Type of variable. |
-<a name="variables.v1alpha.VariableSpec.VariablesEntry"></a>
-
-### VariableSpec.VariablesEntry
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| key | [string](#string) |  |  |
-| value | [google.protobuf.Any](#google.protobuf.Any) |  |  |
-<a name="variables.v1alpha.WatchRequest"></a>
-
-### WatchRequest
-
-Watch
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| watchOptions | [core.v1.WatchOptions](#core.v1.WatchOptions) |  | WatchOptions options for WatchRequest. |
-<a name="variables.v1alpha.WatchResponse"></a>
-
-### WatchResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| event | [events.v1alpha.Event](#events.v1alpha.Event) |  | Variable info for watch response. |
-| variable | [Variable](#variables.v1alpha.Variable) |  | Variable for watch response. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
-<!-- end messages -->
-
-<!-- end enums -->
-
- <!-- end HasExtensions -->
-
-
-<a name="variables.v1alpha.Variables"></a>
-
-### Variables
-
-
-
-| Method Name | Request Type | Response Type | Description |
-| ----------- | ------------ | ------------- | ------------|
-| Get | [GetRequest](#variables.v1alpha.GetRequest) | [GetResponse](#variables.v1alpha.GetResponse) | Get a Variable. |
-| List | [ListRequest](#variables.v1alpha.ListRequest) | [ListResponse](#variables.v1alpha.ListResponse) | List Variable. |
-| Add | [AddRequest](#variables.v1alpha.AddRequest) | [AddResponse](#variables.v1alpha.AddResponse) | Add a Variable. |
-| Update | [UpdateRequest](#variables.v1alpha.UpdateRequest) | [UpdateResponse](#variables.v1alpha.UpdateResponse) | Update a Variable. |
-| Delete | [DeleteRequest](#variables.v1alpha.DeleteRequest) | [DeleteResponse](#variables.v1alpha.DeleteResponse) | Delete a Variable. |
-| Watch | [WatchRequest](#variables.v1alpha.WatchRequest) | [WatchResponse](#variables.v1alpha.WatchResponse) stream | Watch Variable. |
-
- <!-- end services -->
-
-
+        * [WatchResponse](#taskbooks.v1alpha.WatchResponse)* [Scalar Value Types](#scalar-value-types)
 
 <a name="github.com/galexrt/edenconfmgmt/pkg/apis/clustervariables/v1alpha/api.proto"></a>
 <p align="right"><a href="#top">Top</a></p>
@@ -749,25 +249,6 @@ Watch
 
 
 
-<a name="clustervariables.v1alpha.AddRequest"></a>
-
-### AddRequest
-
-Add
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| clusterVariable | [ClusterVariable](#clustervariables.v1alpha.ClusterVariable) |  | ClusterVariable object. |
-<a name="clustervariables.v1alpha.AddResponse"></a>
-
-### AddResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| clusterVariable | [ClusterVariable](#clustervariables.v1alpha.ClusterVariable) |  | ClusterVariable object. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="clustervariables.v1alpha.ClusterVariable"></a>
 
 ### ClusterVariable
@@ -778,6 +259,35 @@ Add
 | ----- | ---- | ----- | ----------- |
 | metadata | [core.v1.ObjectMetadata](#core.v1.ObjectMetadata) |  | Metadata for ClusterVariable object. |
 | spec | [VariableSpec](#clustervariables.v1alpha.VariableSpec) |  | Spec for ClusterVariable. |
+<a name="clustervariables.v1alpha.ClusterVariableList"></a>
+
+### ClusterVariableList
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| metadata | [core.v1.ObjectMetadata](#core.v1.ObjectMetadata) |  | Metadata for ClusterVariableList object. |
+| items | [ClusterVariable](#clustervariables.v1alpha.ClusterVariable) | repeated | List of ClusterVariable objects. |
+<a name="clustervariables.v1alpha.CreateRequest"></a>
+
+### CreateRequest
+
+Create
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.CreateOptions](#core.v1.CreateOptions) |  | core_v1.CreateOptions |
+| clusterVariable | [ClusterVariable](#clustervariables.v1alpha.ClusterVariable) |  | ClusterVariable object. |
+<a name="clustervariables.v1alpha.CreateResponse"></a>
+
+### CreateResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| clusterVariable | [ClusterVariable](#clustervariables.v1alpha.ClusterVariable) |  | ClusterVariable object. |
 <a name="clustervariables.v1alpha.DeleteRequest"></a>
 
 ### DeleteRequest
@@ -786,6 +296,7 @@ Delete
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
+| options | [core.v1.DeleteOptions](#core.v1.DeleteOptions) |  | core_v1.DeleteOptions |
 | clusterVariable | [ClusterVariable](#clustervariables.v1alpha.ClusterVariable) |  | ClusterVariable object. |
 <a name="clustervariables.v1alpha.DeleteResponse"></a>
 
@@ -796,7 +307,6 @@ Delete
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | clusterVariable | [ClusterVariable](#clustervariables.v1alpha.ClusterVariable) |  | ClusterVariable object. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="clustervariables.v1alpha.GetRequest"></a>
 
 ### GetRequest
@@ -805,7 +315,7 @@ Get
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| getOptions | [core.v1.GetOptions](#core.v1.GetOptions) |  | GetOptions options for a GetRequest. |
+| options | [core.v1.GetOptions](#core.v1.GetOptions) |  | core_v1.GetOptions |
 <a name="clustervariables.v1alpha.GetResponse"></a>
 
 ### GetResponse
@@ -815,7 +325,6 @@ Get
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | clusterVariable | [ClusterVariable](#clustervariables.v1alpha.ClusterVariable) |  | ClusterVariable object. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="clustervariables.v1alpha.ListRequest"></a>
 
 ### ListRequest
@@ -824,7 +333,7 @@ List
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| listOptions | [core.v1.ListOptions](#core.v1.ListOptions) |  | ListOptions options for a ListRequest. |
+| options | [core.v1.ListOptions](#core.v1.ListOptions) |  | core_v1.ListOptions |
 <a name="clustervariables.v1alpha.ListResponse"></a>
 
 ### ListResponse
@@ -833,8 +342,7 @@ List
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| clustervariables | [ClusterVariable](#clustervariables.v1alpha.ClusterVariable) | repeated | ClusterVariable list. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
+| clusterVariableList | [ClusterVariableList](#clustervariables.v1alpha.ClusterVariableList) |  | ClusterVariable list. |
 <a name="clustervariables.v1alpha.UpdateRequest"></a>
 
 ### UpdateRequest
@@ -843,6 +351,7 @@ Update
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
+| options | [core.v1.UpdateOptions](#core.v1.UpdateOptions) |  | core_v1.UpdateOptions |
 | clusterVariable | [ClusterVariable](#clustervariables.v1alpha.ClusterVariable) |  | ClusterVariable object. |
 <a name="clustervariables.v1alpha.UpdateResponse"></a>
 
@@ -853,7 +362,6 @@ Update
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | clusterVariable | [ClusterVariable](#clustervariables.v1alpha.ClusterVariable) |  | ClusterVariable object. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="clustervariables.v1alpha.VariableSpec"></a>
 
 ### VariableSpec
@@ -882,7 +390,7 @@ Watch
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| watchOptions | [core.v1.WatchOptions](#core.v1.WatchOptions) |  | WatchOptions options for WatchRequest. |
+| options | [core.v1.WatchOptions](#core.v1.WatchOptions) |  | core_v1.WatchOptions |
 <a name="clustervariables.v1alpha.WatchResponse"></a>
 
 ### WatchResponse
@@ -893,7 +401,6 @@ Watch
 | ----- | ---- | ----- | ----------- |
 | event | [events.v1alpha.Event](#events.v1alpha.Event) |  | ClusterVariable info for watch response. |
 | clusterVariable | [ClusterVariable](#clustervariables.v1alpha.ClusterVariable) |  | ClusterVariable for watch response. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <!-- end messages -->
 
 <!-- end enums -->
@@ -911,10 +418,365 @@ Watch
 | ----------- | ------------ | ------------- | ------------|
 | Get | [GetRequest](#clustervariables.v1alpha.GetRequest) | [GetResponse](#clustervariables.v1alpha.GetResponse) | Get a ClusterVariable. |
 | List | [ListRequest](#clustervariables.v1alpha.ListRequest) | [ListResponse](#clustervariables.v1alpha.ListResponse) | List ClusterVariable. |
-| Add | [AddRequest](#clustervariables.v1alpha.AddRequest) | [AddResponse](#clustervariables.v1alpha.AddResponse) | Add a ClusterVariable. |
+| Create | [CreateRequest](#clustervariables.v1alpha.CreateRequest) | [CreateResponse](#clustervariables.v1alpha.CreateResponse) | Create a ClusterVariable. |
 | Update | [UpdateRequest](#clustervariables.v1alpha.UpdateRequest) | [UpdateResponse](#clustervariables.v1alpha.UpdateResponse) | Update a ClusterVariable. |
 | Delete | [DeleteRequest](#clustervariables.v1alpha.DeleteRequest) | [DeleteResponse](#clustervariables.v1alpha.DeleteResponse) | Delete a ClusterVariable. |
 | Watch | [WatchRequest](#clustervariables.v1alpha.WatchRequest) | [WatchResponse](#clustervariables.v1alpha.WatchResponse) stream | Watch ClusterVariable. |
+
+ <!-- end services -->
+
+
+
+<a name="github.com/galexrt/edenconfmgmt/pkg/apis/secrets/v1alpha/api.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## github.com/galexrt/edenconfmgmt/pkg/apis/secrets/v1alpha/api.proto
+
+
+
+<a name="secrets.v1alpha.CreateRequest"></a>
+
+### CreateRequest
+
+Create
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.CreateOptions](#core.v1.CreateOptions) |  | core_v1.CreateOptions |
+| secret | [Secret](#secrets.v1alpha.Secret) |  | Secret object. |
+<a name="secrets.v1alpha.CreateResponse"></a>
+
+### CreateResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| secret | [Secret](#secrets.v1alpha.Secret) |  | Secret object. |
+<a name="secrets.v1alpha.DeleteRequest"></a>
+
+### DeleteRequest
+
+Delete
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.DeleteOptions](#core.v1.DeleteOptions) |  | core_v1.DeleteOptions |
+| secret | [Secret](#secrets.v1alpha.Secret) |  | Secret object. |
+<a name="secrets.v1alpha.DeleteResponse"></a>
+
+### DeleteResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| secret | [Secret](#secrets.v1alpha.Secret) |  | Secret object. |
+<a name="secrets.v1alpha.GetRequest"></a>
+
+### GetRequest
+
+Get
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.GetOptions](#core.v1.GetOptions) |  | GetOptions options for a GetRequest. |
+<a name="secrets.v1alpha.GetResponse"></a>
+
+### GetResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| secret | [Secret](#secrets.v1alpha.Secret) |  | Secret object. |
+<a name="secrets.v1alpha.ListRequest"></a>
+
+### ListRequest
+
+List
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.ListOptions](#core.v1.ListOptions) |  | core_v1.ListOptions |
+<a name="secrets.v1alpha.ListResponse"></a>
+
+### ListResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| SecretList | [SecretList](#secrets.v1alpha.SecretList) |  | Secret list. |
+<a name="secrets.v1alpha.Secret"></a>
+
+### Secret
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| metadata | [core.v1.ObjectMetadata](#core.v1.ObjectMetadata) |  | Metadata for Secret object. |
+| spec | [SecretSpec](#secrets.v1alpha.SecretSpec) |  | Spec for Secret. |
+<a name="secrets.v1alpha.SecretList"></a>
+
+### SecretList
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| metadata | [core.v1.ObjectMetadata](#core.v1.ObjectMetadata) |  | Metadata for SecretList object. |
+| items | [Secret](#secrets.v1alpha.Secret) | repeated | List of Secret objects. |
+<a name="secrets.v1alpha.SecretSpec"></a>
+
+### SecretSpec
+
+Secrets secrets file structure. This covers the "Secrets File" and "'From Host' Static Secret File".
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| secrets | [SecretSpec.SecretsEntry](#secrets.v1alpha.SecretSpec.SecretsEntry) | repeated | Secrets. |
+| type | [string](#string) |  | Type of secret. |
+<a name="secrets.v1alpha.SecretSpec.SecretsEntry"></a>
+
+### SecretSpec.SecretsEntry
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| key | [string](#string) |  |  |
+| value | [google.protobuf.Any](#google.protobuf.Any) |  |  |
+<a name="secrets.v1alpha.UpdateRequest"></a>
+
+### UpdateRequest
+
+Update
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.UpdateOptions](#core.v1.UpdateOptions) |  | core_v1.UpdateOptions |
+| secret | [Secret](#secrets.v1alpha.Secret) |  | Secret object. |
+<a name="secrets.v1alpha.UpdateResponse"></a>
+
+### UpdateResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| secret | [Secret](#secrets.v1alpha.Secret) |  | Secret object. |
+<a name="secrets.v1alpha.WatchRequest"></a>
+
+### WatchRequest
+
+Watch
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.WatchOptions](#core.v1.WatchOptions) |  | core_v1.WatchOptions |
+<a name="secrets.v1alpha.WatchResponse"></a>
+
+### WatchResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| event | [events.v1alpha.Event](#events.v1alpha.Event) |  | Secret info for watch response. |
+| secret | [Secret](#secrets.v1alpha.Secret) |  | Secret for watch response. |
+<!-- end messages -->
+
+<!-- end enums -->
+
+ <!-- end HasExtensions -->
+
+
+<a name="secrets.v1alpha.Secrets"></a>
+
+### Secrets
+
+
+
+| Method Name | Request Type | Response Type | Description |
+| ----------- | ------------ | ------------- | ------------|
+| Get | [GetRequest](#secrets.v1alpha.GetRequest) | [GetResponse](#secrets.v1alpha.GetResponse) | Get a Secret. |
+| List | [ListRequest](#secrets.v1alpha.ListRequest) | [ListResponse](#secrets.v1alpha.ListResponse) | List Secret. |
+| Create | [CreateRequest](#secrets.v1alpha.CreateRequest) | [CreateResponse](#secrets.v1alpha.CreateResponse) | Create a Secret. |
+| Update | [UpdateRequest](#secrets.v1alpha.UpdateRequest) | [UpdateResponse](#secrets.v1alpha.UpdateResponse) | Update a Secret. |
+| Delete | [DeleteRequest](#secrets.v1alpha.DeleteRequest) | [DeleteResponse](#secrets.v1alpha.DeleteResponse) | Delete a Secret. |
+| Watch | [WatchRequest](#secrets.v1alpha.WatchRequest) | [WatchResponse](#secrets.v1alpha.WatchResponse) stream | Watch Secret. |
+
+ <!-- end services -->
+
+
+
+<a name="github.com/galexrt/edenconfmgmt/pkg/apis/beacons/v1alpha/api.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## github.com/galexrt/edenconfmgmt/pkg/apis/beacons/v1alpha/api.proto
+
+
+
+<a name="beacons.v1alpha.Beacon"></a>
+
+### Beacon
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| metadata | [core.v1.ObjectMetadata](#core.v1.ObjectMetadata) |  | Metadata for Beacon object. |
+| spec | [BeaconSpec](#beacons.v1alpha.BeaconSpec) |  | Spec for Beacon. |
+<a name="beacons.v1alpha.BeaconList"></a>
+
+### BeaconList
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| metadata | [core.v1.ObjectMetadata](#core.v1.ObjectMetadata) |  | Metadata for BeaconList object. |
+| items | [Beacon](#beacons.v1alpha.Beacon) | repeated | List of Beacon objects. |
+<a name="beacons.v1alpha.BeaconSpec"></a>
+
+### BeaconSpec
+
+TODO
+<a name="beacons.v1alpha.CreateRequest"></a>
+
+### CreateRequest
+
+Create Beacon request.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.CreateOptions](#core.v1.CreateOptions) |  | core_v1.CreateOptions |
+| beacon | [Beacon](#beacons.v1alpha.Beacon) |  | Beacon object. |
+<a name="beacons.v1alpha.CreateResponse"></a>
+
+### CreateResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| beacon | [Beacon](#beacons.v1alpha.Beacon) |  | Beacon object. |
+<a name="beacons.v1alpha.DeleteRequest"></a>
+
+### DeleteRequest
+
+Delete
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.DeleteOptions](#core.v1.DeleteOptions) |  | core_v1.DeleteOptions |
+| beacon | [Beacon](#beacons.v1alpha.Beacon) |  | Beacon object. |
+<a name="beacons.v1alpha.DeleteResponse"></a>
+
+### DeleteResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| beacon | [Beacon](#beacons.v1alpha.Beacon) |  | Beacon object. |
+<a name="beacons.v1alpha.GetRequest"></a>
+
+### GetRequest
+
+Get request content.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.GetOptions](#core.v1.GetOptions) |  | core_v1.GetOptions |
+<a name="beacons.v1alpha.GetResponse"></a>
+
+### GetResponse
+
+Get response content.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| beacon | [Beacon](#beacons.v1alpha.Beacon) |  | Beacon object. |
+<a name="beacons.v1alpha.ListRequest"></a>
+
+### ListRequest
+
+List request content.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.ListOptions](#core.v1.ListOptions) |  | core_v1.ListOptions |
+<a name="beacons.v1alpha.ListResponse"></a>
+
+### ListResponse
+
+List response content.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| beaconList | [BeaconList](#beacons.v1alpha.BeaconList) |  | Beacon list. |
+<a name="beacons.v1alpha.UpdateRequest"></a>
+
+### UpdateRequest
+
+Update
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.UpdateOptions](#core.v1.UpdateOptions) |  | core_v1.UpdateOptions |
+| beacon | [Beacon](#beacons.v1alpha.Beacon) |  | Beacon object. |
+<a name="beacons.v1alpha.UpdateResponse"></a>
+
+### UpdateResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| beacon | [Beacon](#beacons.v1alpha.Beacon) |  | Beacon object. |
+<a name="beacons.v1alpha.WatchRequest"></a>
+
+### WatchRequest
+
+Watch
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.WatchOptions](#core.v1.WatchOptions) |  | core_v1.WatchOptions |
+<a name="beacons.v1alpha.WatchResponse"></a>
+
+### WatchResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| event | [events.v1alpha.Event](#events.v1alpha.Event) |  | Beacon info for watch response. |
+| beacon | [Beacon](#beacons.v1alpha.Beacon) |  | Beacon for watch response. |
+<!-- end messages -->
+
+<!-- end enums -->
+
+ <!-- end HasExtensions -->
+
+
+<a name="beacons.v1alpha.Beacons"></a>
+
+### Beacons
+
+
+
+| Method Name | Request Type | Response Type | Description |
+| ----------- | ------------ | ------------- | ------------|
+| Get | [GetRequest](#beacons.v1alpha.GetRequest) | [GetResponse](#beacons.v1alpha.GetResponse) | Get a Beacon. |
+| List | [ListRequest](#beacons.v1alpha.ListRequest) | [ListResponse](#beacons.v1alpha.ListResponse) | List Beacons. |
+| Create | [CreateRequest](#beacons.v1alpha.CreateRequest) | [CreateResponse](#beacons.v1alpha.CreateResponse) | Create a Beacon. |
+| Update | [UpdateRequest](#beacons.v1alpha.UpdateRequest) | [UpdateResponse](#beacons.v1alpha.UpdateResponse) | Update a Beacon. |
+| Delete | [DeleteRequest](#beacons.v1alpha.DeleteRequest) | [DeleteResponse](#beacons.v1alpha.DeleteResponse) | Delete a Beacon. |
+| Watch | [WatchRequest](#beacons.v1alpha.WatchRequest) | [WatchResponse](#beacons.v1alpha.WatchResponse) stream | Watch Beacon. |
 
  <!-- end services -->
 
@@ -927,25 +789,25 @@ Watch
 
 
 
-<a name="cronjobs.v1alpha.AddRequest"></a>
+<a name="cronjobs.v1alpha.CreateRequest"></a>
 
-### AddRequest
+### CreateRequest
 
-Add
+Create
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.CreateOptions](#core.v1.CreateOptions) |  | core_v1.CreateOptions |
+| cronJob | [CronJob](#cronjobs.v1alpha.CronJob) |  | CronJob |
+<a name="cronjobs.v1alpha.CreateResponse"></a>
+
+### CreateResponse
+
+
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | cronJob | [CronJob](#cronjobs.v1alpha.CronJob) |  | CronJob object. |
-<a name="cronjobs.v1alpha.AddResponse"></a>
-
-### AddResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| cronJob | [CronJob](#cronjobs.v1alpha.CronJob) |  | CronJob object. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="cronjobs.v1alpha.CronJob"></a>
 
 ### CronJob
@@ -956,6 +818,16 @@ Add
 | ----- | ---- | ----- | ----------- |
 | metadata | [core.v1.ObjectMetadata](#core.v1.ObjectMetadata) |  | Metadata for CronJob object. |
 | spec | [CronJobSpec](#cronjobs.v1alpha.CronJobSpec) |  | Spec for CronJob. |
+<a name="cronjobs.v1alpha.CronJobList"></a>
+
+### CronJobList
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| metadata | [core.v1.ObjectMetadata](#core.v1.ObjectMetadata) |  | Metadata for CronJobList object. |
+| items | [CronJob](#cronjobs.v1alpha.CronJob) | repeated | List of CronJob objects. |
 <a name="cronjobs.v1alpha.CronJobSpec"></a>
 
 ### CronJobSpec
@@ -973,6 +845,7 @@ Delete
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
+| options | [core.v1.DeleteOptions](#core.v1.DeleteOptions) |  | core_v1.DeleteOptions |
 | cronJob | [CronJob](#cronjobs.v1alpha.CronJob) |  | CronJob object. |
 <a name="cronjobs.v1alpha.DeleteResponse"></a>
 
@@ -983,7 +856,6 @@ Delete
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | cronJob | [CronJob](#cronjobs.v1alpha.CronJob) |  | CronJob object. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="cronjobs.v1alpha.GetRequest"></a>
 
 ### GetRequest
@@ -992,7 +864,7 @@ Get
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| getOptions | [core.v1.GetOptions](#core.v1.GetOptions) |  | GetOptions options for a GetRequest. |
+| options | [core.v1.GetOptions](#core.v1.GetOptions) |  | core_v1.GetOptions |
 <a name="cronjobs.v1alpha.GetResponse"></a>
 
 ### GetResponse
@@ -1002,7 +874,6 @@ Get
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | cronJob | [CronJob](#cronjobs.v1alpha.CronJob) |  | CronJob object. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="cronjobs.v1alpha.ListRequest"></a>
 
 ### ListRequest
@@ -1011,7 +882,7 @@ List
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| listOptions | [core.v1.ListOptions](#core.v1.ListOptions) |  | ListOptions options for a ListRequest. |
+| options | [core.v1.ListOptions](#core.v1.ListOptions) |  | core_v1.ListOptions |
 <a name="cronjobs.v1alpha.ListResponse"></a>
 
 ### ListResponse
@@ -1020,8 +891,7 @@ List
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| cronjobs | [CronJob](#cronjobs.v1alpha.CronJob) | repeated | Config list. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
+| cronJobList | [CronJobList](#cronjobs.v1alpha.CronJobList) |  | Config list. |
 <a name="cronjobs.v1alpha.Schedule"></a>
 
 ### Schedule
@@ -1039,6 +909,7 @@ Update
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
+| options | [core.v1.UpdateOptions](#core.v1.UpdateOptions) |  | core_v1.CreateOptions |
 | cronJob | [CronJob](#cronjobs.v1alpha.CronJob) |  | CronJob object. |
 <a name="cronjobs.v1alpha.UpdateResponse"></a>
 
@@ -1049,7 +920,6 @@ Update
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | cronJob | [CronJob](#cronjobs.v1alpha.CronJob) |  | CronJob object. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <a name="cronjobs.v1alpha.WatchRequest"></a>
 
 ### WatchRequest
@@ -1058,7 +928,7 @@ Watch
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| watchOptions | [core.v1.WatchOptions](#core.v1.WatchOptions) |  | WatchOptions options for WatchRequest. |
+| options | [core.v1.WatchOptions](#core.v1.WatchOptions) |  | core_v1.WatchOptions |
 <a name="cronjobs.v1alpha.WatchResponse"></a>
 
 ### WatchResponse
@@ -1069,7 +939,6 @@ Watch
 | ----- | ---- | ----- | ----------- |
 | event | [events.v1alpha.Event](#events.v1alpha.Event) |  | Event info for watch response. |
 | cronJob | [CronJob](#cronjobs.v1alpha.CronJob) |  | CronJob for watch response. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
 <!-- end messages -->
 
 <!-- end enums -->
@@ -1087,10 +956,770 @@ Watch
 | ----------- | ------------ | ------------- | ------------|
 | Get | [GetRequest](#cronjobs.v1alpha.GetRequest) | [GetResponse](#cronjobs.v1alpha.GetResponse) | Get a Job. |
 | List | [ListRequest](#cronjobs.v1alpha.ListRequest) | [ListResponse](#cronjobs.v1alpha.ListResponse) | List CronJobs. |
-| Add | [AddRequest](#cronjobs.v1alpha.AddRequest) | [AddResponse](#cronjobs.v1alpha.AddResponse) | Add a Job. |
+| Create | [CreateRequest](#cronjobs.v1alpha.CreateRequest) | [CreateResponse](#cronjobs.v1alpha.CreateResponse) | Create a Job. |
 | Update | [UpdateRequest](#cronjobs.v1alpha.UpdateRequest) | [UpdateResponse](#cronjobs.v1alpha.UpdateResponse) | Update a Job. |
 | Delete | [DeleteRequest](#cronjobs.v1alpha.DeleteRequest) | [DeleteResponse](#cronjobs.v1alpha.DeleteResponse) | Delete a Job. |
 | Watch | [WatchRequest](#cronjobs.v1alpha.WatchRequest) | [WatchResponse](#cronjobs.v1alpha.WatchResponse) stream | Watch Job. |
+
+ <!-- end services -->
+
+
+
+<a name="github.com/galexrt/edenconfmgmt/pkg/apis/nodes/v1alpha/api.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## github.com/galexrt/edenconfmgmt/pkg/apis/nodes/v1alpha/api.proto
+
+
+
+<a name="nodes.v1alpha.CreateRequest"></a>
+
+### CreateRequest
+
+Create
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.CreateOptions](#core.v1.CreateOptions) |  | core_v1.CreateOptions |
+| node | [Node](#nodes.v1alpha.Node) |  | Node object. |
+<a name="nodes.v1alpha.CreateResponse"></a>
+
+### CreateResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| node | [Node](#nodes.v1alpha.Node) |  | Node object. |
+<a name="nodes.v1alpha.DeleteRequest"></a>
+
+### DeleteRequest
+
+Delete
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.DeleteOptions](#core.v1.DeleteOptions) |  | core_v1.DeleteOptions |
+| node | [Node](#nodes.v1alpha.Node) |  | Node object. |
+<a name="nodes.v1alpha.DeleteResponse"></a>
+
+### DeleteResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| node | [Node](#nodes.v1alpha.Node) |  | Node object. |
+<a name="nodes.v1alpha.GetRequest"></a>
+
+### GetRequest
+
+Get
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.GetOptions](#core.v1.GetOptions) |  | GetOptions options for a GetRequest. |
+<a name="nodes.v1alpha.GetResponse"></a>
+
+### GetResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| node | [Node](#nodes.v1alpha.Node) |  | Node object. |
+<a name="nodes.v1alpha.ListRequest"></a>
+
+### ListRequest
+
+List
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.ListOptions](#core.v1.ListOptions) |  | core_v1.ListOptions |
+<a name="nodes.v1alpha.ListResponse"></a>
+
+### ListResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| nodeList | [NodeList](#nodes.v1alpha.NodeList) |  | Node list. |
+<a name="nodes.v1alpha.Network"></a>
+
+### Network
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| daemonPorts | [Port](#nodes.v1alpha.Port) | repeated | Ports of edenconfmgmt daemon (should only be two right now, 1. GRPC, 2. HTTP). |
+| fqdn | [string](#string) |  | FQDN of Node. |
+| addresses | [string](#string) | repeated | IP addresses of Node. |
+<a name="nodes.v1alpha.Node"></a>
+
+### Node
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| metadata | [core.v1.ObjectMetadata](#core.v1.ObjectMetadata) |  | Metadata for Node object. |
+| spec | [Spec](#nodes.v1alpha.Spec) |  | Spec for Node. |
+| status | [Status](#nodes.v1alpha.Status) |  | Status for Node. |
+<a name="nodes.v1alpha.NodeList"></a>
+
+### NodeList
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| metadata | [core.v1.ObjectMetadata](#core.v1.ObjectMetadata) |  | Metadata for NodeList object. |
+| items | [Node](#nodes.v1alpha.Node) | repeated | List of Node objects. |
+<a name="nodes.v1alpha.Port"></a>
+
+### Port
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  | Name of port. |
+| port | [int32](#int32) |  | Port number. |
+| protocol | [string](#string) |  | Protocol name. |
+<a name="nodes.v1alpha.Spec"></a>
+
+### Spec
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| network | [Network](#nodes.v1alpha.Network) |  | Network specifications of Node. |
+<a name="nodes.v1alpha.Status"></a>
+
+### Status
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| state | [string](#string) |  | State of Node. |
+<a name="nodes.v1alpha.UpdateRequest"></a>
+
+### UpdateRequest
+
+Update
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.UpdateOptions](#core.v1.UpdateOptions) |  | core_v1.UpdateOptions |
+| node | [Node](#nodes.v1alpha.Node) |  | Node object. |
+<a name="nodes.v1alpha.UpdateResponse"></a>
+
+### UpdateResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| node | [Node](#nodes.v1alpha.Node) |  | Node object. |
+<a name="nodes.v1alpha.WatchRequest"></a>
+
+### WatchRequest
+
+Watch
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.WatchOptions](#core.v1.WatchOptions) |  | core_v1.WatchOptions |
+<a name="nodes.v1alpha.WatchResponse"></a>
+
+### WatchResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| event | [events.v1alpha.Event](#events.v1alpha.Event) |  | Event info for watch response. |
+| node | [Node](#nodes.v1alpha.Node) |  | Node for watch response. |
+<!-- end messages -->
+
+<!-- end enums -->
+
+ <!-- end HasExtensions -->
+
+
+<a name="nodes.v1alpha.Nodes"></a>
+
+### Nodes
+
+
+
+| Method Name | Request Type | Response Type | Description |
+| ----------- | ------------ | ------------- | ------------|
+| Get | [GetRequest](#nodes.v1alpha.GetRequest) | [GetResponse](#nodes.v1alpha.GetResponse) | Get a Node. |
+| List | [ListRequest](#nodes.v1alpha.ListRequest) | [ListResponse](#nodes.v1alpha.ListResponse) | List Nodes. |
+| Create | [CreateRequest](#nodes.v1alpha.CreateRequest) | [CreateResponse](#nodes.v1alpha.CreateResponse) | Create a Node. |
+| Update | [UpdateRequest](#nodes.v1alpha.UpdateRequest) | [UpdateResponse](#nodes.v1alpha.UpdateResponse) | Update a Node. |
+| Delete | [DeleteRequest](#nodes.v1alpha.DeleteRequest) | [DeleteResponse](#nodes.v1alpha.DeleteResponse) | Delete a Node. |
+| Watch | [WatchRequest](#nodes.v1alpha.WatchRequest) | [WatchResponse](#nodes.v1alpha.WatchResponse) stream | Watch a Node(s). |
+
+ <!-- end services -->
+
+
+
+<a name="github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha/api.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha/api.proto
+
+
+
+<a name="events.v1alpha.CreateRequest"></a>
+
+### CreateRequest
+
+Create
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.CreateOptions](#core.v1.CreateOptions) |  | core_v1.CreateOptions |
+| event | [Event](#events.v1alpha.Event) |  | Event object. |
+<a name="events.v1alpha.CreateResponse"></a>
+
+### CreateResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| event | [Event](#events.v1alpha.Event) |  | Event object. |
+<a name="events.v1alpha.DeleteRequest"></a>
+
+### DeleteRequest
+
+Delete
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.DeleteOptions](#core.v1.DeleteOptions) |  | core_v1.DeleteOptions |
+| event | [Event](#events.v1alpha.Event) |  | Event object. |
+<a name="events.v1alpha.DeleteResponse"></a>
+
+### DeleteResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| event | [Event](#events.v1alpha.Event) |  | Event object. |
+<a name="events.v1alpha.Event"></a>
+
+### Event
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| metadata | [core.v1.ObjectMetadata](#core.v1.ObjectMetadata) |  | Metadata for the Event object. |
+| spec | [EventSpec](#events.v1alpha.EventSpec) |  | Spec for Event. |
+<a name="events.v1alpha.EventList"></a>
+
+### EventList
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| metadata | [core.v1.ObjectMetadata](#core.v1.ObjectMetadata) |  | Metadata for EventList object. |
+| items | [Event](#events.v1alpha.Event) | repeated | List of Event objects. |
+<a name="events.v1alpha.EventSpec"></a>
+
+### EventSpec
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| type | [string](#string) |  | Type of the Event. |
+| summary | [string](#string) |  | Summary of Event. |
+| data | [google.protobuf.Any](#google.protobuf.Any) |  | Data of Event. |
+<a name="events.v1alpha.GetRequest"></a>
+
+### GetRequest
+
+Get
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.GetOptions](#core.v1.GetOptions) |  | core_v1.GetOptions |
+<a name="events.v1alpha.GetResponse"></a>
+
+### GetResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| event | [Event](#events.v1alpha.Event) |  | Event object. |
+<a name="events.v1alpha.ListRequest"></a>
+
+### ListRequest
+
+List
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.ListOptions](#core.v1.ListOptions) |  | core_v1.ListOptions |
+<a name="events.v1alpha.ListResponse"></a>
+
+### ListResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| eventList | [EventList](#events.v1alpha.EventList) |  | Event list. |
+<a name="events.v1alpha.UpdateRequest"></a>
+
+### UpdateRequest
+
+Update
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.UpdateOptions](#core.v1.UpdateOptions) |  | core_v1.UpdateOptions |
+| event | [Event](#events.v1alpha.Event) |  | Event object. |
+<a name="events.v1alpha.UpdateResponse"></a>
+
+### UpdateResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| event | [Event](#events.v1alpha.Event) |  | Event object. |
+<a name="events.v1alpha.WatchRequest"></a>
+
+### WatchRequest
+
+Watch
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.WatchOptions](#core.v1.WatchOptions) |  | core_v1.WatchOptions |
+<a name="events.v1alpha.WatchResponse"></a>
+
+### WatchResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| event | [Event](#events.v1alpha.Event) |  | Event for watch stream. |
+<!-- end messages -->
+
+<!-- end enums -->
+
+ <!-- end HasExtensions -->
+
+
+<a name="events.v1alpha.Events"></a>
+
+### Events
+
+
+
+| Method Name | Request Type | Response Type | Description |
+| ----------- | ------------ | ------------- | ------------|
+| Get | [GetRequest](#events.v1alpha.GetRequest) | [GetResponse](#events.v1alpha.GetResponse) | Get a Event. |
+| List | [ListRequest](#events.v1alpha.ListRequest) | [ListResponse](#events.v1alpha.ListResponse) | List Events. |
+| Create | [CreateRequest](#events.v1alpha.CreateRequest) | [CreateResponse](#events.v1alpha.CreateResponse) | Create a Event. |
+| Update | [UpdateRequest](#events.v1alpha.UpdateRequest) | [UpdateResponse](#events.v1alpha.UpdateResponse) | Update a Event. |
+| Delete | [DeleteRequest](#events.v1alpha.DeleteRequest) | [DeleteResponse](#events.v1alpha.DeleteResponse) | Delete a Event. |
+| Watch | [WatchRequest](#events.v1alpha.WatchRequest) | [WatchResponse](#events.v1alpha.WatchResponse) stream | Watch for Events. |
+
+ <!-- end services -->
+
+
+
+<a name="github.com/galexrt/edenconfmgmt/pkg/apis/agentconfigs/v1alpha/api.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## github.com/galexrt/edenconfmgmt/pkg/apis/agentconfigs/v1alpha/api.proto
+
+
+
+<a name="agentagentconfigs.v1alpha.AgentConfig"></a>
+
+### AgentConfig
+
+AgentConfig object base.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| metadata | [core.v1.ObjectMetadata](#core.v1.ObjectMetadata) |  | Metadata for AgentConfig object. |
+| spec | [AgentConfigSpec](#agentagentconfigs.v1alpha.AgentConfigSpec) |  | Spec for AgentConfig. |
+<a name="agentagentconfigs.v1alpha.AgentConfigList"></a>
+
+### AgentConfigList
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| metadata | [core.v1.ObjectMetadata](#core.v1.ObjectMetadata) |  | Metadata for AgentConfigList object. |
+| items | [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig) | repeated | List of AgentConfig objects. |
+<a name="agentagentconfigs.v1alpha.AgentConfigSpec"></a>
+
+### AgentConfigSpec
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| dataStore | [DataStore](#agentagentconfigs.v1alpha.DataStore) |  | DataStore. |
+<a name="agentagentconfigs.v1alpha.CreateRequest"></a>
+
+### CreateRequest
+
+Create
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.CreateOptions](#core.v1.CreateOptions) |  | core_v1.CreateOptions |
+| agentConfig | [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig) |  | AgentConfig object. |
+<a name="agentagentconfigs.v1alpha.CreateResponse"></a>
+
+### CreateResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| agentConfig | [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig) |  | AgentConfig object. |
+<a name="agentagentconfigs.v1alpha.DataStore"></a>
+
+### DataStore
+
+DataStore config for the data store
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| type | [string](#string) |  | Type. |
+| count | [int64](#int64) |  | Count. |
+| etcd | [ETCD](#agentagentconfigs.v1alpha.ETCD) |  | ETCD config options. |
+<a name="agentagentconfigs.v1alpha.DeleteRequest"></a>
+
+### DeleteRequest
+
+Delete
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.DeleteOptions](#core.v1.DeleteOptions) |  | core_v1.DeleteOptions |
+| agentConfig | [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig) |  | AgentConfig object. |
+<a name="agentagentconfigs.v1alpha.DeleteResponse"></a>
+
+### DeleteResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| agentConfig | [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig) |  | AgentConfig object. |
+<a name="agentagentconfigs.v1alpha.ETCD"></a>
+
+### ETCD
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| endpoints | [string](#string) |  | List of endpoints if running your own ETCD server (should only be used for testing). |
+<a name="agentagentconfigs.v1alpha.GetRequest"></a>
+
+### GetRequest
+
+Get
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.GetOptions](#core.v1.GetOptions) |  | core_v1.GetOptions |
+<a name="agentagentconfigs.v1alpha.GetResponse"></a>
+
+### GetResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| agentConfig | [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig) |  | AgentConfig object. |
+<a name="agentagentconfigs.v1alpha.ListRequest"></a>
+
+### ListRequest
+
+List
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.ListOptions](#core.v1.ListOptions) |  | core_v1.ListOptions |
+<a name="agentagentconfigs.v1alpha.ListResponse"></a>
+
+### ListResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| agentConfigList | [AgentConfigList](#agentagentconfigs.v1alpha.AgentConfigList) |  | AgentConfig list. |
+<a name="agentagentconfigs.v1alpha.UpdateRequest"></a>
+
+### UpdateRequest
+
+Update
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.UpdateOptions](#core.v1.UpdateOptions) |  | core_v1.UpdateOptions |
+| agentConfig | [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig) |  | AgentConfig object. |
+<a name="agentagentconfigs.v1alpha.UpdateResponse"></a>
+
+### UpdateResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| agentConfig | [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig) |  | AgentConfig object. |
+<a name="agentagentconfigs.v1alpha.WatchRequest"></a>
+
+### WatchRequest
+
+Watch
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.WatchOptions](#core.v1.WatchOptions) |  | core_v1.WatchOptions |
+<a name="agentagentconfigs.v1alpha.WatchResponse"></a>
+
+### WatchResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| event | [events.v1alpha.Event](#events.v1alpha.Event) |  | Event info for watch response. |
+| agentConfig | [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig) |  | AgentConfig object. |
+<!-- end messages -->
+
+<!-- end enums -->
+
+ <!-- end HasExtensions -->
+
+
+<a name="agentagentconfigs.v1alpha.AgentConfigs"></a>
+
+### AgentConfigs
+
+
+
+| Method Name | Request Type | Response Type | Description |
+| ----------- | ------------ | ------------- | ------------|
+| Get | [GetRequest](#agentagentconfigs.v1alpha.GetRequest) | [GetResponse](#agentagentconfigs.v1alpha.GetResponse) | Get a AgentConfig. |
+| List | [ListRequest](#agentagentconfigs.v1alpha.ListRequest) | [ListResponse](#agentagentconfigs.v1alpha.ListResponse) | List AgentConfigs. |
+| Create | [CreateRequest](#agentagentconfigs.v1alpha.CreateRequest) | [CreateResponse](#agentagentconfigs.v1alpha.CreateResponse) | Create a AgentConfig. |
+| Update | [UpdateRequest](#agentagentconfigs.v1alpha.UpdateRequest) | [UpdateResponse](#agentagentconfigs.v1alpha.UpdateResponse) | Update a AgentConfig. |
+| Delete | [DeleteRequest](#agentagentconfigs.v1alpha.DeleteRequest) | [DeleteResponse](#agentagentconfigs.v1alpha.DeleteResponse) | Delete a AgentConfig. |
+| Watch | [WatchRequest](#agentagentconfigs.v1alpha.WatchRequest) | [WatchResponse](#agentagentconfigs.v1alpha.WatchResponse) stream | Watch AgentConfig. |
+
+ <!-- end services -->
+
+
+
+<a name="github.com/galexrt/edenconfmgmt/pkg/apis/variables/v1alpha/api.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## github.com/galexrt/edenconfmgmt/pkg/apis/variables/v1alpha/api.proto
+
+
+
+<a name="variables.v1alpha.CreateRequest"></a>
+
+### CreateRequest
+
+Create
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.CreateOptions](#core.v1.CreateOptions) |  | core_v1.CreateOptions |
+| variable | [Variable](#variables.v1alpha.Variable) |  | Variable object. |
+<a name="variables.v1alpha.CreateResponse"></a>
+
+### CreateResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| variable | [Variable](#variables.v1alpha.Variable) |  | Variable object. |
+<a name="variables.v1alpha.DeleteRequest"></a>
+
+### DeleteRequest
+
+Delete
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.DeleteOptions](#core.v1.DeleteOptions) |  | core_v1.DeleteOptions |
+| variable | [Variable](#variables.v1alpha.Variable) |  | Variable object. |
+<a name="variables.v1alpha.DeleteResponse"></a>
+
+### DeleteResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| variable | [Variable](#variables.v1alpha.Variable) |  | Variable object. |
+<a name="variables.v1alpha.GetRequest"></a>
+
+### GetRequest
+
+Get
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.GetOptions](#core.v1.GetOptions) |  | core_v1.GetOptions |
+<a name="variables.v1alpha.GetResponse"></a>
+
+### GetResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| variable | [Variable](#variables.v1alpha.Variable) |  | Variable object. |
+<a name="variables.v1alpha.ListRequest"></a>
+
+### ListRequest
+
+List
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.ListOptions](#core.v1.ListOptions) |  | core_v1.ListOptions |
+<a name="variables.v1alpha.ListResponse"></a>
+
+### ListResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| variableList | [VariableList](#variables.v1alpha.VariableList) |  | Variable list. |
+<a name="variables.v1alpha.UpdateRequest"></a>
+
+### UpdateRequest
+
+Update
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.UpdateOptions](#core.v1.UpdateOptions) |  | core_v1.UpdateOptions |
+| variable | [Variable](#variables.v1alpha.Variable) |  | Variable object. |
+<a name="variables.v1alpha.UpdateResponse"></a>
+
+### UpdateResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| variable | [Variable](#variables.v1alpha.Variable) |  | Variable object. |
+<a name="variables.v1alpha.Variable"></a>
+
+### Variable
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| metadata | [core.v1.ObjectMetadata](#core.v1.ObjectMetadata) |  | Metadata for Variable object. |
+| spec | [VariableSpec](#variables.v1alpha.VariableSpec) |  | Spec for Variable. |
+<a name="variables.v1alpha.VariableList"></a>
+
+### VariableList
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| metadata | [core.v1.ObjectMetadata](#core.v1.ObjectMetadata) |  | Metadata for VariableList object. |
+| items | [Variable](#variables.v1alpha.Variable) | repeated | List of Variable objects. |
+<a name="variables.v1alpha.VariableSpec"></a>
+
+### VariableSpec
+
+Variables variables file structure. This covers the "Variables File" and "'From Host' Static Variable File".
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| variables | [VariableSpec.VariablesEntry](#variables.v1alpha.VariableSpec.VariablesEntry) | repeated | Variables. |
+| type | [string](#string) |  | Type of variable. |
+<a name="variables.v1alpha.VariableSpec.VariablesEntry"></a>
+
+### VariableSpec.VariablesEntry
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| key | [string](#string) |  |  |
+| value | [google.protobuf.Any](#google.protobuf.Any) |  |  |
+<a name="variables.v1alpha.WatchRequest"></a>
+
+### WatchRequest
+
+Watch
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.WatchOptions](#core.v1.WatchOptions) |  | WatchOptions options for WatchRequest. |
+<a name="variables.v1alpha.WatchResponse"></a>
+
+### WatchResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| event | [events.v1alpha.Event](#events.v1alpha.Event) |  | Variable info for watch response. |
+| variable | [Variable](#variables.v1alpha.Variable) |  | Variable for watch response. |
+<!-- end messages -->
+
+<!-- end enums -->
+
+ <!-- end HasExtensions -->
+
+
+<a name="variables.v1alpha.Variables"></a>
+
+### Variables
+
+
+
+| Method Name | Request Type | Response Type | Description |
+| ----------- | ------------ | ------------- | ------------|
+| Get | [GetRequest](#variables.v1alpha.GetRequest) | [GetResponse](#variables.v1alpha.GetResponse) | Get a Variable. |
+| List | [ListRequest](#variables.v1alpha.ListRequest) | [ListResponse](#variables.v1alpha.ListResponse) | List Variable. |
+| Create | [CreateRequest](#variables.v1alpha.CreateRequest) | [CreateResponse](#variables.v1alpha.CreateResponse) | Create a Variable. |
+| Update | [UpdateRequest](#variables.v1alpha.UpdateRequest) | [UpdateResponse](#variables.v1alpha.UpdateResponse) | Update a Variable. |
+| Delete | [DeleteRequest](#variables.v1alpha.DeleteRequest) | [DeleteResponse](#variables.v1alpha.DeleteResponse) | Delete a Variable. |
+| Watch | [WatchRequest](#variables.v1alpha.WatchRequest) | [WatchResponse](#variables.v1alpha.WatchResponse) stream | Watch Variable. |
 
  <!-- end services -->
 
@@ -1285,25 +1914,25 @@ Watch
 | conditions | [core.v1.Conditions](#core.v1.Conditions) |  | Conditions. |
 | runOptions | [RunOptions](#triggers.v1alpha.RunOptions) |  | RunOptions |
 | parameters | [google.protobuf.Any](#google.protobuf.Any) | repeated | Map of string interface{} to be given to the action. |
-<a name="triggers.v1alpha.AddRequest"></a>
+<a name="triggers.v1alpha.CreateRequest"></a>
 
-### AddRequest
+### CreateRequest
 
-Add
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| task | [Trigger](#triggers.v1alpha.Trigger) |  | Trigger object. |
-<a name="triggers.v1alpha.AddResponse"></a>
-
-### AddResponse
-
-
+Create
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| task | [Trigger](#triggers.v1alpha.Trigger) |  | Trigger object. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
+| options | [core.v1.CreateOptions](#core.v1.CreateOptions) |  | core_v1.CreateOptions |
+| trigger | [Trigger](#triggers.v1alpha.Trigger) |  | Trigger object. |
+<a name="triggers.v1alpha.CreateResponse"></a>
+
+### CreateResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| trigger | [Trigger](#triggers.v1alpha.Trigger) |  | Trigger object. |
 <a name="triggers.v1alpha.DeleteRequest"></a>
 
 ### DeleteRequest
@@ -1312,7 +1941,8 @@ Delete
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| task | [Trigger](#triggers.v1alpha.Trigger) |  | Trigger object. |
+| options | [core.v1.DeleteOptions](#core.v1.DeleteOptions) |  | core_v1.DeleteOptions |
+| trigger | [Trigger](#triggers.v1alpha.Trigger) |  | Trigger object. |
 <a name="triggers.v1alpha.DeleteResponse"></a>
 
 ### DeleteResponse
@@ -1321,8 +1951,7 @@ Delete
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| task | [Trigger](#triggers.v1alpha.Trigger) |  | Trigger object. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
+| trigger | [Trigger](#triggers.v1alpha.Trigger) |  | Trigger object. |
 <a name="triggers.v1alpha.GetRequest"></a>
 
 ### GetRequest
@@ -1331,7 +1960,7 @@ Get
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| getOptions | [core.v1.GetOptions](#core.v1.GetOptions) |  | GetOptions options for a GetRequest. |
+| options | [core.v1.GetOptions](#core.v1.GetOptions) |  | core_v1.GetOptions |
 <a name="triggers.v1alpha.GetResponse"></a>
 
 ### GetResponse
@@ -1340,8 +1969,7 @@ Get
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| task | [Trigger](#triggers.v1alpha.Trigger) |  | Trigger object. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
+| trigger | [Trigger](#triggers.v1alpha.Trigger) |  | Trigger object. |
 <a name="triggers.v1alpha.ListRequest"></a>
 
 ### ListRequest
@@ -1350,7 +1978,7 @@ List
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| listOptions | [core.v1.ListOptions](#core.v1.ListOptions) |  | ListOptions options for a ListRequest. |
+| options | [core.v1.ListOptions](#core.v1.ListOptions) |  | core_v1.ListOptions |
 <a name="triggers.v1alpha.ListResponse"></a>
 
 ### ListResponse
@@ -1359,8 +1987,7 @@ List
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| triggers | [Trigger](#triggers.v1alpha.Trigger) | repeated | Trigger list. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
+| triggerList | [TriggerList](#triggers.v1alpha.TriggerList) |  | Trigger list. |
 <a name="triggers.v1alpha.RunOptions"></a>
 
 ### RunOptions
@@ -1412,6 +2039,16 @@ List
 | ----- | ---- | ----- | ----------- |
 | metadata | [core.v1.ObjectMetadata](#core.v1.ObjectMetadata) |  | Metadata for Trigger object. |
 | spec | [TriggerSpec](#triggers.v1alpha.TriggerSpec) |  | Spec for Trigger. |
+<a name="triggers.v1alpha.TriggerList"></a>
+
+### TriggerList
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| metadata | [core.v1.ObjectMetadata](#core.v1.ObjectMetadata) |  | Metadata for TriggerList object. |
+| items | [Trigger](#triggers.v1alpha.Trigger) | repeated | List of Trigger objects. |
 <a name="triggers.v1alpha.TriggerSpec"></a>
 
 ### TriggerSpec
@@ -1430,7 +2067,8 @@ Update
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| task | [Trigger](#triggers.v1alpha.Trigger) |  | Trigger object. |
+| options | [core.v1.UpdateOptions](#core.v1.UpdateOptions) |  | core_v1.UpdateOptions |
+| trigger | [Trigger](#triggers.v1alpha.Trigger) |  | Trigger object. |
 <a name="triggers.v1alpha.UpdateResponse"></a>
 
 ### UpdateResponse
@@ -1439,8 +2077,7 @@ Update
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| task | [Trigger](#triggers.v1alpha.Trigger) |  | Trigger object. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
+| trigger | [Trigger](#triggers.v1alpha.Trigger) |  | Trigger object. |
 <a name="triggers.v1alpha.WatchRequest"></a>
 
 ### WatchRequest
@@ -1449,7 +2086,7 @@ Watch
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| watchOptions | [core.v1.WatchOptions](#core.v1.WatchOptions) |  | WatchOptions options for WatchRequest. |
+| options | [core.v1.WatchOptions](#core.v1.WatchOptions) |  | core_v1.WatchOptions |
 <a name="triggers.v1alpha.WatchResponse"></a>
 
 ### WatchResponse
@@ -1459,8 +2096,7 @@ Watch
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | event | [events.v1alpha.Event](#events.v1alpha.Event) |  | Trigger info for watch response. |
-| task | [Trigger](#triggers.v1alpha.Trigger) |  | Trigger for watch response. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
+| trigger | [Trigger](#triggers.v1alpha.Trigger) |  | Trigger for watch response. |
 <!-- end messages -->
 
 <!-- end enums -->
@@ -1478,197 +2114,10 @@ Watch
 | ----------- | ------------ | ------------- | ------------|
 | Get | [GetRequest](#triggers.v1alpha.GetRequest) | [GetResponse](#triggers.v1alpha.GetResponse) | Get a Trigger. |
 | List | [ListRequest](#triggers.v1alpha.ListRequest) | [ListResponse](#triggers.v1alpha.ListResponse) | List Triggers. |
-| Add | [AddRequest](#triggers.v1alpha.AddRequest) | [AddResponse](#triggers.v1alpha.AddResponse) | Add a Trigger. |
+| Create | [CreateRequest](#triggers.v1alpha.CreateRequest) | [CreateResponse](#triggers.v1alpha.CreateResponse) | Create a Trigger. |
 | Update | [UpdateRequest](#triggers.v1alpha.UpdateRequest) | [UpdateResponse](#triggers.v1alpha.UpdateResponse) | Update a Trigger. |
 | Delete | [DeleteRequest](#triggers.v1alpha.DeleteRequest) | [DeleteResponse](#triggers.v1alpha.DeleteResponse) | Delete a Trigger. |
 | Watch | [WatchRequest](#triggers.v1alpha.WatchRequest) | [WatchResponse](#triggers.v1alpha.WatchResponse) stream | Watch Trigger. |
-
- <!-- end services -->
-
-
-
-<a name="github.com/galexrt/edenconfmgmt/pkg/apis/agentconfigs/v1alpha/api.proto"></a>
-<p align="right"><a href="#top">Top</a></p>
-
-## github.com/galexrt/edenconfmgmt/pkg/apis/agentconfigs/v1alpha/api.proto
-
-
-
-<a name="agentagentconfigs.v1alpha.AddRequest"></a>
-
-### AddRequest
-
-Add
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| agentConfig | [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig) |  | AgentConfig object. |
-<a name="agentagentconfigs.v1alpha.AddResponse"></a>
-
-### AddResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| agentConfig | [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig) |  | AgentConfig object. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
-<a name="agentagentconfigs.v1alpha.AgentConfig"></a>
-
-### AgentConfig
-
-AgentConfig object base.
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| metadata | [core.v1.ObjectMetadata](#core.v1.ObjectMetadata) |  | Metadata for AgentConfig object. |
-| spec | [AgentConfigSpec](#agentagentconfigs.v1alpha.AgentConfigSpec) |  | Spec for AgentConfig. |
-<a name="agentagentconfigs.v1alpha.AgentConfigSpec"></a>
-
-### AgentConfigSpec
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| dataStore | [DataStore](#agentagentconfigs.v1alpha.DataStore) |  | DataStore. |
-<a name="agentagentconfigs.v1alpha.DataStore"></a>
-
-### DataStore
-
-DataStore config for the data store
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| type | [string](#string) |  | Type. |
-| count | [int64](#int64) |  | Count. |
-| etcd | [ETCD](#agentagentconfigs.v1alpha.ETCD) |  | ETCD config options. |
-<a name="agentagentconfigs.v1alpha.DeleteRequest"></a>
-
-### DeleteRequest
-
-Delete
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| agentConfig | [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig) |  | AgentConfig object. |
-<a name="agentagentconfigs.v1alpha.DeleteResponse"></a>
-
-### DeleteResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| agentConfig | [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig) |  | AgentConfig object. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
-<a name="agentagentconfigs.v1alpha.ETCD"></a>
-
-### ETCD
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| endpoints | [string](#string) |  | List of endpoints if running your own ETCD server (should only be used for testing). |
-<a name="agentagentconfigs.v1alpha.GetRequest"></a>
-
-### GetRequest
-
-Get
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| getOptions | [core.v1.GetOptions](#core.v1.GetOptions) |  | GetOptions options for a GetRequest. |
-<a name="agentagentconfigs.v1alpha.GetResponse"></a>
-
-### GetResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| agentConfig | [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig) |  | AgentConfig object. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
-<a name="agentagentconfigs.v1alpha.ListRequest"></a>
-
-### ListRequest
-
-List
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| listOptions | [core.v1.ListOptions](#core.v1.ListOptions) |  | ListOptions options for a ListRequest. |
-<a name="agentagentconfigs.v1alpha.ListResponse"></a>
-
-### ListResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| agentConfigs | [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig) | repeated | AgentConfig list. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
-<a name="agentagentconfigs.v1alpha.UpdateRequest"></a>
-
-### UpdateRequest
-
-Update
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| agentConfig | [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig) |  | AgentConfig object. |
-<a name="agentagentconfigs.v1alpha.UpdateResponse"></a>
-
-### UpdateResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| agentConfig | [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig) |  | AgentConfig object. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
-<a name="agentagentconfigs.v1alpha.WatchRequest"></a>
-
-### WatchRequest
-
-Watch
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| watchOptions | [core.v1.WatchOptions](#core.v1.WatchOptions) |  | WatchOptions options for WatchRequest. |
-<a name="agentagentconfigs.v1alpha.WatchResponse"></a>
-
-### WatchResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| event | [events.v1alpha.Event](#events.v1alpha.Event) |  | Event info for watch response. |
-| agentConfig | [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig) |  | AgentConfig object. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
-<!-- end messages -->
-
-<!-- end enums -->
-
- <!-- end HasExtensions -->
-
-
-<a name="agentagentconfigs.v1alpha.AgentConfigs"></a>
-
-### AgentConfigs
-
-
-
-| Method Name | Request Type | Response Type | Description |
-| ----------- | ------------ | ------------- | ------------|
-| Get | [GetRequest](#agentagentconfigs.v1alpha.GetRequest) | [GetResponse](#agentagentconfigs.v1alpha.GetResponse) | Get a AgentConfig. |
-| List | [ListRequest](#agentagentconfigs.v1alpha.ListRequest) | [ListResponse](#agentagentconfigs.v1alpha.ListResponse) | List AgentConfigs. |
-| Add | [AddRequest](#agentagentconfigs.v1alpha.AddRequest) | [AddResponse](#agentagentconfigs.v1alpha.AddResponse) | Add a AgentConfig. |
-| Update | [UpdateRequest](#agentagentconfigs.v1alpha.UpdateRequest) | [UpdateResponse](#agentagentconfigs.v1alpha.UpdateResponse) | Update a AgentConfig. |
-| Delete | [DeleteRequest](#agentagentconfigs.v1alpha.DeleteRequest) | [DeleteResponse](#agentagentconfigs.v1alpha.DeleteResponse) | Delete a AgentConfig. |
-| Watch | [WatchRequest](#agentagentconfigs.v1alpha.WatchRequest) | [WatchResponse](#agentagentconfigs.v1alpha.WatchResponse) stream | Watch AgentConfig. |
 
  <!-- end services -->
 
@@ -1693,25 +2142,25 @@ Watch
 | conditions | [core.v1.Conditions](#core.v1.Conditions) |  | Conditions. |
 | runOptions | [RunOptions](#taskbooks.v1alpha.RunOptions) |  | RunOptions |
 | parameters | [google.protobuf.Any](#google.protobuf.Any) | repeated | Map of string interface{} to be given to the action. |
-<a name="taskbooks.v1alpha.AddRequest"></a>
+<a name="taskbooks.v1alpha.CreateRequest"></a>
 
-### AddRequest
+### CreateRequest
 
-Add
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| task | [TaskBook](#taskbooks.v1alpha.TaskBook) |  | TaskBook object. |
-<a name="taskbooks.v1alpha.AddResponse"></a>
-
-### AddResponse
-
-
+Create
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| task | [TaskBook](#taskbooks.v1alpha.TaskBook) |  | TaskBook object. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
+| options | [core.v1.CreateOptions](#core.v1.CreateOptions) |  | core_v1.CreateOptions |
+| taskBook | [TaskBook](#taskbooks.v1alpha.TaskBook) |  | TaskBook object. |
+<a name="taskbooks.v1alpha.CreateResponse"></a>
+
+### CreateResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| taskBook | [TaskBook](#taskbooks.v1alpha.TaskBook) |  | TaskBook object. |
 <a name="taskbooks.v1alpha.DeleteRequest"></a>
 
 ### DeleteRequest
@@ -1720,7 +2169,8 @@ Delete
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| task | [TaskBook](#taskbooks.v1alpha.TaskBook) |  | TaskBook object. |
+| options | [core.v1.DeleteOptions](#core.v1.DeleteOptions) |  | core_v1.DeleteOptions |
+| taskBook | [TaskBook](#taskbooks.v1alpha.TaskBook) |  | TaskBook object. |
 <a name="taskbooks.v1alpha.DeleteResponse"></a>
 
 ### DeleteResponse
@@ -1729,8 +2179,7 @@ Delete
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| task | [TaskBook](#taskbooks.v1alpha.TaskBook) |  | TaskBook object. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
+| taskBook | [TaskBook](#taskbooks.v1alpha.TaskBook) |  | TaskBook object. |
 <a name="taskbooks.v1alpha.GetRequest"></a>
 
 ### GetRequest
@@ -1739,7 +2188,7 @@ Get
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| getOptions | [core.v1.GetOptions](#core.v1.GetOptions) |  | GetOptions options for a GetRequest. |
+| options | [core.v1.GetOptions](#core.v1.GetOptions) |  | GetOptions options for a GetRequest. |
 <a name="taskbooks.v1alpha.GetResponse"></a>
 
 ### GetResponse
@@ -1748,8 +2197,7 @@ Get
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| task | [TaskBook](#taskbooks.v1alpha.TaskBook) |  | TaskBook object. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
+| taskBook | [TaskBook](#taskbooks.v1alpha.TaskBook) |  | TaskBook object. |
 <a name="taskbooks.v1alpha.ListRequest"></a>
 
 ### ListRequest
@@ -1758,7 +2206,7 @@ List
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| listOptions | [core.v1.ListOptions](#core.v1.ListOptions) |  | ListOptions options for a ListRequest. |
+| options | [core.v1.ListOptions](#core.v1.ListOptions) |  | core_v1.ListOptions |
 <a name="taskbooks.v1alpha.ListResponse"></a>
 
 ### ListResponse
@@ -1767,8 +2215,7 @@ List
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| taskbooks | [TaskBook](#taskbooks.v1alpha.TaskBook) | repeated | TaskBook list. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
+| taskBookList | [TaskBookList](#taskbooks.v1alpha.TaskBookList) |  | TaskBook list. |
 <a name="taskbooks.v1alpha.RunOptions"></a>
 
 ### RunOptions
@@ -1820,6 +2267,16 @@ List
 | ----- | ---- | ----- | ----------- |
 | metadata | [core.v1.ObjectMetadata](#core.v1.ObjectMetadata) |  | Metadata for TaskBook object. |
 | spec | [TaskBookSpec](#taskbooks.v1alpha.TaskBookSpec) |  | Spec for TaskBook. |
+<a name="taskbooks.v1alpha.TaskBookList"></a>
+
+### TaskBookList
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| metadata | [core.v1.ObjectMetadata](#core.v1.ObjectMetadata) |  | Metadata for TaskBookList object. |
+| items | [TaskBook](#taskbooks.v1alpha.TaskBook) | repeated | List of TaskBook objects. |
 <a name="taskbooks.v1alpha.TaskBookSpec"></a>
 
 ### TaskBookSpec
@@ -1838,7 +2295,8 @@ Update
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| task | [TaskBook](#taskbooks.v1alpha.TaskBook) |  | TaskBook object. |
+| options | [core.v1.UpdateOptions](#core.v1.UpdateOptions) |  | core_v1.UpdateOptions |
+| taskBook | [TaskBook](#taskbooks.v1alpha.TaskBook) |  | TaskBook object. |
 <a name="taskbooks.v1alpha.UpdateResponse"></a>
 
 ### UpdateResponse
@@ -1847,8 +2305,7 @@ Update
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| task | [TaskBook](#taskbooks.v1alpha.TaskBook) |  | TaskBook object. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
+| taskBook | [TaskBook](#taskbooks.v1alpha.TaskBook) |  | TaskBook object. |
 <a name="taskbooks.v1alpha.WatchRequest"></a>
 
 ### WatchRequest
@@ -1857,7 +2314,7 @@ Watch
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| watchOptions | [core.v1.WatchOptions](#core.v1.WatchOptions) |  | WatchOptions options for WatchRequest. |
+| options | [core.v1.WatchOptions](#core.v1.WatchOptions) |  | core_v1.WatchOptions |
 <a name="taskbooks.v1alpha.WatchResponse"></a>
 
 ### WatchResponse
@@ -1867,8 +2324,7 @@ Watch
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | event | [events.v1alpha.Event](#events.v1alpha.Event) |  | TaskBook info for watch response. |
-| task | [TaskBook](#taskbooks.v1alpha.TaskBook) |  | TaskBook for watch response. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
+| taskBook | [TaskBook](#taskbooks.v1alpha.TaskBook) |  | TaskBook for watch response. |
 <!-- end messages -->
 
 <!-- end enums -->
@@ -1886,397 +2342,10 @@ Watch
 | ----------- | ------------ | ------------- | ------------|
 | Get | [GetRequest](#taskbooks.v1alpha.GetRequest) | [GetResponse](#taskbooks.v1alpha.GetResponse) | Get a TaskBook. |
 | List | [ListRequest](#taskbooks.v1alpha.ListRequest) | [ListResponse](#taskbooks.v1alpha.ListResponse) | List TaskBooks. |
-| Add | [AddRequest](#taskbooks.v1alpha.AddRequest) | [AddResponse](#taskbooks.v1alpha.AddResponse) | Add a TaskBook. |
+| Create | [CreateRequest](#taskbooks.v1alpha.CreateRequest) | [CreateResponse](#taskbooks.v1alpha.CreateResponse) | Create a TaskBook. |
 | Update | [UpdateRequest](#taskbooks.v1alpha.UpdateRequest) | [UpdateResponse](#taskbooks.v1alpha.UpdateResponse) | Update a TaskBook. |
 | Delete | [DeleteRequest](#taskbooks.v1alpha.DeleteRequest) | [DeleteResponse](#taskbooks.v1alpha.DeleteResponse) | Delete a TaskBook. |
 | Watch | [WatchRequest](#taskbooks.v1alpha.WatchRequest) | [WatchResponse](#taskbooks.v1alpha.WatchResponse) stream | Watch TaskBook. |
-
- <!-- end services -->
-
-
-
-<a name="github.com/galexrt/edenconfmgmt/pkg/apis/nodes/v1alpha/api.proto"></a>
-<p align="right"><a href="#top">Top</a></p>
-
-## github.com/galexrt/edenconfmgmt/pkg/apis/nodes/v1alpha/api.proto
-
-
-
-<a name="nodes.v1alpha.AddRequest"></a>
-
-### AddRequest
-
-Add
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| node | [Node](#nodes.v1alpha.Node) |  | Node object. |
-<a name="nodes.v1alpha.AddResponse"></a>
-
-### AddResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| node | [Node](#nodes.v1alpha.Node) |  | Node object. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
-<a name="nodes.v1alpha.DeleteRequest"></a>
-
-### DeleteRequest
-
-Delete
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| node | [Node](#nodes.v1alpha.Node) |  | Node object. |
-<a name="nodes.v1alpha.DeleteResponse"></a>
-
-### DeleteResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| node | [Node](#nodes.v1alpha.Node) |  | Node object. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
-<a name="nodes.v1alpha.GetRequest"></a>
-
-### GetRequest
-
-Get
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| getOptions | [core.v1.GetOptions](#core.v1.GetOptions) |  | GetOptions options for a GetRequest. |
-<a name="nodes.v1alpha.GetResponse"></a>
-
-### GetResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| node | [Node](#nodes.v1alpha.Node) |  | Node object. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
-<a name="nodes.v1alpha.ListRequest"></a>
-
-### ListRequest
-
-List
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| listOptions | [core.v1.ListOptions](#core.v1.ListOptions) |  | ListOptions options for a ListRequest. |
-<a name="nodes.v1alpha.ListResponse"></a>
-
-### ListResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| nodes | [Node](#nodes.v1alpha.Node) | repeated | Node list. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
-<a name="nodes.v1alpha.Network"></a>
-
-### Network
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| daemonPorts | [Port](#nodes.v1alpha.Port) | repeated | Ports of edenconfmgmt daemon (should only be two right now, 1. GRPC, 2. HTTP). |
-| fqdn | [string](#string) |  | FQDN of Node. |
-| addresses | [string](#string) | repeated | IP addresses of Node. |
-<a name="nodes.v1alpha.Node"></a>
-
-### Node
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| metadata | [core.v1.ObjectMetadata](#core.v1.ObjectMetadata) |  | Metadata for Node object. |
-| spec | [Spec](#nodes.v1alpha.Spec) |  | Spec for Node. |
-| status | [Status](#nodes.v1alpha.Status) |  | Status for Node. |
-<a name="nodes.v1alpha.NodeList"></a>
-
-### NodeList
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| metadata | [core.v1.ObjectMetadata](#core.v1.ObjectMetadata) |  | Metadata for NodeList object. |
-| items | [Node](#nodes.v1alpha.Node) | repeated | List of Node objects. |
-<a name="nodes.v1alpha.Port"></a>
-
-### Port
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| name | [string](#string) |  | Name of port. |
-| port | [int32](#int32) |  | Port number. |
-| protocol | [string](#string) |  | Protocol name. |
-<a name="nodes.v1alpha.Spec"></a>
-
-### Spec
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| network | [Network](#nodes.v1alpha.Network) |  | Network specifications of Node. |
-<a name="nodes.v1alpha.Status"></a>
-
-### Status
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| state | [string](#string) |  | State of Node. |
-<a name="nodes.v1alpha.UpdateRequest"></a>
-
-### UpdateRequest
-
-Update
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| node | [Node](#nodes.v1alpha.Node) |  | Node object. |
-<a name="nodes.v1alpha.UpdateResponse"></a>
-
-### UpdateResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| node | [Node](#nodes.v1alpha.Node) |  | Node object. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
-<a name="nodes.v1alpha.WatchRequest"></a>
-
-### WatchRequest
-
-Watch
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| watchOptions | [core.v1.WatchOptions](#core.v1.WatchOptions) |  | WatchOptions options for WatchRequest. |
-<a name="nodes.v1alpha.WatchResponse"></a>
-
-### WatchResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| event | [events.v1alpha.Event](#events.v1alpha.Event) |  | Event info for watch response. |
-| node | [Node](#nodes.v1alpha.Node) |  | Node for watch response. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
-<!-- end messages -->
-
-<!-- end enums -->
-
- <!-- end HasExtensions -->
-
-
-<a name="nodes.v1alpha.Nodes"></a>
-
-### Nodes
-
-
-
-| Method Name | Request Type | Response Type | Description |
-| ----------- | ------------ | ------------- | ------------|
-| Get | [GetRequest](#nodes.v1alpha.GetRequest) | [GetResponse](#nodes.v1alpha.GetResponse) | Get a Node. |
-| List | [ListRequest](#nodes.v1alpha.ListRequest) | [ListResponse](#nodes.v1alpha.ListResponse) | List Nodes. |
-| Add | [AddRequest](#nodes.v1alpha.AddRequest) | [AddResponse](#nodes.v1alpha.AddResponse) | Add a Node. |
-| Update | [UpdateRequest](#nodes.v1alpha.UpdateRequest) | [UpdateResponse](#nodes.v1alpha.UpdateResponse) | Update a Node. |
-| Delete | [DeleteRequest](#nodes.v1alpha.DeleteRequest) | [DeleteResponse](#nodes.v1alpha.DeleteResponse) | Delete a Node. |
-| Watch | [WatchRequest](#nodes.v1alpha.WatchRequest) | [WatchResponse](#nodes.v1alpha.WatchResponse) stream | Watch a Node(s). |
-
- <!-- end services -->
-
-
-
-<a name="github.com/galexrt/edenconfmgmt/pkg/apis/secrets/v1alpha/api.proto"></a>
-<p align="right"><a href="#top">Top</a></p>
-
-## github.com/galexrt/edenconfmgmt/pkg/apis/secrets/v1alpha/api.proto
-
-
-
-<a name="secrets.v1alpha.AddRequest"></a>
-
-### AddRequest
-
-Add
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| secret | [Secret](#secrets.v1alpha.Secret) |  | Secret object. |
-<a name="secrets.v1alpha.AddResponse"></a>
-
-### AddResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| secret | [Secret](#secrets.v1alpha.Secret) |  | Secret object. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
-<a name="secrets.v1alpha.DeleteRequest"></a>
-
-### DeleteRequest
-
-Delete
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| secret | [Secret](#secrets.v1alpha.Secret) |  | Secret object. |
-<a name="secrets.v1alpha.DeleteResponse"></a>
-
-### DeleteResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| secret | [Secret](#secrets.v1alpha.Secret) |  | Secret object. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
-<a name="secrets.v1alpha.GetRequest"></a>
-
-### GetRequest
-
-Get
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| getOptions | [core.v1.GetOptions](#core.v1.GetOptions) |  | GetOptions options for a GetRequest. |
-<a name="secrets.v1alpha.GetResponse"></a>
-
-### GetResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| secret | [Secret](#secrets.v1alpha.Secret) |  | Secret object. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
-<a name="secrets.v1alpha.ListRequest"></a>
-
-### ListRequest
-
-List
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| listOptions | [core.v1.ListOptions](#core.v1.ListOptions) |  | ListOptions options for a ListRequest. |
-<a name="secrets.v1alpha.ListResponse"></a>
-
-### ListResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| secrets | [Secret](#secrets.v1alpha.Secret) | repeated | Secret list. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
-<a name="secrets.v1alpha.Secret"></a>
-
-### Secret
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| metadata | [core.v1.ObjectMetadata](#core.v1.ObjectMetadata) |  | Metadata for Secret object. |
-| spec | [SecretSpec](#secrets.v1alpha.SecretSpec) |  | Spec for Secret. |
-<a name="secrets.v1alpha.SecretSpec"></a>
-
-### SecretSpec
-
-Secrets secrets file structure. This covers the "Secrets File" and "'From Host' Static Secret File".
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| secrets | [SecretSpec.SecretsEntry](#secrets.v1alpha.SecretSpec.SecretsEntry) | repeated | Secrets. |
-| type | [string](#string) |  | Type of secret. |
-<a name="secrets.v1alpha.SecretSpec.SecretsEntry"></a>
-
-### SecretSpec.SecretsEntry
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| key | [string](#string) |  |  |
-| value | [google.protobuf.Any](#google.protobuf.Any) |  |  |
-<a name="secrets.v1alpha.UpdateRequest"></a>
-
-### UpdateRequest
-
-Update
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| secret | [Secret](#secrets.v1alpha.Secret) |  | Secret object. |
-<a name="secrets.v1alpha.UpdateResponse"></a>
-
-### UpdateResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| secret | [Secret](#secrets.v1alpha.Secret) |  | Secret object. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
-<a name="secrets.v1alpha.WatchRequest"></a>
-
-### WatchRequest
-
-Watch
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| watchOptions | [core.v1.WatchOptions](#core.v1.WatchOptions) |  | WatchOptions options for WatchRequest. |
-<a name="secrets.v1alpha.WatchResponse"></a>
-
-### WatchResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| event | [events.v1alpha.Event](#events.v1alpha.Event) |  | Secret info for watch response. |
-| secret | [Secret](#secrets.v1alpha.Secret) |  | Secret for watch response. |
-| error | [core.v1.Error](#core.v1.Error) |  | Error object. |
-<!-- end messages -->
-
-<!-- end enums -->
-
- <!-- end HasExtensions -->
-
-
-<a name="secrets.v1alpha.Secrets"></a>
-
-### Secrets
-
-
-
-| Method Name | Request Type | Response Type | Description |
-| ----------- | ------------ | ------------- | ------------|
-| Get | [GetRequest](#secrets.v1alpha.GetRequest) | [GetResponse](#secrets.v1alpha.GetResponse) | Get a Secret. |
-| List | [ListRequest](#secrets.v1alpha.ListRequest) | [ListResponse](#secrets.v1alpha.ListResponse) | List Secret. |
-| Add | [AddRequest](#secrets.v1alpha.AddRequest) | [AddResponse](#secrets.v1alpha.AddResponse) | Add a Secret. |
-| Update | [UpdateRequest](#secrets.v1alpha.UpdateRequest) | [UpdateResponse](#secrets.v1alpha.UpdateResponse) | Update a Secret. |
-| Delete | [DeleteRequest](#secrets.v1alpha.DeleteRequest) | [DeleteResponse](#secrets.v1alpha.DeleteResponse) | Delete a Secret. |
-| Watch | [WatchRequest](#secrets.v1alpha.WatchRequest) | [WatchResponse](#secrets.v1alpha.WatchResponse) stream | Watch Secret. |
 
  <!-- end services -->
 

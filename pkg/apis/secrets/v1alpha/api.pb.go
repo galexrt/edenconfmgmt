@@ -8,10 +8,12 @@ import (
 	fmt "fmt"
 	v1 "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1"
 	v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha"
+	_ "github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/apiserver"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	github_com_gogo_protobuf_sortkeys "github.com/gogo/protobuf/sortkeys"
 	types "github.com/gogo/protobuf/types"
+	_ "github.com/mwitkow/go-proto-validators"
 	grpc "google.golang.org/grpc"
 	io "io"
 	math "math"
@@ -85,6 +87,61 @@ func (m *Secret) GetSpec() *SecretSpec {
 	return nil
 }
 
+type SecretList struct {
+	// Metadata for SecretList object.
+	Metadata *v1.ObjectMetadata `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	// List of Secret objects.
+	Items                []*Secret `protobuf:"bytes,2,rep,name=items,proto3" json:"items,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
+}
+
+func (m *SecretList) Reset()      { *m = SecretList{} }
+func (*SecretList) ProtoMessage() {}
+func (*SecretList) Descriptor() ([]byte, []int) {
+	return fileDescriptor_73985c47aba79f84, []int{1}
+}
+func (m *SecretList) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *SecretList) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_SecretList.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalTo(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *SecretList) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_SecretList.Merge(m, src)
+}
+func (m *SecretList) XXX_Size() int {
+	return m.Size()
+}
+func (m *SecretList) XXX_DiscardUnknown() {
+	xxx_messageInfo_SecretList.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_SecretList proto.InternalMessageInfo
+
+func (m *SecretList) GetMetadata() *v1.ObjectMetadata {
+	if m != nil {
+		return m.Metadata
+	}
+	return nil
+}
+
+func (m *SecretList) GetItems() []*Secret {
+	if m != nil {
+		return m.Items
+	}
+	return nil
+}
+
 // Secrets secrets file structure. This covers the "Secrets File" and "'From Host' Static Secret File".
 type SecretSpec struct {
 	// Secrets.
@@ -98,7 +155,7 @@ type SecretSpec struct {
 func (m *SecretSpec) Reset()      { *m = SecretSpec{} }
 func (*SecretSpec) ProtoMessage() {}
 func (*SecretSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_73985c47aba79f84, []int{1}
+	return fileDescriptor_73985c47aba79f84, []int{2}
 }
 func (m *SecretSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -144,7 +201,7 @@ func (m *SecretSpec) GetType() string {
 // Get
 type GetRequest struct {
 	// GetOptions options for a GetRequest.
-	GetOptions           *v1.GetOptions `protobuf:"bytes,1,opt,name=getOptions,proto3" json:"getOptions,omitempty"`
+	Options              *v1.GetOptions `protobuf:"bytes,1,opt,name=options,proto3" json:"options,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
 	XXX_sizecache        int32          `json:"-"`
 }
@@ -152,7 +209,7 @@ type GetRequest struct {
 func (m *GetRequest) Reset()      { *m = GetRequest{} }
 func (*GetRequest) ProtoMessage() {}
 func (*GetRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_73985c47aba79f84, []int{2}
+	return fileDescriptor_73985c47aba79f84, []int{3}
 }
 func (m *GetRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -181,26 +238,24 @@ func (m *GetRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetRequest proto.InternalMessageInfo
 
-func (m *GetRequest) GetGetOptions() *v1.GetOptions {
+func (m *GetRequest) GetOptions() *v1.GetOptions {
 	if m != nil {
-		return m.GetOptions
+		return m.Options
 	}
 	return nil
 }
 
 type GetResponse struct {
 	// Secret object.
-	Secret *Secret `protobuf:"bytes,1,opt,name=secret,proto3" json:"secret,omitempty"`
-	// Error object.
-	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
+	Secret               *Secret  `protobuf:"bytes,1,opt,name=secret,proto3" json:"secret,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
 func (m *GetResponse) Reset()      { *m = GetResponse{} }
 func (*GetResponse) ProtoMessage() {}
 func (*GetResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_73985c47aba79f84, []int{3}
+	return fileDescriptor_73985c47aba79f84, []int{4}
 }
 func (m *GetResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -236,17 +291,10 @@ func (m *GetResponse) GetSecret() *Secret {
 	return nil
 }
 
-func (m *GetResponse) GetError() *v1.Error {
-	if m != nil {
-		return m.Error
-	}
-	return nil
-}
-
 // List
 type ListRequest struct {
-	// ListOptions options for a ListRequest.
-	ListOptions          *v1.ListOptions `protobuf:"bytes,1,opt,name=listOptions,proto3" json:"listOptions,omitempty"`
+	// core_v1.ListOptions
+	Options              *v1.ListOptions `protobuf:"bytes,1,opt,name=options,proto3" json:"options,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
 	XXX_sizecache        int32           `json:"-"`
 }
@@ -254,7 +302,7 @@ type ListRequest struct {
 func (m *ListRequest) Reset()      { *m = ListRequest{} }
 func (*ListRequest) ProtoMessage() {}
 func (*ListRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_73985c47aba79f84, []int{4}
+	return fileDescriptor_73985c47aba79f84, []int{5}
 }
 func (m *ListRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -283,26 +331,24 @@ func (m *ListRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ListRequest proto.InternalMessageInfo
 
-func (m *ListRequest) GetListOptions() *v1.ListOptions {
+func (m *ListRequest) GetOptions() *v1.ListOptions {
 	if m != nil {
-		return m.ListOptions
+		return m.Options
 	}
 	return nil
 }
 
 type ListResponse struct {
 	// Secret list.
-	Secrets []*Secret `protobuf:"bytes,1,rep,name=secrets,proto3" json:"secrets,omitempty"`
-	// Error object.
-	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
+	SecretList           *SecretList `protobuf:"bytes,1,opt,name=SecretList,proto3" json:"SecretList,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
+	XXX_sizecache        int32       `json:"-"`
 }
 
 func (m *ListResponse) Reset()      { *m = ListResponse{} }
 func (*ListResponse) ProtoMessage() {}
 func (*ListResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_73985c47aba79f84, []int{5}
+	return fileDescriptor_73985c47aba79f84, []int{6}
 }
 func (m *ListResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -331,39 +377,87 @@ func (m *ListResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ListResponse proto.InternalMessageInfo
 
-func (m *ListResponse) GetSecrets() []*Secret {
+func (m *ListResponse) GetSecretList() *SecretList {
 	if m != nil {
-		return m.Secrets
+		return m.SecretList
 	}
 	return nil
 }
 
-func (m *ListResponse) GetError() *v1.Error {
+// Create
+type CreateRequest struct {
+	// core_v1.CreateOptions
+	Options *v1.CreateOptions `protobuf:"bytes,1,opt,name=options,proto3" json:"options,omitempty"`
+	// Secret object.
+	Secret               *Secret  `protobuf:"bytes,2,opt,name=secret,proto3" json:"secret,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *CreateRequest) Reset()      { *m = CreateRequest{} }
+func (*CreateRequest) ProtoMessage() {}
+func (*CreateRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_73985c47aba79f84, []int{7}
+}
+func (m *CreateRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CreateRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_CreateRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalTo(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *CreateRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateRequest.Merge(m, src)
+}
+func (m *CreateRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *CreateRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateRequest proto.InternalMessageInfo
+
+func (m *CreateRequest) GetOptions() *v1.CreateOptions {
 	if m != nil {
-		return m.Error
+		return m.Options
 	}
 	return nil
 }
 
-// Add
-type AddRequest struct {
+func (m *CreateRequest) GetSecret() *Secret {
+	if m != nil {
+		return m.Secret
+	}
+	return nil
+}
+
+type CreateResponse struct {
 	// Secret object.
 	Secret               *Secret  `protobuf:"bytes,1,opt,name=secret,proto3" json:"secret,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *AddRequest) Reset()      { *m = AddRequest{} }
-func (*AddRequest) ProtoMessage() {}
-func (*AddRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_73985c47aba79f84, []int{6}
+func (m *CreateResponse) Reset()      { *m = CreateResponse{} }
+func (*CreateResponse) ProtoMessage() {}
+func (*CreateResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_73985c47aba79f84, []int{8}
 }
-func (m *AddRequest) XXX_Unmarshal(b []byte) error {
+func (m *CreateResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *AddRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *CreateResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_AddRequest.Marshal(b, m, deterministic)
+		return xxx_messageInfo_CreateResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalTo(b)
@@ -373,84 +467,31 @@ func (m *AddRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return b[:n], nil
 	}
 }
-func (m *AddRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AddRequest.Merge(m, src)
+func (m *CreateResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateResponse.Merge(m, src)
 }
-func (m *AddRequest) XXX_Size() int {
+func (m *CreateResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *AddRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_AddRequest.DiscardUnknown(m)
+func (m *CreateResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_AddRequest proto.InternalMessageInfo
+var xxx_messageInfo_CreateResponse proto.InternalMessageInfo
 
-func (m *AddRequest) GetSecret() *Secret {
+func (m *CreateResponse) GetSecret() *Secret {
 	if m != nil {
 		return m.Secret
-	}
-	return nil
-}
-
-type AddResponse struct {
-	// Secret object.
-	Secret *Secret `protobuf:"bytes,1,opt,name=secret,proto3" json:"secret,omitempty"`
-	// Error object.
-	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
-}
-
-func (m *AddResponse) Reset()      { *m = AddResponse{} }
-func (*AddResponse) ProtoMessage() {}
-func (*AddResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_73985c47aba79f84, []int{7}
-}
-func (m *AddResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *AddResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_AddResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *AddResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AddResponse.Merge(m, src)
-}
-func (m *AddResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *AddResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_AddResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_AddResponse proto.InternalMessageInfo
-
-func (m *AddResponse) GetSecret() *Secret {
-	if m != nil {
-		return m.Secret
-	}
-	return nil
-}
-
-func (m *AddResponse) GetError() *v1.Error {
-	if m != nil {
-		return m.Error
 	}
 	return nil
 }
 
 // Update
 type UpdateRequest struct {
+	// core_v1.UpdateOptions
+	Options *v1.UpdateOptions `protobuf:"bytes,1,opt,name=options,proto3" json:"options,omitempty"`
 	// Secret object.
-	Secret               *Secret  `protobuf:"bytes,1,opt,name=secret,proto3" json:"secret,omitempty"`
+	Secret               *Secret  `protobuf:"bytes,2,opt,name=secret,proto3" json:"secret,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
@@ -458,7 +499,7 @@ type UpdateRequest struct {
 func (m *UpdateRequest) Reset()      { *m = UpdateRequest{} }
 func (*UpdateRequest) ProtoMessage() {}
 func (*UpdateRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_73985c47aba79f84, []int{8}
+	return fileDescriptor_73985c47aba79f84, []int{9}
 }
 func (m *UpdateRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -487,6 +528,13 @@ func (m *UpdateRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_UpdateRequest proto.InternalMessageInfo
 
+func (m *UpdateRequest) GetOptions() *v1.UpdateOptions {
+	if m != nil {
+		return m.Options
+	}
+	return nil
+}
+
 func (m *UpdateRequest) GetSecret() *Secret {
 	if m != nil {
 		return m.Secret
@@ -496,17 +544,15 @@ func (m *UpdateRequest) GetSecret() *Secret {
 
 type UpdateResponse struct {
 	// Secret object.
-	Secret *Secret `protobuf:"bytes,1,opt,name=secret,proto3" json:"secret,omitempty"`
-	// Error object.
-	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
+	Secret               *Secret  `protobuf:"bytes,1,opt,name=secret,proto3" json:"secret,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
 func (m *UpdateResponse) Reset()      { *m = UpdateResponse{} }
 func (*UpdateResponse) ProtoMessage() {}
 func (*UpdateResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_73985c47aba79f84, []int{9}
+	return fileDescriptor_73985c47aba79f84, []int{10}
 }
 func (m *UpdateResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -542,17 +588,12 @@ func (m *UpdateResponse) GetSecret() *Secret {
 	return nil
 }
 
-func (m *UpdateResponse) GetError() *v1.Error {
-	if m != nil {
-		return m.Error
-	}
-	return nil
-}
-
 // Delete
 type DeleteRequest struct {
+	// core_v1.DeleteOptions
+	Options *v1.DeleteOptions `protobuf:"bytes,1,opt,name=options,proto3" json:"options,omitempty"`
 	// Secret object.
-	Secret               *Secret  `protobuf:"bytes,1,opt,name=secret,proto3" json:"secret,omitempty"`
+	Secret               *Secret  `protobuf:"bytes,2,opt,name=secret,proto3" json:"secret,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
@@ -560,7 +601,7 @@ type DeleteRequest struct {
 func (m *DeleteRequest) Reset()      { *m = DeleteRequest{} }
 func (*DeleteRequest) ProtoMessage() {}
 func (*DeleteRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_73985c47aba79f84, []int{10}
+	return fileDescriptor_73985c47aba79f84, []int{11}
 }
 func (m *DeleteRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -589,6 +630,13 @@ func (m *DeleteRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_DeleteRequest proto.InternalMessageInfo
 
+func (m *DeleteRequest) GetOptions() *v1.DeleteOptions {
+	if m != nil {
+		return m.Options
+	}
+	return nil
+}
+
 func (m *DeleteRequest) GetSecret() *Secret {
 	if m != nil {
 		return m.Secret
@@ -598,17 +646,15 @@ func (m *DeleteRequest) GetSecret() *Secret {
 
 type DeleteResponse struct {
 	// Secret object.
-	Secret *Secret `protobuf:"bytes,1,opt,name=secret,proto3" json:"secret,omitempty"`
-	// Error object.
-	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
+	Secret               *Secret  `protobuf:"bytes,1,opt,name=secret,proto3" json:"secret,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
 func (m *DeleteResponse) Reset()      { *m = DeleteResponse{} }
 func (*DeleteResponse) ProtoMessage() {}
 func (*DeleteResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_73985c47aba79f84, []int{11}
+	return fileDescriptor_73985c47aba79f84, []int{12}
 }
 func (m *DeleteResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -644,17 +690,10 @@ func (m *DeleteResponse) GetSecret() *Secret {
 	return nil
 }
 
-func (m *DeleteResponse) GetError() *v1.Error {
-	if m != nil {
-		return m.Error
-	}
-	return nil
-}
-
 // Watch
 type WatchRequest struct {
-	// WatchOptions options for WatchRequest.
-	WatchOptions         *v1.WatchOptions `protobuf:"bytes,1,opt,name=watchOptions,proto3" json:"watchOptions,omitempty"`
+	// core_v1.WatchOptions
+	Options              *v1.WatchOptions `protobuf:"bytes,1,opt,name=options,proto3" json:"options,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
 	XXX_sizecache        int32            `json:"-"`
 }
@@ -662,7 +701,7 @@ type WatchRequest struct {
 func (m *WatchRequest) Reset()      { *m = WatchRequest{} }
 func (*WatchRequest) ProtoMessage() {}
 func (*WatchRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_73985c47aba79f84, []int{12}
+	return fileDescriptor_73985c47aba79f84, []int{13}
 }
 func (m *WatchRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -691,9 +730,9 @@ func (m *WatchRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_WatchRequest proto.InternalMessageInfo
 
-func (m *WatchRequest) GetWatchOptions() *v1.WatchOptions {
+func (m *WatchRequest) GetOptions() *v1.WatchOptions {
 	if m != nil {
-		return m.WatchOptions
+		return m.Options
 	}
 	return nil
 }
@@ -702,17 +741,15 @@ type WatchResponse struct {
 	// Secret info for watch response.
 	Event *v1alpha.Event `protobuf:"bytes,1,opt,name=event,proto3" json:"event,omitempty"`
 	// Secret for watch response.
-	Secret *Secret `protobuf:"bytes,2,opt,name=secret,proto3" json:"secret,omitempty"`
-	// Error object.
-	Error                *v1.Error `protobuf:"bytes,3,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
+	Secret               *Secret  `protobuf:"bytes,2,opt,name=secret,proto3" json:"secret,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
 func (m *WatchResponse) Reset()      { *m = WatchResponse{} }
 func (*WatchResponse) ProtoMessage() {}
 func (*WatchResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_73985c47aba79f84, []int{13}
+	return fileDescriptor_73985c47aba79f84, []int{14}
 }
 func (m *WatchResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -755,23 +792,17 @@ func (m *WatchResponse) GetSecret() *Secret {
 	return nil
 }
 
-func (m *WatchResponse) GetError() *v1.Error {
-	if m != nil {
-		return m.Error
-	}
-	return nil
-}
-
 func init() {
 	proto.RegisterType((*Secret)(nil), "secrets.v1alpha.Secret")
+	proto.RegisterType((*SecretList)(nil), "secrets.v1alpha.SecretList")
 	proto.RegisterType((*SecretSpec)(nil), "secrets.v1alpha.SecretSpec")
 	proto.RegisterMapType((map[string]*types.Any)(nil), "secrets.v1alpha.SecretSpec.SecretsEntry")
 	proto.RegisterType((*GetRequest)(nil), "secrets.v1alpha.GetRequest")
 	proto.RegisterType((*GetResponse)(nil), "secrets.v1alpha.GetResponse")
 	proto.RegisterType((*ListRequest)(nil), "secrets.v1alpha.ListRequest")
 	proto.RegisterType((*ListResponse)(nil), "secrets.v1alpha.ListResponse")
-	proto.RegisterType((*AddRequest)(nil), "secrets.v1alpha.AddRequest")
-	proto.RegisterType((*AddResponse)(nil), "secrets.v1alpha.AddResponse")
+	proto.RegisterType((*CreateRequest)(nil), "secrets.v1alpha.CreateRequest")
+	proto.RegisterType((*CreateResponse)(nil), "secrets.v1alpha.CreateResponse")
 	proto.RegisterType((*UpdateRequest)(nil), "secrets.v1alpha.UpdateRequest")
 	proto.RegisterType((*UpdateResponse)(nil), "secrets.v1alpha.UpdateResponse")
 	proto.RegisterType((*DeleteRequest)(nil), "secrets.v1alpha.DeleteRequest")
@@ -785,51 +816,56 @@ func init() {
 }
 
 var fileDescriptor_73985c47aba79f84 = []byte{
-	// 703 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x56, 0x41, 0x6f, 0xd3, 0x4c,
-	0x10, 0xed, 0x36, 0x4d, 0xfa, 0x75, 0x92, 0xf6, 0x43, 0x4b, 0x11, 0xc5, 0x80, 0xa9, 0x2c, 0x0e,
-	0x15, 0x08, 0x9b, 0xb4, 0x12, 0x2a, 0x95, 0x90, 0x9a, 0x42, 0x54, 0x2a, 0x15, 0x15, 0xb9, 0x42,
-	0x95, 0xb8, 0x39, 0xf6, 0xd4, 0x0d, 0x4d, 0x6c, 0x63, 0x6f, 0x02, 0xb9, 0xf1, 0x13, 0x90, 0xf8,
-	0x13, 0x9c, 0x39, 0x20, 0x8e, 0x1c, 0x7b, 0xe4, 0xc8, 0x91, 0x9a, 0x3f, 0xc1, 0x11, 0x79, 0xbd,
-	0xb1, 0x9d, 0xc4, 0xa9, 0xda, 0xa2, 0xdc, 0x76, 0xf7, 0xbd, 0x79, 0x7e, 0x33, 0x3b, 0x3b, 0x09,
-	0x6c, 0xd9, 0x4d, 0x76, 0xd4, 0x69, 0xa8, 0xa6, 0xdb, 0xd6, 0x6c, 0xa3, 0x85, 0xef, 0x7d, 0xa6,
-	0xa1, 0x85, 0x8e, 0xe9, 0x3a, 0x87, 0x6d, 0xbb, 0xcd, 0x34, 0xef, 0xd8, 0xd6, 0x0c, 0xaf, 0x19,
-	0x68, 0x01, 0x9a, 0x3e, 0xb2, 0x40, 0xeb, 0x56, 0x8d, 0x96, 0x77, 0x64, 0x44, 0x87, 0xaa, 0xe7,
-	0xbb, 0xcc, 0xa5, 0xff, 0x0b, 0x48, 0x15, 0x90, 0xf4, 0x20, 0x2b, 0xea, 0xda, 0xae, 0xc6, 0x79,
-	0x8d, 0xce, 0x21, 0xdf, 0xf1, 0x0d, 0x5f, 0xc5, 0xf1, 0xd2, 0x0d, 0xdb, 0x75, 0xed, 0x16, 0xa6,
-	0x2c, 0xc3, 0xe9, 0x09, 0x68, 0xe3, 0xdc, 0xf6, 0x4c, 0xd7, 0x47, 0xad, 0x5b, 0x4d, 0x6d, 0x49,
-	0xb5, 0x73, 0xc7, 0x62, 0x17, 0x9d, 0xbc, 0xcc, 0x14, 0x07, 0x4a, 0xfb, 0x3c, 0x37, 0xba, 0x06,
-	0xff, 0xb5, 0x91, 0x19, 0x96, 0xc1, 0x8c, 0x25, 0xb2, 0x4c, 0x56, 0xca, 0xab, 0xd7, 0xd5, 0xe8,
-	0x93, 0x6a, 0xb7, 0xaa, 0xee, 0x35, 0xde, 0xa0, 0xc9, 0x5e, 0x08, 0x58, 0x4f, 0x88, 0x54, 0x83,
-	0x99, 0xc0, 0x43, 0x73, 0x69, 0x9a, 0x07, 0xdc, 0x54, 0x87, 0xea, 0xa4, 0xc6, 0xda, 0xfb, 0x1e,
-	0x9a, 0x3a, 0x27, 0x2a, 0x5f, 0x09, 0x40, 0x7a, 0x48, 0xb7, 0x60, 0x56, 0x84, 0x2c, 0x91, 0xe5,
-	0xc2, 0x4a, 0x79, 0x75, 0xe5, 0x0c, 0x09, 0xb1, 0x0c, 0xea, 0x0e, 0xf3, 0x7b, 0x7a, 0x3f, 0x90,
-	0x52, 0x98, 0x61, 0x3d, 0x0f, 0xb9, 0x87, 0x39, 0x9d, 0xaf, 0xa5, 0x97, 0x50, 0xc9, 0x92, 0xe9,
-	0x15, 0x28, 0x1c, 0x63, 0x8f, 0xe7, 0x35, 0xa7, 0x47, 0x4b, 0x7a, 0x0f, 0x8a, 0x5d, 0xa3, 0xd5,
-	0x41, 0x61, 0x7d, 0x51, 0x8d, 0xaf, 0x48, 0xed, 0x5f, 0x91, 0x5a, 0x73, 0x7a, 0x7a, 0x4c, 0xd9,
-	0x98, 0x5e, 0x27, 0x4a, 0x0d, 0x60, 0x1b, 0x99, 0x8e, 0x6f, 0x3b, 0x18, 0x44, 0xc5, 0x02, 0x1b,
-	0xd9, 0x9e, 0xc7, 0x9a, 0xae, 0x13, 0x88, 0x72, 0x5d, 0x4d, 0xca, 0xb5, 0x9d, 0x40, 0x7a, 0x86,
-	0xa6, 0x58, 0x50, 0xe6, 0x12, 0x81, 0xe7, 0x3a, 0x01, 0x52, 0x0d, 0x4a, 0x71, 0x0a, 0x49, 0xb9,
-	0xf3, 0x53, 0xd7, 0x05, 0x8d, 0xde, 0x85, 0x22, 0xfa, 0xbe, 0xeb, 0x0b, 0xcb, 0x0b, 0xc9, 0xf7,
-	0xea, 0xd1, 0xa9, 0x1e, 0x83, 0x4a, 0x1d, 0xca, 0xbb, 0xcd, 0x20, 0x71, 0xfa, 0x08, 0xca, 0xad,
-	0x66, 0x30, 0x64, 0x75, 0x31, 0x09, 0xdd, 0x4d, 0x31, 0x3d, 0x4b, 0x54, 0x6c, 0xa8, 0xc4, 0x32,
-	0xc2, 0x6d, 0x75, 0xf8, 0xa6, 0xc6, 0xda, 0x4d, 0x2e, 0xe6, 0x7c, 0x7e, 0x9f, 0x00, 0xd4, 0x2c,
-	0xab, 0x6f, 0xf7, 0xa2, 0x45, 0x89, 0x8a, 0xca, 0xc3, 0x27, 0x5b, 0xd4, 0x4d, 0x98, 0x7f, 0xe5,
-	0x59, 0x06, 0xc3, 0x4b, 0xfb, 0xb4, 0x61, 0xa1, 0xaf, 0x30, 0x71, 0xab, 0xcf, 0xb0, 0x85, 0xff,
-	0x66, 0xb5, 0xaf, 0x30, 0x59, 0xab, 0x3b, 0x50, 0x39, 0x30, 0x98, 0x79, 0xd4, 0x77, 0xfa, 0x18,
-	0x2a, 0xef, 0xa2, 0xfd, 0x60, 0xb3, 0x5e, 0x4b, 0x82, 0x0f, 0x32, 0xa0, 0x3e, 0x40, 0x55, 0x3e,
-	0x11, 0x98, 0x17, 0x5a, 0xc2, 0xf3, 0x7d, 0x28, 0xf2, 0xa9, 0x97, 0xa8, 0xc4, 0x33, 0x30, 0x71,
-	0x5c, 0x8f, 0xb6, 0x7a, 0xcc, 0xc9, 0x24, 0x38, 0x7d, 0xc1, 0x04, 0x0b, 0x67, 0x24, 0xb8, 0xfa,
-	0xa5, 0x00, 0xb3, 0x62, 0x0e, 0xd1, 0x4d, 0x28, 0x6c, 0x23, 0xa3, 0xa3, 0x33, 0x32, 0x1d, 0x2b,
-	0xd2, 0xad, 0x7c, 0x50, 0x64, 0xf4, 0x14, 0x66, 0xa2, 0x27, 0x49, 0x47, 0x59, 0x99, 0x07, 0x2f,
-	0xdd, 0x1e, 0x83, 0x0a, 0x91, 0x4d, 0x28, 0xd4, 0x2c, 0x2b, 0xc7, 0x46, 0xfa, 0x08, 0x73, 0x6c,
-	0x64, 0x9f, 0xd8, 0x0e, 0x94, 0xe2, 0x4e, 0xa6, 0xf2, 0x08, 0x6f, 0xe0, 0x91, 0x48, 0x77, 0xc6,
-	0xe2, 0xa9, 0x54, 0xdc, 0x69, 0x39, 0x52, 0x03, 0x4d, 0x9c, 0x23, 0x35, 0xd4, 0xa2, 0xcf, 0xa1,
-	0xc8, 0xef, 0x9f, 0x8e, 0xe6, 0x9f, 0xed, 0x31, 0x49, 0x1e, 0x07, 0xc7, 0x3a, 0x0f, 0xc9, 0xd6,
-	0xe1, 0xc9, 0xa9, 0x4c, 0x7e, 0x9e, 0xca, 0x53, 0x7f, 0x4e, 0x65, 0xf2, 0x21, 0x94, 0xc9, 0xe7,
-	0x50, 0x26, 0xdf, 0x42, 0x79, 0xea, 0x7b, 0x28, 0x93, 0x93, 0x50, 0x26, 0x3f, 0x42, 0x99, 0xfc,
-	0x0a, 0x65, 0xf2, 0xf1, 0xb7, 0x3c, 0xf5, 0x7a, 0xfd, 0xb2, 0x7f, 0x2f, 0x1a, 0x25, 0xfe, 0x53,
-	0xb3, 0xf6, 0x37, 0x00, 0x00, 0xff, 0xff, 0xd8, 0x66, 0x45, 0xce, 0xa1, 0x08, 0x00, 0x00,
+	// 778 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x56, 0xcd, 0x6e, 0xd3, 0x4c,
+	0x14, 0xed, 0x24, 0x4d, 0xda, 0xde, 0xb6, 0xdf, 0x87, 0x86, 0x02, 0xc1, 0x80, 0x5b, 0x65, 0x55,
+	0x81, 0xe2, 0xe9, 0x8f, 0x84, 0xaa, 0x56, 0xfc, 0x34, 0xa5, 0x0a, 0x15, 0xa0, 0x22, 0x57, 0x08,
+	0x89, 0x9d, 0xe3, 0x4c, 0x5d, 0xd3, 0xc4, 0x63, 0xec, 0x49, 0xda, 0xec, 0x78, 0x04, 0x1e, 0x83,
+	0x27, 0x40, 0x48, 0x6c, 0x58, 0x56, 0xac, 0x58, 0xb2, 0x83, 0x9a, 0x97, 0x60, 0x89, 0x32, 0x33,
+	0x76, 0xdc, 0xfc, 0xa0, 0x50, 0xba, 0xca, 0x4c, 0xee, 0xb9, 0xe7, 0x9e, 0x39, 0x73, 0xef, 0x24,
+	0x50, 0x76, 0x5c, 0x7e, 0xd0, 0xac, 0x1a, 0x36, 0x6b, 0x10, 0xc7, 0xaa, 0xd3, 0xe3, 0x80, 0x13,
+	0x5a, 0xa3, 0x9e, 0xcd, 0xbc, 0xfd, 0x86, 0xd3, 0xe0, 0xc4, 0x3f, 0x74, 0x88, 0xe5, 0xbb, 0x21,
+	0x09, 0xa9, 0x1d, 0x50, 0x1e, 0x92, 0xd6, 0xb2, 0x55, 0xf7, 0x0f, 0xac, 0xce, 0x97, 0x86, 0x1f,
+	0x30, 0xce, 0xf0, 0xff, 0x2a, 0x64, 0xa8, 0x90, 0x56, 0x4a, 0x93, 0x32, 0x87, 0x11, 0x81, 0xab,
+	0x36, 0xf7, 0xc5, 0x4e, 0x6c, 0xc4, 0x4a, 0xe6, 0x6b, 0xd7, 0x1d, 0xc6, 0x9c, 0x3a, 0xed, 0xa2,
+	0x2c, 0xaf, 0xad, 0x42, 0x95, 0x51, 0xe4, 0x39, 0x81, 0x6f, 0x13, 0xbf, 0xde, 0x74, 0x5c, 0x2f,
+	0x14, 0x5a, 0x69, 0xd0, 0xa2, 0x01, 0x91, 0x1f, 0x8a, 0xe8, 0x6e, 0x8a, 0xa8, 0x71, 0xe4, 0xf2,
+	0x43, 0x76, 0x44, 0x1c, 0x56, 0x12, 0xc1, 0x52, 0xcb, 0xaa, 0xbb, 0x35, 0x8b, 0xb3, 0x20, 0x24,
+	0xc9, 0x52, 0xe5, 0xad, 0x8f, 0xec, 0x8f, 0xcd, 0x02, 0x4a, 0x5a, 0xcb, 0x5d, 0x5f, 0xb4, 0xcd,
+	0x91, 0x73, 0x69, 0x8b, 0x7a, 0x83, 0xac, 0x2d, 0x36, 0x21, 0xbf, 0x27, 0xcc, 0xc5, 0xab, 0x30,
+	0xd9, 0xa0, 0xdc, 0xaa, 0x59, 0xdc, 0x2a, 0xa0, 0x05, 0xb4, 0x38, 0xbd, 0x72, 0xcd, 0xe8, 0x94,
+	0x34, 0x5a, 0xcb, 0xc6, 0x6e, 0xf5, 0x35, 0xb5, 0xf9, 0x33, 0x15, 0x36, 0x13, 0x20, 0x26, 0x30,
+	0x1e, 0xfa, 0xd4, 0x2e, 0x64, 0x44, 0xc2, 0x0d, 0xa3, 0xe7, 0xa2, 0x0c, 0xc9, 0xbd, 0xe7, 0x53,
+	0xdb, 0x14, 0xc0, 0xf5, 0xdc, 0x97, 0xbd, 0xcc, 0x24, 0x2a, 0x1e, 0x03, 0xc8, 0xd0, 0x53, 0x37,
+	0xe4, 0x78, 0x63, 0xe4, 0xd2, 0xe5, 0x7c, 0xf4, 0x7d, 0x3e, 0xb3, 0x80, 0x52, 0x12, 0x4a, 0x90,
+	0x73, 0x39, 0x6d, 0x84, 0x85, 0xcc, 0x42, 0x56, 0x64, 0x0e, 0xd6, 0x60, 0x4a, 0x54, 0xf1, 0x03,
+	0x8a, 0x4b, 0x77, 0x54, 0xe1, 0x32, 0x4c, 0x28, 0x7c, 0x01, 0x89, 0xfc, 0xc5, 0x3f, 0x9c, 0x41,
+	0x2d, 0xc3, 0x6d, 0x8f, 0x07, 0x6d, 0x33, 0x4e, 0xc4, 0x18, 0xc6, 0x79, 0xdb, 0xa7, 0xc2, 0x84,
+	0x29, 0x53, 0xac, 0xb5, 0xe7, 0x30, 0x93, 0x06, 0xe3, 0x4b, 0x90, 0x3d, 0xa4, 0x6d, 0x71, 0xba,
+	0x29, 0xb3, 0xb3, 0xc4, 0xb7, 0x21, 0xd7, 0xb2, 0xea, 0x4d, 0xaa, 0xbc, 0x9b, 0x33, 0x64, 0x93,
+	0x1a, 0x71, 0x93, 0x1a, 0x9b, 0x5e, 0xdb, 0x94, 0x90, 0xf5, 0xcc, 0x1a, 0x2a, 0x6e, 0x00, 0x54,
+	0x28, 0x37, 0xe9, 0x9b, 0x26, 0x0d, 0x39, 0x2e, 0xc1, 0x04, 0xf3, 0xb9, 0xcb, 0xbc, 0x50, 0x39,
+	0x76, 0x39, 0x71, 0xac, 0x42, 0xf9, 0xae, 0x0c, 0x99, 0x31, 0xa6, 0x78, 0x1f, 0xa6, 0x45, 0x72,
+	0xe8, 0x33, 0x2f, 0xa4, 0x98, 0x40, 0x5e, 0x8a, 0x4f, 0xec, 0x1e, 0x62, 0x9a, 0x82, 0x15, 0xef,
+	0xc1, 0x74, 0xe7, 0xa6, 0xe2, 0xea, 0x46, 0x6f, 0xf5, 0xb9, 0xa4, 0x7a, 0x07, 0xd6, 0x57, 0xfe,
+	0x09, 0xcc, 0xc8, 0x74, 0x55, 0x7f, 0x23, 0x7d, 0xfd, 0x8a, 0x62, 0x58, 0xf3, 0x88, 0xc4, 0x14,
+	0xbc, 0x18, 0xc0, 0xec, 0x56, 0x40, 0x2d, 0x4e, 0x63, 0x35, 0x4b, 0xbd, 0x6a, 0xae, 0x26, 0x6a,
+	0x24, 0xb0, 0x57, 0x4f, 0xea, 0xfc, 0x99, 0xd1, 0xce, 0xbf, 0x09, 0xff, 0xc5, 0x35, 0xcf, 0x6b,
+	0x61, 0x00, 0xb3, 0x2f, 0xfc, 0xda, 0x68, 0xb2, 0x25, 0xf0, 0x42, 0x64, 0xc7, 0x35, 0xff, 0x41,
+	0xf6, 0x23, 0x5a, 0xa7, 0x23, 0xc9, 0x96, 0xc0, 0x0b, 0x91, 0x1d, 0xd7, 0x3c, 0xaf, 0xec, 0x07,
+	0x30, 0xf3, 0xd2, 0xe2, 0xf6, 0x41, 0xac, 0x9a, 0xf4, 0xaa, 0xbe, 0x92, 0xa8, 0x16, 0xb8, 0xbe,
+	0x96, 0x6d, 0xc0, 0xac, 0x22, 0x50, 0x12, 0xee, 0x40, 0x4e, 0xbc, 0xa2, 0x49, 0xbe, 0x7c, 0x53,
+	0x13, 0x01, 0xdb, 0x9d, 0xad, 0x29, 0x31, 0x7f, 0x7d, 0xe4, 0x95, 0x4f, 0x59, 0x98, 0x50, 0x0f,
+	0x06, 0x7e, 0x08, 0xd9, 0x0a, 0xe5, 0xb8, 0x7f, 0x20, 0xba, 0xf3, 0xaf, 0xdd, 0x1c, 0x1c, 0x54,
+	0x5a, 0xb7, 0x60, 0x5c, 0x3c, 0xac, 0xfd, 0xa8, 0xd4, 0x14, 0x6b, 0xb7, 0x86, 0x44, 0x15, 0xc9,
+	0x0e, 0xe4, 0x65, 0xcf, 0x63, 0xbd, 0x0f, 0x78, 0x66, 0x00, 0xb5, 0xf9, 0xa1, 0xf1, 0x2e, 0x95,
+	0xec, 0xc3, 0x01, 0x54, 0x67, 0x86, 0x62, 0x00, 0x55, 0x4f, 0x03, 0xef, 0x40, 0x5e, 0xf6, 0xc6,
+	0x00, 0xaa, 0x33, 0x8d, 0x3a, 0x80, 0xaa, 0xa7, 0xa9, 0x1e, 0x43, 0x4e, 0x5c, 0x31, 0xee, 0x37,
+	0x22, 0xdd, 0x3b, 0x9a, 0x3e, 0x2c, 0x2c, 0x79, 0x96, 0x50, 0x79, 0xff, 0xe4, 0x54, 0x47, 0xdf,
+	0x4e, 0xf5, 0xb1, 0x5f, 0xa7, 0x3a, 0x7a, 0x1b, 0xe9, 0xe8, 0x7d, 0xa4, 0xa3, 0x8f, 0x91, 0x3e,
+	0xf6, 0x39, 0xd2, 0xd1, 0x49, 0xa4, 0xa3, 0xaf, 0x91, 0x8e, 0x7e, 0x44, 0x3a, 0x7a, 0xf7, 0x53,
+	0x1f, 0x7b, 0xb5, 0x76, 0xde, 0xbf, 0x44, 0xd5, 0xbc, 0xf8, 0x71, 0x58, 0xfd, 0x1d, 0x00, 0x00,
+	0xff, 0xff, 0x50, 0x7b, 0x7d, 0xd9, 0x55, 0x09, 0x00, 0x00,
 }
 
 func (this *Secret) Equal(that interface{}) bool {
@@ -856,6 +892,38 @@ func (this *Secret) Equal(that interface{}) bool {
 	}
 	if !this.Spec.Equal(that1.Spec) {
 		return false
+	}
+	return true
+}
+func (this *SecretList) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*SecretList)
+	if !ok {
+		that2, ok := that.(SecretList)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Metadata.Equal(that1.Metadata) {
+		return false
+	}
+	if len(this.Items) != len(that1.Items) {
+		return false
+	}
+	for i := range this.Items {
+		if !this.Items[i].Equal(that1.Items[i]) {
+			return false
+		}
 	}
 	return true
 }
@@ -910,7 +978,7 @@ func (this *GetRequest) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.GetOptions.Equal(that1.GetOptions) {
+	if !this.Options.Equal(that1.Options) {
 		return false
 	}
 	return true
@@ -937,9 +1005,6 @@ func (this *GetResponse) Equal(that interface{}) bool {
 	if !this.Secret.Equal(that1.Secret) {
 		return false
 	}
-	if !this.Error.Equal(that1.Error) {
-		return false
-	}
 	return true
 }
 func (this *ListRequest) Equal(that interface{}) bool {
@@ -961,7 +1026,7 @@ func (this *ListRequest) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.ListOptions.Equal(that1.ListOptions) {
+	if !this.Options.Equal(that1.Options) {
 		return false
 	}
 	return true
@@ -985,27 +1050,46 @@ func (this *ListResponse) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if len(this.Secrets) != len(that1.Secrets) {
-		return false
-	}
-	for i := range this.Secrets {
-		if !this.Secrets[i].Equal(that1.Secrets[i]) {
-			return false
-		}
-	}
-	if !this.Error.Equal(that1.Error) {
+	if !this.SecretList.Equal(that1.SecretList) {
 		return false
 	}
 	return true
 }
-func (this *AddRequest) Equal(that interface{}) bool {
+func (this *CreateRequest) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*AddRequest)
+	that1, ok := that.(*CreateRequest)
 	if !ok {
-		that2, ok := that.(AddRequest)
+		that2, ok := that.(CreateRequest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Options.Equal(that1.Options) {
+		return false
+	}
+	if !this.Secret.Equal(that1.Secret) {
+		return false
+	}
+	return true
+}
+func (this *CreateResponse) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateResponse)
+	if !ok {
+		that2, ok := that.(CreateResponse)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1018,33 +1102,6 @@ func (this *AddRequest) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.Secret.Equal(that1.Secret) {
-		return false
-	}
-	return true
-}
-func (this *AddResponse) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*AddResponse)
-	if !ok {
-		that2, ok := that.(AddResponse)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Secret.Equal(that1.Secret) {
-		return false
-	}
-	if !this.Error.Equal(that1.Error) {
 		return false
 	}
 	return true
@@ -1066,6 +1123,9 @@ func (this *UpdateRequest) Equal(that interface{}) bool {
 	if that1 == nil {
 		return this == nil
 	} else if this == nil {
+		return false
+	}
+	if !this.Options.Equal(that1.Options) {
 		return false
 	}
 	if !this.Secret.Equal(that1.Secret) {
@@ -1095,9 +1155,6 @@ func (this *UpdateResponse) Equal(that interface{}) bool {
 	if !this.Secret.Equal(that1.Secret) {
 		return false
 	}
-	if !this.Error.Equal(that1.Error) {
-		return false
-	}
 	return true
 }
 func (this *DeleteRequest) Equal(that interface{}) bool {
@@ -1117,6 +1174,9 @@ func (this *DeleteRequest) Equal(that interface{}) bool {
 	if that1 == nil {
 		return this == nil
 	} else if this == nil {
+		return false
+	}
+	if !this.Options.Equal(that1.Options) {
 		return false
 	}
 	if !this.Secret.Equal(that1.Secret) {
@@ -1146,9 +1206,6 @@ func (this *DeleteResponse) Equal(that interface{}) bool {
 	if !this.Secret.Equal(that1.Secret) {
 		return false
 	}
-	if !this.Error.Equal(that1.Error) {
-		return false
-	}
 	return true
 }
 func (this *WatchRequest) Equal(that interface{}) bool {
@@ -1170,7 +1227,7 @@ func (this *WatchRequest) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.WatchOptions.Equal(that1.WatchOptions) {
+	if !this.Options.Equal(that1.Options) {
 		return false
 	}
 	return true
@@ -1200,9 +1257,6 @@ func (this *WatchResponse) Equal(that interface{}) bool {
 	if !this.Secret.Equal(that1.Secret) {
 		return false
 	}
-	if !this.Error.Equal(that1.Error) {
-		return false
-	}
 	return true
 }
 
@@ -1222,8 +1276,8 @@ type SecretsClient interface {
 	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
 	// List Secret.
 	List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
-	// Add a Secret.
-	Add(ctx context.Context, in *AddRequest, opts ...grpc.CallOption) (*AddResponse, error)
+	// Create a Secret.
+	Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error)
 	// Update a Secret.
 	Update(ctx context.Context, in *UpdateRequest, opts ...grpc.CallOption) (*UpdateResponse, error)
 	// Delete a Secret.
@@ -1258,9 +1312,9 @@ func (c *secretsClient) List(ctx context.Context, in *ListRequest, opts ...grpc.
 	return out, nil
 }
 
-func (c *secretsClient) Add(ctx context.Context, in *AddRequest, opts ...grpc.CallOption) (*AddResponse, error) {
-	out := new(AddResponse)
-	err := c.cc.Invoke(ctx, "/secrets.v1alpha.Secrets/Add", in, out, opts...)
+func (c *secretsClient) Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error) {
+	out := new(CreateResponse)
+	err := c.cc.Invoke(ctx, "/secrets.v1alpha.Secrets/Create", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1323,8 +1377,8 @@ type SecretsServer interface {
 	Get(context.Context, *GetRequest) (*GetResponse, error)
 	// List Secret.
 	List(context.Context, *ListRequest) (*ListResponse, error)
-	// Add a Secret.
-	Add(context.Context, *AddRequest) (*AddResponse, error)
+	// Create a Secret.
+	Create(context.Context, *CreateRequest) (*CreateResponse, error)
 	// Update a Secret.
 	Update(context.Context, *UpdateRequest) (*UpdateResponse, error)
 	// Delete a Secret.
@@ -1373,20 +1427,20 @@ func _Secrets_List_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Secrets_Add_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddRequest)
+func _Secrets_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(SecretsServer).Add(ctx, in)
+		return srv.(SecretsServer).Create(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/secrets.v1alpha.Secrets/Add",
+		FullMethod: "/secrets.v1alpha.Secrets/Create",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(SecretsServer).Add(ctx, req.(*AddRequest))
+		return srv.(SecretsServer).Create(ctx, req.(*CreateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1461,8 +1515,8 @@ var _Secrets_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Secrets_List_Handler,
 		},
 		{
-			MethodName: "Add",
-			Handler:    _Secrets_Add_Handler,
+			MethodName: "Create",
+			Handler:    _Secrets_Create_Handler,
 		},
 		{
 			MethodName: "Update",
@@ -1521,6 +1575,46 @@ func (m *Secret) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
+func (m *SecretList) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *SecretList) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Metadata != nil {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintApi(dAtA, i, uint64(m.Metadata.Size()))
+		n3, err := m.Metadata.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n3
+	}
+	if len(m.Items) > 0 {
+		for _, msg := range m.Items {
+			dAtA[i] = 0x12
+			i++
+			i = encodeVarintApi(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	return i, nil
+}
+
 func (m *SecretSpec) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1556,11 +1650,11 @@ func (m *SecretSpec) MarshalTo(dAtA []byte) (int, error) {
 				dAtA[i] = 0x12
 				i++
 				i = encodeVarintApi(dAtA, i, uint64(v.Size()))
-				n3, err := v.MarshalTo(dAtA[i:])
+				n4, err := v.MarshalTo(dAtA[i:])
 				if err != nil {
 					return 0, err
 				}
-				i += n3
+				i += n4
 			}
 		}
 	}
@@ -1588,15 +1682,15 @@ func (m *GetRequest) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.GetOptions != nil {
+	if m.Options != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.GetOptions.Size()))
-		n4, err := m.GetOptions.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Options.Size()))
+		n5, err := m.Options.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n4
+		i += n5
 	}
 	return i, nil
 }
@@ -1620,17 +1714,7 @@ func (m *GetResponse) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintApi(dAtA, i, uint64(m.Secret.Size()))
-		n5, err := m.Secret.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n5
-	}
-	if m.Error != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Error.Size()))
-		n6, err := m.Error.MarshalTo(dAtA[i:])
+		n6, err := m.Secret.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -1654,11 +1738,11 @@ func (m *ListRequest) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.ListOptions != nil {
+	if m.Options != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.ListOptions.Size()))
-		n7, err := m.ListOptions.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Options.Size()))
+		n7, err := m.Options.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -1682,23 +1766,11 @@ func (m *ListResponse) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if len(m.Secrets) > 0 {
-		for _, msg := range m.Secrets {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintApi(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	if m.Error != nil {
-		dAtA[i] = 0x12
+	if m.SecretList != nil {
+		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Error.Size()))
-		n8, err := m.Error.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.SecretList.Size()))
+		n8, err := m.SecretList.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -1707,7 +1779,7 @@ func (m *ListResponse) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
-func (m *AddRequest) Marshal() (dAtA []byte, err error) {
+func (m *CreateRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalTo(dAtA)
@@ -1717,41 +1789,23 @@ func (m *AddRequest) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *AddRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *CreateRequest) MarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.Secret != nil {
+	if m.Options != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Secret.Size()))
-		n9, err := m.Secret.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Options.Size()))
+		n9, err := m.Options.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
 		i += n9
 	}
-	return i, nil
-}
-
-func (m *AddResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *AddResponse) MarshalTo(dAtA []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
 	if m.Secret != nil {
-		dAtA[i] = 0xa
+		dAtA[i] = 0x12
 		i++
 		i = encodeVarintApi(dAtA, i, uint64(m.Secret.Size()))
 		n10, err := m.Secret.MarshalTo(dAtA[i:])
@@ -1760,11 +1814,29 @@ func (m *AddResponse) MarshalTo(dAtA []byte) (int, error) {
 		}
 		i += n10
 	}
-	if m.Error != nil {
-		dAtA[i] = 0x12
+	return i, nil
+}
+
+func (m *CreateResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CreateResponse) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Secret != nil {
+		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Error.Size()))
-		n11, err := m.Error.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Secret.Size()))
+		n11, err := m.Secret.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -1788,15 +1860,25 @@ func (m *UpdateRequest) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.Secret != nil {
+	if m.Options != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Secret.Size()))
-		n12, err := m.Secret.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Options.Size()))
+		n12, err := m.Options.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
 		i += n12
+	}
+	if m.Secret != nil {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintApi(dAtA, i, uint64(m.Secret.Size()))
+		n13, err := m.Secret.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n13
 	}
 	return i, nil
 }
@@ -1820,17 +1902,7 @@ func (m *UpdateResponse) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintApi(dAtA, i, uint64(m.Secret.Size()))
-		n13, err := m.Secret.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n13
-	}
-	if m.Error != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Error.Size()))
-		n14, err := m.Error.MarshalTo(dAtA[i:])
+		n14, err := m.Secret.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -1854,15 +1926,25 @@ func (m *DeleteRequest) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.Secret != nil {
+	if m.Options != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Secret.Size()))
-		n15, err := m.Secret.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Options.Size()))
+		n15, err := m.Options.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
 		i += n15
+	}
+	if m.Secret != nil {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintApi(dAtA, i, uint64(m.Secret.Size()))
+		n16, err := m.Secret.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n16
 	}
 	return i, nil
 }
@@ -1886,17 +1968,7 @@ func (m *DeleteResponse) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintApi(dAtA, i, uint64(m.Secret.Size()))
-		n16, err := m.Secret.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n16
-	}
-	if m.Error != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Error.Size()))
-		n17, err := m.Error.MarshalTo(dAtA[i:])
+		n17, err := m.Secret.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -1920,11 +1992,11 @@ func (m *WatchRequest) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.WatchOptions != nil {
+	if m.Options != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.WatchOptions.Size()))
-		n18, err := m.WatchOptions.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Options.Size()))
+		n18, err := m.Options.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -1968,16 +2040,6 @@ func (m *WatchResponse) MarshalTo(dAtA []byte) (int, error) {
 		}
 		i += n20
 	}
-	if m.Error != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Error.Size()))
-		n21, err := m.Error.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n21
-	}
 	return i, nil
 }
 
@@ -2003,12 +2065,29 @@ func NewPopulatedSecret(r randyApi, easy bool) *Secret {
 	return this
 }
 
+func NewPopulatedSecretList(r randyApi, easy bool) *SecretList {
+	this := &SecretList{}
+	if r.Intn(10) != 0 {
+		this.Metadata = v1.NewPopulatedObjectMetadata(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		v1 := r.Intn(5)
+		this.Items = make([]*Secret, v1)
+		for i := 0; i < v1; i++ {
+			this.Items[i] = NewPopulatedSecret(r, easy)
+		}
+	}
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
 func NewPopulatedSecretSpec(r randyApi, easy bool) *SecretSpec {
 	this := &SecretSpec{}
 	if r.Intn(10) != 0 {
-		v1 := r.Intn(10)
+		v2 := r.Intn(10)
 		this.Secrets = make(map[string]*types.Any)
-		for i := 0; i < v1; i++ {
+		for i := 0; i < v2; i++ {
 			this.Secrets[randStringApi(r)] = types.NewPopulatedAny(r, easy)
 		}
 	}
@@ -2021,7 +2100,7 @@ func NewPopulatedSecretSpec(r randyApi, easy bool) *SecretSpec {
 func NewPopulatedGetRequest(r randyApi, easy bool) *GetRequest {
 	this := &GetRequest{}
 	if r.Intn(10) != 0 {
-		this.GetOptions = v1.NewPopulatedGetOptions(r, easy)
+		this.Options = v1.NewPopulatedGetOptions(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2033,9 +2112,6 @@ func NewPopulatedGetResponse(r randyApi, easy bool) *GetResponse {
 	if r.Intn(10) != 0 {
 		this.Secret = NewPopulatedSecret(r, easy)
 	}
-	if r.Intn(10) != 0 {
-		this.Error = v1.NewPopulatedError(r, easy)
-	}
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
@@ -2044,7 +2120,7 @@ func NewPopulatedGetResponse(r randyApi, easy bool) *GetResponse {
 func NewPopulatedListRequest(r randyApi, easy bool) *ListRequest {
 	this := &ListRequest{}
 	if r.Intn(10) != 0 {
-		this.ListOptions = v1.NewPopulatedListOptions(r, easy)
+		this.Options = v1.NewPopulatedListOptions(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2054,22 +2130,18 @@ func NewPopulatedListRequest(r randyApi, easy bool) *ListRequest {
 func NewPopulatedListResponse(r randyApi, easy bool) *ListResponse {
 	this := &ListResponse{}
 	if r.Intn(10) != 0 {
-		v2 := r.Intn(5)
-		this.Secrets = make([]*Secret, v2)
-		for i := 0; i < v2; i++ {
-			this.Secrets[i] = NewPopulatedSecret(r, easy)
-		}
-	}
-	if r.Intn(10) != 0 {
-		this.Error = v1.NewPopulatedError(r, easy)
+		this.SecretList = NewPopulatedSecretList(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
 }
 
-func NewPopulatedAddRequest(r randyApi, easy bool) *AddRequest {
-	this := &AddRequest{}
+func NewPopulatedCreateRequest(r randyApi, easy bool) *CreateRequest {
+	this := &CreateRequest{}
+	if r.Intn(10) != 0 {
+		this.Options = v1.NewPopulatedCreateOptions(r, easy)
+	}
 	if r.Intn(10) != 0 {
 		this.Secret = NewPopulatedSecret(r, easy)
 	}
@@ -2078,13 +2150,10 @@ func NewPopulatedAddRequest(r randyApi, easy bool) *AddRequest {
 	return this
 }
 
-func NewPopulatedAddResponse(r randyApi, easy bool) *AddResponse {
-	this := &AddResponse{}
+func NewPopulatedCreateResponse(r randyApi, easy bool) *CreateResponse {
+	this := &CreateResponse{}
 	if r.Intn(10) != 0 {
 		this.Secret = NewPopulatedSecret(r, easy)
-	}
-	if r.Intn(10) != 0 {
-		this.Error = v1.NewPopulatedError(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2093,6 +2162,9 @@ func NewPopulatedAddResponse(r randyApi, easy bool) *AddResponse {
 
 func NewPopulatedUpdateRequest(r randyApi, easy bool) *UpdateRequest {
 	this := &UpdateRequest{}
+	if r.Intn(10) != 0 {
+		this.Options = v1.NewPopulatedUpdateOptions(r, easy)
+	}
 	if r.Intn(10) != 0 {
 		this.Secret = NewPopulatedSecret(r, easy)
 	}
@@ -2106,9 +2178,6 @@ func NewPopulatedUpdateResponse(r randyApi, easy bool) *UpdateResponse {
 	if r.Intn(10) != 0 {
 		this.Secret = NewPopulatedSecret(r, easy)
 	}
-	if r.Intn(10) != 0 {
-		this.Error = v1.NewPopulatedError(r, easy)
-	}
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
@@ -2116,6 +2185,9 @@ func NewPopulatedUpdateResponse(r randyApi, easy bool) *UpdateResponse {
 
 func NewPopulatedDeleteRequest(r randyApi, easy bool) *DeleteRequest {
 	this := &DeleteRequest{}
+	if r.Intn(10) != 0 {
+		this.Options = v1.NewPopulatedDeleteOptions(r, easy)
+	}
 	if r.Intn(10) != 0 {
 		this.Secret = NewPopulatedSecret(r, easy)
 	}
@@ -2129,9 +2201,6 @@ func NewPopulatedDeleteResponse(r randyApi, easy bool) *DeleteResponse {
 	if r.Intn(10) != 0 {
 		this.Secret = NewPopulatedSecret(r, easy)
 	}
-	if r.Intn(10) != 0 {
-		this.Error = v1.NewPopulatedError(r, easy)
-	}
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
@@ -2140,7 +2209,7 @@ func NewPopulatedDeleteResponse(r randyApi, easy bool) *DeleteResponse {
 func NewPopulatedWatchRequest(r randyApi, easy bool) *WatchRequest {
 	this := &WatchRequest{}
 	if r.Intn(10) != 0 {
-		this.WatchOptions = v1.NewPopulatedWatchOptions(r, easy)
+		this.Options = v1.NewPopulatedWatchOptions(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2154,9 +2223,6 @@ func NewPopulatedWatchResponse(r randyApi, easy bool) *WatchResponse {
 	}
 	if r.Intn(10) != 0 {
 		this.Secret = NewPopulatedSecret(r, easy)
-	}
-	if r.Intn(10) != 0 {
-		this.Error = v1.NewPopulatedError(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2252,6 +2318,25 @@ func (m *Secret) Size() (n int) {
 	return n
 }
 
+func (m *SecretList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Metadata != nil {
+		l = m.Metadata.Size()
+		n += 1 + l + sovApi(uint64(l))
+	}
+	if len(m.Items) > 0 {
+		for _, e := range m.Items {
+			l = e.Size()
+			n += 1 + l + sovApi(uint64(l))
+		}
+	}
+	return n
+}
+
 func (m *SecretSpec) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2284,8 +2369,8 @@ func (m *GetRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.GetOptions != nil {
-		l = m.GetOptions.Size()
+	if m.Options != nil {
+		l = m.Options.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -2301,10 +2386,6 @@ func (m *GetResponse) Size() (n int) {
 		l = m.Secret.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
-	if m.Error != nil {
-		l = m.Error.Size()
-		n += 1 + l + sovApi(uint64(l))
-	}
 	return n
 }
 
@@ -2314,8 +2395,8 @@ func (m *ListRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.ListOptions != nil {
-		l = m.ListOptions.Size()
+	if m.Options != nil {
+		l = m.Options.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -2327,25 +2408,23 @@ func (m *ListResponse) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if len(m.Secrets) > 0 {
-		for _, e := range m.Secrets {
-			l = e.Size()
-			n += 1 + l + sovApi(uint64(l))
-		}
-	}
-	if m.Error != nil {
-		l = m.Error.Size()
+	if m.SecretList != nil {
+		l = m.SecretList.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
 }
 
-func (m *AddRequest) Size() (n int) {
+func (m *CreateRequest) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
+	if m.Options != nil {
+		l = m.Options.Size()
+		n += 1 + l + sovApi(uint64(l))
+	}
 	if m.Secret != nil {
 		l = m.Secret.Size()
 		n += 1 + l + sovApi(uint64(l))
@@ -2353,7 +2432,7 @@ func (m *AddRequest) Size() (n int) {
 	return n
 }
 
-func (m *AddResponse) Size() (n int) {
+func (m *CreateResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -2361,10 +2440,6 @@ func (m *AddResponse) Size() (n int) {
 	_ = l
 	if m.Secret != nil {
 		l = m.Secret.Size()
-		n += 1 + l + sovApi(uint64(l))
-	}
-	if m.Error != nil {
-		l = m.Error.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -2376,6 +2451,10 @@ func (m *UpdateRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
+	if m.Options != nil {
+		l = m.Options.Size()
+		n += 1 + l + sovApi(uint64(l))
+	}
 	if m.Secret != nil {
 		l = m.Secret.Size()
 		n += 1 + l + sovApi(uint64(l))
@@ -2393,10 +2472,6 @@ func (m *UpdateResponse) Size() (n int) {
 		l = m.Secret.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
-	if m.Error != nil {
-		l = m.Error.Size()
-		n += 1 + l + sovApi(uint64(l))
-	}
 	return n
 }
 
@@ -2406,6 +2481,10 @@ func (m *DeleteRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
+	if m.Options != nil {
+		l = m.Options.Size()
+		n += 1 + l + sovApi(uint64(l))
+	}
 	if m.Secret != nil {
 		l = m.Secret.Size()
 		n += 1 + l + sovApi(uint64(l))
@@ -2423,10 +2502,6 @@ func (m *DeleteResponse) Size() (n int) {
 		l = m.Secret.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
-	if m.Error != nil {
-		l = m.Error.Size()
-		n += 1 + l + sovApi(uint64(l))
-	}
 	return n
 }
 
@@ -2436,8 +2511,8 @@ func (m *WatchRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.WatchOptions != nil {
-		l = m.WatchOptions.Size()
+	if m.Options != nil {
+		l = m.Options.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -2455,10 +2530,6 @@ func (m *WatchResponse) Size() (n int) {
 	}
 	if m.Secret != nil {
 		l = m.Secret.Size()
-		n += 1 + l + sovApi(uint64(l))
-	}
-	if m.Error != nil {
-		l = m.Error.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -2484,6 +2555,17 @@ func (this *Secret) String() string {
 	s := strings.Join([]string{`&Secret{`,
 		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "ObjectMetadata", "v1.ObjectMetadata", 1) + `,`,
 		`Spec:` + strings.Replace(fmt.Sprintf("%v", this.Spec), "SecretSpec", "SecretSpec", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *SecretList) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&SecretList{`,
+		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "ObjectMetadata", "v1.ObjectMetadata", 1) + `,`,
+		`Items:` + strings.Replace(fmt.Sprintf("%v", this.Items), "Secret", "Secret", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2514,7 +2596,7 @@ func (this *GetRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetRequest{`,
-		`GetOptions:` + strings.Replace(fmt.Sprintf("%v", this.GetOptions), "GetOptions", "v1.GetOptions", 1) + `,`,
+		`Options:` + strings.Replace(fmt.Sprintf("%v", this.Options), "GetOptions", "v1.GetOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2525,7 +2607,6 @@ func (this *GetResponse) String() string {
 	}
 	s := strings.Join([]string{`&GetResponse{`,
 		`Secret:` + strings.Replace(fmt.Sprintf("%v", this.Secret), "Secret", "Secret", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2535,7 +2616,7 @@ func (this *ListRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ListRequest{`,
-		`ListOptions:` + strings.Replace(fmt.Sprintf("%v", this.ListOptions), "ListOptions", "v1.ListOptions", 1) + `,`,
+		`Options:` + strings.Replace(fmt.Sprintf("%v", this.Options), "ListOptions", "v1.ListOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2545,29 +2626,28 @@ func (this *ListResponse) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ListResponse{`,
-		`Secrets:` + strings.Replace(fmt.Sprintf("%v", this.Secrets), "Secret", "Secret", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
+		`SecretList:` + strings.Replace(fmt.Sprintf("%v", this.SecretList), "SecretList", "SecretList", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *AddRequest) String() string {
+func (this *CreateRequest) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&AddRequest{`,
+	s := strings.Join([]string{`&CreateRequest{`,
+		`Options:` + strings.Replace(fmt.Sprintf("%v", this.Options), "CreateOptions", "v1.CreateOptions", 1) + `,`,
 		`Secret:` + strings.Replace(fmt.Sprintf("%v", this.Secret), "Secret", "Secret", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *AddResponse) String() string {
+func (this *CreateResponse) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&AddResponse{`,
+	s := strings.Join([]string{`&CreateResponse{`,
 		`Secret:` + strings.Replace(fmt.Sprintf("%v", this.Secret), "Secret", "Secret", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2577,6 +2657,7 @@ func (this *UpdateRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&UpdateRequest{`,
+		`Options:` + strings.Replace(fmt.Sprintf("%v", this.Options), "UpdateOptions", "v1.UpdateOptions", 1) + `,`,
 		`Secret:` + strings.Replace(fmt.Sprintf("%v", this.Secret), "Secret", "Secret", 1) + `,`,
 		`}`,
 	}, "")
@@ -2588,7 +2669,6 @@ func (this *UpdateResponse) String() string {
 	}
 	s := strings.Join([]string{`&UpdateResponse{`,
 		`Secret:` + strings.Replace(fmt.Sprintf("%v", this.Secret), "Secret", "Secret", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2598,6 +2678,7 @@ func (this *DeleteRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&DeleteRequest{`,
+		`Options:` + strings.Replace(fmt.Sprintf("%v", this.Options), "DeleteOptions", "v1.DeleteOptions", 1) + `,`,
 		`Secret:` + strings.Replace(fmt.Sprintf("%v", this.Secret), "Secret", "Secret", 1) + `,`,
 		`}`,
 	}, "")
@@ -2609,7 +2690,6 @@ func (this *DeleteResponse) String() string {
 	}
 	s := strings.Join([]string{`&DeleteResponse{`,
 		`Secret:` + strings.Replace(fmt.Sprintf("%v", this.Secret), "Secret", "Secret", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2619,7 +2699,7 @@ func (this *WatchRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&WatchRequest{`,
-		`WatchOptions:` + strings.Replace(fmt.Sprintf("%v", this.WatchOptions), "WatchOptions", "v1.WatchOptions", 1) + `,`,
+		`Options:` + strings.Replace(fmt.Sprintf("%v", this.Options), "WatchOptions", "v1.WatchOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2631,7 +2711,6 @@ func (this *WatchResponse) String() string {
 	s := strings.Join([]string{`&WatchResponse{`,
 		`Event:` + strings.Replace(fmt.Sprintf("%v", this.Event), "Event", "v1alpha.Event", 1) + `,`,
 		`Secret:` + strings.Replace(fmt.Sprintf("%v", this.Secret), "Secret", "Secret", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2736,6 +2815,120 @@ func (m *Secret) Unmarshal(dAtA []byte) error {
 				m.Spec = &SecretSpec{}
 			}
 			if err := m.Spec.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipApi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthApi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *SecretList) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowApi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: SecretList: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: SecretList: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Metadata", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Metadata == nil {
+				m.Metadata = &v1.ObjectMetadata{}
+			}
+			if err := m.Metadata.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Items", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Items = append(m.Items, &Secret{})
+			if err := m.Items[len(m.Items)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -2993,7 +3186,7 @@ func (m *GetRequest) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field GetOptions", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Options", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -3017,10 +3210,10 @@ func (m *GetRequest) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.GetOptions == nil {
-				m.GetOptions = &v1.GetOptions{}
+			if m.Options == nil {
+				m.Options = &v1.GetOptions{}
 			}
-			if err := m.GetOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Options.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -3107,39 +3300,6 @@ func (m *GetResponse) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Error == nil {
-				m.Error = &v1.Error{}
-			}
-			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipApi(dAtA[iNdEx:])
@@ -3192,7 +3352,7 @@ func (m *ListRequest) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ListOptions", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Options", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -3216,10 +3376,10 @@ func (m *ListRequest) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.ListOptions == nil {
-				m.ListOptions = &v1.ListOptions{}
+			if m.Options == nil {
+				m.Options = &v1.ListOptions{}
 			}
-			if err := m.ListOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Options.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -3275,7 +3435,7 @@ func (m *ListResponse) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Secrets", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field SecretList", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -3299,41 +3459,10 @@ func (m *ListResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Secrets = append(m.Secrets, &Secret{})
-			if err := m.Secrets[len(m.Secrets)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
+			if m.SecretList == nil {
+				m.SecretList = &SecretList{}
 			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Error == nil {
-				m.Error = &v1.Error{}
-			}
-			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.SecretList.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -3358,7 +3487,7 @@ func (m *ListResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *AddRequest) Unmarshal(dAtA []byte) error {
+func (m *CreateRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -3381,13 +3510,46 @@ func (m *AddRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: AddRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: CreateRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: AddRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: CreateRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Options", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Options == nil {
+				m.Options = &v1.CreateOptions{}
+			}
+			if err := m.Options.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Secret", wireType)
 			}
@@ -3441,7 +3603,7 @@ func (m *AddRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *AddResponse) Unmarshal(dAtA []byte) error {
+func (m *CreateResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -3464,10 +3626,10 @@ func (m *AddResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: AddResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: CreateResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: AddResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: CreateResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -3500,39 +3662,6 @@ func (m *AddResponse) Unmarshal(dAtA []byte) error {
 				m.Secret = &Secret{}
 			}
 			if err := m.Secret.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Error == nil {
-				m.Error = &v1.Error{}
-			}
-			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -3587,6 +3716,39 @@ func (m *UpdateRequest) Unmarshal(dAtA []byte) error {
 		}
 		switch fieldNum {
 		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Options", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Options == nil {
+				m.Options = &v1.UpdateOptions{}
+			}
+			if err := m.Options.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Secret", wireType)
 			}
@@ -3702,39 +3864,6 @@ func (m *UpdateResponse) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Error == nil {
-				m.Error = &v1.Error{}
-			}
-			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipApi(dAtA[iNdEx:])
@@ -3786,6 +3915,39 @@ func (m *DeleteRequest) Unmarshal(dAtA []byte) error {
 		}
 		switch fieldNum {
 		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Options", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Options == nil {
+				m.Options = &v1.DeleteOptions{}
+			}
+			if err := m.Options.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Secret", wireType)
 			}
@@ -3901,39 +4063,6 @@ func (m *DeleteResponse) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Error == nil {
-				m.Error = &v1.Error{}
-			}
-			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipApi(dAtA[iNdEx:])
@@ -3986,7 +4115,7 @@ func (m *WatchRequest) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field WatchOptions", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Options", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -4010,10 +4139,10 @@ func (m *WatchRequest) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.WatchOptions == nil {
-				m.WatchOptions = &v1.WatchOptions{}
+			if m.Options == nil {
+				m.Options = &v1.WatchOptions{}
 			}
-			if err := m.WatchOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Options.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -4130,39 +4259,6 @@ func (m *WatchResponse) Unmarshal(dAtA []byte) error {
 				m.Secret = &Secret{}
 			}
 			if err := m.Secret.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Error == nil {
-				m.Error = &v1.Error{}
-			}
-			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

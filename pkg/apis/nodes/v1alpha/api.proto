@@ -18,8 +18,8 @@ package nodes.v1alpha;
 option go_package = "github.com/galexrt/edenconfmgmt/pkg/apis/nodes/v1alpha";
 
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/apiserver/server.proto";
 import "github.com/mwitkow/go-proto-validators/validator.proto";
-import "github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/internalclient/client.proto";
 import "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1/api.proto";
 import "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha/api.proto";
 
@@ -40,8 +40,8 @@ service Nodes {
     rpc Get (GetRequest) returns (GetResponse);
     // List Nodes.
     rpc List (ListRequest) returns (ListResponse);
-    // Add a Node.
-    rpc Add (AddRequest) returns (AddResponse);
+    // Create a Node.
+    rpc Create (CreateRequest) returns (CreateResponse);
     // Update a Node.
     rpc Update (UpdateRequest) returns (UpdateResponse);
     // Delete a Node.
@@ -51,8 +51,7 @@ service Nodes {
 }
 
 message Node {
-    option (internalclient.options).generate = true;
-    option (internalclient.options).namespaced = false;
+    option (apiserver.options).generate = true;
     // Metadata for Node object.
     core.v1.ObjectMetadata metadata = 1 [(validator.field) = {msg_exists : true}];
     // Spec for Node.
@@ -99,72 +98,68 @@ message Status {
 // Get
 message GetRequest {
     // GetOptions options for a GetRequest.
-    core.v1.GetOptions getOptions = 1;
+    core.v1.GetOptions options = 1;
 }
 
 message GetResponse {
     // Node object.
     Node node = 1;
-    // Error object.
-    core.v1.Error error = 2;
 }
 
 // List
 message ListRequest {
-    // ListOptions options for a ListRequest.
-    core.v1.ListOptions listOptions = 1;
+    // core_v1.ListOptions
+    core.v1.ListOptions options = 1;
 }
 
 message ListResponse {
     // Node list.
-    repeated Node nodes = 1;
-    // Error object.
-    core.v1.Error error = 2;
+    NodeList nodeList = 1;
 }
 
-// Add
-message AddRequest {
+// Create
+message CreateRequest {
+    // core_v1.CreateOptions
+    core.v1.CreateOptions options = 1;
     // Node object.
-    Node node = 1 [(validator.field) = {msg_exists : true}];
+    Node node = 2 [(validator.field) = {msg_exists : true}];
 }
 
-message AddResponse {
+message CreateResponse {
     // Node object.
     Node node = 1;
-    // Error object.
-    core.v1.Error error = 2;
 }
 
 // Update
 message UpdateRequest {
+    // core_v1.UpdateOptions
+    core.v1.UpdateOptions options = 1;
     // Node object.
-    Node node = 1;
+    Node node = 2;
 }
 
 message UpdateResponse {
     // Node object.
     Node node = 1;
-    // Error object.
-    core.v1.Error error = 2;
 }
 
 // Delete
 message DeleteRequest {
+    // core_v1.DeleteOptions
+    core.v1.DeleteOptions options = 1;
     // Node object.
-    Node node = 1;
+    Node node = 2;
 }
 
 message DeleteResponse {
     // Node object.
     Node node = 1;
-    // Error object.
-    core.v1.Error error = 2;
 }
 
 // Watch
 message WatchRequest {
-    // WatchOptions options for WatchRequest.
-    core.v1.WatchOptions watchOptions = 1;
+    // core_v1.WatchOptions
+    core.v1.WatchOptions options = 1;
 }
 
 message WatchResponse {
@@ -172,6 +167,4 @@ message WatchResponse {
     events.v1alpha.Event event = 1;
     // Node for watch response.
     Node node = 2;
-    // Error object.
-    core.v1.Error error = 3;
 }

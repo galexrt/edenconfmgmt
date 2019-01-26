@@ -8,8 +8,10 @@ import (
 	fmt "fmt"
 	v1 "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1"
 	v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha"
+	_ "github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/apiserver"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
+	_ "github.com/mwitkow/go-proto-validators"
 	grpc "google.golang.org/grpc"
 	io "io"
 	math "math"
@@ -83,6 +85,61 @@ func (m *Beacon) GetSpec() *BeaconSpec {
 	return nil
 }
 
+type BeaconList struct {
+	// Metadata for BeaconList object.
+	Metadata *v1.ObjectMetadata `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	// List of Beacon objects.
+	Items                []*Beacon `protobuf:"bytes,2,rep,name=items,proto3" json:"items,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
+}
+
+func (m *BeaconList) Reset()      { *m = BeaconList{} }
+func (*BeaconList) ProtoMessage() {}
+func (*BeaconList) Descriptor() ([]byte, []int) {
+	return fileDescriptor_d429cd6d4b65179a, []int{1}
+}
+func (m *BeaconList) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *BeaconList) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_BeaconList.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalTo(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *BeaconList) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_BeaconList.Merge(m, src)
+}
+func (m *BeaconList) XXX_Size() int {
+	return m.Size()
+}
+func (m *BeaconList) XXX_DiscardUnknown() {
+	xxx_messageInfo_BeaconList.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_BeaconList proto.InternalMessageInfo
+
+func (m *BeaconList) GetMetadata() *v1.ObjectMetadata {
+	if m != nil {
+		return m.Metadata
+	}
+	return nil
+}
+
+func (m *BeaconList) GetItems() []*Beacon {
+	if m != nil {
+		return m.Items
+	}
+	return nil
+}
+
 // TODO
 type BeaconSpec struct {
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
@@ -92,7 +149,7 @@ type BeaconSpec struct {
 func (m *BeaconSpec) Reset()      { *m = BeaconSpec{} }
 func (*BeaconSpec) ProtoMessage() {}
 func (*BeaconSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d429cd6d4b65179a, []int{1}
+	return fileDescriptor_d429cd6d4b65179a, []int{2}
 }
 func (m *BeaconSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -123,8 +180,8 @@ var xxx_messageInfo_BeaconSpec proto.InternalMessageInfo
 
 // Get request content.
 type GetRequest struct {
-	// GetOptions options for a GetRequest.
-	GetOptions           *v1.GetOptions `protobuf:"bytes,1,opt,name=getOptions,proto3" json:"getOptions,omitempty"`
+	// core_v1.GetOptions
+	Options              *v1.GetOptions `protobuf:"bytes,1,opt,name=options,proto3" json:"options,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
 	XXX_sizecache        int32          `json:"-"`
 }
@@ -132,7 +189,7 @@ type GetRequest struct {
 func (m *GetRequest) Reset()      { *m = GetRequest{} }
 func (*GetRequest) ProtoMessage() {}
 func (*GetRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d429cd6d4b65179a, []int{2}
+	return fileDescriptor_d429cd6d4b65179a, []int{3}
 }
 func (m *GetRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -161,9 +218,9 @@ func (m *GetRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetRequest proto.InternalMessageInfo
 
-func (m *GetRequest) GetGetOptions() *v1.GetOptions {
+func (m *GetRequest) GetOptions() *v1.GetOptions {
 	if m != nil {
-		return m.GetOptions
+		return m.Options
 	}
 	return nil
 }
@@ -171,17 +228,15 @@ func (m *GetRequest) GetGetOptions() *v1.GetOptions {
 // Get response content.
 type GetResponse struct {
 	// Beacon object.
-	Beacon *Beacon `protobuf:"bytes,1,opt,name=beacon,proto3" json:"beacon,omitempty"`
-	// Error object.
-	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
+	Beacon               *Beacon  `protobuf:"bytes,1,opt,name=beacon,proto3" json:"beacon,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
 func (m *GetResponse) Reset()      { *m = GetResponse{} }
 func (*GetResponse) ProtoMessage() {}
 func (*GetResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d429cd6d4b65179a, []int{3}
+	return fileDescriptor_d429cd6d4b65179a, []int{4}
 }
 func (m *GetResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -217,17 +272,10 @@ func (m *GetResponse) GetBeacon() *Beacon {
 	return nil
 }
 
-func (m *GetResponse) GetError() *v1.Error {
-	if m != nil {
-		return m.Error
-	}
-	return nil
-}
-
 // List request content.
 type ListRequest struct {
-	// ListOptions options for a ListRequest.
-	ListOptions          *v1.ListOptions `protobuf:"bytes,1,opt,name=listOptions,proto3" json:"listOptions,omitempty"`
+	// core_v1.ListOptions
+	Options              *v1.ListOptions `protobuf:"bytes,1,opt,name=options,proto3" json:"options,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
 	XXX_sizecache        int32           `json:"-"`
 }
@@ -235,7 +283,7 @@ type ListRequest struct {
 func (m *ListRequest) Reset()      { *m = ListRequest{} }
 func (*ListRequest) ProtoMessage() {}
 func (*ListRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d429cd6d4b65179a, []int{4}
+	return fileDescriptor_d429cd6d4b65179a, []int{5}
 }
 func (m *ListRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -264,9 +312,9 @@ func (m *ListRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ListRequest proto.InternalMessageInfo
 
-func (m *ListRequest) GetListOptions() *v1.ListOptions {
+func (m *ListRequest) GetOptions() *v1.ListOptions {
 	if m != nil {
-		return m.ListOptions
+		return m.Options
 	}
 	return nil
 }
@@ -274,17 +322,15 @@ func (m *ListRequest) GetListOptions() *v1.ListOptions {
 // List response content.
 type ListResponse struct {
 	// Beacon list.
-	Beacons []*Beacon `protobuf:"bytes,1,rep,name=beacons,proto3" json:"beacons,omitempty"`
-	// Error object.
-	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
+	BeaconList           *BeaconList `protobuf:"bytes,1,opt,name=beaconList,proto3" json:"beaconList,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
+	XXX_sizecache        int32       `json:"-"`
 }
 
 func (m *ListResponse) Reset()      { *m = ListResponse{} }
 func (*ListResponse) ProtoMessage() {}
 func (*ListResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d429cd6d4b65179a, []int{5}
+	return fileDescriptor_d429cd6d4b65179a, []int{6}
 }
 func (m *ListResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -313,39 +359,87 @@ func (m *ListResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ListResponse proto.InternalMessageInfo
 
-func (m *ListResponse) GetBeacons() []*Beacon {
+func (m *ListResponse) GetBeaconList() *BeaconList {
 	if m != nil {
-		return m.Beacons
+		return m.BeaconList
 	}
 	return nil
 }
 
-func (m *ListResponse) GetError() *v1.Error {
+// Create Beacon request.
+type CreateRequest struct {
+	// core_v1.CreateOptions
+	Options *v1.CreateOptions `protobuf:"bytes,1,opt,name=options,proto3" json:"options,omitempty"`
+	// Beacon object.
+	Beacon               *Beacon  `protobuf:"bytes,2,opt,name=beacon,proto3" json:"beacon,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *CreateRequest) Reset()      { *m = CreateRequest{} }
+func (*CreateRequest) ProtoMessage() {}
+func (*CreateRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_d429cd6d4b65179a, []int{7}
+}
+func (m *CreateRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CreateRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_CreateRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalTo(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *CreateRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateRequest.Merge(m, src)
+}
+func (m *CreateRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *CreateRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateRequest proto.InternalMessageInfo
+
+func (m *CreateRequest) GetOptions() *v1.CreateOptions {
 	if m != nil {
-		return m.Error
+		return m.Options
 	}
 	return nil
 }
 
-// Add Beacon request.
-type AddRequest struct {
+func (m *CreateRequest) GetBeacon() *Beacon {
+	if m != nil {
+		return m.Beacon
+	}
+	return nil
+}
+
+type CreateResponse struct {
 	// Beacon object.
 	Beacon               *Beacon  `protobuf:"bytes,1,opt,name=beacon,proto3" json:"beacon,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *AddRequest) Reset()      { *m = AddRequest{} }
-func (*AddRequest) ProtoMessage() {}
-func (*AddRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d429cd6d4b65179a, []int{6}
+func (m *CreateResponse) Reset()      { *m = CreateResponse{} }
+func (*CreateResponse) ProtoMessage() {}
+func (*CreateResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_d429cd6d4b65179a, []int{8}
 }
-func (m *AddRequest) XXX_Unmarshal(b []byte) error {
+func (m *CreateResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *AddRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *CreateResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_AddRequest.Marshal(b, m, deterministic)
+		return xxx_messageInfo_CreateResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalTo(b)
@@ -355,84 +449,31 @@ func (m *AddRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return b[:n], nil
 	}
 }
-func (m *AddRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AddRequest.Merge(m, src)
+func (m *CreateResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateResponse.Merge(m, src)
 }
-func (m *AddRequest) XXX_Size() int {
+func (m *CreateResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *AddRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_AddRequest.DiscardUnknown(m)
+func (m *CreateResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_AddRequest proto.InternalMessageInfo
+var xxx_messageInfo_CreateResponse proto.InternalMessageInfo
 
-func (m *AddRequest) GetBeacon() *Beacon {
+func (m *CreateResponse) GetBeacon() *Beacon {
 	if m != nil {
 		return m.Beacon
-	}
-	return nil
-}
-
-type AddResponse struct {
-	// Beacon object.
-	Beacon *Beacon `protobuf:"bytes,1,opt,name=beacon,proto3" json:"beacon,omitempty"`
-	// Error object.
-	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
-}
-
-func (m *AddResponse) Reset()      { *m = AddResponse{} }
-func (*AddResponse) ProtoMessage() {}
-func (*AddResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d429cd6d4b65179a, []int{7}
-}
-func (m *AddResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *AddResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_AddResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *AddResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AddResponse.Merge(m, src)
-}
-func (m *AddResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *AddResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_AddResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_AddResponse proto.InternalMessageInfo
-
-func (m *AddResponse) GetBeacon() *Beacon {
-	if m != nil {
-		return m.Beacon
-	}
-	return nil
-}
-
-func (m *AddResponse) GetError() *v1.Error {
-	if m != nil {
-		return m.Error
 	}
 	return nil
 }
 
 // Update
 type UpdateRequest struct {
+	// core_v1.UpdateOptions
+	Options *v1.UpdateOptions `protobuf:"bytes,1,opt,name=options,proto3" json:"options,omitempty"`
 	// Beacon object.
-	Beacon               *Beacon  `protobuf:"bytes,1,opt,name=beacon,proto3" json:"beacon,omitempty"`
+	Beacon               *Beacon  `protobuf:"bytes,2,opt,name=beacon,proto3" json:"beacon,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
@@ -440,7 +481,7 @@ type UpdateRequest struct {
 func (m *UpdateRequest) Reset()      { *m = UpdateRequest{} }
 func (*UpdateRequest) ProtoMessage() {}
 func (*UpdateRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d429cd6d4b65179a, []int{8}
+	return fileDescriptor_d429cd6d4b65179a, []int{9}
 }
 func (m *UpdateRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -469,6 +510,13 @@ func (m *UpdateRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_UpdateRequest proto.InternalMessageInfo
 
+func (m *UpdateRequest) GetOptions() *v1.UpdateOptions {
+	if m != nil {
+		return m.Options
+	}
+	return nil
+}
+
 func (m *UpdateRequest) GetBeacon() *Beacon {
 	if m != nil {
 		return m.Beacon
@@ -478,17 +526,15 @@ func (m *UpdateRequest) GetBeacon() *Beacon {
 
 type UpdateResponse struct {
 	// Beacon object.
-	Beacon *Beacon `protobuf:"bytes,1,opt,name=beacon,proto3" json:"beacon,omitempty"`
-	// Error object.
-	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
+	Beacon               *Beacon  `protobuf:"bytes,1,opt,name=beacon,proto3" json:"beacon,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
 func (m *UpdateResponse) Reset()      { *m = UpdateResponse{} }
 func (*UpdateResponse) ProtoMessage() {}
 func (*UpdateResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d429cd6d4b65179a, []int{9}
+	return fileDescriptor_d429cd6d4b65179a, []int{10}
 }
 func (m *UpdateResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -524,17 +570,12 @@ func (m *UpdateResponse) GetBeacon() *Beacon {
 	return nil
 }
 
-func (m *UpdateResponse) GetError() *v1.Error {
-	if m != nil {
-		return m.Error
-	}
-	return nil
-}
-
 // Delete
 type DeleteRequest struct {
+	// core_v1.DeleteOptions
+	Options *v1.DeleteOptions `protobuf:"bytes,1,opt,name=options,proto3" json:"options,omitempty"`
 	// Beacon object.
-	Beacon               *Beacon  `protobuf:"bytes,1,opt,name=beacon,proto3" json:"beacon,omitempty"`
+	Beacon               *Beacon  `protobuf:"bytes,2,opt,name=beacon,proto3" json:"beacon,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
@@ -542,7 +583,7 @@ type DeleteRequest struct {
 func (m *DeleteRequest) Reset()      { *m = DeleteRequest{} }
 func (*DeleteRequest) ProtoMessage() {}
 func (*DeleteRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d429cd6d4b65179a, []int{10}
+	return fileDescriptor_d429cd6d4b65179a, []int{11}
 }
 func (m *DeleteRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -571,6 +612,13 @@ func (m *DeleteRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_DeleteRequest proto.InternalMessageInfo
 
+func (m *DeleteRequest) GetOptions() *v1.DeleteOptions {
+	if m != nil {
+		return m.Options
+	}
+	return nil
+}
+
 func (m *DeleteRequest) GetBeacon() *Beacon {
 	if m != nil {
 		return m.Beacon
@@ -580,17 +628,15 @@ func (m *DeleteRequest) GetBeacon() *Beacon {
 
 type DeleteResponse struct {
 	// Beacon object.
-	Beacon *Beacon `protobuf:"bytes,1,opt,name=beacon,proto3" json:"beacon,omitempty"`
-	// Error object.
-	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
+	Beacon               *Beacon  `protobuf:"bytes,1,opt,name=beacon,proto3" json:"beacon,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
 func (m *DeleteResponse) Reset()      { *m = DeleteResponse{} }
 func (*DeleteResponse) ProtoMessage() {}
 func (*DeleteResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d429cd6d4b65179a, []int{11}
+	return fileDescriptor_d429cd6d4b65179a, []int{12}
 }
 func (m *DeleteResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -626,17 +672,10 @@ func (m *DeleteResponse) GetBeacon() *Beacon {
 	return nil
 }
 
-func (m *DeleteResponse) GetError() *v1.Error {
-	if m != nil {
-		return m.Error
-	}
-	return nil
-}
-
 // Watch
 type WatchRequest struct {
-	// WatchOptions options for WatchRequest.
-	WatchOptions         *v1.WatchOptions `protobuf:"bytes,1,opt,name=watchOptions,proto3" json:"watchOptions,omitempty"`
+	// core_v1.WatchOptions
+	Options              *v1.WatchOptions `protobuf:"bytes,1,opt,name=options,proto3" json:"options,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
 	XXX_sizecache        int32            `json:"-"`
 }
@@ -644,7 +683,7 @@ type WatchRequest struct {
 func (m *WatchRequest) Reset()      { *m = WatchRequest{} }
 func (*WatchRequest) ProtoMessage() {}
 func (*WatchRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d429cd6d4b65179a, []int{12}
+	return fileDescriptor_d429cd6d4b65179a, []int{13}
 }
 func (m *WatchRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -673,9 +712,9 @@ func (m *WatchRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_WatchRequest proto.InternalMessageInfo
 
-func (m *WatchRequest) GetWatchOptions() *v1.WatchOptions {
+func (m *WatchRequest) GetOptions() *v1.WatchOptions {
 	if m != nil {
-		return m.WatchOptions
+		return m.Options
 	}
 	return nil
 }
@@ -684,17 +723,15 @@ type WatchResponse struct {
 	// Beacon info for watch response.
 	Event *v1alpha.Event `protobuf:"bytes,1,opt,name=event,proto3" json:"event,omitempty"`
 	// Beacon for watch response.
-	Beacon *Beacon `protobuf:"bytes,2,opt,name=beacon,proto3" json:"beacon,omitempty"`
-	// Error object.
-	Error                *v1.Error `protobuf:"bytes,3,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
+	Beacon               *Beacon  `protobuf:"bytes,2,opt,name=beacon,proto3" json:"beacon,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
 func (m *WatchResponse) Reset()      { *m = WatchResponse{} }
 func (*WatchResponse) ProtoMessage() {}
 func (*WatchResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_d429cd6d4b65179a, []int{13}
+	return fileDescriptor_d429cd6d4b65179a, []int{14}
 }
 func (m *WatchResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -737,22 +774,16 @@ func (m *WatchResponse) GetBeacon() *Beacon {
 	return nil
 }
 
-func (m *WatchResponse) GetError() *v1.Error {
-	if m != nil {
-		return m.Error
-	}
-	return nil
-}
-
 func init() {
 	proto.RegisterType((*Beacon)(nil), "beacons.v1alpha.Beacon")
+	proto.RegisterType((*BeaconList)(nil), "beacons.v1alpha.BeaconList")
 	proto.RegisterType((*BeaconSpec)(nil), "beacons.v1alpha.BeaconSpec")
 	proto.RegisterType((*GetRequest)(nil), "beacons.v1alpha.GetRequest")
 	proto.RegisterType((*GetResponse)(nil), "beacons.v1alpha.GetResponse")
 	proto.RegisterType((*ListRequest)(nil), "beacons.v1alpha.ListRequest")
 	proto.RegisterType((*ListResponse)(nil), "beacons.v1alpha.ListResponse")
-	proto.RegisterType((*AddRequest)(nil), "beacons.v1alpha.AddRequest")
-	proto.RegisterType((*AddResponse)(nil), "beacons.v1alpha.AddResponse")
+	proto.RegisterType((*CreateRequest)(nil), "beacons.v1alpha.CreateRequest")
+	proto.RegisterType((*CreateResponse)(nil), "beacons.v1alpha.CreateResponse")
 	proto.RegisterType((*UpdateRequest)(nil), "beacons.v1alpha.UpdateRequest")
 	proto.RegisterType((*UpdateResponse)(nil), "beacons.v1alpha.UpdateResponse")
 	proto.RegisterType((*DeleteRequest)(nil), "beacons.v1alpha.DeleteRequest")
@@ -766,46 +797,51 @@ func init() {
 }
 
 var fileDescriptor_d429cd6d4b65179a = []byte{
-	// 616 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x95, 0xcf, 0x8b, 0xd3, 0x40,
-	0x14, 0xc7, 0x3b, 0xdb, 0x6d, 0x57, 0x5e, 0xbb, 0x2b, 0x44, 0xc5, 0x12, 0x75, 0x5c, 0x82, 0x07,
-	0x41, 0x4c, 0xec, 0x16, 0x44, 0x05, 0xa1, 0xad, 0x96, 0xba, 0xb0, 0xb2, 0x10, 0x91, 0x05, 0x6f,
-	0x69, 0x32, 0x4d, 0xab, 0x6d, 0x26, 0x26, 0xd3, 0xea, 0xd1, 0x3f, 0x41, 0xf0, 0x9f, 0xf0, 0xec,
-	0xc9, 0xa3, 0xc7, 0x3d, 0x7a, 0xf4, 0x68, 0xe3, 0x3f, 0xe1, 0x51, 0x32, 0x99, 0xfc, 0x68, 0x9b,
-	0x2e, 0xdd, 0x95, 0xde, 0x3a, 0xf3, 0xbe, 0xef, 0x3b, 0x9f, 0x37, 0x7d, 0x6f, 0x02, 0x6d, 0x7b,
-	0xc8, 0x06, 0x93, 0x9e, 0x6a, 0xd2, 0xb1, 0x66, 0x1b, 0x23, 0xf2, 0xd1, 0x63, 0x1a, 0xb1, 0x88,
-	0x63, 0x52, 0xa7, 0x3f, 0xb6, 0xc7, 0x4c, 0x73, 0xdf, 0xd9, 0x9a, 0xe1, 0x0e, 0x7d, 0xad, 0x47,
-	0x0c, 0x93, 0x3a, 0xbe, 0x36, 0xad, 0x1b, 0x23, 0x77, 0x60, 0x84, 0x9b, 0xaa, 0xeb, 0x51, 0x46,
-	0xa5, 0xcb, 0x22, 0xa4, 0x8a, 0x90, 0x7c, 0x3f, 0x6b, 0x4a, 0x6d, 0xaa, 0x71, 0x5d, 0x6f, 0xd2,
-	0xe7, 0x2b, 0xbe, 0xe0, 0xbf, 0xa2, 0x7c, 0xf9, 0xc9, 0xda, 0x0c, 0x26, 0xf5, 0x88, 0x36, 0xad,
-	0xa7, 0x67, 0xcb, 0xad, 0xb5, 0x73, 0xc9, 0x94, 0x38, 0x2c, 0x07, 0x5f, 0x71, 0xa0, 0xdc, 0xe6,
-	0x05, 0x48, 0x0d, 0xb8, 0x34, 0x26, 0xcc, 0xb0, 0x0c, 0x66, 0xd4, 0xd0, 0x3e, 0xba, 0x5b, 0x39,
-	0xb8, 0xae, 0x86, 0x47, 0xaa, 0xd3, 0xba, 0x7a, 0xdc, 0x7b, 0x4b, 0x4c, 0xf6, 0x52, 0x84, 0xf5,
-	0x44, 0x28, 0x69, 0xb0, 0xed, 0xbb, 0xc4, 0xac, 0x6d, 0xf1, 0x84, 0x1b, 0xea, 0xc2, 0x65, 0xa8,
-	0x91, 0xf7, 0x2b, 0x97, 0x98, 0x3a, 0x17, 0x2a, 0x55, 0x80, 0x74, 0x4f, 0x69, 0x01, 0x74, 0x09,
-	0xd3, 0xc9, 0xfb, 0x09, 0xf1, 0x99, 0xd4, 0x00, 0xb0, 0x09, 0x3b, 0x76, 0xd9, 0x90, 0x3a, 0xbe,
-	0x60, 0xb8, 0x92, 0x30, 0x74, 0x93, 0x90, 0x9e, 0x91, 0x29, 0x16, 0x54, 0xb8, 0x85, 0xef, 0x52,
-	0xc7, 0x27, 0x92, 0x06, 0xe5, 0x88, 0x21, 0xa9, 0x21, 0x1f, 0x49, 0x17, 0x32, 0xe9, 0x0e, 0x94,
-	0x88, 0xe7, 0x51, 0x4f, 0x94, 0xb0, 0x97, 0x9c, 0xd7, 0x09, 0x77, 0xf5, 0x28, 0xa8, 0x74, 0xa0,
-	0x72, 0x34, 0xf4, 0x13, 0xd2, 0x87, 0x50, 0x19, 0x0d, 0xfd, 0x05, 0xd4, 0xab, 0x49, 0xea, 0x51,
-	0x1a, 0xd3, 0xb3, 0x42, 0xc5, 0x86, 0x6a, 0x64, 0x23, 0x68, 0xeb, 0xb0, 0x23, 0xf0, 0x6a, 0x68,
-	0xbf, 0x78, 0x16, 0x6e, 0xac, 0x5b, 0x93, 0xf7, 0x29, 0x40, 0xcb, 0xb2, 0x62, 0xdc, 0xf3, 0x5e,
-	0x4a, 0x78, 0xa9, 0x3c, 0x7d, 0xb3, 0x97, 0xda, 0x84, 0xdd, 0xd7, 0xae, 0x65, 0x30, 0x72, 0x61,
-	0x4e, 0x1b, 0xf6, 0x62, 0x87, 0x8d, 0xa3, 0x3e, 0x27, 0x23, 0xf2, 0x7f, 0xa8, 0xb1, 0xc3, 0x66,
-	0x51, 0x0f, 0xa1, 0x7a, 0x62, 0x30, 0x73, 0x10, 0x93, 0x3e, 0x86, 0xea, 0x87, 0x70, 0x3d, 0xdf,
-	0xac, 0xd7, 0x92, 0xe4, 0x93, 0x4c, 0x50, 0x9f, 0x93, 0x2a, 0x5f, 0x10, 0xec, 0x0a, 0x2f, 0xc1,
-	0x7c, 0x0f, 0x4a, 0xfc, 0x29, 0x49, 0x5c, 0xa2, 0x87, 0x25, 0x21, 0xee, 0x84, 0x4b, 0x3d, 0xd2,
-	0x64, 0x0a, 0xdc, 0x3a, 0x67, 0x81, 0xc5, 0x33, 0x0a, 0x3c, 0xf8, 0x56, 0x84, 0x9d, 0xb6, 0x98,
-	0x86, 0x26, 0x14, 0xbb, 0x84, 0x49, 0xcb, 0x0f, 0x4f, 0xfa, 0xac, 0xc8, 0x37, 0xf3, 0x83, 0xa2,
-	0xa2, 0x67, 0xb0, 0x1d, 0x8e, 0xa4, 0xb4, 0xac, 0xca, 0x0c, 0xbc, 0x7c, 0x6b, 0x45, 0x54, 0x98,
-	0x34, 0xa1, 0xd8, 0xb2, 0xac, 0x1c, 0x8c, 0x74, 0x08, 0x73, 0x30, 0xb2, 0x23, 0x76, 0x08, 0xe5,
-	0xa8, 0x93, 0x25, 0xbc, 0xa4, 0x9b, 0x1b, 0x12, 0xf9, 0xf6, 0xca, 0x78, 0x6a, 0x15, 0x75, 0x5a,
-	0x8e, 0xd5, 0x5c, 0x13, 0xe7, 0x58, 0x2d, 0xb4, 0xe8, 0x0b, 0x28, 0xf1, 0xff, 0x5f, 0x5a, 0xae,
-	0x3f, 0xdb, 0x63, 0x32, 0x5e, 0x15, 0x8e, 0x7c, 0x1e, 0xa0, 0x76, 0xff, 0x74, 0x86, 0xd1, 0xaf,
-	0x19, 0x2e, 0xfc, 0x9d, 0x61, 0xf4, 0x29, 0xc0, 0xe8, 0x6b, 0x80, 0xd1, 0xf7, 0x00, 0x17, 0x7e,
-	0x04, 0x18, 0x9d, 0x06, 0x18, 0xfd, 0x0c, 0x30, 0xfa, 0x1d, 0x60, 0xf4, 0xf9, 0x0f, 0x2e, 0xbc,
-	0x79, 0x74, 0xd1, 0x0f, 0x73, 0xaf, 0xcc, 0x3f, 0x6b, 0x8d, 0x7f, 0x01, 0x00, 0x00, 0xff, 0xff,
-	0x5b, 0xd4, 0x09, 0x1b, 0xdb, 0x07, 0x00, 0x00,
+	// 692 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x96, 0xcb, 0x6e, 0xd3, 0x4e,
+	0x14, 0xc6, 0x3b, 0x69, 0x93, 0x56, 0xa7, 0xed, 0xff, 0x2f, 0x99, 0x5b, 0x65, 0x60, 0x5a, 0x79,
+	0x85, 0x84, 0xe2, 0xe9, 0x45, 0x42, 0xa8, 0x15, 0x97, 0xa6, 0xa0, 0x50, 0x01, 0xaa, 0x94, 0x0a,
+	0x21, 0xb1, 0x73, 0x9c, 0xa9, 0x6b, 0x1a, 0x7b, 0x8c, 0x3d, 0x49, 0xbb, 0xe4, 0x11, 0x78, 0x0c,
+	0x1e, 0x01, 0x89, 0x0d, 0xcb, 0x8a, 0x15, 0x4b, 0x76, 0x50, 0xf3, 0x12, 0x2c, 0x51, 0x66, 0xc6,
+	0xae, 0x6b, 0x3b, 0x92, 0x09, 0x5d, 0xd5, 0xf6, 0xf9, 0xce, 0xf7, 0xfd, 0x66, 0x7c, 0xc6, 0x0d,
+	0xb4, 0x1c, 0x97, 0x1f, 0x0e, 0xba, 0xa6, 0xcd, 0x3c, 0xe2, 0x58, 0x7d, 0x7a, 0x12, 0x72, 0x42,
+	0x7b, 0xd4, 0xb7, 0x99, 0x7f, 0xe0, 0x39, 0x1e, 0x27, 0xc1, 0x91, 0x43, 0xac, 0xc0, 0x8d, 0x48,
+	0x97, 0x5a, 0x36, 0xf3, 0x23, 0x32, 0x5c, 0xb3, 0xfa, 0xc1, 0xa1, 0x35, 0x7a, 0x68, 0x06, 0x21,
+	0xe3, 0x4c, 0xfb, 0x5f, 0x95, 0x4c, 0x55, 0xd2, 0x9b, 0x59, 0x53, 0xe6, 0x30, 0x22, 0x74, 0xdd,
+	0xc1, 0x81, 0xb8, 0x13, 0x37, 0xe2, 0x4a, 0xf6, 0xeb, 0xed, 0x2a, 0x0c, 0x4e, 0x18, 0xd8, 0x24,
+	0xe8, 0x0f, 0x1c, 0xd7, 0x8f, 0x04, 0x10, 0x0d, 0x87, 0x34, 0x24, 0xf2, 0x8f, 0x32, 0xba, 0x97,
+	0x31, 0xf2, 0x8e, 0x5d, 0x7e, 0xc4, 0x8e, 0x89, 0xc3, 0x9a, 0xa2, 0xd8, 0x1c, 0x5a, 0x7d, 0xb7,
+	0x67, 0x71, 0x16, 0x46, 0x24, 0xbd, 0x54, 0x7d, 0x9b, 0x95, 0x37, 0xc1, 0x66, 0x21, 0x25, 0xc3,
+	0xb5, 0xf3, 0xc5, 0xeb, 0xdb, 0x95, 0x7b, 0xe9, 0x90, 0xfa, 0xbc, 0x64, 0xff, 0x8c, 0x01, 0x34,
+	0x5a, 0x62, 0x07, 0xb5, 0x0d, 0x98, 0xf3, 0x28, 0xb7, 0x7a, 0x16, 0xb7, 0x96, 0xd0, 0x0a, 0xba,
+	0x33, 0xbf, 0x7e, 0xc3, 0x1c, 0x45, 0x9a, 0xc3, 0x35, 0x73, 0xaf, 0xfb, 0x96, 0xda, 0xfc, 0xa5,
+	0x2a, 0x77, 0x52, 0xa1, 0x46, 0x60, 0x26, 0x0a, 0xa8, 0xbd, 0x54, 0x13, 0x0d, 0x37, 0xcd, 0xdc,
+	0xdb, 0x30, 0xa5, 0xf7, 0x7e, 0x40, 0xed, 0x8e, 0x10, 0x6e, 0xd6, 0xbf, 0xee, 0xd7, 0xe6, 0x90,
+	0x71, 0x02, 0x20, 0x4b, 0x2f, 0xdc, 0x88, 0x6b, 0x5b, 0x95, 0xa3, 0x5b, 0x8d, 0xf8, 0xc7, 0x72,
+	0x6d, 0x05, 0x65, 0x10, 0x9a, 0x50, 0x77, 0x39, 0xf5, 0xa2, 0xa5, 0xda, 0xca, 0xb4, 0xe8, 0x2c,
+	0x67, 0xe8, 0x48, 0x95, 0xb1, 0x90, 0x24, 0x8f, 0xa0, 0x8c, 0x2d, 0x80, 0x36, 0xe5, 0x1d, 0xfa,
+	0x6e, 0x40, 0x23, 0xae, 0x35, 0x61, 0x96, 0x05, 0xdc, 0x65, 0x7e, 0xa4, 0x30, 0xae, 0xa4, 0x18,
+	0x6d, 0xca, 0xf7, 0x64, 0xa9, 0x93, 0x68, 0x8c, 0x87, 0x30, 0x2f, 0x9a, 0xa3, 0x80, 0xf9, 0x11,
+	0xd5, 0x08, 0x34, 0x64, 0x74, 0xba, 0x86, 0x31, 0x24, 0x4a, 0x66, 0x3c, 0x80, 0xf9, 0xd1, 0xf2,
+	0x93, 0x74, 0x33, 0x9f, 0x7e, 0x35, 0x4d, 0x1f, 0xc9, 0x0a, 0xf1, 0xcf, 0x61, 0x41, 0xb6, 0xab,
+	0xfc, 0x2d, 0x80, 0x6e, 0xba, 0xa7, 0xca, 0x62, 0xdc, 0x1b, 0x11, 0x8d, 0x19, 0xb9, 0x11, 0xc2,
+	0xe2, 0x4e, 0x48, 0x2d, 0x4e, 0x13, 0x9a, 0xd5, 0x3c, 0xcd, 0xf5, 0x94, 0x46, 0x0a, 0xf3, 0x3c,
+	0x99, 0xf5, 0xd7, 0xaa, 0xad, 0x7f, 0x1b, 0xfe, 0x4b, 0x32, 0x27, 0xdd, 0xc2, 0x10, 0x16, 0x5f,
+	0x05, 0xbd, 0x6a, 0xd8, 0x52, 0x78, 0x29, 0xd8, 0x49, 0xe6, 0x3f, 0x60, 0x3f, 0xa1, 0x7d, 0x5a,
+	0x09, 0x5b, 0x0a, 0x2f, 0x05, 0x3b, 0xc9, 0x9c, 0x14, 0xfb, 0x11, 0x2c, 0xbc, 0xb6, 0xb8, 0x7d,
+	0x98, 0x50, 0x93, 0x3c, 0xf5, 0xb5, 0x94, 0x5a, 0xe8, 0x0a, 0x23, 0xeb, 0xc1, 0xa2, 0x32, 0x50,
+	0x08, 0x77, 0xa1, 0x2e, 0x3e, 0x4d, 0x69, 0xbf, 0xfc, 0x50, 0xa5, 0x00, 0x4f, 0x47, 0xb7, 0x1d,
+	0xa9, 0xf9, 0xeb, 0x25, 0xaf, 0x7f, 0x9e, 0x86, 0x59, 0xf9, 0x28, 0xd2, 0x1e, 0xc3, 0x74, 0x9b,
+	0x72, 0xad, 0x78, 0x20, 0xce, 0xcf, 0xbf, 0x7e, 0xab, 0xbc, 0xa8, 0x58, 0x77, 0x60, 0x46, 0x7c,
+	0xad, 0x8a, 0xaa, 0xcc, 0x29, 0xd6, 0x6f, 0x8f, 0xa9, 0x2a, 0x93, 0x5d, 0x68, 0xc8, 0x99, 0xd7,
+	0x70, 0x41, 0x78, 0xe1, 0x00, 0xea, 0xcb, 0x63, 0xeb, 0xe7, 0x56, 0x72, 0x0e, 0x4b, 0xac, 0x2e,
+	0x1c, 0x8a, 0x12, 0xab, 0xdc, 0x00, 0xef, 0x42, 0x43, 0xce, 0x46, 0x89, 0xd5, 0x85, 0x41, 0x2d,
+	0xb1, 0xca, 0x0d, 0xd5, 0x33, 0xa8, 0x8b, 0x57, 0xac, 0x15, 0x37, 0x22, 0x3b, 0x3b, 0x3a, 0x1e,
+	0x57, 0x96, 0x3e, 0xab, 0xa8, 0x75, 0x70, 0x7a, 0x86, 0xd1, 0xf7, 0x33, 0x3c, 0xf5, 0xfb, 0x0c,
+	0xa3, 0xf7, 0x31, 0x46, 0x1f, 0x63, 0x8c, 0x3e, 0xc5, 0x78, 0xea, 0x4b, 0x8c, 0xd1, 0x69, 0x8c,
+	0xd1, 0xb7, 0x18, 0xa3, 0x9f, 0x31, 0x46, 0x1f, 0x7e, 0xe1, 0xa9, 0x37, 0xf7, 0x27, 0xfd, 0x31,
+	0xd1, 0x6d, 0x88, 0xff, 0x84, 0x1b, 0x7f, 0x02, 0x00, 0x00, 0xff, 0xff, 0x37, 0x10, 0x7b, 0x9c,
+	0x8f, 0x08, 0x00, 0x00,
 }
 
 func (this *Beacon) Equal(that interface{}) bool {
@@ -832,6 +868,38 @@ func (this *Beacon) Equal(that interface{}) bool {
 	}
 	if !this.Spec.Equal(that1.Spec) {
 		return false
+	}
+	return true
+}
+func (this *BeaconList) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*BeaconList)
+	if !ok {
+		that2, ok := that.(BeaconList)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Metadata.Equal(that1.Metadata) {
+		return false
+	}
+	if len(this.Items) != len(that1.Items) {
+		return false
+	}
+	for i := range this.Items {
+		if !this.Items[i].Equal(that1.Items[i]) {
+			return false
+		}
 	}
 	return true
 }
@@ -875,7 +943,7 @@ func (this *GetRequest) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.GetOptions.Equal(that1.GetOptions) {
+	if !this.Options.Equal(that1.Options) {
 		return false
 	}
 	return true
@@ -902,9 +970,6 @@ func (this *GetResponse) Equal(that interface{}) bool {
 	if !this.Beacon.Equal(that1.Beacon) {
 		return false
 	}
-	if !this.Error.Equal(that1.Error) {
-		return false
-	}
 	return true
 }
 func (this *ListRequest) Equal(that interface{}) bool {
@@ -926,7 +991,7 @@ func (this *ListRequest) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.ListOptions.Equal(that1.ListOptions) {
+	if !this.Options.Equal(that1.Options) {
 		return false
 	}
 	return true
@@ -950,27 +1015,46 @@ func (this *ListResponse) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if len(this.Beacons) != len(that1.Beacons) {
-		return false
-	}
-	for i := range this.Beacons {
-		if !this.Beacons[i].Equal(that1.Beacons[i]) {
-			return false
-		}
-	}
-	if !this.Error.Equal(that1.Error) {
+	if !this.BeaconList.Equal(that1.BeaconList) {
 		return false
 	}
 	return true
 }
-func (this *AddRequest) Equal(that interface{}) bool {
+func (this *CreateRequest) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*AddRequest)
+	that1, ok := that.(*CreateRequest)
 	if !ok {
-		that2, ok := that.(AddRequest)
+		that2, ok := that.(CreateRequest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Options.Equal(that1.Options) {
+		return false
+	}
+	if !this.Beacon.Equal(that1.Beacon) {
+		return false
+	}
+	return true
+}
+func (this *CreateResponse) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateResponse)
+	if !ok {
+		that2, ok := that.(CreateResponse)
 		if ok {
 			that1 = &that2
 		} else {
@@ -983,33 +1067,6 @@ func (this *AddRequest) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.Beacon.Equal(that1.Beacon) {
-		return false
-	}
-	return true
-}
-func (this *AddResponse) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*AddResponse)
-	if !ok {
-		that2, ok := that.(AddResponse)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.Beacon.Equal(that1.Beacon) {
-		return false
-	}
-	if !this.Error.Equal(that1.Error) {
 		return false
 	}
 	return true
@@ -1031,6 +1088,9 @@ func (this *UpdateRequest) Equal(that interface{}) bool {
 	if that1 == nil {
 		return this == nil
 	} else if this == nil {
+		return false
+	}
+	if !this.Options.Equal(that1.Options) {
 		return false
 	}
 	if !this.Beacon.Equal(that1.Beacon) {
@@ -1060,9 +1120,6 @@ func (this *UpdateResponse) Equal(that interface{}) bool {
 	if !this.Beacon.Equal(that1.Beacon) {
 		return false
 	}
-	if !this.Error.Equal(that1.Error) {
-		return false
-	}
 	return true
 }
 func (this *DeleteRequest) Equal(that interface{}) bool {
@@ -1082,6 +1139,9 @@ func (this *DeleteRequest) Equal(that interface{}) bool {
 	if that1 == nil {
 		return this == nil
 	} else if this == nil {
+		return false
+	}
+	if !this.Options.Equal(that1.Options) {
 		return false
 	}
 	if !this.Beacon.Equal(that1.Beacon) {
@@ -1111,9 +1171,6 @@ func (this *DeleteResponse) Equal(that interface{}) bool {
 	if !this.Beacon.Equal(that1.Beacon) {
 		return false
 	}
-	if !this.Error.Equal(that1.Error) {
-		return false
-	}
 	return true
 }
 func (this *WatchRequest) Equal(that interface{}) bool {
@@ -1135,7 +1192,7 @@ func (this *WatchRequest) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.WatchOptions.Equal(that1.WatchOptions) {
+	if !this.Options.Equal(that1.Options) {
 		return false
 	}
 	return true
@@ -1165,9 +1222,6 @@ func (this *WatchResponse) Equal(that interface{}) bool {
 	if !this.Beacon.Equal(that1.Beacon) {
 		return false
 	}
-	if !this.Error.Equal(that1.Error) {
-		return false
-	}
 	return true
 }
 
@@ -1187,8 +1241,8 @@ type BeaconsClient interface {
 	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
 	// List Beacons.
 	List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
-	// Add a Beacon.
-	Add(ctx context.Context, in *AddRequest, opts ...grpc.CallOption) (*AddResponse, error)
+	// Create a Beacon.
+	Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error)
 	// Update a Beacon.
 	Update(ctx context.Context, in *UpdateRequest, opts ...grpc.CallOption) (*UpdateResponse, error)
 	// Delete a Beacon.
@@ -1223,9 +1277,9 @@ func (c *beaconsClient) List(ctx context.Context, in *ListRequest, opts ...grpc.
 	return out, nil
 }
 
-func (c *beaconsClient) Add(ctx context.Context, in *AddRequest, opts ...grpc.CallOption) (*AddResponse, error) {
-	out := new(AddResponse)
-	err := c.cc.Invoke(ctx, "/beacons.v1alpha.Beacons/Add", in, out, opts...)
+func (c *beaconsClient) Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error) {
+	out := new(CreateResponse)
+	err := c.cc.Invoke(ctx, "/beacons.v1alpha.Beacons/Create", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1288,8 +1342,8 @@ type BeaconsServer interface {
 	Get(context.Context, *GetRequest) (*GetResponse, error)
 	// List Beacons.
 	List(context.Context, *ListRequest) (*ListResponse, error)
-	// Add a Beacon.
-	Add(context.Context, *AddRequest) (*AddResponse, error)
+	// Create a Beacon.
+	Create(context.Context, *CreateRequest) (*CreateResponse, error)
 	// Update a Beacon.
 	Update(context.Context, *UpdateRequest) (*UpdateResponse, error)
 	// Delete a Beacon.
@@ -1338,20 +1392,20 @@ func _Beacons_List_Handler(srv interface{}, ctx context.Context, dec func(interf
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Beacons_Add_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddRequest)
+func _Beacons_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(BeaconsServer).Add(ctx, in)
+		return srv.(BeaconsServer).Create(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/beacons.v1alpha.Beacons/Add",
+		FullMethod: "/beacons.v1alpha.Beacons/Create",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BeaconsServer).Add(ctx, req.(*AddRequest))
+		return srv.(BeaconsServer).Create(ctx, req.(*CreateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1426,8 +1480,8 @@ var _Beacons_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Beacons_List_Handler,
 		},
 		{
-			MethodName: "Add",
-			Handler:    _Beacons_Add_Handler,
+			MethodName: "Create",
+			Handler:    _Beacons_Create_Handler,
 		},
 		{
 			MethodName: "Update",
@@ -1486,6 +1540,46 @@ func (m *Beacon) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
+func (m *BeaconList) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *BeaconList) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Metadata != nil {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintApi(dAtA, i, uint64(m.Metadata.Size()))
+		n3, err := m.Metadata.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n3
+	}
+	if len(m.Items) > 0 {
+		for _, msg := range m.Items {
+			dAtA[i] = 0x12
+			i++
+			i = encodeVarintApi(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	return i, nil
+}
+
 func (m *BeaconSpec) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1519,15 +1613,15 @@ func (m *GetRequest) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.GetOptions != nil {
+	if m.Options != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.GetOptions.Size()))
-		n3, err := m.GetOptions.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Options.Size()))
+		n4, err := m.Options.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n3
+		i += n4
 	}
 	return i, nil
 }
@@ -1551,17 +1645,7 @@ func (m *GetResponse) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintApi(dAtA, i, uint64(m.Beacon.Size()))
-		n4, err := m.Beacon.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n4
-	}
-	if m.Error != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Error.Size()))
-		n5, err := m.Error.MarshalTo(dAtA[i:])
+		n5, err := m.Beacon.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -1585,11 +1669,11 @@ func (m *ListRequest) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.ListOptions != nil {
+	if m.Options != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.ListOptions.Size()))
-		n6, err := m.ListOptions.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Options.Size()))
+		n6, err := m.Options.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -1613,23 +1697,11 @@ func (m *ListResponse) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if len(m.Beacons) > 0 {
-		for _, msg := range m.Beacons {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintApi(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	if m.Error != nil {
-		dAtA[i] = 0x12
+	if m.BeaconList != nil {
+		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Error.Size()))
-		n7, err := m.Error.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.BeaconList.Size()))
+		n7, err := m.BeaconList.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -1638,7 +1710,7 @@ func (m *ListResponse) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
-func (m *AddRequest) Marshal() (dAtA []byte, err error) {
+func (m *CreateRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalTo(dAtA)
@@ -1648,41 +1720,23 @@ func (m *AddRequest) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *AddRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *CreateRequest) MarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.Beacon != nil {
+	if m.Options != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Beacon.Size()))
-		n8, err := m.Beacon.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Options.Size()))
+		n8, err := m.Options.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
 		i += n8
 	}
-	return i, nil
-}
-
-func (m *AddResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *AddResponse) MarshalTo(dAtA []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
 	if m.Beacon != nil {
-		dAtA[i] = 0xa
+		dAtA[i] = 0x12
 		i++
 		i = encodeVarintApi(dAtA, i, uint64(m.Beacon.Size()))
 		n9, err := m.Beacon.MarshalTo(dAtA[i:])
@@ -1691,11 +1745,29 @@ func (m *AddResponse) MarshalTo(dAtA []byte) (int, error) {
 		}
 		i += n9
 	}
-	if m.Error != nil {
-		dAtA[i] = 0x12
+	return i, nil
+}
+
+func (m *CreateResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CreateResponse) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Beacon != nil {
+		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Error.Size()))
-		n10, err := m.Error.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Beacon.Size()))
+		n10, err := m.Beacon.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -1719,15 +1791,25 @@ func (m *UpdateRequest) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.Beacon != nil {
+	if m.Options != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Beacon.Size()))
-		n11, err := m.Beacon.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Options.Size()))
+		n11, err := m.Options.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
 		i += n11
+	}
+	if m.Beacon != nil {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintApi(dAtA, i, uint64(m.Beacon.Size()))
+		n12, err := m.Beacon.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n12
 	}
 	return i, nil
 }
@@ -1751,17 +1833,7 @@ func (m *UpdateResponse) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintApi(dAtA, i, uint64(m.Beacon.Size()))
-		n12, err := m.Beacon.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n12
-	}
-	if m.Error != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Error.Size()))
-		n13, err := m.Error.MarshalTo(dAtA[i:])
+		n13, err := m.Beacon.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -1785,15 +1857,25 @@ func (m *DeleteRequest) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.Beacon != nil {
+	if m.Options != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Beacon.Size()))
-		n14, err := m.Beacon.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Options.Size()))
+		n14, err := m.Options.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
 		i += n14
+	}
+	if m.Beacon != nil {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintApi(dAtA, i, uint64(m.Beacon.Size()))
+		n15, err := m.Beacon.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n15
 	}
 	return i, nil
 }
@@ -1817,17 +1899,7 @@ func (m *DeleteResponse) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintApi(dAtA, i, uint64(m.Beacon.Size()))
-		n15, err := m.Beacon.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n15
-	}
-	if m.Error != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Error.Size()))
-		n16, err := m.Error.MarshalTo(dAtA[i:])
+		n16, err := m.Beacon.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -1851,11 +1923,11 @@ func (m *WatchRequest) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.WatchOptions != nil {
+	if m.Options != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.WatchOptions.Size()))
-		n17, err := m.WatchOptions.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Options.Size()))
+		n17, err := m.Options.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -1899,16 +1971,6 @@ func (m *WatchResponse) MarshalTo(dAtA []byte) (int, error) {
 		}
 		i += n19
 	}
-	if m.Error != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Error.Size()))
-		n20, err := m.Error.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n20
-	}
 	return i, nil
 }
 
@@ -1934,6 +1996,23 @@ func NewPopulatedBeacon(r randyApi, easy bool) *Beacon {
 	return this
 }
 
+func NewPopulatedBeaconList(r randyApi, easy bool) *BeaconList {
+	this := &BeaconList{}
+	if r.Intn(10) != 0 {
+		this.Metadata = v1.NewPopulatedObjectMetadata(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		v1 := r.Intn(5)
+		this.Items = make([]*Beacon, v1)
+		for i := 0; i < v1; i++ {
+			this.Items[i] = NewPopulatedBeacon(r, easy)
+		}
+	}
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
 func NewPopulatedBeaconSpec(r randyApi, easy bool) *BeaconSpec {
 	this := &BeaconSpec{}
 	if !easy && r.Intn(10) != 0 {
@@ -1944,7 +2023,7 @@ func NewPopulatedBeaconSpec(r randyApi, easy bool) *BeaconSpec {
 func NewPopulatedGetRequest(r randyApi, easy bool) *GetRequest {
 	this := &GetRequest{}
 	if r.Intn(10) != 0 {
-		this.GetOptions = v1.NewPopulatedGetOptions(r, easy)
+		this.Options = v1.NewPopulatedGetOptions(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -1956,9 +2035,6 @@ func NewPopulatedGetResponse(r randyApi, easy bool) *GetResponse {
 	if r.Intn(10) != 0 {
 		this.Beacon = NewPopulatedBeacon(r, easy)
 	}
-	if r.Intn(10) != 0 {
-		this.Error = v1.NewPopulatedError(r, easy)
-	}
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
@@ -1967,7 +2043,7 @@ func NewPopulatedGetResponse(r randyApi, easy bool) *GetResponse {
 func NewPopulatedListRequest(r randyApi, easy bool) *ListRequest {
 	this := &ListRequest{}
 	if r.Intn(10) != 0 {
-		this.ListOptions = v1.NewPopulatedListOptions(r, easy)
+		this.Options = v1.NewPopulatedListOptions(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -1977,22 +2053,18 @@ func NewPopulatedListRequest(r randyApi, easy bool) *ListRequest {
 func NewPopulatedListResponse(r randyApi, easy bool) *ListResponse {
 	this := &ListResponse{}
 	if r.Intn(10) != 0 {
-		v1 := r.Intn(5)
-		this.Beacons = make([]*Beacon, v1)
-		for i := 0; i < v1; i++ {
-			this.Beacons[i] = NewPopulatedBeacon(r, easy)
-		}
-	}
-	if r.Intn(10) != 0 {
-		this.Error = v1.NewPopulatedError(r, easy)
+		this.BeaconList = NewPopulatedBeaconList(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
 }
 
-func NewPopulatedAddRequest(r randyApi, easy bool) *AddRequest {
-	this := &AddRequest{}
+func NewPopulatedCreateRequest(r randyApi, easy bool) *CreateRequest {
+	this := &CreateRequest{}
+	if r.Intn(10) != 0 {
+		this.Options = v1.NewPopulatedCreateOptions(r, easy)
+	}
 	if r.Intn(10) != 0 {
 		this.Beacon = NewPopulatedBeacon(r, easy)
 	}
@@ -2001,13 +2073,10 @@ func NewPopulatedAddRequest(r randyApi, easy bool) *AddRequest {
 	return this
 }
 
-func NewPopulatedAddResponse(r randyApi, easy bool) *AddResponse {
-	this := &AddResponse{}
+func NewPopulatedCreateResponse(r randyApi, easy bool) *CreateResponse {
+	this := &CreateResponse{}
 	if r.Intn(10) != 0 {
 		this.Beacon = NewPopulatedBeacon(r, easy)
-	}
-	if r.Intn(10) != 0 {
-		this.Error = v1.NewPopulatedError(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2016,6 +2085,9 @@ func NewPopulatedAddResponse(r randyApi, easy bool) *AddResponse {
 
 func NewPopulatedUpdateRequest(r randyApi, easy bool) *UpdateRequest {
 	this := &UpdateRequest{}
+	if r.Intn(10) != 0 {
+		this.Options = v1.NewPopulatedUpdateOptions(r, easy)
+	}
 	if r.Intn(10) != 0 {
 		this.Beacon = NewPopulatedBeacon(r, easy)
 	}
@@ -2029,9 +2101,6 @@ func NewPopulatedUpdateResponse(r randyApi, easy bool) *UpdateResponse {
 	if r.Intn(10) != 0 {
 		this.Beacon = NewPopulatedBeacon(r, easy)
 	}
-	if r.Intn(10) != 0 {
-		this.Error = v1.NewPopulatedError(r, easy)
-	}
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
@@ -2039,6 +2108,9 @@ func NewPopulatedUpdateResponse(r randyApi, easy bool) *UpdateResponse {
 
 func NewPopulatedDeleteRequest(r randyApi, easy bool) *DeleteRequest {
 	this := &DeleteRequest{}
+	if r.Intn(10) != 0 {
+		this.Options = v1.NewPopulatedDeleteOptions(r, easy)
+	}
 	if r.Intn(10) != 0 {
 		this.Beacon = NewPopulatedBeacon(r, easy)
 	}
@@ -2052,9 +2124,6 @@ func NewPopulatedDeleteResponse(r randyApi, easy bool) *DeleteResponse {
 	if r.Intn(10) != 0 {
 		this.Beacon = NewPopulatedBeacon(r, easy)
 	}
-	if r.Intn(10) != 0 {
-		this.Error = v1.NewPopulatedError(r, easy)
-	}
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
@@ -2063,7 +2132,7 @@ func NewPopulatedDeleteResponse(r randyApi, easy bool) *DeleteResponse {
 func NewPopulatedWatchRequest(r randyApi, easy bool) *WatchRequest {
 	this := &WatchRequest{}
 	if r.Intn(10) != 0 {
-		this.WatchOptions = v1.NewPopulatedWatchOptions(r, easy)
+		this.Options = v1.NewPopulatedWatchOptions(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2077,9 +2146,6 @@ func NewPopulatedWatchResponse(r randyApi, easy bool) *WatchResponse {
 	}
 	if r.Intn(10) != 0 {
 		this.Beacon = NewPopulatedBeacon(r, easy)
-	}
-	if r.Intn(10) != 0 {
-		this.Error = v1.NewPopulatedError(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2175,6 +2241,25 @@ func (m *Beacon) Size() (n int) {
 	return n
 }
 
+func (m *BeaconList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Metadata != nil {
+		l = m.Metadata.Size()
+		n += 1 + l + sovApi(uint64(l))
+	}
+	if len(m.Items) > 0 {
+		for _, e := range m.Items {
+			l = e.Size()
+			n += 1 + l + sovApi(uint64(l))
+		}
+	}
+	return n
+}
+
 func (m *BeaconSpec) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2190,8 +2275,8 @@ func (m *GetRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.GetOptions != nil {
-		l = m.GetOptions.Size()
+	if m.Options != nil {
+		l = m.Options.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -2207,10 +2292,6 @@ func (m *GetResponse) Size() (n int) {
 		l = m.Beacon.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
-	if m.Error != nil {
-		l = m.Error.Size()
-		n += 1 + l + sovApi(uint64(l))
-	}
 	return n
 }
 
@@ -2220,8 +2301,8 @@ func (m *ListRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.ListOptions != nil {
-		l = m.ListOptions.Size()
+	if m.Options != nil {
+		l = m.Options.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -2233,25 +2314,23 @@ func (m *ListResponse) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if len(m.Beacons) > 0 {
-		for _, e := range m.Beacons {
-			l = e.Size()
-			n += 1 + l + sovApi(uint64(l))
-		}
-	}
-	if m.Error != nil {
-		l = m.Error.Size()
+	if m.BeaconList != nil {
+		l = m.BeaconList.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
 }
 
-func (m *AddRequest) Size() (n int) {
+func (m *CreateRequest) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
+	if m.Options != nil {
+		l = m.Options.Size()
+		n += 1 + l + sovApi(uint64(l))
+	}
 	if m.Beacon != nil {
 		l = m.Beacon.Size()
 		n += 1 + l + sovApi(uint64(l))
@@ -2259,7 +2338,7 @@ func (m *AddRequest) Size() (n int) {
 	return n
 }
 
-func (m *AddResponse) Size() (n int) {
+func (m *CreateResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -2267,10 +2346,6 @@ func (m *AddResponse) Size() (n int) {
 	_ = l
 	if m.Beacon != nil {
 		l = m.Beacon.Size()
-		n += 1 + l + sovApi(uint64(l))
-	}
-	if m.Error != nil {
-		l = m.Error.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -2282,6 +2357,10 @@ func (m *UpdateRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
+	if m.Options != nil {
+		l = m.Options.Size()
+		n += 1 + l + sovApi(uint64(l))
+	}
 	if m.Beacon != nil {
 		l = m.Beacon.Size()
 		n += 1 + l + sovApi(uint64(l))
@@ -2299,10 +2378,6 @@ func (m *UpdateResponse) Size() (n int) {
 		l = m.Beacon.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
-	if m.Error != nil {
-		l = m.Error.Size()
-		n += 1 + l + sovApi(uint64(l))
-	}
 	return n
 }
 
@@ -2312,6 +2387,10 @@ func (m *DeleteRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
+	if m.Options != nil {
+		l = m.Options.Size()
+		n += 1 + l + sovApi(uint64(l))
+	}
 	if m.Beacon != nil {
 		l = m.Beacon.Size()
 		n += 1 + l + sovApi(uint64(l))
@@ -2329,10 +2408,6 @@ func (m *DeleteResponse) Size() (n int) {
 		l = m.Beacon.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
-	if m.Error != nil {
-		l = m.Error.Size()
-		n += 1 + l + sovApi(uint64(l))
-	}
 	return n
 }
 
@@ -2342,8 +2417,8 @@ func (m *WatchRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.WatchOptions != nil {
-		l = m.WatchOptions.Size()
+	if m.Options != nil {
+		l = m.Options.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -2361,10 +2436,6 @@ func (m *WatchResponse) Size() (n int) {
 	}
 	if m.Beacon != nil {
 		l = m.Beacon.Size()
-		n += 1 + l + sovApi(uint64(l))
-	}
-	if m.Error != nil {
-		l = m.Error.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -2394,6 +2465,17 @@ func (this *Beacon) String() string {
 	}, "")
 	return s
 }
+func (this *BeaconList) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&BeaconList{`,
+		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "ObjectMetadata", "v1.ObjectMetadata", 1) + `,`,
+		`Items:` + strings.Replace(fmt.Sprintf("%v", this.Items), "Beacon", "Beacon", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *BeaconSpec) String() string {
 	if this == nil {
 		return "nil"
@@ -2408,7 +2490,7 @@ func (this *GetRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetRequest{`,
-		`GetOptions:` + strings.Replace(fmt.Sprintf("%v", this.GetOptions), "GetOptions", "v1.GetOptions", 1) + `,`,
+		`Options:` + strings.Replace(fmt.Sprintf("%v", this.Options), "GetOptions", "v1.GetOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2419,7 +2501,6 @@ func (this *GetResponse) String() string {
 	}
 	s := strings.Join([]string{`&GetResponse{`,
 		`Beacon:` + strings.Replace(fmt.Sprintf("%v", this.Beacon), "Beacon", "Beacon", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2429,7 +2510,7 @@ func (this *ListRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ListRequest{`,
-		`ListOptions:` + strings.Replace(fmt.Sprintf("%v", this.ListOptions), "ListOptions", "v1.ListOptions", 1) + `,`,
+		`Options:` + strings.Replace(fmt.Sprintf("%v", this.Options), "ListOptions", "v1.ListOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2439,29 +2520,28 @@ func (this *ListResponse) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ListResponse{`,
-		`Beacons:` + strings.Replace(fmt.Sprintf("%v", this.Beacons), "Beacon", "Beacon", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
+		`BeaconList:` + strings.Replace(fmt.Sprintf("%v", this.BeaconList), "BeaconList", "BeaconList", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *AddRequest) String() string {
+func (this *CreateRequest) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&AddRequest{`,
+	s := strings.Join([]string{`&CreateRequest{`,
+		`Options:` + strings.Replace(fmt.Sprintf("%v", this.Options), "CreateOptions", "v1.CreateOptions", 1) + `,`,
 		`Beacon:` + strings.Replace(fmt.Sprintf("%v", this.Beacon), "Beacon", "Beacon", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *AddResponse) String() string {
+func (this *CreateResponse) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&AddResponse{`,
+	s := strings.Join([]string{`&CreateResponse{`,
 		`Beacon:` + strings.Replace(fmt.Sprintf("%v", this.Beacon), "Beacon", "Beacon", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2471,6 +2551,7 @@ func (this *UpdateRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&UpdateRequest{`,
+		`Options:` + strings.Replace(fmt.Sprintf("%v", this.Options), "UpdateOptions", "v1.UpdateOptions", 1) + `,`,
 		`Beacon:` + strings.Replace(fmt.Sprintf("%v", this.Beacon), "Beacon", "Beacon", 1) + `,`,
 		`}`,
 	}, "")
@@ -2482,7 +2563,6 @@ func (this *UpdateResponse) String() string {
 	}
 	s := strings.Join([]string{`&UpdateResponse{`,
 		`Beacon:` + strings.Replace(fmt.Sprintf("%v", this.Beacon), "Beacon", "Beacon", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2492,6 +2572,7 @@ func (this *DeleteRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&DeleteRequest{`,
+		`Options:` + strings.Replace(fmt.Sprintf("%v", this.Options), "DeleteOptions", "v1.DeleteOptions", 1) + `,`,
 		`Beacon:` + strings.Replace(fmt.Sprintf("%v", this.Beacon), "Beacon", "Beacon", 1) + `,`,
 		`}`,
 	}, "")
@@ -2503,7 +2584,6 @@ func (this *DeleteResponse) String() string {
 	}
 	s := strings.Join([]string{`&DeleteResponse{`,
 		`Beacon:` + strings.Replace(fmt.Sprintf("%v", this.Beacon), "Beacon", "Beacon", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2513,7 +2593,7 @@ func (this *WatchRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&WatchRequest{`,
-		`WatchOptions:` + strings.Replace(fmt.Sprintf("%v", this.WatchOptions), "WatchOptions", "v1.WatchOptions", 1) + `,`,
+		`Options:` + strings.Replace(fmt.Sprintf("%v", this.Options), "WatchOptions", "v1.WatchOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2525,7 +2605,6 @@ func (this *WatchResponse) String() string {
 	s := strings.Join([]string{`&WatchResponse{`,
 		`Event:` + strings.Replace(fmt.Sprintf("%v", this.Event), "Event", "v1alpha.Event", 1) + `,`,
 		`Beacon:` + strings.Replace(fmt.Sprintf("%v", this.Beacon), "Beacon", "Beacon", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2654,6 +2733,120 @@ func (m *Beacon) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
+func (m *BeaconList) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowApi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: BeaconList: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: BeaconList: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Metadata", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Metadata == nil {
+				m.Metadata = &v1.ObjectMetadata{}
+			}
+			if err := m.Metadata.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Items", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Items = append(m.Items, &Beacon{})
+			if err := m.Items[len(m.Items)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipApi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthApi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
 func (m *BeaconSpec) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
@@ -2735,7 +2928,7 @@ func (m *GetRequest) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field GetOptions", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Options", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -2759,10 +2952,10 @@ func (m *GetRequest) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.GetOptions == nil {
-				m.GetOptions = &v1.GetOptions{}
+			if m.Options == nil {
+				m.Options = &v1.GetOptions{}
 			}
-			if err := m.GetOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Options.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -2849,39 +3042,6 @@ func (m *GetResponse) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Error == nil {
-				m.Error = &v1.Error{}
-			}
-			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipApi(dAtA[iNdEx:])
@@ -2934,7 +3094,7 @@ func (m *ListRequest) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ListOptions", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Options", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -2958,10 +3118,10 @@ func (m *ListRequest) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.ListOptions == nil {
-				m.ListOptions = &v1.ListOptions{}
+			if m.Options == nil {
+				m.Options = &v1.ListOptions{}
 			}
-			if err := m.ListOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Options.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -3017,7 +3177,7 @@ func (m *ListResponse) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Beacons", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field BeaconList", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -3041,41 +3201,10 @@ func (m *ListResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Beacons = append(m.Beacons, &Beacon{})
-			if err := m.Beacons[len(m.Beacons)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
+			if m.BeaconList == nil {
+				m.BeaconList = &BeaconList{}
 			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Error == nil {
-				m.Error = &v1.Error{}
-			}
-			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.BeaconList.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -3100,7 +3229,7 @@ func (m *ListResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *AddRequest) Unmarshal(dAtA []byte) error {
+func (m *CreateRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -3123,13 +3252,46 @@ func (m *AddRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: AddRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: CreateRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: AddRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: CreateRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Options", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Options == nil {
+				m.Options = &v1.CreateOptions{}
+			}
+			if err := m.Options.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Beacon", wireType)
 			}
@@ -3183,7 +3345,7 @@ func (m *AddRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *AddResponse) Unmarshal(dAtA []byte) error {
+func (m *CreateResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -3206,10 +3368,10 @@ func (m *AddResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: AddResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: CreateResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: AddResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: CreateResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -3242,39 +3404,6 @@ func (m *AddResponse) Unmarshal(dAtA []byte) error {
 				m.Beacon = &Beacon{}
 			}
 			if err := m.Beacon.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Error == nil {
-				m.Error = &v1.Error{}
-			}
-			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -3329,6 +3458,39 @@ func (m *UpdateRequest) Unmarshal(dAtA []byte) error {
 		}
 		switch fieldNum {
 		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Options", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Options == nil {
+				m.Options = &v1.UpdateOptions{}
+			}
+			if err := m.Options.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Beacon", wireType)
 			}
@@ -3444,39 +3606,6 @@ func (m *UpdateResponse) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Error == nil {
-				m.Error = &v1.Error{}
-			}
-			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipApi(dAtA[iNdEx:])
@@ -3528,6 +3657,39 @@ func (m *DeleteRequest) Unmarshal(dAtA []byte) error {
 		}
 		switch fieldNum {
 		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Options", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Options == nil {
+				m.Options = &v1.DeleteOptions{}
+			}
+			if err := m.Options.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Beacon", wireType)
 			}
@@ -3643,39 +3805,6 @@ func (m *DeleteResponse) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Error == nil {
-				m.Error = &v1.Error{}
-			}
-			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipApi(dAtA[iNdEx:])
@@ -3728,7 +3857,7 @@ func (m *WatchRequest) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field WatchOptions", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Options", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -3752,10 +3881,10 @@ func (m *WatchRequest) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.WatchOptions == nil {
-				m.WatchOptions = &v1.WatchOptions{}
+			if m.Options == nil {
+				m.Options = &v1.WatchOptions{}
 			}
-			if err := m.WatchOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Options.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -3872,39 +4001,6 @@ func (m *WatchResponse) Unmarshal(dAtA []byte) error {
 				m.Beacon = &Beacon{}
 			}
 			if err := m.Beacon.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Error == nil {
-				m.Error = &v1.Error{}
-			}
-			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

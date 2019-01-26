@@ -8,8 +8,10 @@ import (
 	fmt "fmt"
 	v1 "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1"
 	v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha"
+	_ "github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/apiserver"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
+	_ "github.com/mwitkow/go-proto-validators"
 	grpc "google.golang.org/grpc"
 	io "io"
 	math "math"
@@ -83,6 +85,61 @@ func (m *CronJob) GetSpec() *CronJobSpec {
 	return nil
 }
 
+type CronJobList struct {
+	// Metadata for CronJobList object.
+	Metadata *v1.ObjectMetadata `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	// List of CronJob objects.
+	Items                []*CronJob `protobuf:"bytes,2,rep,name=items,proto3" json:"items,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
+	XXX_sizecache        int32      `json:"-"`
+}
+
+func (m *CronJobList) Reset()      { *m = CronJobList{} }
+func (*CronJobList) ProtoMessage() {}
+func (*CronJobList) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8e9a4a89a735bf31, []int{1}
+}
+func (m *CronJobList) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CronJobList) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_CronJobList.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalTo(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *CronJobList) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CronJobList.Merge(m, src)
+}
+func (m *CronJobList) XXX_Size() int {
+	return m.Size()
+}
+func (m *CronJobList) XXX_DiscardUnknown() {
+	xxx_messageInfo_CronJobList.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CronJobList proto.InternalMessageInfo
+
+func (m *CronJobList) GetMetadata() *v1.ObjectMetadata {
+	if m != nil {
+		return m.Metadata
+	}
+	return nil
+}
+
+func (m *CronJobList) GetItems() []*CronJob {
+	if m != nil {
+		return m.Items
+	}
+	return nil
+}
+
 type CronJobSpec struct {
 	// Schedule of CronJob.
 	Schedule             *Schedule `protobuf:"bytes,1,opt,name=schedule,proto3" json:"schedule,omitempty"`
@@ -93,7 +150,7 @@ type CronJobSpec struct {
 func (m *CronJobSpec) Reset()      { *m = CronJobSpec{} }
 func (*CronJobSpec) ProtoMessage() {}
 func (*CronJobSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8e9a4a89a735bf31, []int{1}
+	return fileDescriptor_8e9a4a89a735bf31, []int{2}
 }
 func (m *CronJobSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -139,7 +196,7 @@ type Schedule struct {
 func (m *Schedule) Reset()      { *m = Schedule{} }
 func (*Schedule) ProtoMessage() {}
 func (*Schedule) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8e9a4a89a735bf31, []int{2}
+	return fileDescriptor_8e9a4a89a735bf31, []int{3}
 }
 func (m *Schedule) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -177,8 +234,8 @@ func (m *Schedule) GetCrontTab() string {
 
 // Get
 type GetRequest struct {
-	// GetOptions options for a GetRequest.
-	GetOptions           *v1.GetOptions `protobuf:"bytes,1,opt,name=getOptions,proto3" json:"getOptions,omitempty"`
+	// core_v1.GetOptions
+	Options              *v1.GetOptions `protobuf:"bytes,1,opt,name=options,proto3" json:"options,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
 	XXX_sizecache        int32          `json:"-"`
 }
@@ -186,7 +243,7 @@ type GetRequest struct {
 func (m *GetRequest) Reset()      { *m = GetRequest{} }
 func (*GetRequest) ProtoMessage() {}
 func (*GetRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8e9a4a89a735bf31, []int{3}
+	return fileDescriptor_8e9a4a89a735bf31, []int{4}
 }
 func (m *GetRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -215,26 +272,24 @@ func (m *GetRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetRequest proto.InternalMessageInfo
 
-func (m *GetRequest) GetGetOptions() *v1.GetOptions {
+func (m *GetRequest) GetOptions() *v1.GetOptions {
 	if m != nil {
-		return m.GetOptions
+		return m.Options
 	}
 	return nil
 }
 
 type GetResponse struct {
 	// CronJob object.
-	CronJob *CronJob `protobuf:"bytes,1,opt,name=cronJob,proto3" json:"cronJob,omitempty"`
-	// Error object.
-	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
+	CronJob              *CronJob `protobuf:"bytes,1,opt,name=cronJob,proto3" json:"cronJob,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
 func (m *GetResponse) Reset()      { *m = GetResponse{} }
 func (*GetResponse) ProtoMessage() {}
 func (*GetResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8e9a4a89a735bf31, []int{4}
+	return fileDescriptor_8e9a4a89a735bf31, []int{5}
 }
 func (m *GetResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -270,17 +325,10 @@ func (m *GetResponse) GetCronJob() *CronJob {
 	return nil
 }
 
-func (m *GetResponse) GetError() *v1.Error {
-	if m != nil {
-		return m.Error
-	}
-	return nil
-}
-
 // List
 type ListRequest struct {
-	// ListOptions options for a ListRequest.
-	ListOptions          *v1.ListOptions `protobuf:"bytes,1,opt,name=listOptions,proto3" json:"listOptions,omitempty"`
+	// core_v1.ListOptions
+	Options              *v1.ListOptions `protobuf:"bytes,1,opt,name=options,proto3" json:"options,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
 	XXX_sizecache        int32           `json:"-"`
 }
@@ -288,7 +336,7 @@ type ListRequest struct {
 func (m *ListRequest) Reset()      { *m = ListRequest{} }
 func (*ListRequest) ProtoMessage() {}
 func (*ListRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8e9a4a89a735bf31, []int{5}
+	return fileDescriptor_8e9a4a89a735bf31, []int{6}
 }
 func (m *ListRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -317,26 +365,24 @@ func (m *ListRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ListRequest proto.InternalMessageInfo
 
-func (m *ListRequest) GetListOptions() *v1.ListOptions {
+func (m *ListRequest) GetOptions() *v1.ListOptions {
 	if m != nil {
-		return m.ListOptions
+		return m.Options
 	}
 	return nil
 }
 
 type ListResponse struct {
 	// Config list.
-	Cronjobs []*CronJob `protobuf:"bytes,1,rep,name=cronjobs,proto3" json:"cronjobs,omitempty"`
-	// Error object.
-	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
+	CronJobList          *CronJobList `protobuf:"bytes,1,opt,name=cronJobList,proto3" json:"cronJobList,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}     `json:"-"`
+	XXX_sizecache        int32        `json:"-"`
 }
 
 func (m *ListResponse) Reset()      { *m = ListResponse{} }
 func (*ListResponse) ProtoMessage() {}
 func (*ListResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8e9a4a89a735bf31, []int{6}
+	return fileDescriptor_8e9a4a89a735bf31, []int{7}
 }
 func (m *ListResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -365,39 +411,87 @@ func (m *ListResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ListResponse proto.InternalMessageInfo
 
-func (m *ListResponse) GetCronjobs() []*CronJob {
+func (m *ListResponse) GetCronJobList() *CronJobList {
 	if m != nil {
-		return m.Cronjobs
+		return m.CronJobList
 	}
 	return nil
 }
 
-func (m *ListResponse) GetError() *v1.Error {
+// Create
+type CreateRequest struct {
+	// core_v1.CreateOptions
+	Options *v1.CreateOptions `protobuf:"bytes,1,opt,name=options,proto3" json:"options,omitempty"`
+	// CronJob
+	CronJob              *CronJob `protobuf:"bytes,2,opt,name=cronJob,proto3" json:"cronJob,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *CreateRequest) Reset()      { *m = CreateRequest{} }
+func (*CreateRequest) ProtoMessage() {}
+func (*CreateRequest) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8e9a4a89a735bf31, []int{8}
+}
+func (m *CreateRequest) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CreateRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_CreateRequest.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalTo(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *CreateRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateRequest.Merge(m, src)
+}
+func (m *CreateRequest) XXX_Size() int {
+	return m.Size()
+}
+func (m *CreateRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateRequest.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateRequest proto.InternalMessageInfo
+
+func (m *CreateRequest) GetOptions() *v1.CreateOptions {
 	if m != nil {
-		return m.Error
+		return m.Options
 	}
 	return nil
 }
 
-// Add
-type AddRequest struct {
+func (m *CreateRequest) GetCronJob() *CronJob {
+	if m != nil {
+		return m.CronJob
+	}
+	return nil
+}
+
+type CreateResponse struct {
 	// CronJob object.
 	CronJob              *CronJob `protobuf:"bytes,1,opt,name=cronJob,proto3" json:"cronJob,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *AddRequest) Reset()      { *m = AddRequest{} }
-func (*AddRequest) ProtoMessage() {}
-func (*AddRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8e9a4a89a735bf31, []int{7}
+func (m *CreateResponse) Reset()      { *m = CreateResponse{} }
+func (*CreateResponse) ProtoMessage() {}
+func (*CreateResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_8e9a4a89a735bf31, []int{9}
 }
-func (m *AddRequest) XXX_Unmarshal(b []byte) error {
+func (m *CreateResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *AddRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *CreateResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_AddRequest.Marshal(b, m, deterministic)
+		return xxx_messageInfo_CreateResponse.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalTo(b)
@@ -407,84 +501,31 @@ func (m *AddRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 		return b[:n], nil
 	}
 }
-func (m *AddRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AddRequest.Merge(m, src)
+func (m *CreateResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateResponse.Merge(m, src)
 }
-func (m *AddRequest) XXX_Size() int {
+func (m *CreateResponse) XXX_Size() int {
 	return m.Size()
 }
-func (m *AddRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_AddRequest.DiscardUnknown(m)
+func (m *CreateResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateResponse.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_AddRequest proto.InternalMessageInfo
+var xxx_messageInfo_CreateResponse proto.InternalMessageInfo
 
-func (m *AddRequest) GetCronJob() *CronJob {
+func (m *CreateResponse) GetCronJob() *CronJob {
 	if m != nil {
 		return m.CronJob
-	}
-	return nil
-}
-
-type AddResponse struct {
-	// CronJob object.
-	CronJob *CronJob `protobuf:"bytes,1,opt,name=cronJob,proto3" json:"cronJob,omitempty"`
-	// Error object.
-	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
-}
-
-func (m *AddResponse) Reset()      { *m = AddResponse{} }
-func (*AddResponse) ProtoMessage() {}
-func (*AddResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8e9a4a89a735bf31, []int{8}
-}
-func (m *AddResponse) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *AddResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_AddResponse.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *AddResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AddResponse.Merge(m, src)
-}
-func (m *AddResponse) XXX_Size() int {
-	return m.Size()
-}
-func (m *AddResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_AddResponse.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_AddResponse proto.InternalMessageInfo
-
-func (m *AddResponse) GetCronJob() *CronJob {
-	if m != nil {
-		return m.CronJob
-	}
-	return nil
-}
-
-func (m *AddResponse) GetError() *v1.Error {
-	if m != nil {
-		return m.Error
 	}
 	return nil
 }
 
 // Update
 type UpdateRequest struct {
+	// core_v1.CreateOptions
+	Options *v1.UpdateOptions `protobuf:"bytes,1,opt,name=options,proto3" json:"options,omitempty"`
 	// CronJob object.
-	CronJob              *CronJob `protobuf:"bytes,1,opt,name=cronJob,proto3" json:"cronJob,omitempty"`
+	CronJob              *CronJob `protobuf:"bytes,2,opt,name=cronJob,proto3" json:"cronJob,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
@@ -492,7 +533,7 @@ type UpdateRequest struct {
 func (m *UpdateRequest) Reset()      { *m = UpdateRequest{} }
 func (*UpdateRequest) ProtoMessage() {}
 func (*UpdateRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8e9a4a89a735bf31, []int{9}
+	return fileDescriptor_8e9a4a89a735bf31, []int{10}
 }
 func (m *UpdateRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -521,6 +562,13 @@ func (m *UpdateRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_UpdateRequest proto.InternalMessageInfo
 
+func (m *UpdateRequest) GetOptions() *v1.UpdateOptions {
+	if m != nil {
+		return m.Options
+	}
+	return nil
+}
+
 func (m *UpdateRequest) GetCronJob() *CronJob {
 	if m != nil {
 		return m.CronJob
@@ -530,17 +578,15 @@ func (m *UpdateRequest) GetCronJob() *CronJob {
 
 type UpdateResponse struct {
 	// CronJob object.
-	CronJob *CronJob `protobuf:"bytes,1,opt,name=cronJob,proto3" json:"cronJob,omitempty"`
-	// Error object.
-	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
+	CronJob              *CronJob `protobuf:"bytes,1,opt,name=cronJob,proto3" json:"cronJob,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
 func (m *UpdateResponse) Reset()      { *m = UpdateResponse{} }
 func (*UpdateResponse) ProtoMessage() {}
 func (*UpdateResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8e9a4a89a735bf31, []int{10}
+	return fileDescriptor_8e9a4a89a735bf31, []int{11}
 }
 func (m *UpdateResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -576,17 +622,12 @@ func (m *UpdateResponse) GetCronJob() *CronJob {
 	return nil
 }
 
-func (m *UpdateResponse) GetError() *v1.Error {
-	if m != nil {
-		return m.Error
-	}
-	return nil
-}
-
 // Delete
 type DeleteRequest struct {
+	// core_v1.DeleteOptions
+	Options *v1.DeleteOptions `protobuf:"bytes,1,opt,name=options,proto3" json:"options,omitempty"`
 	// CronJob object.
-	CronJob              *CronJob `protobuf:"bytes,1,opt,name=cronJob,proto3" json:"cronJob,omitempty"`
+	CronJob              *CronJob `protobuf:"bytes,2,opt,name=cronJob,proto3" json:"cronJob,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
@@ -594,7 +635,7 @@ type DeleteRequest struct {
 func (m *DeleteRequest) Reset()      { *m = DeleteRequest{} }
 func (*DeleteRequest) ProtoMessage() {}
 func (*DeleteRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8e9a4a89a735bf31, []int{11}
+	return fileDescriptor_8e9a4a89a735bf31, []int{12}
 }
 func (m *DeleteRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -623,6 +664,13 @@ func (m *DeleteRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_DeleteRequest proto.InternalMessageInfo
 
+func (m *DeleteRequest) GetOptions() *v1.DeleteOptions {
+	if m != nil {
+		return m.Options
+	}
+	return nil
+}
+
 func (m *DeleteRequest) GetCronJob() *CronJob {
 	if m != nil {
 		return m.CronJob
@@ -632,17 +680,15 @@ func (m *DeleteRequest) GetCronJob() *CronJob {
 
 type DeleteResponse struct {
 	// CronJob object.
-	CronJob *CronJob `protobuf:"bytes,1,opt,name=cronJob,proto3" json:"cronJob,omitempty"`
-	// Error object.
-	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
+	CronJob              *CronJob `protobuf:"bytes,1,opt,name=cronJob,proto3" json:"cronJob,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
 func (m *DeleteResponse) Reset()      { *m = DeleteResponse{} }
 func (*DeleteResponse) ProtoMessage() {}
 func (*DeleteResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8e9a4a89a735bf31, []int{12}
+	return fileDescriptor_8e9a4a89a735bf31, []int{13}
 }
 func (m *DeleteResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -678,17 +724,10 @@ func (m *DeleteResponse) GetCronJob() *CronJob {
 	return nil
 }
 
-func (m *DeleteResponse) GetError() *v1.Error {
-	if m != nil {
-		return m.Error
-	}
-	return nil
-}
-
 // Watch
 type WatchRequest struct {
-	// WatchOptions options for WatchRequest.
-	WatchOptions         *v1.WatchOptions `protobuf:"bytes,1,opt,name=watchOptions,proto3" json:"watchOptions,omitempty"`
+	// core_v1.WatchOptions
+	Options              *v1.WatchOptions `protobuf:"bytes,1,opt,name=options,proto3" json:"options,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
 	XXX_sizecache        int32            `json:"-"`
 }
@@ -696,7 +735,7 @@ type WatchRequest struct {
 func (m *WatchRequest) Reset()      { *m = WatchRequest{} }
 func (*WatchRequest) ProtoMessage() {}
 func (*WatchRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8e9a4a89a735bf31, []int{13}
+	return fileDescriptor_8e9a4a89a735bf31, []int{14}
 }
 func (m *WatchRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -725,9 +764,9 @@ func (m *WatchRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_WatchRequest proto.InternalMessageInfo
 
-func (m *WatchRequest) GetWatchOptions() *v1.WatchOptions {
+func (m *WatchRequest) GetOptions() *v1.WatchOptions {
 	if m != nil {
-		return m.WatchOptions
+		return m.Options
 	}
 	return nil
 }
@@ -736,17 +775,15 @@ type WatchResponse struct {
 	// Event info for watch response.
 	Event *v1alpha.Event `protobuf:"bytes,1,opt,name=event,proto3" json:"event,omitempty"`
 	// CronJob for watch response.
-	CronJob *CronJob `protobuf:"bytes,2,opt,name=cronJob,proto3" json:"cronJob,omitempty"`
-	// Error object.
-	Error                *v1.Error `protobuf:"bytes,3,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
+	CronJob              *CronJob `protobuf:"bytes,2,opt,name=cronJob,proto3" json:"cronJob,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
 func (m *WatchResponse) Reset()      { *m = WatchResponse{} }
 func (*WatchResponse) ProtoMessage() {}
 func (*WatchResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_8e9a4a89a735bf31, []int{14}
+	return fileDescriptor_8e9a4a89a735bf31, []int{15}
 }
 func (m *WatchResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -789,23 +826,17 @@ func (m *WatchResponse) GetCronJob() *CronJob {
 	return nil
 }
 
-func (m *WatchResponse) GetError() *v1.Error {
-	if m != nil {
-		return m.Error
-	}
-	return nil
-}
-
 func init() {
 	proto.RegisterType((*CronJob)(nil), "cronjobs.v1alpha.CronJob")
+	proto.RegisterType((*CronJobList)(nil), "cronjobs.v1alpha.CronJobList")
 	proto.RegisterType((*CronJobSpec)(nil), "cronjobs.v1alpha.CronJobSpec")
 	proto.RegisterType((*Schedule)(nil), "cronjobs.v1alpha.Schedule")
 	proto.RegisterType((*GetRequest)(nil), "cronjobs.v1alpha.GetRequest")
 	proto.RegisterType((*GetResponse)(nil), "cronjobs.v1alpha.GetResponse")
 	proto.RegisterType((*ListRequest)(nil), "cronjobs.v1alpha.ListRequest")
 	proto.RegisterType((*ListResponse)(nil), "cronjobs.v1alpha.ListResponse")
-	proto.RegisterType((*AddRequest)(nil), "cronjobs.v1alpha.AddRequest")
-	proto.RegisterType((*AddResponse)(nil), "cronjobs.v1alpha.AddResponse")
+	proto.RegisterType((*CreateRequest)(nil), "cronjobs.v1alpha.CreateRequest")
+	proto.RegisterType((*CreateResponse)(nil), "cronjobs.v1alpha.CreateResponse")
 	proto.RegisterType((*UpdateRequest)(nil), "cronjobs.v1alpha.UpdateRequest")
 	proto.RegisterType((*UpdateResponse)(nil), "cronjobs.v1alpha.UpdateResponse")
 	proto.RegisterType((*DeleteRequest)(nil), "cronjobs.v1alpha.DeleteRequest")
@@ -819,49 +850,54 @@ func init() {
 }
 
 var fileDescriptor_8e9a4a89a735bf31 = []byte{
-	// 664 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x56, 0xcd, 0x6e, 0xd3, 0x4c,
-	0x14, 0xed, 0x34, 0xfd, 0xc9, 0x77, 0xd3, 0x56, 0x9f, 0x06, 0x10, 0xc5, 0xa2, 0xd3, 0xca, 0x42,
-	0x08, 0x09, 0x61, 0x93, 0x46, 0x54, 0x2a, 0xbb, 0xb4, 0x8d, 0x2a, 0x4a, 0x51, 0x25, 0x17, 0x54,
-	0x89, 0x9d, 0x7f, 0xa6, 0x4e, 0xda, 0xc4, 0xe3, 0xda, 0x93, 0xc0, 0x92, 0x47, 0x60, 0xc7, 0x2b,
-	0xf0, 0x08, 0xec, 0x60, 0xd9, 0x25, 0x4b, 0x96, 0xd4, 0xbc, 0x04, 0x4b, 0xe4, 0xf1, 0x64, 0xe2,
-	0xb4, 0x4e, 0x95, 0x52, 0x95, 0x5d, 0xee, 0x9c, 0x73, 0xcf, 0x3d, 0xf7, 0xea, 0xce, 0xc4, 0xb0,
-	0xe9, 0xb7, 0x78, 0xb3, 0xeb, 0x18, 0x2e, 0xeb, 0x98, 0xbe, 0xdd, 0xa6, 0xef, 0x23, 0x6e, 0x52,
-	0x8f, 0x06, 0x2e, 0x0b, 0x0e, 0x3b, 0x7e, 0x87, 0x9b, 0xe1, 0xb1, 0x6f, 0xda, 0x61, 0x2b, 0x36,
-	0xdd, 0x88, 0x05, 0x47, 0xcc, 0x89, 0xcd, 0x5e, 0xd5, 0x6e, 0x87, 0x4d, 0x3b, 0x3d, 0x35, 0xc2,
-	0x88, 0x71, 0x86, 0xff, 0xef, 0x63, 0x86, 0xc4, 0xb4, 0x27, 0x79, 0x59, 0xe6, 0x33, 0x53, 0x10,
-	0x9d, 0xee, 0xa1, 0x88, 0x44, 0x20, 0x7e, 0x65, 0x02, 0xda, 0xf3, 0xf1, 0x5d, 0xb0, 0x88, 0x9a,
-	0xbd, 0xea, 0xa0, 0xb8, 0x56, 0x1f, 0x3b, 0x97, 0xf6, 0x68, 0xc0, 0x0b, 0xfc, 0xeb, 0x27, 0x30,
-	0xbb, 0x19, 0xb1, 0x60, 0x87, 0x39, 0xb8, 0x06, 0xe5, 0x0e, 0xe5, 0xb6, 0x67, 0x73, 0x7b, 0x11,
-	0xad, 0xa0, 0x47, 0x95, 0xd5, 0xbb, 0x46, 0x5a, 0xd3, 0xe8, 0x55, 0x8d, 0x3d, 0xe7, 0x88, 0xba,
-	0xfc, 0x95, 0x84, 0x2d, 0x45, 0xc4, 0x55, 0x98, 0x8a, 0x43, 0xea, 0x2e, 0x4e, 0x8a, 0x84, 0x25,
-	0xe3, 0xfc, 0x38, 0x0c, 0xa9, 0xbe, 0x1f, 0x52, 0xd7, 0x12, 0x54, 0xbd, 0x01, 0x95, 0xdc, 0x21,
-	0x5e, 0x83, 0x72, 0xec, 0x36, 0xa9, 0xd7, 0x6d, 0x53, 0x59, 0x56, 0xbb, 0xa8, 0xb2, 0x2f, 0x19,
-	0x96, 0xe2, 0xea, 0x0f, 0xa1, 0xdc, 0x3f, 0xc5, 0x1a, 0x94, 0xd3, 0x14, 0xfe, 0xda, 0x76, 0x84,
-	0xc6, 0x7f, 0x96, 0x8a, 0xf5, 0x3a, 0xc0, 0x36, 0xe5, 0x16, 0x3d, 0xe9, 0xd2, 0x98, 0xe3, 0x1a,
-	0x80, 0x4f, 0xf9, 0x5e, 0xc8, 0x5b, 0x2c, 0x88, 0x65, 0xbd, 0x5b, 0xaa, 0xcd, 0x6d, 0x05, 0x59,
-	0x39, 0x9a, 0xde, 0x84, 0x8a, 0x90, 0x88, 0x43, 0x16, 0xc4, 0x14, 0xd7, 0x60, 0xd6, 0xcd, 0x1a,
-	0x90, 0x02, 0xf7, 0x46, 0xb6, 0x6d, 0xf5, 0x99, 0xf8, 0x01, 0x4c, 0xd3, 0x28, 0x62, 0x91, 0x9c,
-	0xd4, 0x82, 0xaa, 0xd9, 0x48, 0x4f, 0xad, 0x0c, 0x4c, 0x67, 0xb3, 0xdb, 0x8a, 0x95, 0xdb, 0x35,
-	0xa8, 0xb4, 0x5b, 0xf1, 0x39, 0xbb, 0xb7, 0x55, 0xea, 0xee, 0x00, 0xb3, 0xf2, 0x44, 0xfd, 0x18,
-	0xe6, 0x32, 0x19, 0xe9, 0xf8, 0x59, 0x36, 0x9f, 0xd4, 0xe1, 0x22, 0x5a, 0x29, 0x5d, 0x6e, 0x59,
-	0x51, 0xc7, 0xf4, 0x5c, 0x07, 0xa8, 0x7b, 0xde, 0x60, 0xc0, 0x57, 0x1f, 0x4e, 0x3a, 0x60, 0x21,
-	0x71, 0xf3, 0x03, 0xde, 0x82, 0xf9, 0x37, 0xa1, 0x67, 0x73, 0x7a, 0x2d, 0xbf, 0xc7, 0xb0, 0xd0,
-	0x57, 0xf9, 0x27, 0x96, 0xb7, 0x68, 0x9b, 0x5e, 0xdf, 0x72, 0x5f, 0xe5, 0xe6, 0x2d, 0xbf, 0x80,
-	0xb9, 0x03, 0x9b, 0xbb, 0xcd, 0xbe, 0xe3, 0x75, 0x98, 0x7b, 0x97, 0xc6, 0xc3, 0x8b, 0x7c, 0x47,
-	0x25, 0x1f, 0xe4, 0x40, 0x6b, 0x88, 0xaa, 0x7f, 0x42, 0x30, 0x2f, 0xb5, 0xa4, 0xef, 0xc7, 0x30,
-	0x2d, 0x9e, 0x33, 0xa5, 0x92, 0x3d, 0x6e, 0xca, 0x73, 0x23, 0x0d, 0xad, 0x8c, 0x93, 0x6f, 0x72,
-	0xf2, 0xea, 0x4d, 0x96, 0x2e, 0x69, 0x72, 0xf5, 0x6b, 0x09, 0xca, 0x32, 0x35, 0xc6, 0x1b, 0x50,
-	0xda, 0xa6, 0x1c, 0xdf, 0xbf, 0xa8, 0x3e, 0x78, 0x7c, 0xb4, 0xa5, 0x11, 0xa8, 0x6c, 0xac, 0x01,
-	0x53, 0xe9, 0xad, 0xc5, 0x05, 0xb4, 0xdc, 0xa3, 0xa0, 0x91, 0x51, 0xb0, 0x94, 0xd9, 0x80, 0x52,
-	0xdd, 0xf3, 0x8a, 0xac, 0x0c, 0xae, 0x69, 0x91, 0x95, 0xfc, 0x0d, 0x7c, 0x09, 0x33, 0xd9, 0x82,
-	0xe3, 0xe5, 0x8b, 0xc4, 0xa1, 0x0b, 0xa4, 0xad, 0x8c, 0x26, 0x0c, 0xc4, 0xb2, 0xd5, 0x2b, 0x12,
-	0x1b, 0x5a, 0xed, 0x22, 0xb1, 0x73, 0x5b, 0xbb, 0x03, 0xd3, 0x62, 0x1d, 0x70, 0xc1, 0x18, 0xf2,
-	0x3b, 0xa7, 0x2d, 0x8f, 0xc4, 0x33, 0xa5, 0xa7, 0x68, 0xc3, 0x3f, 0x3d, 0x23, 0xe8, 0xc7, 0x19,
-	0x99, 0xf8, 0x7d, 0x46, 0xd0, 0x87, 0x84, 0xa0, 0xcf, 0x09, 0x41, 0x5f, 0x12, 0x32, 0xf1, 0x2d,
-	0x21, 0xe8, 0x34, 0x21, 0xe8, 0x7b, 0x42, 0xd0, 0xcf, 0x84, 0xa0, 0x8f, 0xbf, 0xc8, 0xc4, 0xdb,
-	0xf5, 0xbf, 0xfe, 0x5e, 0x70, 0x66, 0xc4, 0x9f, 0x6d, 0xed, 0x4f, 0x00, 0x00, 0x00, 0xff, 0xff,
-	0xb4, 0xe5, 0xb4, 0xb7, 0x73, 0x08, 0x00, 0x00,
+	// 739 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x96, 0xcf, 0x4e, 0xdb, 0x4e,
+	0x10, 0xc7, 0x71, 0x20, 0x21, 0xbf, 0x09, 0xfc, 0x54, 0xb9, 0xff, 0xa8, 0x55, 0x4c, 0xe4, 0x43,
+	0x85, 0x54, 0xc5, 0x4b, 0x40, 0x42, 0x2a, 0xa8, 0x42, 0x0d, 0x8d, 0x22, 0x41, 0x2b, 0x24, 0xd3,
+	0xaa, 0x52, 0x6f, 0x8e, 0xb3, 0x38, 0x86, 0xc4, 0x6b, 0xec, 0x8d, 0x41, 0xea, 0xa5, 0x8f, 0xd0,
+	0xc7, 0xe8, 0x23, 0xf4, 0xd8, 0x23, 0xea, 0xa9, 0xc7, 0xde, 0x5a, 0xdc, 0x97, 0xe8, 0xb1, 0xca,
+	0xee, 0xda, 0x31, 0x89, 0x53, 0x59, 0xc0, 0x09, 0xdb, 0xf3, 0x9d, 0xef, 0x7c, 0x76, 0x76, 0x76,
+	0x09, 0xec, 0xda, 0x0e, 0xed, 0x0e, 0xda, 0xba, 0x45, 0xfa, 0xc8, 0x36, 0x7b, 0xf8, 0xdc, 0xa7,
+	0x08, 0x77, 0xb0, 0x6b, 0x11, 0xf7, 0xa8, 0x6f, 0xf7, 0x29, 0xf2, 0x4e, 0x6c, 0x64, 0x7a, 0x4e,
+	0x80, 0x2c, 0x9f, 0xb8, 0xc7, 0xa4, 0x1d, 0xa0, 0xb0, 0x6e, 0xf6, 0xbc, 0xae, 0x39, 0xfc, 0xaa,
+	0x7b, 0x3e, 0xa1, 0x44, 0xbe, 0x13, 0xc7, 0x74, 0x11, 0x53, 0x6a, 0x69, 0x5b, 0x62, 0x13, 0xc4,
+	0x84, 0xed, 0xc1, 0x11, 0x7b, 0x63, 0x2f, 0xec, 0x89, 0x1b, 0x28, 0xad, 0x3c, 0x14, 0xb6, 0xef,
+	0x59, 0xc8, 0xeb, 0x0d, 0x6c, 0xc7, 0x0d, 0x18, 0x12, 0xf6, 0x43, 0xec, 0x23, 0xfe, 0x47, 0x18,
+	0x6d, 0xa6, 0x8c, 0xfa, 0x67, 0x0e, 0x3d, 0x21, 0x67, 0xc8, 0x26, 0x35, 0x16, 0xac, 0x85, 0x66,
+	0xcf, 0xe9, 0x98, 0x94, 0xf8, 0x01, 0x4a, 0x1e, 0x45, 0xde, 0x56, 0xfe, 0x36, 0x10, 0x1f, 0xa3,
+	0xb0, 0x3e, 0x5a, 0xbd, 0xf2, 0x22, 0x77, 0x2e, 0x0e, 0xb1, 0x4b, 0x33, 0x1a, 0xa8, 0x9d, 0xc3,
+	0xfc, 0xae, 0x4f, 0xdc, 0x3d, 0xd2, 0x96, 0x37, 0xa0, 0xdc, 0xc7, 0xd4, 0xec, 0x98, 0xd4, 0x5c,
+	0x92, 0xaa, 0xd2, 0x6a, 0x65, 0xfd, 0xa1, 0x3e, 0xac, 0xa9, 0x87, 0x75, 0xfd, 0xa0, 0x7d, 0x8c,
+	0x2d, 0xfa, 0x5a, 0x84, 0x8d, 0x44, 0x28, 0xd7, 0x61, 0x2e, 0xf0, 0xb0, 0xb5, 0x54, 0x60, 0x09,
+	0xcb, 0xfa, 0xf8, 0x7e, 0xe8, 0xc2, 0xfd, 0xd0, 0xc3, 0x96, 0xc1, 0xa4, 0x5b, 0xc5, 0x6f, 0x87,
+	0x85, 0xb2, 0xa4, 0x7d, 0x80, 0x8a, 0x88, 0xbd, 0x72, 0x02, 0x2a, 0x6f, 0xe7, 0xae, 0xde, 0x28,
+	0x45, 0x3f, 0x57, 0x0a, 0x55, 0x29, 0x45, 0x81, 0xa0, 0xe8, 0x50, 0xdc, 0x0f, 0x96, 0x0a, 0xd5,
+	0xd9, 0xd5, 0xca, 0xfa, 0xa3, 0xa9, 0x18, 0x06, 0xd7, 0x69, 0xcd, 0xa4, 0xf8, 0x10, 0x4c, 0xde,
+	0x84, 0x72, 0x60, 0x75, 0x71, 0x67, 0xd0, 0xc3, 0xa2, 0xb8, 0x32, 0x69, 0x71, 0x28, 0x14, 0x46,
+	0xa2, 0xd5, 0x9e, 0x40, 0x39, 0xfe, 0x2a, 0x2b, 0x50, 0x1e, 0xa6, 0xd0, 0x37, 0x66, 0x9b, 0x79,
+	0xfc, 0x67, 0x24, 0xef, 0xda, 0x36, 0x40, 0x0b, 0x53, 0x03, 0x9f, 0x0e, 0x70, 0x40, 0xe5, 0x1a,
+	0xcc, 0x13, 0x8f, 0x3a, 0xc4, 0x0d, 0x44, 0xb1, 0xbb, 0xc9, 0x4a, 0x5b, 0x98, 0x1e, 0xf0, 0x90,
+	0x11, 0x6b, 0xb4, 0x06, 0x54, 0x58, 0x72, 0xe0, 0x11, 0x37, 0xc0, 0xf2, 0x06, 0xcc, 0x5b, 0x1c,
+	0x5d, 0x64, 0xff, 0x63, 0xb5, 0xb1, 0x52, 0x7b, 0x0e, 0x95, 0x61, 0x97, 0x63, 0x02, 0x7d, 0x9c,
+	0xe0, 0x5e, 0x42, 0x30, 0x94, 0x4d, 0x20, 0x1c, 0xc0, 0x02, 0x4f, 0x17, 0x0c, 0x3b, 0x50, 0xb1,
+	0x46, 0x7b, 0x27, 0x3c, 0xa6, 0x6f, 0x3e, 0xcb, 0x4d, 0x67, 0x68, 0x21, 0x2c, 0xee, 0xfa, 0xd8,
+	0xa4, 0x38, 0x26, 0x5a, 0x1b, 0x27, 0x7a, 0x90, 0x10, 0x71, 0xe1, 0x38, 0x53, 0xba, 0x0f, 0x85,
+	0xdc, 0x7d, 0x68, 0xc2, 0xff, 0x71, 0xdd, 0x9b, 0xb4, 0x33, 0x84, 0xc5, 0xb7, 0x5e, 0x27, 0x1f,
+	0x3e, 0x17, 0xde, 0x1a, 0x7e, 0x5c, 0xf7, 0x86, 0xf8, 0x2f, 0x71, 0x0f, 0xe7, 0xc2, 0xe7, 0xc2,
+	0x5b, 0xc3, 0x8f, 0xeb, 0xde, 0x04, 0x7f, 0x07, 0x16, 0xde, 0x99, 0xd4, 0xea, 0xc6, 0xf4, 0x68,
+	0x9c, 0xfe, 0x7e, 0x42, 0xcf, 0x74, 0x13, 0xe3, 0x7c, 0x0a, 0x8b, 0xc2, 0x40, 0x60, 0x3c, 0x85,
+	0x22, 0xbb, 0x21, 0x93, 0x7c, 0x7e, 0x5f, 0x26, 0x08, 0xcd, 0xe1, 0xab, 0xc1, 0x35, 0xd7, 0x5a,
+	0xfa, 0xfa, 0xc5, 0x2c, 0x94, 0xc5, 0xc7, 0x40, 0x6e, 0xc0, 0x6c, 0x0b, 0x53, 0xf9, 0xf1, 0x64,
+	0xde, 0xe8, 0x96, 0x50, 0x96, 0xa7, 0x44, 0x05, 0x72, 0x13, 0xe6, 0xd8, 0xbd, 0x99, 0x21, 0x4b,
+	0x9d, 0x74, 0x45, 0x9d, 0x16, 0x16, 0x36, 0xfb, 0x50, 0xe2, 0x07, 0x42, 0x5e, 0xc9, 0x5a, 0x45,
+	0xea, 0x88, 0x2a, 0xd5, 0xe9, 0x82, 0x91, 0x19, 0x1f, 0xcf, 0x2c, 0xb3, 0x2b, 0x07, 0x26, 0xcb,
+	0x6c, 0x6c, 0xb2, 0xf7, 0xa1, 0xc4, 0x87, 0x25, 0xcb, 0xec, 0xca, 0xf8, 0x66, 0x99, 0x8d, 0xcd,
+	0xd9, 0x1e, 0x14, 0xd9, 0x8e, 0xcb, 0x19, 0xfd, 0x48, 0xcf, 0x92, 0xb2, 0x32, 0x35, 0xce, 0x9d,
+	0xd6, 0xa4, 0x86, 0x7d, 0x71, 0xa9, 0x4a, 0x3f, 0x2e, 0xd5, 0x99, 0x3f, 0x97, 0xaa, 0xf4, 0x31,
+	0x52, 0xa5, 0xcf, 0x91, 0x2a, 0x7d, 0x89, 0xd4, 0x99, 0xaf, 0x91, 0x2a, 0x5d, 0x44, 0xaa, 0xf4,
+	0x3d, 0x52, 0xa5, 0x5f, 0x91, 0x2a, 0x7d, 0xfa, 0xad, 0xce, 0xbc, 0x7f, 0x76, 0xed, 0x9f, 0x39,
+	0xed, 0x12, 0xfb, 0x17, 0xbd, 0xf1, 0x37, 0x00, 0x00, 0xff, 0xff, 0xc6, 0x19, 0x0b, 0x2b, 0x2a,
+	0x09, 0x00, 0x00,
 }
 
 func (this *CronJob) Equal(that interface{}) bool {
@@ -888,6 +924,38 @@ func (this *CronJob) Equal(that interface{}) bool {
 	}
 	if !this.Spec.Equal(that1.Spec) {
 		return false
+	}
+	return true
+}
+func (this *CronJobList) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CronJobList)
+	if !ok {
+		that2, ok := that.(CronJobList)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Metadata.Equal(that1.Metadata) {
+		return false
+	}
+	if len(this.Items) != len(that1.Items) {
+		return false
+	}
+	for i := range this.Items {
+		if !this.Items[i].Equal(that1.Items[i]) {
+			return false
+		}
 	}
 	return true
 }
@@ -958,7 +1026,7 @@ func (this *GetRequest) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.GetOptions.Equal(that1.GetOptions) {
+	if !this.Options.Equal(that1.Options) {
 		return false
 	}
 	return true
@@ -985,9 +1053,6 @@ func (this *GetResponse) Equal(that interface{}) bool {
 	if !this.CronJob.Equal(that1.CronJob) {
 		return false
 	}
-	if !this.Error.Equal(that1.Error) {
-		return false
-	}
 	return true
 }
 func (this *ListRequest) Equal(that interface{}) bool {
@@ -1009,7 +1074,7 @@ func (this *ListRequest) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.ListOptions.Equal(that1.ListOptions) {
+	if !this.Options.Equal(that1.Options) {
 		return false
 	}
 	return true
@@ -1033,27 +1098,46 @@ func (this *ListResponse) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if len(this.Cronjobs) != len(that1.Cronjobs) {
-		return false
-	}
-	for i := range this.Cronjobs {
-		if !this.Cronjobs[i].Equal(that1.Cronjobs[i]) {
-			return false
-		}
-	}
-	if !this.Error.Equal(that1.Error) {
+	if !this.CronJobList.Equal(that1.CronJobList) {
 		return false
 	}
 	return true
 }
-func (this *AddRequest) Equal(that interface{}) bool {
+func (this *CreateRequest) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*AddRequest)
+	that1, ok := that.(*CreateRequest)
 	if !ok {
-		that2, ok := that.(AddRequest)
+		that2, ok := that.(CreateRequest)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Options.Equal(that1.Options) {
+		return false
+	}
+	if !this.CronJob.Equal(that1.CronJob) {
+		return false
+	}
+	return true
+}
+func (this *CreateResponse) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*CreateResponse)
+	if !ok {
+		that2, ok := that.(CreateResponse)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1066,33 +1150,6 @@ func (this *AddRequest) Equal(that interface{}) bool {
 		return false
 	}
 	if !this.CronJob.Equal(that1.CronJob) {
-		return false
-	}
-	return true
-}
-func (this *AddResponse) Equal(that interface{}) bool {
-	if that == nil {
-		return this == nil
-	}
-
-	that1, ok := that.(*AddResponse)
-	if !ok {
-		that2, ok := that.(AddResponse)
-		if ok {
-			that1 = &that2
-		} else {
-			return false
-		}
-	}
-	if that1 == nil {
-		return this == nil
-	} else if this == nil {
-		return false
-	}
-	if !this.CronJob.Equal(that1.CronJob) {
-		return false
-	}
-	if !this.Error.Equal(that1.Error) {
 		return false
 	}
 	return true
@@ -1114,6 +1171,9 @@ func (this *UpdateRequest) Equal(that interface{}) bool {
 	if that1 == nil {
 		return this == nil
 	} else if this == nil {
+		return false
+	}
+	if !this.Options.Equal(that1.Options) {
 		return false
 	}
 	if !this.CronJob.Equal(that1.CronJob) {
@@ -1143,9 +1203,6 @@ func (this *UpdateResponse) Equal(that interface{}) bool {
 	if !this.CronJob.Equal(that1.CronJob) {
 		return false
 	}
-	if !this.Error.Equal(that1.Error) {
-		return false
-	}
 	return true
 }
 func (this *DeleteRequest) Equal(that interface{}) bool {
@@ -1165,6 +1222,9 @@ func (this *DeleteRequest) Equal(that interface{}) bool {
 	if that1 == nil {
 		return this == nil
 	} else if this == nil {
+		return false
+	}
+	if !this.Options.Equal(that1.Options) {
 		return false
 	}
 	if !this.CronJob.Equal(that1.CronJob) {
@@ -1194,9 +1254,6 @@ func (this *DeleteResponse) Equal(that interface{}) bool {
 	if !this.CronJob.Equal(that1.CronJob) {
 		return false
 	}
-	if !this.Error.Equal(that1.Error) {
-		return false
-	}
 	return true
 }
 func (this *WatchRequest) Equal(that interface{}) bool {
@@ -1218,7 +1275,7 @@ func (this *WatchRequest) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.WatchOptions.Equal(that1.WatchOptions) {
+	if !this.Options.Equal(that1.Options) {
 		return false
 	}
 	return true
@@ -1248,9 +1305,6 @@ func (this *WatchResponse) Equal(that interface{}) bool {
 	if !this.CronJob.Equal(that1.CronJob) {
 		return false
 	}
-	if !this.Error.Equal(that1.Error) {
-		return false
-	}
 	return true
 }
 
@@ -1270,8 +1324,8 @@ type CronJobsClient interface {
 	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
 	// List CronJobs.
 	List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
-	// Add a Job.
-	Add(ctx context.Context, in *AddRequest, opts ...grpc.CallOption) (*AddResponse, error)
+	// Create a Job.
+	Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error)
 	// Update a Job.
 	Update(ctx context.Context, in *UpdateRequest, opts ...grpc.CallOption) (*UpdateResponse, error)
 	// Delete a Job.
@@ -1306,9 +1360,9 @@ func (c *cronJobsClient) List(ctx context.Context, in *ListRequest, opts ...grpc
 	return out, nil
 }
 
-func (c *cronJobsClient) Add(ctx context.Context, in *AddRequest, opts ...grpc.CallOption) (*AddResponse, error) {
-	out := new(AddResponse)
-	err := c.cc.Invoke(ctx, "/cronjobs.v1alpha.CronJobs/Add", in, out, opts...)
+func (c *cronJobsClient) Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error) {
+	out := new(CreateResponse)
+	err := c.cc.Invoke(ctx, "/cronjobs.v1alpha.CronJobs/Create", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1371,8 +1425,8 @@ type CronJobsServer interface {
 	Get(context.Context, *GetRequest) (*GetResponse, error)
 	// List CronJobs.
 	List(context.Context, *ListRequest) (*ListResponse, error)
-	// Add a Job.
-	Add(context.Context, *AddRequest) (*AddResponse, error)
+	// Create a Job.
+	Create(context.Context, *CreateRequest) (*CreateResponse, error)
 	// Update a Job.
 	Update(context.Context, *UpdateRequest) (*UpdateResponse, error)
 	// Delete a Job.
@@ -1421,20 +1475,20 @@ func _CronJobs_List_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
-func _CronJobs_Add_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddRequest)
+func _CronJobs_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(CronJobsServer).Add(ctx, in)
+		return srv.(CronJobsServer).Create(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/cronjobs.v1alpha.CronJobs/Add",
+		FullMethod: "/cronjobs.v1alpha.CronJobs/Create",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(CronJobsServer).Add(ctx, req.(*AddRequest))
+		return srv.(CronJobsServer).Create(ctx, req.(*CreateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1509,8 +1563,8 @@ var _CronJobs_serviceDesc = grpc.ServiceDesc{
 			Handler:    _CronJobs_List_Handler,
 		},
 		{
-			MethodName: "Add",
-			Handler:    _CronJobs_Add_Handler,
+			MethodName: "Create",
+			Handler:    _CronJobs_Create_Handler,
 		},
 		{
 			MethodName: "Update",
@@ -1569,6 +1623,46 @@ func (m *CronJob) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
+func (m *CronJobList) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CronJobList) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Metadata != nil {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintApi(dAtA, i, uint64(m.Metadata.Size()))
+		n3, err := m.Metadata.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n3
+	}
+	if len(m.Items) > 0 {
+		for _, msg := range m.Items {
+			dAtA[i] = 0x12
+			i++
+			i = encodeVarintApi(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	return i, nil
+}
+
 func (m *CronJobSpec) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -1588,11 +1682,11 @@ func (m *CronJobSpec) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintApi(dAtA, i, uint64(m.Schedule.Size()))
-		n3, err := m.Schedule.MarshalTo(dAtA[i:])
+		n4, err := m.Schedule.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n3
+		i += n4
 	}
 	return i, nil
 }
@@ -1636,15 +1730,15 @@ func (m *GetRequest) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.GetOptions != nil {
+	if m.Options != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.GetOptions.Size()))
-		n4, err := m.GetOptions.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Options.Size()))
+		n5, err := m.Options.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n4
+		i += n5
 	}
 	return i, nil
 }
@@ -1668,17 +1762,7 @@ func (m *GetResponse) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintApi(dAtA, i, uint64(m.CronJob.Size()))
-		n5, err := m.CronJob.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n5
-	}
-	if m.Error != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Error.Size()))
-		n6, err := m.Error.MarshalTo(dAtA[i:])
+		n6, err := m.CronJob.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -1702,11 +1786,11 @@ func (m *ListRequest) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.ListOptions != nil {
+	if m.Options != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.ListOptions.Size()))
-		n7, err := m.ListOptions.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Options.Size()))
+		n7, err := m.Options.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -1730,23 +1814,11 @@ func (m *ListResponse) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if len(m.Cronjobs) > 0 {
-		for _, msg := range m.Cronjobs {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintApi(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	if m.Error != nil {
-		dAtA[i] = 0x12
+	if m.CronJobList != nil {
+		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Error.Size()))
-		n8, err := m.Error.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.CronJobList.Size()))
+		n8, err := m.CronJobList.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -1755,7 +1827,7 @@ func (m *ListResponse) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
-func (m *AddRequest) Marshal() (dAtA []byte, err error) {
+func (m *CreateRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalTo(dAtA)
@@ -1765,41 +1837,23 @@ func (m *AddRequest) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *AddRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *CreateRequest) MarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.CronJob != nil {
+	if m.Options != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.CronJob.Size()))
-		n9, err := m.CronJob.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Options.Size()))
+		n9, err := m.Options.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
 		i += n9
 	}
-	return i, nil
-}
-
-func (m *AddResponse) Marshal() (dAtA []byte, err error) {
-	size := m.Size()
-	dAtA = make([]byte, size)
-	n, err := m.MarshalTo(dAtA)
-	if err != nil {
-		return nil, err
-	}
-	return dAtA[:n], nil
-}
-
-func (m *AddResponse) MarshalTo(dAtA []byte) (int, error) {
-	var i int
-	_ = i
-	var l int
-	_ = l
 	if m.CronJob != nil {
-		dAtA[i] = 0xa
+		dAtA[i] = 0x12
 		i++
 		i = encodeVarintApi(dAtA, i, uint64(m.CronJob.Size()))
 		n10, err := m.CronJob.MarshalTo(dAtA[i:])
@@ -1808,11 +1862,29 @@ func (m *AddResponse) MarshalTo(dAtA []byte) (int, error) {
 		}
 		i += n10
 	}
-	if m.Error != nil {
-		dAtA[i] = 0x12
+	return i, nil
+}
+
+func (m *CreateResponse) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *CreateResponse) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.CronJob != nil {
+		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Error.Size()))
-		n11, err := m.Error.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.CronJob.Size()))
+		n11, err := m.CronJob.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -1836,15 +1908,25 @@ func (m *UpdateRequest) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.CronJob != nil {
+	if m.Options != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.CronJob.Size()))
-		n12, err := m.CronJob.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Options.Size()))
+		n12, err := m.Options.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
 		i += n12
+	}
+	if m.CronJob != nil {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintApi(dAtA, i, uint64(m.CronJob.Size()))
+		n13, err := m.CronJob.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n13
 	}
 	return i, nil
 }
@@ -1868,17 +1950,7 @@ func (m *UpdateResponse) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintApi(dAtA, i, uint64(m.CronJob.Size()))
-		n13, err := m.CronJob.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n13
-	}
-	if m.Error != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Error.Size()))
-		n14, err := m.Error.MarshalTo(dAtA[i:])
+		n14, err := m.CronJob.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -1902,15 +1974,25 @@ func (m *DeleteRequest) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.CronJob != nil {
+	if m.Options != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.CronJob.Size()))
-		n15, err := m.CronJob.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Options.Size()))
+		n15, err := m.Options.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
 		i += n15
+	}
+	if m.CronJob != nil {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintApi(dAtA, i, uint64(m.CronJob.Size()))
+		n16, err := m.CronJob.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n16
 	}
 	return i, nil
 }
@@ -1934,17 +2016,7 @@ func (m *DeleteResponse) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintApi(dAtA, i, uint64(m.CronJob.Size()))
-		n16, err := m.CronJob.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n16
-	}
-	if m.Error != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Error.Size()))
-		n17, err := m.Error.MarshalTo(dAtA[i:])
+		n17, err := m.CronJob.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -1968,11 +2040,11 @@ func (m *WatchRequest) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.WatchOptions != nil {
+	if m.Options != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.WatchOptions.Size()))
-		n18, err := m.WatchOptions.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Options.Size()))
+		n18, err := m.Options.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -2016,16 +2088,6 @@ func (m *WatchResponse) MarshalTo(dAtA []byte) (int, error) {
 		}
 		i += n20
 	}
-	if m.Error != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Error.Size()))
-		n21, err := m.Error.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n21
-	}
 	return i, nil
 }
 
@@ -2045,6 +2107,23 @@ func NewPopulatedCronJob(r randyApi, easy bool) *CronJob {
 	}
 	if r.Intn(10) != 0 {
 		this.Spec = NewPopulatedCronJobSpec(r, easy)
+	}
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
+func NewPopulatedCronJobList(r randyApi, easy bool) *CronJobList {
+	this := &CronJobList{}
+	if r.Intn(10) != 0 {
+		this.Metadata = v1.NewPopulatedObjectMetadata(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		v1 := r.Intn(5)
+		this.Items = make([]*CronJob, v1)
+		for i := 0; i < v1; i++ {
+			this.Items[i] = NewPopulatedCronJob(r, easy)
+		}
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2072,7 +2151,7 @@ func NewPopulatedSchedule(r randyApi, easy bool) *Schedule {
 func NewPopulatedGetRequest(r randyApi, easy bool) *GetRequest {
 	this := &GetRequest{}
 	if r.Intn(10) != 0 {
-		this.GetOptions = v1.NewPopulatedGetOptions(r, easy)
+		this.Options = v1.NewPopulatedGetOptions(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2084,9 +2163,6 @@ func NewPopulatedGetResponse(r randyApi, easy bool) *GetResponse {
 	if r.Intn(10) != 0 {
 		this.CronJob = NewPopulatedCronJob(r, easy)
 	}
-	if r.Intn(10) != 0 {
-		this.Error = v1.NewPopulatedError(r, easy)
-	}
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
@@ -2095,7 +2171,7 @@ func NewPopulatedGetResponse(r randyApi, easy bool) *GetResponse {
 func NewPopulatedListRequest(r randyApi, easy bool) *ListRequest {
 	this := &ListRequest{}
 	if r.Intn(10) != 0 {
-		this.ListOptions = v1.NewPopulatedListOptions(r, easy)
+		this.Options = v1.NewPopulatedListOptions(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2105,22 +2181,18 @@ func NewPopulatedListRequest(r randyApi, easy bool) *ListRequest {
 func NewPopulatedListResponse(r randyApi, easy bool) *ListResponse {
 	this := &ListResponse{}
 	if r.Intn(10) != 0 {
-		v1 := r.Intn(5)
-		this.Cronjobs = make([]*CronJob, v1)
-		for i := 0; i < v1; i++ {
-			this.Cronjobs[i] = NewPopulatedCronJob(r, easy)
-		}
-	}
-	if r.Intn(10) != 0 {
-		this.Error = v1.NewPopulatedError(r, easy)
+		this.CronJobList = NewPopulatedCronJobList(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
 }
 
-func NewPopulatedAddRequest(r randyApi, easy bool) *AddRequest {
-	this := &AddRequest{}
+func NewPopulatedCreateRequest(r randyApi, easy bool) *CreateRequest {
+	this := &CreateRequest{}
+	if r.Intn(10) != 0 {
+		this.Options = v1.NewPopulatedCreateOptions(r, easy)
+	}
 	if r.Intn(10) != 0 {
 		this.CronJob = NewPopulatedCronJob(r, easy)
 	}
@@ -2129,13 +2201,10 @@ func NewPopulatedAddRequest(r randyApi, easy bool) *AddRequest {
 	return this
 }
 
-func NewPopulatedAddResponse(r randyApi, easy bool) *AddResponse {
-	this := &AddResponse{}
+func NewPopulatedCreateResponse(r randyApi, easy bool) *CreateResponse {
+	this := &CreateResponse{}
 	if r.Intn(10) != 0 {
 		this.CronJob = NewPopulatedCronJob(r, easy)
-	}
-	if r.Intn(10) != 0 {
-		this.Error = v1.NewPopulatedError(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2144,6 +2213,9 @@ func NewPopulatedAddResponse(r randyApi, easy bool) *AddResponse {
 
 func NewPopulatedUpdateRequest(r randyApi, easy bool) *UpdateRequest {
 	this := &UpdateRequest{}
+	if r.Intn(10) != 0 {
+		this.Options = v1.NewPopulatedUpdateOptions(r, easy)
+	}
 	if r.Intn(10) != 0 {
 		this.CronJob = NewPopulatedCronJob(r, easy)
 	}
@@ -2157,9 +2229,6 @@ func NewPopulatedUpdateResponse(r randyApi, easy bool) *UpdateResponse {
 	if r.Intn(10) != 0 {
 		this.CronJob = NewPopulatedCronJob(r, easy)
 	}
-	if r.Intn(10) != 0 {
-		this.Error = v1.NewPopulatedError(r, easy)
-	}
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
@@ -2167,6 +2236,9 @@ func NewPopulatedUpdateResponse(r randyApi, easy bool) *UpdateResponse {
 
 func NewPopulatedDeleteRequest(r randyApi, easy bool) *DeleteRequest {
 	this := &DeleteRequest{}
+	if r.Intn(10) != 0 {
+		this.Options = v1.NewPopulatedDeleteOptions(r, easy)
+	}
 	if r.Intn(10) != 0 {
 		this.CronJob = NewPopulatedCronJob(r, easy)
 	}
@@ -2180,9 +2252,6 @@ func NewPopulatedDeleteResponse(r randyApi, easy bool) *DeleteResponse {
 	if r.Intn(10) != 0 {
 		this.CronJob = NewPopulatedCronJob(r, easy)
 	}
-	if r.Intn(10) != 0 {
-		this.Error = v1.NewPopulatedError(r, easy)
-	}
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
@@ -2191,7 +2260,7 @@ func NewPopulatedDeleteResponse(r randyApi, easy bool) *DeleteResponse {
 func NewPopulatedWatchRequest(r randyApi, easy bool) *WatchRequest {
 	this := &WatchRequest{}
 	if r.Intn(10) != 0 {
-		this.WatchOptions = v1.NewPopulatedWatchOptions(r, easy)
+		this.Options = v1.NewPopulatedWatchOptions(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2205,9 +2274,6 @@ func NewPopulatedWatchResponse(r randyApi, easy bool) *WatchResponse {
 	}
 	if r.Intn(10) != 0 {
 		this.CronJob = NewPopulatedCronJob(r, easy)
-	}
-	if r.Intn(10) != 0 {
-		this.Error = v1.NewPopulatedError(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2303,6 +2369,25 @@ func (m *CronJob) Size() (n int) {
 	return n
 }
 
+func (m *CronJobList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Metadata != nil {
+		l = m.Metadata.Size()
+		n += 1 + l + sovApi(uint64(l))
+	}
+	if len(m.Items) > 0 {
+		for _, e := range m.Items {
+			l = e.Size()
+			n += 1 + l + sovApi(uint64(l))
+		}
+	}
+	return n
+}
+
 func (m *CronJobSpec) Size() (n int) {
 	if m == nil {
 		return 0
@@ -2335,8 +2420,8 @@ func (m *GetRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.GetOptions != nil {
-		l = m.GetOptions.Size()
+	if m.Options != nil {
+		l = m.Options.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -2352,10 +2437,6 @@ func (m *GetResponse) Size() (n int) {
 		l = m.CronJob.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
-	if m.Error != nil {
-		l = m.Error.Size()
-		n += 1 + l + sovApi(uint64(l))
-	}
 	return n
 }
 
@@ -2365,8 +2446,8 @@ func (m *ListRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.ListOptions != nil {
-		l = m.ListOptions.Size()
+	if m.Options != nil {
+		l = m.Options.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -2378,25 +2459,23 @@ func (m *ListResponse) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if len(m.Cronjobs) > 0 {
-		for _, e := range m.Cronjobs {
-			l = e.Size()
-			n += 1 + l + sovApi(uint64(l))
-		}
-	}
-	if m.Error != nil {
-		l = m.Error.Size()
+	if m.CronJobList != nil {
+		l = m.CronJobList.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
 }
 
-func (m *AddRequest) Size() (n int) {
+func (m *CreateRequest) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
+	if m.Options != nil {
+		l = m.Options.Size()
+		n += 1 + l + sovApi(uint64(l))
+	}
 	if m.CronJob != nil {
 		l = m.CronJob.Size()
 		n += 1 + l + sovApi(uint64(l))
@@ -2404,7 +2483,7 @@ func (m *AddRequest) Size() (n int) {
 	return n
 }
 
-func (m *AddResponse) Size() (n int) {
+func (m *CreateResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
@@ -2412,10 +2491,6 @@ func (m *AddResponse) Size() (n int) {
 	_ = l
 	if m.CronJob != nil {
 		l = m.CronJob.Size()
-		n += 1 + l + sovApi(uint64(l))
-	}
-	if m.Error != nil {
-		l = m.Error.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -2427,6 +2502,10 @@ func (m *UpdateRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
+	if m.Options != nil {
+		l = m.Options.Size()
+		n += 1 + l + sovApi(uint64(l))
+	}
 	if m.CronJob != nil {
 		l = m.CronJob.Size()
 		n += 1 + l + sovApi(uint64(l))
@@ -2444,10 +2523,6 @@ func (m *UpdateResponse) Size() (n int) {
 		l = m.CronJob.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
-	if m.Error != nil {
-		l = m.Error.Size()
-		n += 1 + l + sovApi(uint64(l))
-	}
 	return n
 }
 
@@ -2457,6 +2532,10 @@ func (m *DeleteRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
+	if m.Options != nil {
+		l = m.Options.Size()
+		n += 1 + l + sovApi(uint64(l))
+	}
 	if m.CronJob != nil {
 		l = m.CronJob.Size()
 		n += 1 + l + sovApi(uint64(l))
@@ -2474,10 +2553,6 @@ func (m *DeleteResponse) Size() (n int) {
 		l = m.CronJob.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
-	if m.Error != nil {
-		l = m.Error.Size()
-		n += 1 + l + sovApi(uint64(l))
-	}
 	return n
 }
 
@@ -2487,8 +2562,8 @@ func (m *WatchRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.WatchOptions != nil {
-		l = m.WatchOptions.Size()
+	if m.Options != nil {
+		l = m.Options.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -2506,10 +2581,6 @@ func (m *WatchResponse) Size() (n int) {
 	}
 	if m.CronJob != nil {
 		l = m.CronJob.Size()
-		n += 1 + l + sovApi(uint64(l))
-	}
-	if m.Error != nil {
-		l = m.Error.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -2539,6 +2610,17 @@ func (this *CronJob) String() string {
 	}, "")
 	return s
 }
+func (this *CronJobList) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&CronJobList{`,
+		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "ObjectMetadata", "v1.ObjectMetadata", 1) + `,`,
+		`Items:` + strings.Replace(fmt.Sprintf("%v", this.Items), "CronJob", "CronJob", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
 func (this *CronJobSpec) String() string {
 	if this == nil {
 		return "nil"
@@ -2564,7 +2646,7 @@ func (this *GetRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetRequest{`,
-		`GetOptions:` + strings.Replace(fmt.Sprintf("%v", this.GetOptions), "GetOptions", "v1.GetOptions", 1) + `,`,
+		`Options:` + strings.Replace(fmt.Sprintf("%v", this.Options), "GetOptions", "v1.GetOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2575,7 +2657,6 @@ func (this *GetResponse) String() string {
 	}
 	s := strings.Join([]string{`&GetResponse{`,
 		`CronJob:` + strings.Replace(fmt.Sprintf("%v", this.CronJob), "CronJob", "CronJob", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2585,7 +2666,7 @@ func (this *ListRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ListRequest{`,
-		`ListOptions:` + strings.Replace(fmt.Sprintf("%v", this.ListOptions), "ListOptions", "v1.ListOptions", 1) + `,`,
+		`Options:` + strings.Replace(fmt.Sprintf("%v", this.Options), "ListOptions", "v1.ListOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2595,29 +2676,28 @@ func (this *ListResponse) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ListResponse{`,
-		`Cronjobs:` + strings.Replace(fmt.Sprintf("%v", this.Cronjobs), "CronJob", "CronJob", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
+		`CronJobList:` + strings.Replace(fmt.Sprintf("%v", this.CronJobList), "CronJobList", "CronJobList", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *AddRequest) String() string {
+func (this *CreateRequest) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&AddRequest{`,
+	s := strings.Join([]string{`&CreateRequest{`,
+		`Options:` + strings.Replace(fmt.Sprintf("%v", this.Options), "CreateOptions", "v1.CreateOptions", 1) + `,`,
 		`CronJob:` + strings.Replace(fmt.Sprintf("%v", this.CronJob), "CronJob", "CronJob", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *AddResponse) String() string {
+func (this *CreateResponse) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&AddResponse{`,
+	s := strings.Join([]string{`&CreateResponse{`,
 		`CronJob:` + strings.Replace(fmt.Sprintf("%v", this.CronJob), "CronJob", "CronJob", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2627,6 +2707,7 @@ func (this *UpdateRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&UpdateRequest{`,
+		`Options:` + strings.Replace(fmt.Sprintf("%v", this.Options), "UpdateOptions", "v1.UpdateOptions", 1) + `,`,
 		`CronJob:` + strings.Replace(fmt.Sprintf("%v", this.CronJob), "CronJob", "CronJob", 1) + `,`,
 		`}`,
 	}, "")
@@ -2638,7 +2719,6 @@ func (this *UpdateResponse) String() string {
 	}
 	s := strings.Join([]string{`&UpdateResponse{`,
 		`CronJob:` + strings.Replace(fmt.Sprintf("%v", this.CronJob), "CronJob", "CronJob", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2648,6 +2728,7 @@ func (this *DeleteRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&DeleteRequest{`,
+		`Options:` + strings.Replace(fmt.Sprintf("%v", this.Options), "DeleteOptions", "v1.DeleteOptions", 1) + `,`,
 		`CronJob:` + strings.Replace(fmt.Sprintf("%v", this.CronJob), "CronJob", "CronJob", 1) + `,`,
 		`}`,
 	}, "")
@@ -2659,7 +2740,6 @@ func (this *DeleteResponse) String() string {
 	}
 	s := strings.Join([]string{`&DeleteResponse{`,
 		`CronJob:` + strings.Replace(fmt.Sprintf("%v", this.CronJob), "CronJob", "CronJob", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2669,7 +2749,7 @@ func (this *WatchRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&WatchRequest{`,
-		`WatchOptions:` + strings.Replace(fmt.Sprintf("%v", this.WatchOptions), "WatchOptions", "v1.WatchOptions", 1) + `,`,
+		`Options:` + strings.Replace(fmt.Sprintf("%v", this.Options), "WatchOptions", "v1.WatchOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2681,7 +2761,6 @@ func (this *WatchResponse) String() string {
 	s := strings.Join([]string{`&WatchResponse{`,
 		`Event:` + strings.Replace(fmt.Sprintf("%v", this.Event), "Event", "v1alpha.Event", 1) + `,`,
 		`CronJob:` + strings.Replace(fmt.Sprintf("%v", this.CronJob), "CronJob", "CronJob", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2786,6 +2865,120 @@ func (m *CronJob) Unmarshal(dAtA []byte) error {
 				m.Spec = &CronJobSpec{}
 			}
 			if err := m.Spec.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipApi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthApi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *CronJobList) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowApi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: CronJobList: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: CronJobList: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Metadata", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Metadata == nil {
+				m.Metadata = &v1.ObjectMetadata{}
+			}
+			if err := m.Metadata.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Items", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Items = append(m.Items, &CronJob{})
+			if err := m.Items[len(m.Items)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -3003,7 +3196,7 @@ func (m *GetRequest) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field GetOptions", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Options", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -3027,10 +3220,10 @@ func (m *GetRequest) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.GetOptions == nil {
-				m.GetOptions = &v1.GetOptions{}
+			if m.Options == nil {
+				m.Options = &v1.GetOptions{}
 			}
-			if err := m.GetOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Options.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -3117,39 +3310,6 @@ func (m *GetResponse) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Error == nil {
-				m.Error = &v1.Error{}
-			}
-			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipApi(dAtA[iNdEx:])
@@ -3202,7 +3362,7 @@ func (m *ListRequest) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ListOptions", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Options", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -3226,10 +3386,10 @@ func (m *ListRequest) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.ListOptions == nil {
-				m.ListOptions = &v1.ListOptions{}
+			if m.Options == nil {
+				m.Options = &v1.ListOptions{}
 			}
-			if err := m.ListOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Options.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -3285,7 +3445,7 @@ func (m *ListResponse) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Cronjobs", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field CronJobList", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -3309,41 +3469,10 @@ func (m *ListResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Cronjobs = append(m.Cronjobs, &CronJob{})
-			if err := m.Cronjobs[len(m.Cronjobs)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
+			if m.CronJobList == nil {
+				m.CronJobList = &CronJobList{}
 			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Error == nil {
-				m.Error = &v1.Error{}
-			}
-			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.CronJobList.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -3368,7 +3497,7 @@ func (m *ListResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *AddRequest) Unmarshal(dAtA []byte) error {
+func (m *CreateRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -3391,13 +3520,46 @@ func (m *AddRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: AddRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: CreateRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: AddRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: CreateRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Options", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Options == nil {
+				m.Options = &v1.CreateOptions{}
+			}
+			if err := m.Options.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field CronJob", wireType)
 			}
@@ -3451,7 +3613,7 @@ func (m *AddRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *AddResponse) Unmarshal(dAtA []byte) error {
+func (m *CreateResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -3474,10 +3636,10 @@ func (m *AddResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: AddResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: CreateResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: AddResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: CreateResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
@@ -3510,39 +3672,6 @@ func (m *AddResponse) Unmarshal(dAtA []byte) error {
 				m.CronJob = &CronJob{}
 			}
 			if err := m.CronJob.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Error == nil {
-				m.Error = &v1.Error{}
-			}
-			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -3597,6 +3726,39 @@ func (m *UpdateRequest) Unmarshal(dAtA []byte) error {
 		}
 		switch fieldNum {
 		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Options", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Options == nil {
+				m.Options = &v1.UpdateOptions{}
+			}
+			if err := m.Options.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field CronJob", wireType)
 			}
@@ -3712,39 +3874,6 @@ func (m *UpdateResponse) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Error == nil {
-				m.Error = &v1.Error{}
-			}
-			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipApi(dAtA[iNdEx:])
@@ -3796,6 +3925,39 @@ func (m *DeleteRequest) Unmarshal(dAtA []byte) error {
 		}
 		switch fieldNum {
 		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Options", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Options == nil {
+				m.Options = &v1.DeleteOptions{}
+			}
+			if err := m.Options.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field CronJob", wireType)
 			}
@@ -3911,39 +4073,6 @@ func (m *DeleteResponse) Unmarshal(dAtA []byte) error {
 				return err
 			}
 			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Error == nil {
-				m.Error = &v1.Error{}
-			}
-			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipApi(dAtA[iNdEx:])
@@ -3996,7 +4125,7 @@ func (m *WatchRequest) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field WatchOptions", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Options", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -4020,10 +4149,10 @@ func (m *WatchRequest) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.WatchOptions == nil {
-				m.WatchOptions = &v1.WatchOptions{}
+			if m.Options == nil {
+				m.Options = &v1.WatchOptions{}
 			}
-			if err := m.WatchOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Options.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -4140,39 +4269,6 @@ func (m *WatchResponse) Unmarshal(dAtA []byte) error {
 				m.CronJob = &CronJob{}
 			}
 			if err := m.CronJob.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Error == nil {
-				m.Error = &v1.Error{}
-			}
-			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

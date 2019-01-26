@@ -8,9 +8,11 @@ import (
 	fmt "fmt"
 	v1 "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1"
 	v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha"
+	_ "github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/apiserver"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	types "github.com/gogo/protobuf/types"
+	_ "github.com/mwitkow/go-proto-validators"
 	grpc "google.golang.org/grpc"
 	io "io"
 	math "math"
@@ -84,6 +86,61 @@ func (m *Trigger) GetSpec() *TriggerSpec {
 	return nil
 }
 
+type TriggerList struct {
+	// Metadata for TriggerList object.
+	Metadata *v1.ObjectMetadata `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	// List of Trigger objects.
+	Items                []*Trigger `protobuf:"bytes,2,rep,name=items,proto3" json:"items,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}   `json:"-"`
+	XXX_sizecache        int32      `json:"-"`
+}
+
+func (m *TriggerList) Reset()      { *m = TriggerList{} }
+func (*TriggerList) ProtoMessage() {}
+func (*TriggerList) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2349df664540f6f4, []int{1}
+}
+func (m *TriggerList) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *TriggerList) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_TriggerList.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalTo(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *TriggerList) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TriggerList.Merge(m, src)
+}
+func (m *TriggerList) XXX_Size() int {
+	return m.Size()
+}
+func (m *TriggerList) XXX_DiscardUnknown() {
+	xxx_messageInfo_TriggerList.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_TriggerList proto.InternalMessageInfo
+
+func (m *TriggerList) GetMetadata() *v1.ObjectMetadata {
+	if m != nil {
+		return m.Metadata
+	}
+	return nil
+}
+
+func (m *TriggerList) GetItems() []*Trigger {
+	if m != nil {
+		return m.Items
+	}
+	return nil
+}
+
 type TriggerSpec struct {
 	// RunOptions.
 	RunOptions *RunOptions `protobuf:"bytes,1,opt,name=runOptions,proto3" json:"runOptions,omitempty"`
@@ -96,7 +153,7 @@ type TriggerSpec struct {
 func (m *TriggerSpec) Reset()      { *m = TriggerSpec{} }
 func (*TriggerSpec) ProtoMessage() {}
 func (*TriggerSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2349df664540f6f4, []int{1}
+	return fileDescriptor_2349df664540f6f4, []int{2}
 }
 func (m *TriggerSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -149,7 +206,7 @@ type Step struct {
 func (m *Step) Reset()      { *m = Step{} }
 func (*Step) ProtoMessage() {}
 func (*Step) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2349df664540f6f4, []int{2}
+	return fileDescriptor_2349df664540f6f4, []int{3}
 }
 func (m *Step) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -203,7 +260,7 @@ type RunOptions struct {
 func (m *RunOptions) Reset()      { *m = RunOptions{} }
 func (*RunOptions) ProtoMessage() {}
 func (*RunOptions) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2349df664540f6f4, []int{3}
+	return fileDescriptor_2349df664540f6f4, []int{4}
 }
 func (m *RunOptions) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -265,7 +322,7 @@ type Serialize struct {
 func (m *Serialize) Reset()      { *m = Serialize{} }
 func (*Serialize) ProtoMessage() {}
 func (*Serialize) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2349df664540f6f4, []int{4}
+	return fileDescriptor_2349df664540f6f4, []int{5}
 }
 func (m *Serialize) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -320,7 +377,7 @@ type Target struct {
 func (m *Target) Reset()      { *m = Target{} }
 func (*Target) ProtoMessage() {}
 func (*Target) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2349df664540f6f4, []int{5}
+	return fileDescriptor_2349df664540f6f4, []int{6}
 }
 func (m *Target) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -379,7 +436,7 @@ type Action struct {
 func (m *Action) Reset()      { *m = Action{} }
 func (*Action) ProtoMessage() {}
 func (*Action) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2349df664540f6f4, []int{6}
+	return fileDescriptor_2349df664540f6f4, []int{7}
 }
 func (m *Action) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -438,8 +495,8 @@ func (m *Action) GetParameters() []*types.Any {
 
 // Get
 type GetRequest struct {
-	// GetOptions options for a GetRequest.
-	GetOptions           *v1.GetOptions `protobuf:"bytes,1,opt,name=getOptions,proto3" json:"getOptions,omitempty"`
+	// core_v1.GetOptions
+	Options              *v1.GetOptions `protobuf:"bytes,1,opt,name=options,proto3" json:"options,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
 	XXX_sizecache        int32          `json:"-"`
 }
@@ -447,7 +504,7 @@ type GetRequest struct {
 func (m *GetRequest) Reset()      { *m = GetRequest{} }
 func (*GetRequest) ProtoMessage() {}
 func (*GetRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2349df664540f6f4, []int{7}
+	return fileDescriptor_2349df664540f6f4, []int{8}
 }
 func (m *GetRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -476,26 +533,24 @@ func (m *GetRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetRequest proto.InternalMessageInfo
 
-func (m *GetRequest) GetGetOptions() *v1.GetOptions {
+func (m *GetRequest) GetOptions() *v1.GetOptions {
 	if m != nil {
-		return m.GetOptions
+		return m.Options
 	}
 	return nil
 }
 
 type GetResponse struct {
 	// Trigger object.
-	Task *Trigger `protobuf:"bytes,1,opt,name=task,proto3" json:"task,omitempty"`
-	// Error object.
-	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
+	Trigger              *Trigger `protobuf:"bytes,1,opt,name=trigger,proto3" json:"trigger,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
 func (m *GetResponse) Reset()      { *m = GetResponse{} }
 func (*GetResponse) ProtoMessage() {}
 func (*GetResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2349df664540f6f4, []int{8}
+	return fileDescriptor_2349df664540f6f4, []int{9}
 }
 func (m *GetResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -524,24 +579,17 @@ func (m *GetResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetResponse proto.InternalMessageInfo
 
-func (m *GetResponse) GetTask() *Trigger {
+func (m *GetResponse) GetTrigger() *Trigger {
 	if m != nil {
-		return m.Task
-	}
-	return nil
-}
-
-func (m *GetResponse) GetError() *v1.Error {
-	if m != nil {
-		return m.Error
+		return m.Trigger
 	}
 	return nil
 }
 
 // List
 type ListRequest struct {
-	// ListOptions options for a ListRequest.
-	ListOptions          *v1.ListOptions `protobuf:"bytes,1,opt,name=listOptions,proto3" json:"listOptions,omitempty"`
+	// core_v1.ListOptions
+	Options              *v1.ListOptions `protobuf:"bytes,1,opt,name=options,proto3" json:"options,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
 	XXX_sizecache        int32           `json:"-"`
 }
@@ -549,7 +597,7 @@ type ListRequest struct {
 func (m *ListRequest) Reset()      { *m = ListRequest{} }
 func (*ListRequest) ProtoMessage() {}
 func (*ListRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2349df664540f6f4, []int{9}
+	return fileDescriptor_2349df664540f6f4, []int{10}
 }
 func (m *ListRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -578,26 +626,24 @@ func (m *ListRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ListRequest proto.InternalMessageInfo
 
-func (m *ListRequest) GetListOptions() *v1.ListOptions {
+func (m *ListRequest) GetOptions() *v1.ListOptions {
 	if m != nil {
-		return m.ListOptions
+		return m.Options
 	}
 	return nil
 }
 
 type ListResponse struct {
 	// Trigger list.
-	Triggers []*Trigger `protobuf:"bytes,1,rep,name=triggers,proto3" json:"triggers,omitempty"`
-	// Error object.
-	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
+	TriggerList          *TriggerList `protobuf:"bytes,1,opt,name=triggerList,proto3" json:"triggerList,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}     `json:"-"`
+	XXX_sizecache        int32        `json:"-"`
 }
 
 func (m *ListResponse) Reset()      { *m = ListResponse{} }
 func (*ListResponse) ProtoMessage() {}
 func (*ListResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2349df664540f6f4, []int{10}
+	return fileDescriptor_2349df664540f6f4, []int{11}
 }
 func (m *ListResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -626,87 +672,34 @@ func (m *ListResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ListResponse proto.InternalMessageInfo
 
-func (m *ListResponse) GetTriggers() []*Trigger {
+func (m *ListResponse) GetTriggerList() *TriggerList {
 	if m != nil {
-		return m.Triggers
+		return m.TriggerList
 	}
 	return nil
 }
 
-func (m *ListResponse) GetError() *v1.Error {
-	if m != nil {
-		return m.Error
-	}
-	return nil
-}
-
-// Add
-type AddRequest struct {
+// Create
+type CreateRequest struct {
+	// core_v1.CreateOptions
+	Options *v1.CreateOptions `protobuf:"bytes,1,opt,name=options,proto3" json:"options,omitempty"`
 	// Trigger object.
-	Task                 *Trigger `protobuf:"bytes,1,opt,name=task,proto3" json:"task,omitempty"`
+	Trigger              *Trigger `protobuf:"bytes,2,opt,name=trigger,proto3" json:"trigger,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
 
-func (m *AddRequest) Reset()      { *m = AddRequest{} }
-func (*AddRequest) ProtoMessage() {}
-func (*AddRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2349df664540f6f4, []int{11}
-}
-func (m *AddRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *AddRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_AddRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *AddRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AddRequest.Merge(m, src)
-}
-func (m *AddRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *AddRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_AddRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_AddRequest proto.InternalMessageInfo
-
-func (m *AddRequest) GetTask() *Trigger {
-	if m != nil {
-		return m.Task
-	}
-	return nil
-}
-
-type AddResponse struct {
-	// Trigger object.
-	Task *Trigger `protobuf:"bytes,1,opt,name=task,proto3" json:"task,omitempty"`
-	// Error object.
-	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
-}
-
-func (m *AddResponse) Reset()      { *m = AddResponse{} }
-func (*AddResponse) ProtoMessage() {}
-func (*AddResponse) Descriptor() ([]byte, []int) {
+func (m *CreateRequest) Reset()      { *m = CreateRequest{} }
+func (*CreateRequest) ProtoMessage() {}
+func (*CreateRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_2349df664540f6f4, []int{12}
 }
-func (m *AddResponse) XXX_Unmarshal(b []byte) error {
+func (m *CreateRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *AddResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *CreateRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_AddResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_CreateRequest.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalTo(b)
@@ -716,36 +709,84 @@ func (m *AddResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) 
 		return b[:n], nil
 	}
 }
-func (m *AddResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AddResponse.Merge(m, src)
+func (m *CreateRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateRequest.Merge(m, src)
 }
-func (m *AddResponse) XXX_Size() int {
+func (m *CreateRequest) XXX_Size() int {
 	return m.Size()
 }
-func (m *AddResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_AddResponse.DiscardUnknown(m)
+func (m *CreateRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_AddResponse proto.InternalMessageInfo
+var xxx_messageInfo_CreateRequest proto.InternalMessageInfo
 
-func (m *AddResponse) GetTask() *Trigger {
+func (m *CreateRequest) GetOptions() *v1.CreateOptions {
 	if m != nil {
-		return m.Task
+		return m.Options
 	}
 	return nil
 }
 
-func (m *AddResponse) GetError() *v1.Error {
+func (m *CreateRequest) GetTrigger() *Trigger {
 	if m != nil {
-		return m.Error
+		return m.Trigger
+	}
+	return nil
+}
+
+type CreateResponse struct {
+	// Trigger object.
+	Trigger              *Trigger `protobuf:"bytes,1,opt,name=trigger,proto3" json:"trigger,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *CreateResponse) Reset()      { *m = CreateResponse{} }
+func (*CreateResponse) ProtoMessage() {}
+func (*CreateResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2349df664540f6f4, []int{13}
+}
+func (m *CreateResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CreateResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_CreateResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalTo(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *CreateResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateResponse.Merge(m, src)
+}
+func (m *CreateResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *CreateResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateResponse proto.InternalMessageInfo
+
+func (m *CreateResponse) GetTrigger() *Trigger {
+	if m != nil {
+		return m.Trigger
 	}
 	return nil
 }
 
 // Update
 type UpdateRequest struct {
+	// core_v1.UpdateOptions
+	Options *v1.UpdateOptions `protobuf:"bytes,1,opt,name=options,proto3" json:"options,omitempty"`
 	// Trigger object.
-	Task                 *Trigger `protobuf:"bytes,1,opt,name=task,proto3" json:"task,omitempty"`
+	Trigger              *Trigger `protobuf:"bytes,2,opt,name=trigger,proto3" json:"trigger,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
@@ -753,7 +794,7 @@ type UpdateRequest struct {
 func (m *UpdateRequest) Reset()      { *m = UpdateRequest{} }
 func (*UpdateRequest) ProtoMessage() {}
 func (*UpdateRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2349df664540f6f4, []int{13}
+	return fileDescriptor_2349df664540f6f4, []int{14}
 }
 func (m *UpdateRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -782,26 +823,31 @@ func (m *UpdateRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_UpdateRequest proto.InternalMessageInfo
 
-func (m *UpdateRequest) GetTask() *Trigger {
+func (m *UpdateRequest) GetOptions() *v1.UpdateOptions {
 	if m != nil {
-		return m.Task
+		return m.Options
+	}
+	return nil
+}
+
+func (m *UpdateRequest) GetTrigger() *Trigger {
+	if m != nil {
+		return m.Trigger
 	}
 	return nil
 }
 
 type UpdateResponse struct {
 	// Trigger object.
-	Task *Trigger `protobuf:"bytes,1,opt,name=task,proto3" json:"task,omitempty"`
-	// Error object.
-	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
+	Trigger              *Trigger `protobuf:"bytes,1,opt,name=trigger,proto3" json:"trigger,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
 func (m *UpdateResponse) Reset()      { *m = UpdateResponse{} }
 func (*UpdateResponse) ProtoMessage() {}
 func (*UpdateResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2349df664540f6f4, []int{14}
+	return fileDescriptor_2349df664540f6f4, []int{15}
 }
 func (m *UpdateResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -830,24 +876,19 @@ func (m *UpdateResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_UpdateResponse proto.InternalMessageInfo
 
-func (m *UpdateResponse) GetTask() *Trigger {
+func (m *UpdateResponse) GetTrigger() *Trigger {
 	if m != nil {
-		return m.Task
-	}
-	return nil
-}
-
-func (m *UpdateResponse) GetError() *v1.Error {
-	if m != nil {
-		return m.Error
+		return m.Trigger
 	}
 	return nil
 }
 
 // Delete
 type DeleteRequest struct {
+	// core_v1.DeleteOptions
+	Options *v1.DeleteOptions `protobuf:"bytes,1,opt,name=options,proto3" json:"options,omitempty"`
 	// Trigger object.
-	Task                 *Trigger `protobuf:"bytes,1,opt,name=task,proto3" json:"task,omitempty"`
+	Trigger              *Trigger `protobuf:"bytes,2,opt,name=trigger,proto3" json:"trigger,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
@@ -855,7 +896,7 @@ type DeleteRequest struct {
 func (m *DeleteRequest) Reset()      { *m = DeleteRequest{} }
 func (*DeleteRequest) ProtoMessage() {}
 func (*DeleteRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2349df664540f6f4, []int{15}
+	return fileDescriptor_2349df664540f6f4, []int{16}
 }
 func (m *DeleteRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -884,26 +925,31 @@ func (m *DeleteRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_DeleteRequest proto.InternalMessageInfo
 
-func (m *DeleteRequest) GetTask() *Trigger {
+func (m *DeleteRequest) GetOptions() *v1.DeleteOptions {
 	if m != nil {
-		return m.Task
+		return m.Options
+	}
+	return nil
+}
+
+func (m *DeleteRequest) GetTrigger() *Trigger {
+	if m != nil {
+		return m.Trigger
 	}
 	return nil
 }
 
 type DeleteResponse struct {
 	// Trigger object.
-	Task *Trigger `protobuf:"bytes,1,opt,name=task,proto3" json:"task,omitempty"`
-	// Error object.
-	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
+	Trigger              *Trigger `protobuf:"bytes,1,opt,name=trigger,proto3" json:"trigger,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
 func (m *DeleteResponse) Reset()      { *m = DeleteResponse{} }
 func (*DeleteResponse) ProtoMessage() {}
 func (*DeleteResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2349df664540f6f4, []int{16}
+	return fileDescriptor_2349df664540f6f4, []int{17}
 }
 func (m *DeleteResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -932,24 +978,17 @@ func (m *DeleteResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_DeleteResponse proto.InternalMessageInfo
 
-func (m *DeleteResponse) GetTask() *Trigger {
+func (m *DeleteResponse) GetTrigger() *Trigger {
 	if m != nil {
-		return m.Task
-	}
-	return nil
-}
-
-func (m *DeleteResponse) GetError() *v1.Error {
-	if m != nil {
-		return m.Error
+		return m.Trigger
 	}
 	return nil
 }
 
 // Watch
 type WatchRequest struct {
-	// WatchOptions options for WatchRequest.
-	WatchOptions         *v1.WatchOptions `protobuf:"bytes,1,opt,name=watchOptions,proto3" json:"watchOptions,omitempty"`
+	// core_v1.WatchOptions
+	Options              *v1.WatchOptions `protobuf:"bytes,1,opt,name=options,proto3" json:"options,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
 	XXX_sizecache        int32            `json:"-"`
 }
@@ -957,7 +996,7 @@ type WatchRequest struct {
 func (m *WatchRequest) Reset()      { *m = WatchRequest{} }
 func (*WatchRequest) ProtoMessage() {}
 func (*WatchRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2349df664540f6f4, []int{17}
+	return fileDescriptor_2349df664540f6f4, []int{18}
 }
 func (m *WatchRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -986,9 +1025,9 @@ func (m *WatchRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_WatchRequest proto.InternalMessageInfo
 
-func (m *WatchRequest) GetWatchOptions() *v1.WatchOptions {
+func (m *WatchRequest) GetOptions() *v1.WatchOptions {
 	if m != nil {
-		return m.WatchOptions
+		return m.Options
 	}
 	return nil
 }
@@ -997,17 +1036,15 @@ type WatchResponse struct {
 	// Trigger info for watch response.
 	Event *v1alpha.Event `protobuf:"bytes,1,opt,name=event,proto3" json:"event,omitempty"`
 	// Trigger for watch response.
-	Task *Trigger `protobuf:"bytes,2,opt,name=task,proto3" json:"task,omitempty"`
-	// Error object.
-	Error                *v1.Error `protobuf:"bytes,3,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
+	Trigger              *Trigger `protobuf:"bytes,2,opt,name=trigger,proto3" json:"trigger,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
 }
 
 func (m *WatchResponse) Reset()      { *m = WatchResponse{} }
 func (*WatchResponse) ProtoMessage() {}
 func (*WatchResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2349df664540f6f4, []int{18}
+	return fileDescriptor_2349df664540f6f4, []int{19}
 }
 func (m *WatchResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1043,22 +1080,16 @@ func (m *WatchResponse) GetEvent() *v1alpha.Event {
 	return nil
 }
 
-func (m *WatchResponse) GetTask() *Trigger {
+func (m *WatchResponse) GetTrigger() *Trigger {
 	if m != nil {
-		return m.Task
-	}
-	return nil
-}
-
-func (m *WatchResponse) GetError() *v1.Error {
-	if m != nil {
-		return m.Error
+		return m.Trigger
 	}
 	return nil
 }
 
 func init() {
 	proto.RegisterType((*Trigger)(nil), "triggers.v1alpha.Trigger")
+	proto.RegisterType((*TriggerList)(nil), "triggers.v1alpha.TriggerList")
 	proto.RegisterType((*TriggerSpec)(nil), "triggers.v1alpha.TriggerSpec")
 	proto.RegisterType((*Step)(nil), "triggers.v1alpha.Step")
 	proto.RegisterType((*RunOptions)(nil), "triggers.v1alpha.RunOptions")
@@ -1069,8 +1100,8 @@ func init() {
 	proto.RegisterType((*GetResponse)(nil), "triggers.v1alpha.GetResponse")
 	proto.RegisterType((*ListRequest)(nil), "triggers.v1alpha.ListRequest")
 	proto.RegisterType((*ListResponse)(nil), "triggers.v1alpha.ListResponse")
-	proto.RegisterType((*AddRequest)(nil), "triggers.v1alpha.AddRequest")
-	proto.RegisterType((*AddResponse)(nil), "triggers.v1alpha.AddResponse")
+	proto.RegisterType((*CreateRequest)(nil), "triggers.v1alpha.CreateRequest")
+	proto.RegisterType((*CreateResponse)(nil), "triggers.v1alpha.CreateResponse")
 	proto.RegisterType((*UpdateRequest)(nil), "triggers.v1alpha.UpdateRequest")
 	proto.RegisterType((*UpdateResponse)(nil), "triggers.v1alpha.UpdateResponse")
 	proto.RegisterType((*DeleteRequest)(nil), "triggers.v1alpha.DeleteRequest")
@@ -1084,63 +1115,67 @@ func init() {
 }
 
 var fileDescriptor_2349df664540f6f4 = []byte{
-	// 887 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x56, 0x4f, 0x6f, 0xdc, 0x44,
-	0x14, 0x8f, 0xe3, 0xdd, 0x65, 0xf3, 0x36, 0xad, 0xd0, 0x10, 0xc2, 0x76, 0xa1, 0x6e, 0x64, 0x71,
-	0x88, 0x44, 0xeb, 0x6d, 0x92, 0x52, 0x29, 0x80, 0x90, 0x9c, 0x12, 0x85, 0x3f, 0x45, 0x95, 0xa6,
-	0x41, 0x15, 0xdc, 0x66, 0xed, 0x17, 0xc7, 0xc4, 0x6b, 0xbb, 0x9e, 0xd9, 0x40, 0x38, 0xf1, 0x05,
-	0x90, 0xe0, 0x5b, 0xf0, 0x11, 0xb8, 0xc1, 0xb1, 0xdc, 0x38, 0x72, 0x24, 0xcb, 0x97, 0xe0, 0x88,
-	0x3c, 0x33, 0xfe, 0xb3, 0x89, 0xb7, 0x4a, 0x52, 0xe5, 0xe6, 0x37, 0xbf, 0xdf, 0xfb, 0xcd, 0xef,
-	0x3d, 0xbf, 0xb7, 0x5e, 0x78, 0x14, 0x84, 0xe2, 0x70, 0x32, 0x72, 0xbc, 0x64, 0x3c, 0x0c, 0x58,
-	0x84, 0xdf, 0x67, 0x62, 0x88, 0x3e, 0xc6, 0x5e, 0x12, 0x1f, 0x8c, 0x83, 0xb1, 0x18, 0xa6, 0x47,
-	0xc1, 0x90, 0xa5, 0x21, 0x1f, 0x8a, 0x2c, 0x0c, 0x02, 0xcc, 0xf8, 0xf0, 0x78, 0x83, 0x45, 0xe9,
-	0x21, 0xcb, 0x4f, 0x9d, 0x34, 0x4b, 0x44, 0x42, 0x5e, 0x2f, 0x30, 0x47, 0x63, 0x83, 0x7b, 0x75,
-	0xd9, 0x24, 0x48, 0x86, 0x92, 0x38, 0x9a, 0x1c, 0xc8, 0x48, 0x06, 0xf2, 0x49, 0x09, 0x0c, 0x6e,
-	0x05, 0x49, 0x12, 0x44, 0x58, 0xb1, 0x58, 0x7c, 0xa2, 0xa1, 0x0f, 0x2e, 0x6c, 0xd0, 0x4b, 0x32,
-	0x1c, 0x1e, 0x6f, 0x54, 0xbe, 0x06, 0xee, 0x85, 0x73, 0xf1, 0x18, 0x63, 0xd1, 0x50, 0x9a, 0xfd,
-	0x1c, 0x5e, 0xdb, 0x57, 0xc5, 0x91, 0x2d, 0xe8, 0x8e, 0x51, 0x30, 0x9f, 0x09, 0xd6, 0x37, 0xd6,
-	0x8c, 0xf5, 0xde, 0xe6, 0x5b, 0x4e, 0x7e, 0xa7, 0x73, 0xbc, 0xe1, 0x3c, 0x19, 0x7d, 0x8b, 0x9e,
-	0xf8, 0x52, 0xc3, 0xb4, 0x24, 0x92, 0x0d, 0x68, 0xf1, 0x14, 0xbd, 0xfe, 0xa2, 0x4c, 0xb8, 0xed,
-	0x9c, 0xed, 0x94, 0xa3, 0xd5, 0x9f, 0xa6, 0xe8, 0x51, 0x49, 0xb5, 0x4f, 0xa0, 0x57, 0x3b, 0x24,
-	0x1f, 0x01, 0x64, 0x93, 0xf8, 0x49, 0x2a, 0xc2, 0x24, 0xe6, 0xfa, 0xe2, 0x77, 0xce, 0xeb, 0xd0,
-	0x92, 0x43, 0x6b, 0x7c, 0x72, 0x17, 0xda, 0x5c, 0x60, 0xca, 0xfb, 0x8b, 0x6b, 0xe6, 0x7a, 0x6f,
-	0x73, 0xf5, 0x7c, 0xe2, 0x53, 0x81, 0x29, 0x55, 0x24, 0xfb, 0x53, 0x68, 0xe5, 0x21, 0x21, 0xd0,
-	0x8a, 0xd9, 0x18, 0xe5, 0x6d, 0x4b, 0x54, 0x3e, 0x93, 0xbb, 0x33, 0x95, 0xf4, 0xcf, 0x0b, 0xb9,
-	0x5e, 0x7e, 0xa5, 0x2e, 0xe2, 0x27, 0x03, 0xa0, 0xb2, 0x94, 0x0b, 0xf2, 0x93, 0xd8, 0x93, 0x82,
-	0x5d, 0x2a, 0x9f, 0xc9, 0x36, 0x2c, 0x71, 0xcc, 0x42, 0x16, 0x85, 0x3f, 0xa0, 0x56, 0x7d, 0xbb,
-	0xc1, 0x5e, 0x41, 0xa1, 0x15, 0x9b, 0xdc, 0x87, 0x8e, 0x60, 0x59, 0x80, 0xa2, 0x6f, 0xce, 0x73,
-	0xb3, 0x2f, 0x71, 0xaa, 0x79, 0xf6, 0xd7, 0xb0, 0x54, 0x2a, 0x91, 0x15, 0x68, 0x7b, 0xc9, 0x24,
-	0x16, 0xd2, 0x8e, 0x49, 0x55, 0x40, 0x1e, 0xc2, 0xea, 0x01, 0x0b, 0x23, 0xf7, 0x40, 0x60, 0xe6,
-	0x46, 0x91, 0x12, 0xe0, 0x94, 0xc5, 0xd2, 0x5c, 0x97, 0xce, 0x41, 0xed, 0x07, 0xd0, 0x51, 0x51,
-	0xae, 0x7b, 0x98, 0x70, 0x91, 0xbf, 0x25, 0x73, 0x7d, 0x89, 0xaa, 0x20, 0x3f, 0x8d, 0xc2, 0x71,
-	0x28, 0xa4, 0x8c, 0x49, 0x55, 0x60, 0xff, 0x69, 0x40, 0x47, 0x75, 0x8c, 0xac, 0x42, 0x87, 0xc9,
-	0x27, 0xdd, 0x6f, 0x1d, 0x91, 0x2d, 0x00, 0x2f, 0x89, 0xfd, 0x50, 0xbd, 0x79, 0xd5, 0xa1, 0x37,
-	0xca, 0x91, 0x7b, 0x54, 0x42, 0xb4, 0x46, 0x3b, 0x33, 0x2e, 0xe6, 0x25, 0xc7, 0xe5, 0x01, 0x40,
-	0xca, 0x32, 0x36, 0x46, 0x81, 0x19, 0xef, 0xb7, 0xe4, 0xcc, 0xac, 0x38, 0x6a, 0x3b, 0x9d, 0x62,
-	0x3b, 0x1d, 0x37, 0x3e, 0xa1, 0x35, 0x9e, 0xed, 0x02, 0xec, 0xa1, 0xa0, 0xf8, 0x7c, 0x82, 0x5c,
-	0xe4, 0xb6, 0x03, 0x14, 0xb3, 0x03, 0x5b, 0xd9, 0xde, 0x2b, 0x21, 0x5a, 0xa3, 0xd9, 0x23, 0xe8,
-	0x49, 0x09, 0x9e, 0x26, 0x31, 0x47, 0x72, 0x0f, 0x5a, 0x82, 0xf1, 0x23, 0x9d, 0x7d, 0x6b, 0xee,
-	0xda, 0x50, 0x49, 0x23, 0xef, 0x42, 0x1b, 0xb3, 0x2c, 0xc9, 0x74, 0x93, 0x6e, 0x96, 0xb7, 0xed,
-	0xe6, 0xa7, 0x54, 0x81, 0xf6, 0x2e, 0xf4, 0x1e, 0x87, 0xbc, 0xf4, 0xf9, 0x10, 0x7a, 0x51, 0xc8,
-	0xcf, 0x18, 0x5d, 0x29, 0x53, 0x1f, 0x57, 0x18, 0xad, 0x13, 0xed, 0x23, 0x58, 0x56, 0x32, 0xda,
-	0xeb, 0xfb, 0xd0, 0x2d, 0xec, 0xc9, 0x17, 0xff, 0x52, 0xbf, 0x25, 0xf5, 0x82, 0x9e, 0x3f, 0x04,
-	0x70, 0x7d, 0xbf, 0xb0, 0x7c, 0xb9, 0xb6, 0xe4, 0x4d, 0x95, 0xc9, 0xd7, 0xd9, 0xd4, 0x8f, 0xe1,
-	0xc6, 0x57, 0xa9, 0xcf, 0x04, 0x5e, 0xd1, 0x23, 0xc2, 0xcd, 0x22, 0xff, 0x9a, 0x6d, 0x7e, 0x82,
-	0x11, 0xbe, 0x8a, 0xcd, 0x22, 0xff, 0x3a, 0x6d, 0x7e, 0x06, 0xcb, 0xcf, 0x98, 0xf0, 0x0e, 0x0b,
-	0x97, 0xdb, 0xb0, 0xfc, 0x5d, 0x1e, 0xcf, 0x0e, 0xe9, 0x9b, 0x65, 0xf2, 0xb3, 0x1a, 0x48, 0x67,
-	0xa8, 0xf6, 0x2f, 0x06, 0xdc, 0xd0, 0x5a, 0xda, 0xf1, 0x7b, 0xd0, 0x96, 0xdf, 0xb9, 0x52, 0x45,
-	0x7d, 0xf5, 0x4a, 0xc3, 0xbb, 0x79, 0x48, 0x15, 0xa7, 0x2c, 0x6f, 0xf1, 0x92, 0xe5, 0x99, 0x2f,
-	0x29, 0x6f, 0xf3, 0x77, 0x13, 0xba, 0xfb, 0xc5, 0x02, 0xec, 0x80, 0xb9, 0x87, 0x82, 0x34, 0xfc,
-	0x38, 0x55, 0x3f, 0x26, 0x83, 0xdb, 0x73, 0x50, 0x5d, 0xd2, 0x2e, 0xb4, 0xf2, 0x5d, 0x24, 0x0d,
-	0xb4, 0xda, 0xaa, 0x0f, 0xac, 0x79, 0xb0, 0x96, 0xd9, 0x01, 0xd3, 0xf5, 0xfd, 0x26, 0x2b, 0xd5,
-	0xf2, 0x35, 0x59, 0xa9, 0x6f, 0xd7, 0x17, 0xd0, 0x51, 0x83, 0x4c, 0xee, 0x9c, 0x27, 0xce, 0xac,
-	0xc8, 0x60, 0x6d, 0x3e, 0xa1, 0x12, 0x53, 0xe3, 0xd6, 0x24, 0x36, 0x33, 0xc8, 0x4d, 0x62, 0x67,
-	0x26, 0xf5, 0x73, 0x68, 0xcb, 0x41, 0x20, 0x0d, 0x6d, 0xa8, 0x4f, 0xdb, 0xe0, 0xce, 0x5c, 0x5c,
-	0x29, 0xdd, 0x37, 0x76, 0x82, 0x17, 0xa7, 0x96, 0xf1, 0xf7, 0xa9, 0xb5, 0xf0, 0xdf, 0xa9, 0x65,
-	0xfc, 0x38, 0xb5, 0x8c, 0x5f, 0xa7, 0x96, 0xf1, 0xdb, 0xd4, 0x5a, 0xf8, 0x63, 0x6a, 0x19, 0x2f,
-	0xa6, 0x96, 0xf1, 0xd7, 0xd4, 0x32, 0xfe, 0x99, 0x5a, 0xc6, 0xcf, 0xff, 0x5a, 0x0b, 0xdf, 0x6c,
-	0x5f, 0xf9, 0xdf, 0xe5, 0xa8, 0x23, 0xbf, 0x36, 0x5b, 0xff, 0x07, 0x00, 0x00, 0xff, 0xff, 0xcf,
-	0x6d, 0xe9, 0x0e, 0xa1, 0x0a, 0x00, 0x00,
+	// 959 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x96, 0x4d, 0x6f, 0xdc, 0x44,
+	0x18, 0xc7, 0xe3, 0x7d, 0xcb, 0xe6, 0xd9, 0x06, 0xa1, 0x21, 0x84, 0xed, 0x42, 0x9d, 0xc8, 0xa7,
+	0x48, 0x34, 0x76, 0x5e, 0xaa, 0x4a, 0x6d, 0x41, 0xd5, 0x26, 0x44, 0x41, 0x14, 0x14, 0x69, 0x52,
+	0x84, 0xe0, 0x36, 0xf1, 0x4e, 0x1c, 0x53, 0xdb, 0xe3, 0x7a, 0x66, 0xb7, 0x0d, 0x5c, 0xf8, 0x02,
+	0x48, 0x7c, 0x0c, 0x3e, 0x02, 0x47, 0x8e, 0x81, 0x13, 0x47, 0x6e, 0x90, 0xe5, 0x4b, 0x70, 0x44,
+	0x9e, 0x19, 0xbf, 0xec, 0xae, 0x17, 0x6d, 0x9b, 0x9e, 0xe2, 0xf1, 0xf3, 0x7f, 0xfe, 0xcf, 0x6f,
+	0x9f, 0x79, 0x66, 0x1c, 0x38, 0xf4, 0x7c, 0x71, 0x31, 0x3c, 0xb3, 0x5d, 0x16, 0x3a, 0x1e, 0x09,
+	0xe8, 0xcb, 0x44, 0x38, 0x74, 0x40, 0x23, 0x97, 0x45, 0xe7, 0xa1, 0x17, 0x0a, 0x27, 0x7e, 0xe6,
+	0x39, 0x24, 0xf6, 0xb9, 0x23, 0x12, 0xdf, 0xf3, 0x68, 0xc2, 0x9d, 0xd1, 0x2e, 0x09, 0xe2, 0x0b,
+	0x92, 0xbe, 0xb5, 0xe3, 0x84, 0x09, 0x86, 0xde, 0xce, 0x62, 0xb6, 0x8e, 0xf5, 0xb6, 0xcb, 0xb6,
+	0xcc, 0x63, 0x8e, 0x14, 0x9e, 0x0d, 0xcf, 0xe5, 0x4a, 0x2e, 0xe4, 0x93, 0x32, 0xe8, 0xdd, 0xf6,
+	0x18, 0xf3, 0x02, 0x5a, 0xa8, 0x48, 0x74, 0xa9, 0x43, 0xc7, 0x8b, 0x00, 0x7a, 0x49, 0xec, 0x3a,
+	0x71, 0x30, 0xf4, 0xfc, 0x88, 0x4b, 0x5a, 0x9a, 0x8c, 0x68, 0xe2, 0xa8, 0x3f, 0xda, 0xe8, 0x7e,
+	0xc9, 0x28, 0x7c, 0xe1, 0x8b, 0x67, 0xec, 0x85, 0xe3, 0xb1, 0x6d, 0x19, 0xdc, 0x1e, 0x91, 0xc0,
+	0x1f, 0x10, 0xc1, 0xd2, 0x9f, 0x97, 0x3d, 0xea, 0xbc, 0x87, 0x0b, 0x77, 0xc8, 0x65, 0x09, 0x75,
+	0x46, 0xbb, 0x45, 0x63, 0x7a, 0xfd, 0x85, 0x73, 0xe9, 0x88, 0x46, 0xa2, 0xa2, 0xb7, 0xd6, 0x4b,
+	0x58, 0x7e, 0xaa, 0xba, 0x8b, 0xf6, 0xa1, 0x1d, 0x52, 0x41, 0x06, 0x44, 0x90, 0xae, 0xb1, 0x69,
+	0x6c, 0x75, 0xf6, 0xde, 0xb3, 0xd3, 0x9a, 0xf6, 0x68, 0xd7, 0x3e, 0x39, 0xfb, 0x96, 0xba, 0xe2,
+	0x0b, 0x1d, 0xc6, 0xb9, 0x10, 0xed, 0x42, 0x83, 0xc7, 0xd4, 0xed, 0xd6, 0x64, 0xc2, 0x1d, 0x7b,
+	0x7a, 0xab, 0x6c, 0xed, 0x7e, 0x1a, 0x53, 0x17, 0x4b, 0xe9, 0xc3, 0xe6, 0xef, 0xa7, 0xb5, 0xb6,
+	0x61, 0x7d, 0x0f, 0x1d, 0x1d, 0xfb, 0xdc, 0xe7, 0x02, 0x3d, 0x5a, 0xb8, 0xfa, 0x41, 0x6b, 0xfc,
+	0xd7, 0x46, 0x6d, 0xd3, 0x28, 0x51, 0x38, 0xd0, 0xf4, 0x05, 0x0d, 0x79, 0xb7, 0xb6, 0x59, 0xdf,
+	0xea, 0xec, 0xdd, 0x9e, 0x8b, 0x81, 0x95, 0xce, 0xba, 0xcc, 0x8b, 0xa7, 0x60, 0xe8, 0x23, 0x80,
+	0x64, 0x18, 0x9d, 0xc4, 0xc2, 0x67, 0x11, 0xd7, 0xe5, 0x3f, 0x98, 0x35, 0xc1, 0xb9, 0x06, 0x97,
+	0xf4, 0xe8, 0x2e, 0x34, 0xb9, 0xa0, 0x71, 0x56, 0x7d, 0x7d, 0x36, 0xf1, 0x54, 0xd0, 0x18, 0x2b,
+	0x91, 0xf5, 0x29, 0x34, 0xd2, 0x25, 0x42, 0xd0, 0x88, 0x48, 0x48, 0x65, 0xb5, 0x15, 0x2c, 0x9f,
+	0xd1, 0xdd, 0x89, 0x6e, 0x76, 0x67, 0x8d, 0xfa, 0x6e, 0x5a, 0x52, 0x35, 0xd2, 0xfa, 0xd1, 0x00,
+	0x28, 0x90, 0x52, 0x43, 0x7e, 0x19, 0xb9, 0xd2, 0xb0, 0x8d, 0xe5, 0x33, 0x7a, 0x00, 0x2b, 0x9c,
+	0x26, 0x3e, 0x09, 0xfc, 0xef, 0xa8, 0x76, 0x7d, 0xbf, 0x02, 0x2f, 0x93, 0xe0, 0x42, 0x8d, 0x76,
+	0xa0, 0x25, 0x48, 0xe2, 0x51, 0xd1, 0xad, 0xcf, 0xa3, 0x79, 0x2a, 0xe3, 0x58, 0xeb, 0xac, 0xaf,
+	0x61, 0x25, 0x77, 0x42, 0x6b, 0xd0, 0x74, 0xd9, 0x30, 0x12, 0x12, 0xa7, 0x8e, 0xd5, 0x02, 0xdd,
+	0x87, 0xf5, 0x73, 0xe2, 0x07, 0xfd, 0x73, 0x41, 0x93, 0x7e, 0x10, 0x28, 0x03, 0x8e, 0x49, 0x24,
+	0xe1, 0xda, 0x78, 0x4e, 0xd4, 0xba, 0x07, 0x2d, 0xb5, 0x4a, 0x7d, 0x2f, 0x18, 0x17, 0xe9, 0x2e,
+	0xd5, 0xb7, 0x56, 0xb0, 0x5a, 0xa4, 0x6f, 0x03, 0x3f, 0xf4, 0x85, 0xb4, 0xa9, 0x63, 0xb5, 0xb0,
+	0x7e, 0x33, 0xa0, 0xa5, 0x3a, 0x86, 0xd6, 0xa1, 0x45, 0xe4, 0x93, 0xee, 0xb7, 0x5e, 0xa1, 0x7d,
+	0x00, 0x97, 0x45, 0x03, 0x5f, 0xed, 0xbc, 0xea, 0xd0, 0x3b, 0xf9, 0xe0, 0x1d, 0xe6, 0x21, 0x5c,
+	0x92, 0x4d, 0x8d, 0x4b, 0xfd, 0x15, 0xc7, 0xe5, 0x1e, 0x40, 0x4c, 0x12, 0x12, 0x52, 0x41, 0x13,
+	0xde, 0x6d, 0xc8, 0x99, 0x59, 0xb3, 0xd5, 0x15, 0x65, 0x67, 0x57, 0x94, 0xdd, 0x8f, 0x2e, 0x71,
+	0x49, 0x67, 0x3d, 0x02, 0x38, 0xa6, 0x02, 0xd3, 0xe7, 0x43, 0xca, 0x05, 0xda, 0x86, 0x65, 0x36,
+	0x31, 0xad, 0x05, 0xf3, 0x31, 0x15, 0x59, 0xd5, 0x4c, 0x63, 0x1d, 0x40, 0x47, 0x26, 0xf3, 0x98,
+	0x45, 0x9c, 0xa2, 0x7d, 0x58, 0xd6, 0xb0, 0x3a, 0xfb, 0x7f, 0x0e, 0x4c, 0xa6, 0xb4, 0x3e, 0x86,
+	0x4e, 0x7a, 0x50, 0x33, 0x02, 0x7b, 0x9a, 0x60, 0x2d, 0x27, 0x48, 0x65, 0x33, 0x08, 0x27, 0x70,
+	0x4b, 0xa5, 0x6b, 0x86, 0xc7, 0xd0, 0x11, 0xc5, 0xf1, 0xd7, 0x1e, 0xf3, 0xef, 0x0f, 0x99, 0x5b,
+	0xce, 0xb0, 0x46, 0xb0, 0x7a, 0x98, 0x50, 0x22, 0x68, 0x46, 0xb4, 0x33, 0x4d, 0xb4, 0x5e, 0xec,
+	0xa3, 0x14, 0x4e, 0x33, 0x95, 0xfb, 0x50, 0x5b, 0xb8, 0x0f, 0x47, 0xf0, 0x56, 0x56, 0xf7, 0x26,
+	0xed, 0x1c, 0xc1, 0xea, 0x97, 0xf1, 0x60, 0x31, 0x7c, 0x25, 0x7c, 0x63, 0xf8, 0x59, 0xdd, 0x1b,
+	0xe2, 0x7f, 0x42, 0x03, 0xba, 0x10, 0xbe, 0x12, 0xbe, 0x31, 0xfc, 0xac, 0xee, 0x4d, 0xf0, 0x1f,
+	0xc3, 0xad, 0xaf, 0x88, 0x70, 0x2f, 0x32, 0x7a, 0x67, 0x9a, 0xfe, 0xdd, 0x9c, 0x5e, 0xea, 0x66,
+	0xc6, 0xf9, 0x39, 0xac, 0x6a, 0x03, 0x8d, 0xf1, 0x21, 0x34, 0xe5, 0x47, 0x36, 0xcf, 0x57, 0x9f,
+	0xdc, 0x1c, 0xe1, 0x28, 0x5d, 0x62, 0xa5, 0x79, 0xad, 0x9f, 0xbe, 0x77, 0x55, 0x87, 0xb6, 0x7e,
+	0xc9, 0xd1, 0x01, 0xd4, 0x8f, 0xa9, 0x40, 0x15, 0xb7, 0x4e, 0x71, 0x4b, 0xf4, 0xee, 0xcc, 0x89,
+	0x6a, 0xe4, 0x23, 0x68, 0xc8, 0x4f, 0x6f, 0x85, 0xac, 0x74, 0xd2, 0x7b, 0xe6, 0xbc, 0xb0, 0xb6,
+	0x79, 0x02, 0x2d, 0x75, 0x20, 0xd0, 0xc6, 0xac, 0x72, 0xe2, 0x88, 0xf6, 0x36, 0xe7, 0x0b, 0x0a,
+	0x33, 0x35, 0x9e, 0x55, 0x66, 0x13, 0x07, 0xa6, 0xca, 0x6c, 0x6a, 0xb2, 0x9f, 0x40, 0x4b, 0x0d,
+	0x4b, 0x95, 0xd9, 0xc4, 0xf8, 0x56, 0x99, 0x4d, 0xcd, 0xd9, 0x67, 0xd0, 0x94, 0x3b, 0x8e, 0x2a,
+	0xfa, 0x51, 0x9e, 0xa5, 0xde, 0xc6, 0xdc, 0xb8, 0x72, 0xda, 0x31, 0x0e, 0xbc, 0xab, 0x6b, 0xd3,
+	0xf8, 0xf3, 0xda, 0x5c, 0xfa, 0xf7, 0xda, 0x34, 0x7e, 0x18, 0x9b, 0xc6, 0xcf, 0x63, 0xd3, 0xf8,
+	0x65, 0x6c, 0x2e, 0xfd, 0x3a, 0x36, 0x8d, 0xab, 0xb1, 0x69, 0xfc, 0x31, 0x36, 0x8d, 0xbf, 0xc7,
+	0xa6, 0xf1, 0xd3, 0x3f, 0xe6, 0xd2, 0x37, 0x0f, 0x5e, 0xfb, 0x9f, 0xe8, 0xb3, 0x96, 0xfc, 0x9e,
+	0xec, 0xff, 0x17, 0x00, 0x00, 0xff, 0xff, 0xee, 0xe3, 0x7c, 0x07, 0x88, 0x0b, 0x00, 0x00,
 }
 
 func (this *Trigger) Equal(that interface{}) bool {
@@ -1167,6 +1202,38 @@ func (this *Trigger) Equal(that interface{}) bool {
 	}
 	if !this.Spec.Equal(that1.Spec) {
 		return false
+	}
+	return true
+}
+func (this *TriggerList) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*TriggerList)
+	if !ok {
+		that2, ok := that.(TriggerList)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Metadata.Equal(that1.Metadata) {
+		return false
+	}
+	if len(this.Items) != len(that1.Items) {
+		return false
+	}
+	for i := range this.Items {
+		if !this.Items[i].Equal(that1.Items[i]) {
+			return false
+		}
 	}
 	return true
 }
@@ -1375,7 +1442,7 @@ func (this *GetRequest) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.GetOptions.Equal(that1.GetOptions) {
+	if !this.Options.Equal(that1.Options) {
 		return false
 	}
 	return true
@@ -1399,10 +1466,7 @@ func (this *GetResponse) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.Task.Equal(that1.Task) {
-		return false
-	}
-	if !this.Error.Equal(that1.Error) {
+	if !this.Trigger.Equal(that1.Trigger) {
 		return false
 	}
 	return true
@@ -1426,7 +1490,7 @@ func (this *ListRequest) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.ListOptions.Equal(that1.ListOptions) {
+	if !this.Options.Equal(that1.Options) {
 		return false
 	}
 	return true
@@ -1450,27 +1514,19 @@ func (this *ListResponse) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if len(this.Triggers) != len(that1.Triggers) {
-		return false
-	}
-	for i := range this.Triggers {
-		if !this.Triggers[i].Equal(that1.Triggers[i]) {
-			return false
-		}
-	}
-	if !this.Error.Equal(that1.Error) {
+	if !this.TriggerList.Equal(that1.TriggerList) {
 		return false
 	}
 	return true
 }
-func (this *AddRequest) Equal(that interface{}) bool {
+func (this *CreateRequest) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*AddRequest)
+	that1, ok := that.(*CreateRequest)
 	if !ok {
-		that2, ok := that.(AddRequest)
+		that2, ok := that.(CreateRequest)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1482,19 +1538,22 @@ func (this *AddRequest) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.Task.Equal(that1.Task) {
+	if !this.Options.Equal(that1.Options) {
+		return false
+	}
+	if !this.Trigger.Equal(that1.Trigger) {
 		return false
 	}
 	return true
 }
-func (this *AddResponse) Equal(that interface{}) bool {
+func (this *CreateResponse) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*AddResponse)
+	that1, ok := that.(*CreateResponse)
 	if !ok {
-		that2, ok := that.(AddResponse)
+		that2, ok := that.(CreateResponse)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1506,10 +1565,7 @@ func (this *AddResponse) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.Task.Equal(that1.Task) {
-		return false
-	}
-	if !this.Error.Equal(that1.Error) {
+	if !this.Trigger.Equal(that1.Trigger) {
 		return false
 	}
 	return true
@@ -1533,7 +1589,10 @@ func (this *UpdateRequest) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.Task.Equal(that1.Task) {
+	if !this.Options.Equal(that1.Options) {
+		return false
+	}
+	if !this.Trigger.Equal(that1.Trigger) {
 		return false
 	}
 	return true
@@ -1557,10 +1616,7 @@ func (this *UpdateResponse) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.Task.Equal(that1.Task) {
-		return false
-	}
-	if !this.Error.Equal(that1.Error) {
+	if !this.Trigger.Equal(that1.Trigger) {
 		return false
 	}
 	return true
@@ -1584,7 +1640,10 @@ func (this *DeleteRequest) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.Task.Equal(that1.Task) {
+	if !this.Options.Equal(that1.Options) {
+		return false
+	}
+	if !this.Trigger.Equal(that1.Trigger) {
 		return false
 	}
 	return true
@@ -1608,10 +1667,7 @@ func (this *DeleteResponse) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.Task.Equal(that1.Task) {
-		return false
-	}
-	if !this.Error.Equal(that1.Error) {
+	if !this.Trigger.Equal(that1.Trigger) {
 		return false
 	}
 	return true
@@ -1635,7 +1691,7 @@ func (this *WatchRequest) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.WatchOptions.Equal(that1.WatchOptions) {
+	if !this.Options.Equal(that1.Options) {
 		return false
 	}
 	return true
@@ -1662,10 +1718,7 @@ func (this *WatchResponse) Equal(that interface{}) bool {
 	if !this.Event.Equal(that1.Event) {
 		return false
 	}
-	if !this.Task.Equal(that1.Task) {
-		return false
-	}
-	if !this.Error.Equal(that1.Error) {
+	if !this.Trigger.Equal(that1.Trigger) {
 		return false
 	}
 	return true
@@ -1687,8 +1740,8 @@ type TriggersClient interface {
 	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
 	// List Triggers.
 	List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
-	// Add a Trigger.
-	Add(ctx context.Context, in *AddRequest, opts ...grpc.CallOption) (*AddResponse, error)
+	// Create a Trigger.
+	Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error)
 	// Update a Trigger.
 	Update(ctx context.Context, in *UpdateRequest, opts ...grpc.CallOption) (*UpdateResponse, error)
 	// Delete a Trigger.
@@ -1723,9 +1776,9 @@ func (c *triggersClient) List(ctx context.Context, in *ListRequest, opts ...grpc
 	return out, nil
 }
 
-func (c *triggersClient) Add(ctx context.Context, in *AddRequest, opts ...grpc.CallOption) (*AddResponse, error) {
-	out := new(AddResponse)
-	err := c.cc.Invoke(ctx, "/triggers.v1alpha.Triggers/Add", in, out, opts...)
+func (c *triggersClient) Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error) {
+	out := new(CreateResponse)
+	err := c.cc.Invoke(ctx, "/triggers.v1alpha.Triggers/Create", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1788,8 +1841,8 @@ type TriggersServer interface {
 	Get(context.Context, *GetRequest) (*GetResponse, error)
 	// List Triggers.
 	List(context.Context, *ListRequest) (*ListResponse, error)
-	// Add a Trigger.
-	Add(context.Context, *AddRequest) (*AddResponse, error)
+	// Create a Trigger.
+	Create(context.Context, *CreateRequest) (*CreateResponse, error)
 	// Update a Trigger.
 	Update(context.Context, *UpdateRequest) (*UpdateResponse, error)
 	// Delete a Trigger.
@@ -1838,20 +1891,20 @@ func _Triggers_List_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Triggers_Add_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddRequest)
+func _Triggers_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TriggersServer).Add(ctx, in)
+		return srv.(TriggersServer).Create(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/triggers.v1alpha.Triggers/Add",
+		FullMethod: "/triggers.v1alpha.Triggers/Create",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TriggersServer).Add(ctx, req.(*AddRequest))
+		return srv.(TriggersServer).Create(ctx, req.(*CreateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1926,8 +1979,8 @@ var _Triggers_serviceDesc = grpc.ServiceDesc{
 			Handler:    _Triggers_List_Handler,
 		},
 		{
-			MethodName: "Add",
-			Handler:    _Triggers_Add_Handler,
+			MethodName: "Create",
+			Handler:    _Triggers_Create_Handler,
 		},
 		{
 			MethodName: "Update",
@@ -1986,6 +2039,46 @@ func (m *Trigger) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
+func (m *TriggerList) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *TriggerList) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Metadata != nil {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintApi(dAtA, i, uint64(m.Metadata.Size()))
+		n3, err := m.Metadata.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n3
+	}
+	if len(m.Items) > 0 {
+		for _, msg := range m.Items {
+			dAtA[i] = 0x12
+			i++
+			i = encodeVarintApi(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	return i, nil
+}
+
 func (m *TriggerSpec) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2005,11 +2098,11 @@ func (m *TriggerSpec) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintApi(dAtA, i, uint64(m.RunOptions.Size()))
-		n3, err := m.RunOptions.MarshalTo(dAtA[i:])
+		n4, err := m.RunOptions.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n3
+		i += n4
 	}
 	if len(m.Steps) > 0 {
 		for _, msg := range m.Steps {
@@ -2051,11 +2144,11 @@ func (m *Step) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintApi(dAtA, i, uint64(m.Spec.Size()))
-		n4, err := m.Spec.MarshalTo(dAtA[i:])
+		n5, err := m.Spec.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n4
+		i += n5
 	}
 	return i, nil
 }
@@ -2089,21 +2182,21 @@ func (m *RunOptions) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintApi(dAtA, i, uint64(m.Serialize.Size()))
-		n5, err := m.Serialize.MarshalTo(dAtA[i:])
+		n6, err := m.Serialize.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n5
+		i += n6
 	}
 	if m.Target != nil {
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintApi(dAtA, i, uint64(m.Target.Size()))
-		n6, err := m.Target.MarshalTo(dAtA[i:])
+		n7, err := m.Target.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n6
+		i += n7
 	}
 	return i, nil
 }
@@ -2204,21 +2297,21 @@ func (m *Action) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintApi(dAtA, i, uint64(m.Conditions.Size()))
-		n7, err := m.Conditions.MarshalTo(dAtA[i:])
+		n8, err := m.Conditions.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n7
+		i += n8
 	}
 	if m.RunOptions != nil {
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintApi(dAtA, i, uint64(m.RunOptions.Size()))
-		n8, err := m.RunOptions.MarshalTo(dAtA[i:])
+		n9, err := m.RunOptions.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n8
+		i += n9
 	}
 	if len(m.Parameters) > 0 {
 		for _, msg := range m.Parameters {
@@ -2250,15 +2343,15 @@ func (m *GetRequest) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.GetOptions != nil {
+	if m.Options != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.GetOptions.Size()))
-		n9, err := m.GetOptions.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Options.Size()))
+		n10, err := m.Options.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n9
+		i += n10
 	}
 	return i, nil
 }
@@ -2278,21 +2371,11 @@ func (m *GetResponse) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.Task != nil {
+	if m.Trigger != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Task.Size()))
-		n10, err := m.Task.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n10
-	}
-	if m.Error != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Error.Size()))
-		n11, err := m.Error.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Trigger.Size()))
+		n11, err := m.Trigger.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -2316,11 +2399,11 @@ func (m *ListRequest) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.ListOptions != nil {
+	if m.Options != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.ListOptions.Size()))
-		n12, err := m.ListOptions.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Options.Size()))
+		n12, err := m.Options.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -2344,23 +2427,11 @@ func (m *ListResponse) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if len(m.Triggers) > 0 {
-		for _, msg := range m.Triggers {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintApi(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	if m.Error != nil {
-		dAtA[i] = 0x12
+	if m.TriggerList != nil {
+		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Error.Size()))
-		n13, err := m.Error.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.TriggerList.Size()))
+		n13, err := m.TriggerList.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -2369,7 +2440,7 @@ func (m *ListResponse) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
-func (m *AddRequest) Marshal() (dAtA []byte, err error) {
+func (m *CreateRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalTo(dAtA)
@@ -2379,25 +2450,35 @@ func (m *AddRequest) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *AddRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *CreateRequest) MarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.Task != nil {
+	if m.Options != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Task.Size()))
-		n14, err := m.Task.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Options.Size()))
+		n14, err := m.Options.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
 		i += n14
 	}
+	if m.Trigger != nil {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintApi(dAtA, i, uint64(m.Trigger.Size()))
+		n15, err := m.Trigger.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n15
+	}
 	return i, nil
 }
 
-func (m *AddResponse) Marshal() (dAtA []byte, err error) {
+func (m *CreateResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalTo(dAtA)
@@ -2407,26 +2488,16 @@ func (m *AddResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *AddResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *CreateResponse) MarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.Task != nil {
+	if m.Trigger != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Task.Size()))
-		n15, err := m.Task.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n15
-	}
-	if m.Error != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Error.Size()))
-		n16, err := m.Error.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Trigger.Size()))
+		n16, err := m.Trigger.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -2450,15 +2521,25 @@ func (m *UpdateRequest) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.Task != nil {
+	if m.Options != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Task.Size()))
-		n17, err := m.Task.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Options.Size()))
+		n17, err := m.Options.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
 		i += n17
+	}
+	if m.Trigger != nil {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintApi(dAtA, i, uint64(m.Trigger.Size()))
+		n18, err := m.Trigger.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n18
 	}
 	return i, nil
 }
@@ -2478,21 +2559,11 @@ func (m *UpdateResponse) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.Task != nil {
+	if m.Trigger != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Task.Size()))
-		n18, err := m.Task.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n18
-	}
-	if m.Error != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Error.Size()))
-		n19, err := m.Error.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Trigger.Size()))
+		n19, err := m.Trigger.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -2516,15 +2587,25 @@ func (m *DeleteRequest) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.Task != nil {
+	if m.Options != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Task.Size()))
-		n20, err := m.Task.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Options.Size()))
+		n20, err := m.Options.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
 		i += n20
+	}
+	if m.Trigger != nil {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintApi(dAtA, i, uint64(m.Trigger.Size()))
+		n21, err := m.Trigger.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n21
 	}
 	return i, nil
 }
@@ -2544,21 +2625,11 @@ func (m *DeleteResponse) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.Task != nil {
+	if m.Trigger != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Task.Size()))
-		n21, err := m.Task.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n21
-	}
-	if m.Error != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Error.Size()))
-		n22, err := m.Error.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Trigger.Size()))
+		n22, err := m.Trigger.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -2582,11 +2653,11 @@ func (m *WatchRequest) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.WatchOptions != nil {
+	if m.Options != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.WatchOptions.Size()))
-		n23, err := m.WatchOptions.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Options.Size()))
+		n23, err := m.Options.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -2620,25 +2691,15 @@ func (m *WatchResponse) MarshalTo(dAtA []byte) (int, error) {
 		}
 		i += n24
 	}
-	if m.Task != nil {
+	if m.Trigger != nil {
 		dAtA[i] = 0x12
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Task.Size()))
-		n25, err := m.Task.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Trigger.Size()))
+		n25, err := m.Trigger.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
 		i += n25
-	}
-	if m.Error != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Error.Size()))
-		n26, err := m.Error.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n26
 	}
 	return i, nil
 }
@@ -2665,15 +2726,32 @@ func NewPopulatedTrigger(r randyApi, easy bool) *Trigger {
 	return this
 }
 
+func NewPopulatedTriggerList(r randyApi, easy bool) *TriggerList {
+	this := &TriggerList{}
+	if r.Intn(10) != 0 {
+		this.Metadata = v1.NewPopulatedObjectMetadata(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		v1 := r.Intn(5)
+		this.Items = make([]*Trigger, v1)
+		for i := 0; i < v1; i++ {
+			this.Items[i] = NewPopulatedTrigger(r, easy)
+		}
+	}
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
 func NewPopulatedTriggerSpec(r randyApi, easy bool) *TriggerSpec {
 	this := &TriggerSpec{}
 	if r.Intn(10) != 0 {
 		this.RunOptions = NewPopulatedRunOptions(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		v1 := r.Intn(5)
-		this.Steps = make([]*Step, v1)
-		for i := 0; i < v1; i++ {
+		v2 := r.Intn(5)
+		this.Steps = make([]*Step, v2)
+		for i := 0; i < v2; i++ {
 			this.Steps[i] = NewPopulatedStep(r, easy)
 		}
 	}
@@ -2721,9 +2799,9 @@ func NewPopulatedSerialize(r randyApi, easy bool) *Serialize {
 
 func NewPopulatedTarget(r randyApi, easy bool) *Target {
 	this := &Target{}
-	v2 := r.Intn(10)
-	this.Hosts = make([]string, v2)
-	for i := 0; i < v2; i++ {
+	v3 := r.Intn(10)
+	this.Hosts = make([]string, v3)
+	for i := 0; i < v3; i++ {
 		this.Hosts[i] = string(randStringApi(r))
 	}
 	this.Limit = int64(r.Int63())
@@ -2745,9 +2823,9 @@ func NewPopulatedAction(r randyApi, easy bool) *Action {
 		this.RunOptions = NewPopulatedRunOptions(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		v3 := r.Intn(5)
-		this.Parameters = make([]*types.Any, v3)
-		for i := 0; i < v3; i++ {
+		v4 := r.Intn(5)
+		this.Parameters = make([]*types.Any, v4)
+		for i := 0; i < v4; i++ {
 			this.Parameters[i] = types.NewPopulatedAny(r, easy)
 		}
 	}
@@ -2759,7 +2837,7 @@ func NewPopulatedAction(r randyApi, easy bool) *Action {
 func NewPopulatedGetRequest(r randyApi, easy bool) *GetRequest {
 	this := &GetRequest{}
 	if r.Intn(10) != 0 {
-		this.GetOptions = v1.NewPopulatedGetOptions(r, easy)
+		this.Options = v1.NewPopulatedGetOptions(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2769,10 +2847,7 @@ func NewPopulatedGetRequest(r randyApi, easy bool) *GetRequest {
 func NewPopulatedGetResponse(r randyApi, easy bool) *GetResponse {
 	this := &GetResponse{}
 	if r.Intn(10) != 0 {
-		this.Task = NewPopulatedTrigger(r, easy)
-	}
-	if r.Intn(10) != 0 {
-		this.Error = v1.NewPopulatedError(r, easy)
+		this.Trigger = NewPopulatedTrigger(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2782,7 +2857,7 @@ func NewPopulatedGetResponse(r randyApi, easy bool) *GetResponse {
 func NewPopulatedListRequest(r randyApi, easy bool) *ListRequest {
 	this := &ListRequest{}
 	if r.Intn(10) != 0 {
-		this.ListOptions = v1.NewPopulatedListOptions(r, easy)
+		this.Options = v1.NewPopulatedListOptions(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2792,37 +2867,30 @@ func NewPopulatedListRequest(r randyApi, easy bool) *ListRequest {
 func NewPopulatedListResponse(r randyApi, easy bool) *ListResponse {
 	this := &ListResponse{}
 	if r.Intn(10) != 0 {
-		v4 := r.Intn(5)
-		this.Triggers = make([]*Trigger, v4)
-		for i := 0; i < v4; i++ {
-			this.Triggers[i] = NewPopulatedTrigger(r, easy)
-		}
-	}
-	if r.Intn(10) != 0 {
-		this.Error = v1.NewPopulatedError(r, easy)
+		this.TriggerList = NewPopulatedTriggerList(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
 }
 
-func NewPopulatedAddRequest(r randyApi, easy bool) *AddRequest {
-	this := &AddRequest{}
+func NewPopulatedCreateRequest(r randyApi, easy bool) *CreateRequest {
+	this := &CreateRequest{}
 	if r.Intn(10) != 0 {
-		this.Task = NewPopulatedTrigger(r, easy)
+		this.Options = v1.NewPopulatedCreateOptions(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		this.Trigger = NewPopulatedTrigger(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
 }
 
-func NewPopulatedAddResponse(r randyApi, easy bool) *AddResponse {
-	this := &AddResponse{}
+func NewPopulatedCreateResponse(r randyApi, easy bool) *CreateResponse {
+	this := &CreateResponse{}
 	if r.Intn(10) != 0 {
-		this.Task = NewPopulatedTrigger(r, easy)
-	}
-	if r.Intn(10) != 0 {
-		this.Error = v1.NewPopulatedError(r, easy)
+		this.Trigger = NewPopulatedTrigger(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2832,7 +2900,10 @@ func NewPopulatedAddResponse(r randyApi, easy bool) *AddResponse {
 func NewPopulatedUpdateRequest(r randyApi, easy bool) *UpdateRequest {
 	this := &UpdateRequest{}
 	if r.Intn(10) != 0 {
-		this.Task = NewPopulatedTrigger(r, easy)
+		this.Options = v1.NewPopulatedUpdateOptions(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		this.Trigger = NewPopulatedTrigger(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2842,10 +2913,7 @@ func NewPopulatedUpdateRequest(r randyApi, easy bool) *UpdateRequest {
 func NewPopulatedUpdateResponse(r randyApi, easy bool) *UpdateResponse {
 	this := &UpdateResponse{}
 	if r.Intn(10) != 0 {
-		this.Task = NewPopulatedTrigger(r, easy)
-	}
-	if r.Intn(10) != 0 {
-		this.Error = v1.NewPopulatedError(r, easy)
+		this.Trigger = NewPopulatedTrigger(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2855,7 +2923,10 @@ func NewPopulatedUpdateResponse(r randyApi, easy bool) *UpdateResponse {
 func NewPopulatedDeleteRequest(r randyApi, easy bool) *DeleteRequest {
 	this := &DeleteRequest{}
 	if r.Intn(10) != 0 {
-		this.Task = NewPopulatedTrigger(r, easy)
+		this.Options = v1.NewPopulatedDeleteOptions(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		this.Trigger = NewPopulatedTrigger(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2865,10 +2936,7 @@ func NewPopulatedDeleteRequest(r randyApi, easy bool) *DeleteRequest {
 func NewPopulatedDeleteResponse(r randyApi, easy bool) *DeleteResponse {
 	this := &DeleteResponse{}
 	if r.Intn(10) != 0 {
-		this.Task = NewPopulatedTrigger(r, easy)
-	}
-	if r.Intn(10) != 0 {
-		this.Error = v1.NewPopulatedError(r, easy)
+		this.Trigger = NewPopulatedTrigger(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2878,7 +2946,7 @@ func NewPopulatedDeleteResponse(r randyApi, easy bool) *DeleteResponse {
 func NewPopulatedWatchRequest(r randyApi, easy bool) *WatchRequest {
 	this := &WatchRequest{}
 	if r.Intn(10) != 0 {
-		this.WatchOptions = v1.NewPopulatedWatchOptions(r, easy)
+		this.Options = v1.NewPopulatedWatchOptions(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2891,10 +2959,7 @@ func NewPopulatedWatchResponse(r randyApi, easy bool) *WatchResponse {
 		this.Event = v1alpha.NewPopulatedEvent(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		this.Task = NewPopulatedTrigger(r, easy)
-	}
-	if r.Intn(10) != 0 {
-		this.Error = v1.NewPopulatedError(r, easy)
+		this.Trigger = NewPopulatedTrigger(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2986,6 +3051,25 @@ func (m *Trigger) Size() (n int) {
 	if m.Spec != nil {
 		l = m.Spec.Size()
 		n += 1 + l + sovApi(uint64(l))
+	}
+	return n
+}
+
+func (m *TriggerList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Metadata != nil {
+		l = m.Metadata.Size()
+		n += 1 + l + sovApi(uint64(l))
+	}
+	if len(m.Items) > 0 {
+		for _, e := range m.Items {
+			l = e.Size()
+			n += 1 + l + sovApi(uint64(l))
+		}
 	}
 	return n
 }
@@ -3112,8 +3196,8 @@ func (m *GetRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.GetOptions != nil {
-		l = m.GetOptions.Size()
+	if m.Options != nil {
+		l = m.Options.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -3125,12 +3209,8 @@ func (m *GetResponse) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.Task != nil {
-		l = m.Task.Size()
-		n += 1 + l + sovApi(uint64(l))
-	}
-	if m.Error != nil {
-		l = m.Error.Size()
+	if m.Trigger != nil {
+		l = m.Trigger.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -3142,8 +3222,8 @@ func (m *ListRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.ListOptions != nil {
-		l = m.ListOptions.Size()
+	if m.Options != nil {
+		l = m.Options.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -3155,44 +3235,38 @@ func (m *ListResponse) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if len(m.Triggers) > 0 {
-		for _, e := range m.Triggers {
-			l = e.Size()
-			n += 1 + l + sovApi(uint64(l))
-		}
-	}
-	if m.Error != nil {
-		l = m.Error.Size()
+	if m.TriggerList != nil {
+		l = m.TriggerList.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
 }
 
-func (m *AddRequest) Size() (n int) {
+func (m *CreateRequest) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.Task != nil {
-		l = m.Task.Size()
+	if m.Options != nil {
+		l = m.Options.Size()
+		n += 1 + l + sovApi(uint64(l))
+	}
+	if m.Trigger != nil {
+		l = m.Trigger.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
 }
 
-func (m *AddResponse) Size() (n int) {
+func (m *CreateResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.Task != nil {
-		l = m.Task.Size()
-		n += 1 + l + sovApi(uint64(l))
-	}
-	if m.Error != nil {
-		l = m.Error.Size()
+	if m.Trigger != nil {
+		l = m.Trigger.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -3204,8 +3278,12 @@ func (m *UpdateRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.Task != nil {
-		l = m.Task.Size()
+	if m.Options != nil {
+		l = m.Options.Size()
+		n += 1 + l + sovApi(uint64(l))
+	}
+	if m.Trigger != nil {
+		l = m.Trigger.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -3217,12 +3295,8 @@ func (m *UpdateResponse) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.Task != nil {
-		l = m.Task.Size()
-		n += 1 + l + sovApi(uint64(l))
-	}
-	if m.Error != nil {
-		l = m.Error.Size()
+	if m.Trigger != nil {
+		l = m.Trigger.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -3234,8 +3308,12 @@ func (m *DeleteRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.Task != nil {
-		l = m.Task.Size()
+	if m.Options != nil {
+		l = m.Options.Size()
+		n += 1 + l + sovApi(uint64(l))
+	}
+	if m.Trigger != nil {
+		l = m.Trigger.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -3247,12 +3325,8 @@ func (m *DeleteResponse) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.Task != nil {
-		l = m.Task.Size()
-		n += 1 + l + sovApi(uint64(l))
-	}
-	if m.Error != nil {
-		l = m.Error.Size()
+	if m.Trigger != nil {
+		l = m.Trigger.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -3264,8 +3338,8 @@ func (m *WatchRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.WatchOptions != nil {
-		l = m.WatchOptions.Size()
+	if m.Options != nil {
+		l = m.Options.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -3281,12 +3355,8 @@ func (m *WatchResponse) Size() (n int) {
 		l = m.Event.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
-	if m.Task != nil {
-		l = m.Task.Size()
-		n += 1 + l + sovApi(uint64(l))
-	}
-	if m.Error != nil {
-		l = m.Error.Size()
+	if m.Trigger != nil {
+		l = m.Trigger.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -3312,6 +3382,17 @@ func (this *Trigger) String() string {
 	s := strings.Join([]string{`&Trigger{`,
 		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "ObjectMetadata", "v1.ObjectMetadata", 1) + `,`,
 		`Spec:` + strings.Replace(fmt.Sprintf("%v", this.Spec), "TriggerSpec", "TriggerSpec", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *TriggerList) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&TriggerList{`,
+		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "ObjectMetadata", "v1.ObjectMetadata", 1) + `,`,
+		`Items:` + strings.Replace(fmt.Sprintf("%v", this.Items), "Trigger", "Trigger", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3390,7 +3471,7 @@ func (this *GetRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetRequest{`,
-		`GetOptions:` + strings.Replace(fmt.Sprintf("%v", this.GetOptions), "GetOptions", "v1.GetOptions", 1) + `,`,
+		`Options:` + strings.Replace(fmt.Sprintf("%v", this.Options), "GetOptions", "v1.GetOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3400,8 +3481,7 @@ func (this *GetResponse) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetResponse{`,
-		`Task:` + strings.Replace(fmt.Sprintf("%v", this.Task), "Trigger", "Trigger", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
+		`Trigger:` + strings.Replace(fmt.Sprintf("%v", this.Trigger), "Trigger", "Trigger", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3411,7 +3491,7 @@ func (this *ListRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ListRequest{`,
-		`ListOptions:` + strings.Replace(fmt.Sprintf("%v", this.ListOptions), "ListOptions", "v1.ListOptions", 1) + `,`,
+		`Options:` + strings.Replace(fmt.Sprintf("%v", this.Options), "ListOptions", "v1.ListOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3421,29 +3501,28 @@ func (this *ListResponse) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ListResponse{`,
-		`Triggers:` + strings.Replace(fmt.Sprintf("%v", this.Triggers), "Trigger", "Trigger", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
+		`TriggerList:` + strings.Replace(fmt.Sprintf("%v", this.TriggerList), "TriggerList", "TriggerList", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *AddRequest) String() string {
+func (this *CreateRequest) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&AddRequest{`,
-		`Task:` + strings.Replace(fmt.Sprintf("%v", this.Task), "Trigger", "Trigger", 1) + `,`,
+	s := strings.Join([]string{`&CreateRequest{`,
+		`Options:` + strings.Replace(fmt.Sprintf("%v", this.Options), "CreateOptions", "v1.CreateOptions", 1) + `,`,
+		`Trigger:` + strings.Replace(fmt.Sprintf("%v", this.Trigger), "Trigger", "Trigger", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *AddResponse) String() string {
+func (this *CreateResponse) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&AddResponse{`,
-		`Task:` + strings.Replace(fmt.Sprintf("%v", this.Task), "Trigger", "Trigger", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
+	s := strings.Join([]string{`&CreateResponse{`,
+		`Trigger:` + strings.Replace(fmt.Sprintf("%v", this.Trigger), "Trigger", "Trigger", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3453,7 +3532,8 @@ func (this *UpdateRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&UpdateRequest{`,
-		`Task:` + strings.Replace(fmt.Sprintf("%v", this.Task), "Trigger", "Trigger", 1) + `,`,
+		`Options:` + strings.Replace(fmt.Sprintf("%v", this.Options), "UpdateOptions", "v1.UpdateOptions", 1) + `,`,
+		`Trigger:` + strings.Replace(fmt.Sprintf("%v", this.Trigger), "Trigger", "Trigger", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3463,8 +3543,7 @@ func (this *UpdateResponse) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&UpdateResponse{`,
-		`Task:` + strings.Replace(fmt.Sprintf("%v", this.Task), "Trigger", "Trigger", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
+		`Trigger:` + strings.Replace(fmt.Sprintf("%v", this.Trigger), "Trigger", "Trigger", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3474,7 +3553,8 @@ func (this *DeleteRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&DeleteRequest{`,
-		`Task:` + strings.Replace(fmt.Sprintf("%v", this.Task), "Trigger", "Trigger", 1) + `,`,
+		`Options:` + strings.Replace(fmt.Sprintf("%v", this.Options), "DeleteOptions", "v1.DeleteOptions", 1) + `,`,
+		`Trigger:` + strings.Replace(fmt.Sprintf("%v", this.Trigger), "Trigger", "Trigger", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3484,8 +3564,7 @@ func (this *DeleteResponse) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&DeleteResponse{`,
-		`Task:` + strings.Replace(fmt.Sprintf("%v", this.Task), "Trigger", "Trigger", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
+		`Trigger:` + strings.Replace(fmt.Sprintf("%v", this.Trigger), "Trigger", "Trigger", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3495,7 +3574,7 @@ func (this *WatchRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&WatchRequest{`,
-		`WatchOptions:` + strings.Replace(fmt.Sprintf("%v", this.WatchOptions), "WatchOptions", "v1.WatchOptions", 1) + `,`,
+		`Options:` + strings.Replace(fmt.Sprintf("%v", this.Options), "WatchOptions", "v1.WatchOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3506,8 +3585,7 @@ func (this *WatchResponse) String() string {
 	}
 	s := strings.Join([]string{`&WatchResponse{`,
 		`Event:` + strings.Replace(fmt.Sprintf("%v", this.Event), "Event", "v1alpha.Event", 1) + `,`,
-		`Task:` + strings.Replace(fmt.Sprintf("%v", this.Task), "Trigger", "Trigger", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
+		`Trigger:` + strings.Replace(fmt.Sprintf("%v", this.Trigger), "Trigger", "Trigger", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3612,6 +3690,120 @@ func (m *Trigger) Unmarshal(dAtA []byte) error {
 				m.Spec = &TriggerSpec{}
 			}
 			if err := m.Spec.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipApi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthApi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *TriggerList) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowApi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: TriggerList: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: TriggerList: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Metadata", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Metadata == nil {
+				m.Metadata = &v1.ObjectMetadata{}
+			}
+			if err := m.Metadata.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Items", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Items = append(m.Items, &Trigger{})
+			if err := m.Items[len(m.Items)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -4392,7 +4584,7 @@ func (m *GetRequest) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field GetOptions", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Options", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -4416,10 +4608,10 @@ func (m *GetRequest) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.GetOptions == nil {
-				m.GetOptions = &v1.GetOptions{}
+			if m.Options == nil {
+				m.Options = &v1.GetOptions{}
 			}
-			if err := m.GetOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Options.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -4475,7 +4667,7 @@ func (m *GetResponse) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Task", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Trigger", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -4499,43 +4691,10 @@ func (m *GetResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Task == nil {
-				m.Task = &Trigger{}
+			if m.Trigger == nil {
+				m.Trigger = &Trigger{}
 			}
-			if err := m.Task.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Error == nil {
-				m.Error = &v1.Error{}
-			}
-			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Trigger.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -4591,7 +4750,7 @@ func (m *ListRequest) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ListOptions", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Options", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -4615,10 +4774,10 @@ func (m *ListRequest) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.ListOptions == nil {
-				m.ListOptions = &v1.ListOptions{}
+			if m.Options == nil {
+				m.Options = &v1.ListOptions{}
 			}
-			if err := m.ListOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Options.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -4674,7 +4833,7 @@ func (m *ListResponse) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Triggers", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field TriggerList", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -4698,41 +4857,10 @@ func (m *ListResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Triggers = append(m.Triggers, &Trigger{})
-			if err := m.Triggers[len(m.Triggers)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
+			if m.TriggerList == nil {
+				m.TriggerList = &TriggerList{}
 			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Error == nil {
-				m.Error = &v1.Error{}
-			}
-			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.TriggerList.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -4757,7 +4885,7 @@ func (m *ListResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *AddRequest) Unmarshal(dAtA []byte) error {
+func (m *CreateRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -4780,15 +4908,15 @@ func (m *AddRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: AddRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: CreateRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: AddRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: CreateRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Task", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Options", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -4812,10 +4940,43 @@ func (m *AddRequest) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Task == nil {
-				m.Task = &Trigger{}
+			if m.Options == nil {
+				m.Options = &v1.CreateOptions{}
 			}
-			if err := m.Task.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Options.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Trigger", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Trigger == nil {
+				m.Trigger = &Trigger{}
+			}
+			if err := m.Trigger.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -4840,7 +5001,7 @@ func (m *AddRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *AddResponse) Unmarshal(dAtA []byte) error {
+func (m *CreateResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -4863,15 +5024,15 @@ func (m *AddResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: AddResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: CreateResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: AddResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: CreateResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Task", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Trigger", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -4895,43 +5056,10 @@ func (m *AddResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Task == nil {
-				m.Task = &Trigger{}
+			if m.Trigger == nil {
+				m.Trigger = &Trigger{}
 			}
-			if err := m.Task.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Error == nil {
-				m.Error = &v1.Error{}
-			}
-			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Trigger.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -4987,7 +5115,7 @@ func (m *UpdateRequest) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Task", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Options", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -5011,10 +5139,43 @@ func (m *UpdateRequest) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Task == nil {
-				m.Task = &Trigger{}
+			if m.Options == nil {
+				m.Options = &v1.UpdateOptions{}
 			}
-			if err := m.Task.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Options.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Trigger", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Trigger == nil {
+				m.Trigger = &Trigger{}
+			}
+			if err := m.Trigger.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -5070,7 +5231,7 @@ func (m *UpdateResponse) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Task", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Trigger", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -5094,43 +5255,10 @@ func (m *UpdateResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Task == nil {
-				m.Task = &Trigger{}
+			if m.Trigger == nil {
+				m.Trigger = &Trigger{}
 			}
-			if err := m.Task.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Error == nil {
-				m.Error = &v1.Error{}
-			}
-			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Trigger.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -5186,7 +5314,7 @@ func (m *DeleteRequest) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Task", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Options", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -5210,10 +5338,43 @@ func (m *DeleteRequest) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Task == nil {
-				m.Task = &Trigger{}
+			if m.Options == nil {
+				m.Options = &v1.DeleteOptions{}
 			}
-			if err := m.Task.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Options.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Trigger", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Trigger == nil {
+				m.Trigger = &Trigger{}
+			}
+			if err := m.Trigger.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -5269,7 +5430,7 @@ func (m *DeleteResponse) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Task", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Trigger", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -5293,43 +5454,10 @@ func (m *DeleteResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Task == nil {
-				m.Task = &Trigger{}
+			if m.Trigger == nil {
+				m.Trigger = &Trigger{}
 			}
-			if err := m.Task.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Error == nil {
-				m.Error = &v1.Error{}
-			}
-			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Trigger.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -5385,7 +5513,7 @@ func (m *WatchRequest) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field WatchOptions", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Options", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -5409,10 +5537,10 @@ func (m *WatchRequest) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.WatchOptions == nil {
-				m.WatchOptions = &v1.WatchOptions{}
+			if m.Options == nil {
+				m.Options = &v1.WatchOptions{}
 			}
-			if err := m.WatchOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Options.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -5501,7 +5629,7 @@ func (m *WatchResponse) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Task", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Trigger", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -5525,43 +5653,10 @@ func (m *WatchResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Task == nil {
-				m.Task = &Trigger{}
+			if m.Trigger == nil {
+				m.Trigger = &Trigger{}
 			}
-			if err := m.Task.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Error == nil {
-				m.Error = &v1.Error{}
-			}
-			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Trigger.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex

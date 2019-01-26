@@ -15,5 +15,3 @@ import (
 var _ = proto.Marshal
 var _ = fmt.Errorf
 var _ = math.Inf
-
-// No Client generated, because no `option (internalclient.options).generate = true;` is given for a `Message`

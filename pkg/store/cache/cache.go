@@ -22,6 +22,7 @@ import (
 
 	"github.com/galexrt/edenconfmgmt/pkg/store/data"
 	"github.com/galexrt/edenconfmgmt/pkg/utils/errors"
+	"go.etcd.io/etcd/clientv3"
 	"go.uber.org/zap"
 )
 
@@ -35,8 +36,6 @@ type Store struct {
 	logger     *zap.Logger
 }
 
-// TODO Rewrite to save objects protobuf encoded as this will definitly be faster than to always parse JSON again.
-
 // New return new Store.
 func New(dataStore data.Store, cacheStore data.Store, logger *zap.Logger) *Store {
 	inf := NewInformer(dataStore, cacheStore, logger)
@@ -48,21 +47,21 @@ func New(dataStore data.Store, cacheStore data.Store, logger *zap.Logger) *Store
 	}
 }
 
-// Start start the logic behind the cache store.
+// Start start the logic behind the cache store (utilizes st.dataStore and st.cacheStore).
 func (st *Store) Start(stopCh chan struct{}) error {
-	var err error
+	var errs []error
 
 	st.wg.Add(1)
 	go func() {
 		defer st.wg.Done()
-		st.informer.Start(stopCh)
+		errs = append(errs, st.informer.Start(stopCh))
 	}()
 
 	for {
 		select {
 		case <-stopCh:
 			st.wg.Wait()
-			return err
+			return errors.Concat(errs...)
 		}
 	}
 }
@@ -88,12 +87,35 @@ func (st *Store) Get(ctx context.Context, key string) ([]byte, error) {
 		}
 	}
 	err = st.cacheStore.Put(ctx, key, result)
-	return result, err
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
 }
 
-// List return a list of key value pairs.
+// List return a list of key value pairs where the key is the directory.
 func (st *Store) List(ctx context.Context, key string) (map[string][]byte, error) {
-	return nil, nil
+	result, err := st.cacheStore.GetRecursive(ctx, key)
+	if err != nil {
+		return nil, err
+	}
+	if len(result) == 0 {
+		result, err = st.dataStore.GetRecursive(ctx, key)
+		if err != nil {
+			return nil, err
+		}
+	}
+	if err != nil {
+		return nil, err
+	}
+	for rk := range result {
+
+		err = st.cacheStore.Put(ctx, "", result[rk])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return result, err
 }
 
 // Put creates or updates if exists, a key value pair.
@@ -114,15 +136,18 @@ func (st *Store) Delete(ctx context.Context, key string) error {
 
 // Watch watch a key or directory for creation, changes and deletion.
 func (st *Store) Watch(ctx context.Context, key string) (chan *InformerResult, error) {
-	// TODO call st.informer.DataStoreChExists() to see if a datastore watchchan is needed.
-	watch, err := st.dataStore.Watch(ctx, key)
-	if err != nil {
-		return nil, err
+	var watch clientv3.WatchChan
+	if !st.informer.DataStoreChExists(key) {
+		var err error
+		watch, err = st.dataStore.Watch(ctx, key)
+		if err != nil {
+			return nil, err
+		}
 	}
 	return st.informer.Watch(ctx, key, watch)
 }
 
-// Close adapter.
+// Close data and cache store adapter.
 func (st *Store) Close() error {
 	return errors.Concat(st.dataStore.Close(), st.cacheStore.Close())
 }

@@ -19,6 +19,8 @@ option go_package = "github.com/galexrt/edenconfmgmt/pkg/apis/clustervariables/v
 
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "google/protobuf/any.proto";
+import "github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/apiserver/server.proto";
+import "github.com/mwitkow/go-proto-validators/validator.proto";
 import "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1/api.proto";
 import "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha/api.proto";
 
@@ -39,8 +41,8 @@ service ClusterVariables {
     rpc Get (GetRequest) returns (GetResponse);
     // List ClusterVariable.
     rpc List (ListRequest) returns (ListResponse);
-    // Add a ClusterVariable.
-    rpc Add (AddRequest) returns (AddResponse);
+    // Create a ClusterVariable.
+    rpc Create (CreateRequest) returns (CreateResponse);
     // Update a ClusterVariable.
     rpc Update (UpdateRequest) returns (UpdateResponse);
     // Delete a ClusterVariable.
@@ -50,10 +52,18 @@ service ClusterVariables {
 }
 
 message ClusterVariable {
+    option (apiserver.options).generate = true;
     // Metadata for ClusterVariable object.
     core.v1.ObjectMetadata metadata = 1;
     // Spec for ClusterVariable.
     VariableSpec spec = 2;
+}
+
+message ClusterVariableList {
+    // Metadata for ClusterVariableList object.
+    core.v1.ObjectMetadata metadata = 1 [(validator.field) = {msg_exists : true}];
+    // List of ClusterVariable objects.
+    repeated ClusterVariable items = 2;
 }
 
 // ClusterVariables clustervariables file structure. This covers the "ClusterVariables File" and "'From Host' Static ClusterVariable File".
@@ -66,73 +76,69 @@ message VariableSpec {
 
 // Get
 message GetRequest {
-    // GetOptions options for a GetRequest.
-    core.v1.GetOptions getOptions = 1;
+    // core_v1.GetOptions
+    core.v1.GetOptions options = 1;
 }
 
 message GetResponse {
     // ClusterVariable object.
     ClusterVariable clusterVariable = 1;
-    // Error object.
-    core.v1.Error error = 2;
 }
 
 // List
 message ListRequest {
-    // ListOptions options for a ListRequest.
-    core.v1.ListOptions listOptions = 1;
+    // core_v1.ListOptions
+    core.v1.ListOptions options = 1;
 }
 
 message ListResponse {
     // ClusterVariable list.
-    repeated ClusterVariable clustervariables = 1;
-    // Error object.
-    core.v1.Error error = 2;
+    ClusterVariableList clusterVariableList = 1;
 }
 
-// Add
-message AddRequest {
+// Create
+message CreateRequest {
+    // core_v1.CreateOptions
+    core.v1.CreateOptions options = 1;
     // ClusterVariable object.
-    ClusterVariable clusterVariable = 1;
+    ClusterVariable clusterVariable = 2;
 }
 
-message AddResponse {
+message CreateResponse {
     // ClusterVariable object.
     ClusterVariable clusterVariable = 1;
-    // Error object.
-    core.v1.Error error = 2;
 }
 
 // Update
 message UpdateRequest {
+    // core_v1.UpdateOptions
+    core.v1.UpdateOptions options = 1;
     // ClusterVariable object.
-    ClusterVariable clusterVariable = 1;
+    ClusterVariable clusterVariable = 2;
 }
 
 message UpdateResponse {
     // ClusterVariable object.
     ClusterVariable clusterVariable = 1;
-    // Error object.
-    core.v1.Error error = 2;
 }
 
 // Delete
 message DeleteRequest {
+    // core_v1.DeleteOptions
+    core.v1.DeleteOptions options = 1;
     // ClusterVariable object.
-    ClusterVariable clusterVariable = 1;
+    ClusterVariable clusterVariable = 2;
 }
 
 message DeleteResponse {
     // ClusterVariable object.
     ClusterVariable clusterVariable = 1;
-    // Error object.
-    core.v1.Error error = 2;
 }
 
 // Watch
 message WatchRequest {
-    // WatchOptions options for WatchRequest.
-    core.v1.WatchOptions watchOptions = 1;
+    // core_v1.WatchOptions
+    core.v1.WatchOptions options = 1;
 }
 
 message WatchResponse {
@@ -140,6 +146,4 @@ message WatchResponse {
     events.v1alpha.Event event = 1;
     // ClusterVariable for watch response.
     ClusterVariable clusterVariable = 2;
-    // Error object.
-    core.v1.Error error = 3;
 }

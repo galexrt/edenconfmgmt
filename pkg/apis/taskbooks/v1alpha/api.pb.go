@@ -8,9 +8,11 @@ import (
 	fmt "fmt"
 	v1 "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1"
 	v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha"
+	_ "github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/apiserver"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	types "github.com/gogo/protobuf/types"
+	_ "github.com/mwitkow/go-proto-validators"
 	grpc "google.golang.org/grpc"
 	io "io"
 	math "math"
@@ -84,6 +86,61 @@ func (m *TaskBook) GetSpec() *TaskBookSpec {
 	return nil
 }
 
+type TaskBookList struct {
+	// Metadata for TaskBookList object.
+	Metadata *v1.ObjectMetadata `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	// List of TaskBook objects.
+	Items                []*TaskBook `protobuf:"bytes,2,rep,name=items,proto3" json:"items,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}    `json:"-"`
+	XXX_sizecache        int32       `json:"-"`
+}
+
+func (m *TaskBookList) Reset()      { *m = TaskBookList{} }
+func (*TaskBookList) ProtoMessage() {}
+func (*TaskBookList) Descriptor() ([]byte, []int) {
+	return fileDescriptor_dbb3b814fbe3e5c4, []int{1}
+}
+func (m *TaskBookList) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *TaskBookList) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_TaskBookList.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalTo(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *TaskBookList) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_TaskBookList.Merge(m, src)
+}
+func (m *TaskBookList) XXX_Size() int {
+	return m.Size()
+}
+func (m *TaskBookList) XXX_DiscardUnknown() {
+	xxx_messageInfo_TaskBookList.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_TaskBookList proto.InternalMessageInfo
+
+func (m *TaskBookList) GetMetadata() *v1.ObjectMetadata {
+	if m != nil {
+		return m.Metadata
+	}
+	return nil
+}
+
+func (m *TaskBookList) GetItems() []*TaskBook {
+	if m != nil {
+		return m.Items
+	}
+	return nil
+}
+
 type TaskBookSpec struct {
 	// RunOptions.
 	RunOptions *RunOptions `protobuf:"bytes,1,opt,name=runOptions,proto3" json:"runOptions,omitempty"`
@@ -96,7 +153,7 @@ type TaskBookSpec struct {
 func (m *TaskBookSpec) Reset()      { *m = TaskBookSpec{} }
 func (*TaskBookSpec) ProtoMessage() {}
 func (*TaskBookSpec) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dbb3b814fbe3e5c4, []int{1}
+	return fileDescriptor_dbb3b814fbe3e5c4, []int{2}
 }
 func (m *TaskBookSpec) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -149,7 +206,7 @@ type Step struct {
 func (m *Step) Reset()      { *m = Step{} }
 func (*Step) ProtoMessage() {}
 func (*Step) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dbb3b814fbe3e5c4, []int{2}
+	return fileDescriptor_dbb3b814fbe3e5c4, []int{3}
 }
 func (m *Step) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -203,7 +260,7 @@ type RunOptions struct {
 func (m *RunOptions) Reset()      { *m = RunOptions{} }
 func (*RunOptions) ProtoMessage() {}
 func (*RunOptions) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dbb3b814fbe3e5c4, []int{3}
+	return fileDescriptor_dbb3b814fbe3e5c4, []int{4}
 }
 func (m *RunOptions) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -265,7 +322,7 @@ type Serialize struct {
 func (m *Serialize) Reset()      { *m = Serialize{} }
 func (*Serialize) ProtoMessage() {}
 func (*Serialize) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dbb3b814fbe3e5c4, []int{4}
+	return fileDescriptor_dbb3b814fbe3e5c4, []int{5}
 }
 func (m *Serialize) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -320,7 +377,7 @@ type Target struct {
 func (m *Target) Reset()      { *m = Target{} }
 func (*Target) ProtoMessage() {}
 func (*Target) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dbb3b814fbe3e5c4, []int{5}
+	return fileDescriptor_dbb3b814fbe3e5c4, []int{6}
 }
 func (m *Target) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -379,7 +436,7 @@ type Action struct {
 func (m *Action) Reset()      { *m = Action{} }
 func (*Action) ProtoMessage() {}
 func (*Action) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dbb3b814fbe3e5c4, []int{6}
+	return fileDescriptor_dbb3b814fbe3e5c4, []int{7}
 }
 func (m *Action) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -439,7 +496,7 @@ func (m *Action) GetParameters() []*types.Any {
 // Get
 type GetRequest struct {
 	// GetOptions options for a GetRequest.
-	GetOptions           *v1.GetOptions `protobuf:"bytes,1,opt,name=getOptions,proto3" json:"getOptions,omitempty"`
+	Options              *v1.GetOptions `protobuf:"bytes,1,opt,name=options,proto3" json:"options,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}       `json:"-"`
 	XXX_sizecache        int32          `json:"-"`
 }
@@ -447,7 +504,7 @@ type GetRequest struct {
 func (m *GetRequest) Reset()      { *m = GetRequest{} }
 func (*GetRequest) ProtoMessage() {}
 func (*GetRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dbb3b814fbe3e5c4, []int{7}
+	return fileDescriptor_dbb3b814fbe3e5c4, []int{8}
 }
 func (m *GetRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -476,18 +533,16 @@ func (m *GetRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetRequest proto.InternalMessageInfo
 
-func (m *GetRequest) GetGetOptions() *v1.GetOptions {
+func (m *GetRequest) GetOptions() *v1.GetOptions {
 	if m != nil {
-		return m.GetOptions
+		return m.Options
 	}
 	return nil
 }
 
 type GetResponse struct {
 	// TaskBook object.
-	Task *TaskBook `protobuf:"bytes,1,opt,name=task,proto3" json:"task,omitempty"`
-	// Error object.
-	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
+	TaskBook             *TaskBook `protobuf:"bytes,1,opt,name=taskBook,proto3" json:"taskBook,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
 	XXX_sizecache        int32     `json:"-"`
 }
@@ -495,7 +550,7 @@ type GetResponse struct {
 func (m *GetResponse) Reset()      { *m = GetResponse{} }
 func (*GetResponse) ProtoMessage() {}
 func (*GetResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dbb3b814fbe3e5c4, []int{8}
+	return fileDescriptor_dbb3b814fbe3e5c4, []int{9}
 }
 func (m *GetResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -524,24 +579,17 @@ func (m *GetResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_GetResponse proto.InternalMessageInfo
 
-func (m *GetResponse) GetTask() *TaskBook {
+func (m *GetResponse) GetTaskBook() *TaskBook {
 	if m != nil {
-		return m.Task
-	}
-	return nil
-}
-
-func (m *GetResponse) GetError() *v1.Error {
-	if m != nil {
-		return m.Error
+		return m.TaskBook
 	}
 	return nil
 }
 
 // List
 type ListRequest struct {
-	// ListOptions options for a ListRequest.
-	ListOptions          *v1.ListOptions `protobuf:"bytes,1,opt,name=listOptions,proto3" json:"listOptions,omitempty"`
+	// core_v1.ListOptions
+	Options              *v1.ListOptions `protobuf:"bytes,1,opt,name=options,proto3" json:"options,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}        `json:"-"`
 	XXX_sizecache        int32           `json:"-"`
 }
@@ -549,7 +597,7 @@ type ListRequest struct {
 func (m *ListRequest) Reset()      { *m = ListRequest{} }
 func (*ListRequest) ProtoMessage() {}
 func (*ListRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dbb3b814fbe3e5c4, []int{9}
+	return fileDescriptor_dbb3b814fbe3e5c4, []int{10}
 }
 func (m *ListRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -578,26 +626,24 @@ func (m *ListRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ListRequest proto.InternalMessageInfo
 
-func (m *ListRequest) GetListOptions() *v1.ListOptions {
+func (m *ListRequest) GetOptions() *v1.ListOptions {
 	if m != nil {
-		return m.ListOptions
+		return m.Options
 	}
 	return nil
 }
 
 type ListResponse struct {
 	// TaskBook list.
-	Taskbooks []*TaskBook `protobuf:"bytes,1,rep,name=taskbooks,proto3" json:"taskbooks,omitempty"`
-	// Error object.
-	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
+	TaskBookList         *TaskBookList `protobuf:"bytes,1,opt,name=taskBookList,proto3" json:"taskBookList,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
+	XXX_sizecache        int32         `json:"-"`
 }
 
 func (m *ListResponse) Reset()      { *m = ListResponse{} }
 func (*ListResponse) ProtoMessage() {}
 func (*ListResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dbb3b814fbe3e5c4, []int{10}
+	return fileDescriptor_dbb3b814fbe3e5c4, []int{11}
 }
 func (m *ListResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -626,87 +672,34 @@ func (m *ListResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ListResponse proto.InternalMessageInfo
 
-func (m *ListResponse) GetTaskbooks() []*TaskBook {
+func (m *ListResponse) GetTaskBookList() *TaskBookList {
 	if m != nil {
-		return m.Taskbooks
+		return m.TaskBookList
 	}
 	return nil
 }
 
-func (m *ListResponse) GetError() *v1.Error {
-	if m != nil {
-		return m.Error
-	}
-	return nil
-}
-
-// Add
-type AddRequest struct {
+// Create
+type CreateRequest struct {
+	// core_v1.CreateOptions
+	Options *v1.CreateOptions `protobuf:"bytes,1,opt,name=options,proto3" json:"options,omitempty"`
 	// TaskBook object.
-	Task                 *TaskBook `protobuf:"bytes,1,opt,name=task,proto3" json:"task,omitempty"`
+	TaskBook             *TaskBook `protobuf:"bytes,2,opt,name=taskBook,proto3" json:"taskBook,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
 	XXX_sizecache        int32     `json:"-"`
 }
 
-func (m *AddRequest) Reset()      { *m = AddRequest{} }
-func (*AddRequest) ProtoMessage() {}
-func (*AddRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dbb3b814fbe3e5c4, []int{11}
-}
-func (m *AddRequest) XXX_Unmarshal(b []byte) error {
-	return m.Unmarshal(b)
-}
-func (m *AddRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	if deterministic {
-		return xxx_messageInfo_AddRequest.Marshal(b, m, deterministic)
-	} else {
-		b = b[:cap(b)]
-		n, err := m.MarshalTo(b)
-		if err != nil {
-			return nil, err
-		}
-		return b[:n], nil
-	}
-}
-func (m *AddRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AddRequest.Merge(m, src)
-}
-func (m *AddRequest) XXX_Size() int {
-	return m.Size()
-}
-func (m *AddRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_AddRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_AddRequest proto.InternalMessageInfo
-
-func (m *AddRequest) GetTask() *TaskBook {
-	if m != nil {
-		return m.Task
-	}
-	return nil
-}
-
-type AddResponse struct {
-	// TaskBook object.
-	Task *TaskBook `protobuf:"bytes,1,opt,name=task,proto3" json:"task,omitempty"`
-	// Error object.
-	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
-	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
-	XXX_sizecache        int32     `json:"-"`
-}
-
-func (m *AddResponse) Reset()      { *m = AddResponse{} }
-func (*AddResponse) ProtoMessage() {}
-func (*AddResponse) Descriptor() ([]byte, []int) {
+func (m *CreateRequest) Reset()      { *m = CreateRequest{} }
+func (*CreateRequest) ProtoMessage() {}
+func (*CreateRequest) Descriptor() ([]byte, []int) {
 	return fileDescriptor_dbb3b814fbe3e5c4, []int{12}
 }
-func (m *AddResponse) XXX_Unmarshal(b []byte) error {
+func (m *CreateRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
 }
-func (m *AddResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+func (m *CreateRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
 	if deterministic {
-		return xxx_messageInfo_AddResponse.Marshal(b, m, deterministic)
+		return xxx_messageInfo_CreateRequest.Marshal(b, m, deterministic)
 	} else {
 		b = b[:cap(b)]
 		n, err := m.MarshalTo(b)
@@ -716,36 +709,84 @@ func (m *AddResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) 
 		return b[:n], nil
 	}
 }
-func (m *AddResponse) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_AddResponse.Merge(m, src)
+func (m *CreateRequest) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateRequest.Merge(m, src)
 }
-func (m *AddResponse) XXX_Size() int {
+func (m *CreateRequest) XXX_Size() int {
 	return m.Size()
 }
-func (m *AddResponse) XXX_DiscardUnknown() {
-	xxx_messageInfo_AddResponse.DiscardUnknown(m)
+func (m *CreateRequest) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateRequest.DiscardUnknown(m)
 }
 
-var xxx_messageInfo_AddResponse proto.InternalMessageInfo
+var xxx_messageInfo_CreateRequest proto.InternalMessageInfo
 
-func (m *AddResponse) GetTask() *TaskBook {
+func (m *CreateRequest) GetOptions() *v1.CreateOptions {
 	if m != nil {
-		return m.Task
+		return m.Options
 	}
 	return nil
 }
 
-func (m *AddResponse) GetError() *v1.Error {
+func (m *CreateRequest) GetTaskBook() *TaskBook {
 	if m != nil {
-		return m.Error
+		return m.TaskBook
+	}
+	return nil
+}
+
+type CreateResponse struct {
+	// TaskBook object.
+	TaskBook             *TaskBook `protobuf:"bytes,1,opt,name=taskBook,proto3" json:"taskBook,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
+	XXX_sizecache        int32     `json:"-"`
+}
+
+func (m *CreateResponse) Reset()      { *m = CreateResponse{} }
+func (*CreateResponse) ProtoMessage() {}
+func (*CreateResponse) Descriptor() ([]byte, []int) {
+	return fileDescriptor_dbb3b814fbe3e5c4, []int{13}
+}
+func (m *CreateResponse) XXX_Unmarshal(b []byte) error {
+	return m.Unmarshal(b)
+}
+func (m *CreateResponse) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	if deterministic {
+		return xxx_messageInfo_CreateResponse.Marshal(b, m, deterministic)
+	} else {
+		b = b[:cap(b)]
+		n, err := m.MarshalTo(b)
+		if err != nil {
+			return nil, err
+		}
+		return b[:n], nil
+	}
+}
+func (m *CreateResponse) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateResponse.Merge(m, src)
+}
+func (m *CreateResponse) XXX_Size() int {
+	return m.Size()
+}
+func (m *CreateResponse) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateResponse.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateResponse proto.InternalMessageInfo
+
+func (m *CreateResponse) GetTaskBook() *TaskBook {
+	if m != nil {
+		return m.TaskBook
 	}
 	return nil
 }
 
 // Update
 type UpdateRequest struct {
+	// core_v1.UpdateOptions
+	Options *v1.UpdateOptions `protobuf:"bytes,1,opt,name=options,proto3" json:"options,omitempty"`
 	// TaskBook object.
-	Task                 *TaskBook `protobuf:"bytes,1,opt,name=task,proto3" json:"task,omitempty"`
+	TaskBook             *TaskBook `protobuf:"bytes,2,opt,name=taskBook,proto3" json:"taskBook,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
 	XXX_sizecache        int32     `json:"-"`
 }
@@ -753,7 +794,7 @@ type UpdateRequest struct {
 func (m *UpdateRequest) Reset()      { *m = UpdateRequest{} }
 func (*UpdateRequest) ProtoMessage() {}
 func (*UpdateRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dbb3b814fbe3e5c4, []int{13}
+	return fileDescriptor_dbb3b814fbe3e5c4, []int{14}
 }
 func (m *UpdateRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -782,18 +823,23 @@ func (m *UpdateRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_UpdateRequest proto.InternalMessageInfo
 
-func (m *UpdateRequest) GetTask() *TaskBook {
+func (m *UpdateRequest) GetOptions() *v1.UpdateOptions {
 	if m != nil {
-		return m.Task
+		return m.Options
+	}
+	return nil
+}
+
+func (m *UpdateRequest) GetTaskBook() *TaskBook {
+	if m != nil {
+		return m.TaskBook
 	}
 	return nil
 }
 
 type UpdateResponse struct {
 	// TaskBook object.
-	Task *TaskBook `protobuf:"bytes,1,opt,name=task,proto3" json:"task,omitempty"`
-	// Error object.
-	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
+	TaskBook             *TaskBook `protobuf:"bytes,1,opt,name=taskBook,proto3" json:"taskBook,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
 	XXX_sizecache        int32     `json:"-"`
 }
@@ -801,7 +847,7 @@ type UpdateResponse struct {
 func (m *UpdateResponse) Reset()      { *m = UpdateResponse{} }
 func (*UpdateResponse) ProtoMessage() {}
 func (*UpdateResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dbb3b814fbe3e5c4, []int{14}
+	return fileDescriptor_dbb3b814fbe3e5c4, []int{15}
 }
 func (m *UpdateResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -830,24 +876,19 @@ func (m *UpdateResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_UpdateResponse proto.InternalMessageInfo
 
-func (m *UpdateResponse) GetTask() *TaskBook {
+func (m *UpdateResponse) GetTaskBook() *TaskBook {
 	if m != nil {
-		return m.Task
-	}
-	return nil
-}
-
-func (m *UpdateResponse) GetError() *v1.Error {
-	if m != nil {
-		return m.Error
+		return m.TaskBook
 	}
 	return nil
 }
 
 // Delete
 type DeleteRequest struct {
+	// core_v1.DeleteOptions
+	Options *v1.DeleteOptions `protobuf:"bytes,1,opt,name=options,proto3" json:"options,omitempty"`
 	// TaskBook object.
-	Task                 *TaskBook `protobuf:"bytes,1,opt,name=task,proto3" json:"task,omitempty"`
+	TaskBook             *TaskBook `protobuf:"bytes,2,opt,name=taskBook,proto3" json:"taskBook,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
 	XXX_sizecache        int32     `json:"-"`
 }
@@ -855,7 +896,7 @@ type DeleteRequest struct {
 func (m *DeleteRequest) Reset()      { *m = DeleteRequest{} }
 func (*DeleteRequest) ProtoMessage() {}
 func (*DeleteRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dbb3b814fbe3e5c4, []int{15}
+	return fileDescriptor_dbb3b814fbe3e5c4, []int{16}
 }
 func (m *DeleteRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -884,18 +925,23 @@ func (m *DeleteRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_DeleteRequest proto.InternalMessageInfo
 
-func (m *DeleteRequest) GetTask() *TaskBook {
+func (m *DeleteRequest) GetOptions() *v1.DeleteOptions {
 	if m != nil {
-		return m.Task
+		return m.Options
+	}
+	return nil
+}
+
+func (m *DeleteRequest) GetTaskBook() *TaskBook {
+	if m != nil {
+		return m.TaskBook
 	}
 	return nil
 }
 
 type DeleteResponse struct {
 	// TaskBook object.
-	Task *TaskBook `protobuf:"bytes,1,opt,name=task,proto3" json:"task,omitempty"`
-	// Error object.
-	Error                *v1.Error `protobuf:"bytes,2,opt,name=error,proto3" json:"error,omitempty"`
+	TaskBook             *TaskBook `protobuf:"bytes,1,opt,name=taskBook,proto3" json:"taskBook,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
 	XXX_sizecache        int32     `json:"-"`
 }
@@ -903,7 +949,7 @@ type DeleteResponse struct {
 func (m *DeleteResponse) Reset()      { *m = DeleteResponse{} }
 func (*DeleteResponse) ProtoMessage() {}
 func (*DeleteResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dbb3b814fbe3e5c4, []int{16}
+	return fileDescriptor_dbb3b814fbe3e5c4, []int{17}
 }
 func (m *DeleteResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -932,24 +978,17 @@ func (m *DeleteResponse) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_DeleteResponse proto.InternalMessageInfo
 
-func (m *DeleteResponse) GetTask() *TaskBook {
+func (m *DeleteResponse) GetTaskBook() *TaskBook {
 	if m != nil {
-		return m.Task
-	}
-	return nil
-}
-
-func (m *DeleteResponse) GetError() *v1.Error {
-	if m != nil {
-		return m.Error
+		return m.TaskBook
 	}
 	return nil
 }
 
 // Watch
 type WatchRequest struct {
-	// WatchOptions options for WatchRequest.
-	WatchOptions         *v1.WatchOptions `protobuf:"bytes,1,opt,name=watchOptions,proto3" json:"watchOptions,omitempty"`
+	// core_v1.WatchOptions
+	Options              *v1.WatchOptions `protobuf:"bytes,1,opt,name=options,proto3" json:"options,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}         `json:"-"`
 	XXX_sizecache        int32            `json:"-"`
 }
@@ -957,7 +996,7 @@ type WatchRequest struct {
 func (m *WatchRequest) Reset()      { *m = WatchRequest{} }
 func (*WatchRequest) ProtoMessage() {}
 func (*WatchRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dbb3b814fbe3e5c4, []int{17}
+	return fileDescriptor_dbb3b814fbe3e5c4, []int{18}
 }
 func (m *WatchRequest) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -986,9 +1025,9 @@ func (m *WatchRequest) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_WatchRequest proto.InternalMessageInfo
 
-func (m *WatchRequest) GetWatchOptions() *v1.WatchOptions {
+func (m *WatchRequest) GetOptions() *v1.WatchOptions {
 	if m != nil {
-		return m.WatchOptions
+		return m.Options
 	}
 	return nil
 }
@@ -997,9 +1036,7 @@ type WatchResponse struct {
 	// TaskBook info for watch response.
 	Event *v1alpha.Event `protobuf:"bytes,1,opt,name=event,proto3" json:"event,omitempty"`
 	// TaskBook for watch response.
-	Task *TaskBook `protobuf:"bytes,2,opt,name=task,proto3" json:"task,omitempty"`
-	// Error object.
-	Error                *v1.Error `protobuf:"bytes,3,opt,name=error,proto3" json:"error,omitempty"`
+	TaskBook             *TaskBook `protobuf:"bytes,2,opt,name=taskBook,proto3" json:"taskBook,omitempty"`
 	XXX_NoUnkeyedLiteral struct{}  `json:"-"`
 	XXX_sizecache        int32     `json:"-"`
 }
@@ -1007,7 +1044,7 @@ type WatchResponse struct {
 func (m *WatchResponse) Reset()      { *m = WatchResponse{} }
 func (*WatchResponse) ProtoMessage() {}
 func (*WatchResponse) Descriptor() ([]byte, []int) {
-	return fileDescriptor_dbb3b814fbe3e5c4, []int{18}
+	return fileDescriptor_dbb3b814fbe3e5c4, []int{19}
 }
 func (m *WatchResponse) XXX_Unmarshal(b []byte) error {
 	return m.Unmarshal(b)
@@ -1043,22 +1080,16 @@ func (m *WatchResponse) GetEvent() *v1alpha.Event {
 	return nil
 }
 
-func (m *WatchResponse) GetTask() *TaskBook {
+func (m *WatchResponse) GetTaskBook() *TaskBook {
 	if m != nil {
-		return m.Task
-	}
-	return nil
-}
-
-func (m *WatchResponse) GetError() *v1.Error {
-	if m != nil {
-		return m.Error
+		return m.TaskBook
 	}
 	return nil
 }
 
 func init() {
 	proto.RegisterType((*TaskBook)(nil), "taskbooks.v1alpha.TaskBook")
+	proto.RegisterType((*TaskBookList)(nil), "taskbooks.v1alpha.TaskBookList")
 	proto.RegisterType((*TaskBookSpec)(nil), "taskbooks.v1alpha.TaskBookSpec")
 	proto.RegisterType((*Step)(nil), "taskbooks.v1alpha.Step")
 	proto.RegisterType((*RunOptions)(nil), "taskbooks.v1alpha.RunOptions")
@@ -1069,8 +1100,8 @@ func init() {
 	proto.RegisterType((*GetResponse)(nil), "taskbooks.v1alpha.GetResponse")
 	proto.RegisterType((*ListRequest)(nil), "taskbooks.v1alpha.ListRequest")
 	proto.RegisterType((*ListResponse)(nil), "taskbooks.v1alpha.ListResponse")
-	proto.RegisterType((*AddRequest)(nil), "taskbooks.v1alpha.AddRequest")
-	proto.RegisterType((*AddResponse)(nil), "taskbooks.v1alpha.AddResponse")
+	proto.RegisterType((*CreateRequest)(nil), "taskbooks.v1alpha.CreateRequest")
+	proto.RegisterType((*CreateResponse)(nil), "taskbooks.v1alpha.CreateResponse")
 	proto.RegisterType((*UpdateRequest)(nil), "taskbooks.v1alpha.UpdateRequest")
 	proto.RegisterType((*UpdateResponse)(nil), "taskbooks.v1alpha.UpdateResponse")
 	proto.RegisterType((*DeleteRequest)(nil), "taskbooks.v1alpha.DeleteRequest")
@@ -1084,63 +1115,68 @@ func init() {
 }
 
 var fileDescriptor_dbb3b814fbe3e5c4 = []byte{
-	// 889 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x56, 0x4f, 0x6f, 0xdc, 0x44,
-	0x14, 0x8f, 0xe3, 0xdd, 0x55, 0xf6, 0x25, 0xad, 0xc4, 0x10, 0xca, 0x76, 0x01, 0x37, 0x58, 0x1c,
-	0x2a, 0xa1, 0xd8, 0xa4, 0xa9, 0x2a, 0x35, 0x52, 0x25, 0x5c, 0x12, 0xad, 0x2a, 0xa5, 0xaa, 0x34,
-	0x2d, 0xaa, 0xe0, 0x36, 0x6b, 0xcf, 0x7a, 0xcd, 0x7a, 0x3d, 0xc6, 0x33, 0xbb, 0x10, 0xc4, 0x81,
-	0x6f, 0x00, 0x12, 0x5f, 0x82, 0x8f, 0xc0, 0x91, 0x63, 0x85, 0x38, 0x70, 0xe4, 0x48, 0x96, 0x2f,
-	0xc1, 0x11, 0x79, 0x66, 0xfc, 0x67, 0x53, 0x6f, 0x48, 0x52, 0xe5, 0x36, 0x6f, 0xde, 0xef, 0xfd,
-	0xe6, 0xf7, 0x9e, 0xdf, 0x9b, 0x31, 0x1c, 0x86, 0x91, 0x18, 0xcf, 0x86, 0x8e, 0xcf, 0xa6, 0x6e,
-	0x48, 0x62, 0xfa, 0x6d, 0x26, 0x5c, 0x1a, 0xd0, 0xc4, 0x67, 0xc9, 0x68, 0x1a, 0x4e, 0x85, 0x9b,
-	0x4e, 0x42, 0x97, 0xa4, 0x11, 0x77, 0x05, 0xe1, 0x93, 0x21, 0x63, 0x13, 0xee, 0xce, 0xf7, 0x48,
-	0x9c, 0x8e, 0x49, 0xbe, 0xed, 0xa4, 0x19, 0x13, 0x0c, 0xbd, 0x55, 0x3a, 0x1d, 0xed, 0xec, 0xef,
-	0xd6, 0x89, 0x59, 0xc8, 0x5c, 0x89, 0x1c, 0xce, 0x46, 0xd2, 0x92, 0x86, 0x5c, 0x29, 0x86, 0xfe,
-	0xed, 0x90, 0xb1, 0x30, 0xa6, 0x15, 0x8a, 0x24, 0x27, 0xda, 0x75, 0x70, 0x61, 0x89, 0x3e, 0xcb,
-	0xa8, 0x3b, 0xdf, 0xab, 0x84, 0xf5, 0xbd, 0x0b, 0xc7, 0xd2, 0x39, 0x4d, 0x44, 0x43, 0x6e, 0xb6,
-	0x80, 0x8d, 0x17, 0x84, 0x4f, 0x1e, 0x33, 0x36, 0x41, 0xfb, 0xb0, 0x31, 0xa5, 0x82, 0x04, 0x44,
-	0x90, 0x9e, 0xb1, 0x63, 0xdc, 0xdd, 0xbc, 0xf7, 0xae, 0x93, 0x1f, 0xea, 0xcc, 0xf7, 0x9c, 0x67,
-	0xc3, 0xaf, 0xa8, 0x2f, 0x9e, 0x6a, 0x37, 0x2e, 0x81, 0x68, 0x1f, 0x5a, 0x3c, 0xa5, 0x7e, 0x6f,
-	0x5d, 0x06, 0xdc, 0x71, 0x5e, 0xab, 0x95, 0x53, 0xf0, 0x3f, 0x4f, 0xa9, 0x8f, 0x25, 0xd8, 0xfe,
-	0x1e, 0xb6, 0xea, 0xbb, 0xe8, 0x11, 0x40, 0x36, 0x4b, 0x9e, 0xa5, 0x22, 0x62, 0x09, 0xd7, 0x67,
-	0x7f, 0xd0, 0x40, 0x85, 0x4b, 0x10, 0xae, 0x05, 0xa0, 0x5d, 0x68, 0x73, 0x41, 0x53, 0xde, 0x5b,
-	0xdf, 0x31, 0xa5, 0xea, 0xd7, 0x23, 0x9f, 0x0b, 0x9a, 0x62, 0x85, 0xb2, 0x9f, 0x40, 0x2b, 0x37,
-	0x11, 0x82, 0x56, 0x42, 0xa6, 0x54, 0x9e, 0xd7, 0xc5, 0x72, 0x8d, 0x76, 0x97, 0xd2, 0xb9, 0xdd,
-	0xc0, 0xe4, 0xf9, 0xf9, 0xa1, 0x3a, 0x91, 0x1f, 0x0d, 0x80, 0x4a, 0x54, 0xce, 0xc8, 0x4f, 0x12,
-	0x5f, 0x32, 0x6e, 0x60, 0xb9, 0x46, 0x07, 0xd0, 0xe5, 0x34, 0x8b, 0x48, 0x1c, 0x7d, 0x47, 0x35,
-	0xed, 0xfb, 0x4d, 0x02, 0x0b, 0x0c, 0xae, 0xe0, 0x68, 0x0f, 0x3a, 0x82, 0x64, 0x21, 0x15, 0x3d,
-	0x73, 0xa5, 0x9e, 0x17, 0x12, 0x80, 0x35, 0xd0, 0xfe, 0x02, 0xba, 0x25, 0x15, 0xda, 0x86, 0xb6,
-	0xcf, 0x66, 0x89, 0x90, 0x82, 0x4c, 0xac, 0x0c, 0xf4, 0x00, 0x6e, 0x8d, 0x48, 0x14, 0x7b, 0x23,
-	0x41, 0x33, 0x2f, 0x8e, 0x15, 0x01, 0xc7, 0x24, 0x91, 0xf2, 0x36, 0xf0, 0x0a, 0xaf, 0x7d, 0x1f,
-	0x3a, 0xca, 0xca, 0x79, 0xc7, 0x8c, 0x8b, 0xfc, 0x53, 0x99, 0x77, 0xbb, 0x58, 0x19, 0xf9, 0x6e,
-	0x1c, 0x4d, 0x23, 0x21, 0x69, 0x4c, 0xac, 0x0c, 0xfb, 0x77, 0x03, 0x3a, 0xaa, 0x66, 0xe8, 0x16,
-	0x74, 0x88, 0x5c, 0xe9, 0x92, 0x6b, 0x0b, 0xed, 0x03, 0xf8, 0x2c, 0x09, 0x22, 0xf5, 0xf9, 0x55,
-	0x8d, 0xde, 0x2e, 0x5b, 0xef, 0xb3, 0xd2, 0x85, 0x6b, 0xb0, 0x33, 0x3d, 0x63, 0x5e, 0xb6, 0x67,
-	0xee, 0x03, 0xa4, 0x24, 0x23, 0x53, 0x2a, 0x68, 0xc6, 0x7b, 0x2d, 0xd9, 0x38, 0xdb, 0x8e, 0x9a,
-	0x53, 0xa7, 0x98, 0x53, 0xc7, 0x4b, 0x4e, 0x70, 0x0d, 0x67, 0x7b, 0x00, 0x03, 0x2a, 0x30, 0xfd,
-	0x7a, 0x46, 0xb9, 0xc8, 0x75, 0x87, 0x54, 0x2c, 0xb7, 0x6d, 0xa5, 0x7b, 0x50, 0xba, 0x70, 0x0d,
-	0x66, 0x07, 0xb0, 0x29, 0x29, 0x78, 0xca, 0x12, 0x4e, 0x91, 0x0b, 0xad, 0x5c, 0xb3, 0x8e, 0x7e,
-	0xef, 0x9c, 0xf9, 0xc1, 0x12, 0x88, 0x3e, 0x82, 0x36, 0xcd, 0x32, 0x96, 0xe9, 0x3a, 0xdd, 0x2c,
-	0xcf, 0x3b, 0xca, 0x77, 0xb1, 0x72, 0xda, 0x47, 0xb0, 0x79, 0x1c, 0xf1, 0x52, 0xe9, 0x03, 0xd8,
-	0x8c, 0x23, 0x7e, 0x46, 0xea, 0x76, 0x19, 0x7a, 0x5c, 0xf9, 0x70, 0x1d, 0x68, 0x33, 0xd8, 0x52,
-	0x34, 0x5a, 0xed, 0x43, 0xe8, 0x96, 0x02, 0xe5, 0xc7, 0xff, 0x1f, 0xc9, 0x15, 0xfa, 0x82, 0xba,
-	0x1f, 0x01, 0x78, 0x41, 0x50, 0xc8, 0xbe, 0x6c, 0x71, 0xf2, 0xe2, 0xca, 0xf0, 0xeb, 0x2d, 0xee,
-	0xa7, 0x70, 0xe3, 0xf3, 0x34, 0x20, 0x82, 0x5e, 0x59, 0x67, 0x08, 0x37, 0x0b, 0x86, 0x6b, 0x97,
-	0x7a, 0x48, 0x63, 0xfa, 0x66, 0x52, 0x0b, 0x86, 0xeb, 0x95, 0xfa, 0x04, 0xb6, 0x5e, 0x12, 0xe1,
-	0x8f, 0x0b, 0xa5, 0x0f, 0x61, 0xeb, 0x9b, 0xdc, 0x5e, 0x6e, 0xda, 0x77, 0xca, 0xe0, 0x97, 0x35,
-	0x27, 0x5e, 0x82, 0xda, 0x3f, 0x1b, 0x70, 0x43, 0x73, 0x69, 0xcd, 0x1f, 0x43, 0x5b, 0xbe, 0x81,
-	0x25, 0x8b, 0x7a, 0x11, 0x4b, 0xc5, 0x47, 0xb9, 0x89, 0x15, 0xa6, 0x4c, 0x70, 0xfd, 0xd2, 0x09,
-	0x9a, 0xe7, 0x24, 0x78, 0xef, 0x0f, 0x13, 0xba, 0x45, 0x20, 0x47, 0x87, 0x60, 0x0e, 0xa8, 0x40,
-	0x4d, 0x57, 0x56, 0x75, 0xc5, 0xf4, 0xad, 0x55, 0x6e, 0x9d, 0xd7, 0x00, 0x5a, 0xf9, 0x80, 0xa2,
-	0x26, 0x5c, 0xed, 0x02, 0xe8, 0xdf, 0x59, 0xe9, 0xd7, 0x44, 0x87, 0x60, 0x7a, 0x41, 0xd0, 0x28,
-	0xa7, 0x1a, 0xc8, 0x46, 0x39, 0xf5, 0x81, 0x7b, 0x0a, 0x1d, 0xd5, 0xd7, 0x68, 0xa7, 0x01, 0xb9,
-	0x34, 0x34, 0xfd, 0x0f, 0xcf, 0x41, 0x54, 0x74, 0xaa, 0xf7, 0x1a, 0xe9, 0x96, 0x1a, 0xbb, 0x91,
-	0xee, 0x4c, 0xe3, 0x1e, 0x43, 0x5b, 0x76, 0x05, 0x6a, 0xaa, 0x46, 0xbd, 0xf7, 0xfa, 0x3b, 0xab,
-	0x01, 0x8a, 0xeb, 0x13, 0xe3, 0xf1, 0xf8, 0xd5, 0xa9, 0x65, 0xfc, 0x75, 0x6a, 0xad, 0xfd, 0x7b,
-	0x6a, 0x19, 0x3f, 0x2c, 0x2c, 0xe3, 0x97, 0x85, 0x65, 0xfc, 0xba, 0xb0, 0xd6, 0x7e, 0x5b, 0x58,
-	0xc6, 0xab, 0x85, 0x65, 0xfc, 0xb9, 0xb0, 0x8c, 0xbf, 0x17, 0x96, 0xf1, 0xd3, 0x3f, 0xd6, 0xda,
-	0x97, 0x07, 0x57, 0xff, 0x15, 0x1d, 0x76, 0xe4, 0x7b, 0xb4, 0xff, 0x5f, 0x00, 0x00, 0x00, 0xff,
-	0xff, 0x68, 0x67, 0x19, 0xb4, 0xcf, 0x0a, 0x00, 0x00,
+	// 970 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x56, 0x4f, 0x6f, 0x1b, 0x45,
+	0x14, 0xcf, 0xc6, 0x7f, 0xb0, 0x5f, 0x12, 0x24, 0x86, 0x90, 0xba, 0x06, 0x36, 0x66, 0x4f, 0x91,
+	0x90, 0x77, 0xeb, 0xa4, 0x2a, 0x52, 0xaa, 0x0a, 0x39, 0x09, 0x58, 0x95, 0x1a, 0x55, 0x9a, 0x14,
+	0x21, 0xb8, 0x8d, 0xd7, 0x93, 0xf5, 0xe2, 0xf5, 0xce, 0xb2, 0x33, 0x76, 0x49, 0x40, 0x88, 0x6f,
+	0x00, 0x1f, 0x83, 0x8f, 0xc0, 0x91, 0x63, 0xd5, 0x13, 0x17, 0x24, 0x6e, 0x10, 0xf3, 0x25, 0x38,
+	0xa2, 0x9d, 0x99, 0x5d, 0xff, 0xc9, 0x3a, 0x72, 0xdb, 0x9c, 0x3c, 0x6f, 0xdf, 0xef, 0xfd, 0xde,
+	0xef, 0xbd, 0x79, 0x33, 0x63, 0x38, 0xf1, 0x7c, 0xd1, 0x1f, 0x75, 0x6d, 0x97, 0x0d, 0x1d, 0x8f,
+	0x04, 0xf4, 0xbb, 0x58, 0x38, 0xb4, 0x47, 0x43, 0x97, 0x85, 0xe7, 0x43, 0x6f, 0x28, 0x9c, 0x68,
+	0xe0, 0x39, 0x24, 0xf2, 0xb9, 0x23, 0x08, 0x1f, 0x74, 0x19, 0x1b, 0x70, 0x67, 0xdc, 0x22, 0x41,
+	0xd4, 0x27, 0xc9, 0x67, 0x3b, 0x8a, 0x99, 0x60, 0xe8, 0x9d, 0xcc, 0x69, 0x6b, 0x67, 0xbd, 0x39,
+	0x4b, 0xcc, 0x3c, 0xe6, 0x48, 0x64, 0x77, 0x74, 0x2e, 0x2d, 0x69, 0xc8, 0x95, 0x62, 0xa8, 0xdf,
+	0xf5, 0x18, 0xf3, 0x02, 0x3a, 0x45, 0x91, 0xf0, 0x42, 0xbb, 0x3a, 0xab, 0x48, 0xf4, 0xe2, 0xc8,
+	0x75, 0xa2, 0x60, 0xe4, 0xf9, 0x21, 0x97, 0x7a, 0x69, 0x3c, 0xa6, 0xb1, 0xa3, 0x7e, 0x34, 0xd1,
+	0x83, 0x19, 0xa2, 0xe1, 0x73, 0x5f, 0x0c, 0xd8, 0x73, 0xc7, 0x63, 0x4d, 0xe9, 0x6c, 0x8e, 0x49,
+	0xe0, 0xf7, 0x88, 0x60, 0x31, 0x77, 0xb2, 0xa5, 0x8e, 0x3b, 0x5c, 0xb9, 0x47, 0x2e, 0x8b, 0xa9,
+	0x33, 0x6e, 0x4d, 0x3b, 0x53, 0x6f, 0xaf, 0x1c, 0x4b, 0xc7, 0x34, 0x14, 0x39, 0xcd, 0xb5, 0xbe,
+	0x87, 0xca, 0x33, 0xc2, 0x07, 0x47, 0x8c, 0x0d, 0xd0, 0x01, 0x54, 0x86, 0x54, 0x90, 0x1e, 0x11,
+	0xa4, 0x66, 0x34, 0x8c, 0xbd, 0x8d, 0xfd, 0x3b, 0x76, 0x92, 0xd4, 0x1e, 0xb7, 0xec, 0xa7, 0xdd,
+	0x6f, 0xa8, 0x2b, 0x4e, 0xb5, 0x1b, 0x67, 0x40, 0x74, 0x00, 0x45, 0x1e, 0x51, 0xb7, 0xb6, 0x2e,
+	0x03, 0x76, 0xed, 0x6b, 0x9b, 0x65, 0xa7, 0xfc, 0x67, 0x11, 0x75, 0xb1, 0x04, 0x1f, 0x96, 0x5e,
+	0x9e, 0xad, 0x57, 0x0c, 0xeb, 0x47, 0xd8, 0x4c, 0x9d, 0x4f, 0x7c, 0x2e, 0xd0, 0xc3, 0x95, 0x05,
+	0x1c, 0x95, 0x27, 0x7f, 0xef, 0xae, 0x37, 0x8c, 0x19, 0x21, 0x2d, 0x28, 0xf9, 0x82, 0x0e, 0x79,
+	0x6d, 0xbd, 0x51, 0xd8, 0xdb, 0xd8, 0x7f, 0xff, 0x06, 0x25, 0x58, 0x21, 0xad, 0x1f, 0xa6, 0xf9,
+	0x13, 0x71, 0xe8, 0x11, 0x40, 0x3c, 0x0a, 0x9f, 0x46, 0xc2, 0x67, 0x21, 0xd7, 0x0a, 0x3e, 0xcc,
+	0xe1, 0xc1, 0x19, 0x08, 0xcf, 0x04, 0xa0, 0x26, 0x94, 0xb8, 0xa0, 0x51, 0xaa, 0xe0, 0x4e, 0x4e,
+	0xe4, 0x99, 0xa0, 0x11, 0x56, 0x28, 0xeb, 0x31, 0x14, 0x13, 0x13, 0x21, 0x28, 0x86, 0x64, 0x48,
+	0x65, 0xbe, 0x2a, 0x96, 0x6b, 0xd4, 0x9c, 0xeb, 0xea, 0xdd, 0x1c, 0xa6, 0xb6, 0x9b, 0x24, 0x55,
+	0xfd, 0xb4, 0x7e, 0x36, 0x00, 0xa6, 0xa2, 0x12, 0x46, 0x7e, 0x11, 0xba, 0x92, 0xb1, 0x82, 0xe5,
+	0x1a, 0x1d, 0x42, 0x95, 0xd3, 0xd8, 0x27, 0x81, 0x7f, 0x49, 0x35, 0xed, 0x07, 0x79, 0x02, 0x53,
+	0x0c, 0x9e, 0xc2, 0x51, 0x0b, 0xca, 0x82, 0xc4, 0x1e, 0x15, 0xb5, 0xc2, 0x52, 0x3d, 0xcf, 0x24,
+	0x00, 0x6b, 0xa0, 0xf5, 0x15, 0x54, 0x33, 0x2a, 0xb4, 0x0d, 0x25, 0x97, 0x8d, 0x42, 0x21, 0x05,
+	0x15, 0xb0, 0x32, 0xd0, 0x03, 0xd8, 0x39, 0x27, 0x7e, 0xd0, 0x3e, 0x17, 0x34, 0x6e, 0x07, 0x81,
+	0x22, 0xe0, 0x98, 0x84, 0x52, 0x5e, 0x05, 0x2f, 0xf1, 0x5a, 0xf7, 0xa1, 0xac, 0xac, 0x84, 0xb7,
+	0xcf, 0xb8, 0x48, 0xb6, 0xaa, 0xb0, 0x57, 0xc5, 0xca, 0x48, 0xbe, 0x06, 0xfe, 0xd0, 0x17, 0x92,
+	0xa6, 0x80, 0x95, 0x61, 0xbd, 0x34, 0xa0, 0xac, 0x7a, 0x86, 0x76, 0xa0, 0x4c, 0xe4, 0x4a, 0xb7,
+	0x5c, 0x5b, 0xe8, 0x00, 0xc0, 0x65, 0x61, 0xcf, 0x57, 0xdb, 0xaf, 0x7a, 0xf4, 0x6e, 0x36, 0x80,
+	0xc7, 0x99, 0x0b, 0xcf, 0xc0, 0x16, 0x66, 0xa6, 0xf0, 0xaa, 0x33, 0x73, 0x1f, 0x20, 0x22, 0x31,
+	0x19, 0x52, 0x41, 0x63, 0x5e, 0x2b, 0xca, 0xc1, 0xd9, 0xb6, 0xd5, 0x7d, 0x65, 0xa7, 0xf7, 0x95,
+	0xdd, 0x0e, 0x2f, 0xf0, 0x0c, 0xce, 0x7a, 0x08, 0xd0, 0xa1, 0x02, 0xd3, 0x6f, 0x47, 0x94, 0x0b,
+	0xd4, 0x84, 0xb7, 0xd8, 0xdc, 0xcc, 0x4e, 0x45, 0x77, 0xa8, 0x48, 0xb3, 0xa6, 0x18, 0xeb, 0x73,
+	0xd8, 0x90, 0xc1, 0x3c, 0x62, 0x21, 0xa7, 0xe8, 0x13, 0xa8, 0x08, 0x7d, 0x08, 0x74, 0xf8, 0x8d,
+	0x47, 0x27, 0x03, 0x5b, 0x8f, 0x60, 0x23, 0x39, 0xb5, 0xa9, 0x0a, 0x7b, 0x51, 0xc5, 0x76, 0xa6,
+	0x22, 0x81, 0x5d, 0x93, 0x71, 0x06, 0x9b, 0x2a, 0x5c, 0xeb, 0x38, 0x86, 0x4d, 0x31, 0x73, 0x19,
+	0x68, 0x92, 0x9b, 0x2e, 0x14, 0x19, 0x3e, 0x17, 0x64, 0x5d, 0xc2, 0xd6, 0x71, 0x4c, 0x89, 0xa0,
+	0xa9, 0xaa, 0x7b, 0x8b, 0xaa, 0x76, 0xa6, 0x1b, 0x2a, 0x81, 0x8b, 0xba, 0xe6, 0xfa, 0xb1, 0xfe,
+	0x2a, 0xfd, 0x78, 0x0c, 0x6f, 0xa7, 0xb9, 0xdf, 0xb4, 0xb5, 0x97, 0xb0, 0xf5, 0x45, 0xd4, 0x5b,
+	0xad, 0x0c, 0x05, 0xbc, 0xd5, 0x32, 0xd2, 0xdc, 0xb7, 0x50, 0xc6, 0x09, 0x0d, 0xe8, 0x4a, 0x65,
+	0x28, 0xe0, 0xad, 0x96, 0x91, 0xe6, 0x7e, 0xd3, 0x32, 0x3e, 0x85, 0xcd, 0x2f, 0x89, 0x70, 0xfb,
+	0x69, 0x15, 0xce, 0x62, 0x15, 0xef, 0x65, 0x55, 0x48, 0xdc, 0xb5, 0x51, 0x1f, 0xc1, 0x96, 0x26,
+	0xd0, 0x52, 0x3e, 0x86, 0x92, 0x7c, 0x91, 0xb3, 0x78, 0xf5, 0x3e, 0x67, 0x22, 0x3e, 0x4b, 0x4c,
+	0xac, 0x30, 0xaf, 0xdd, 0x82, 0xfd, 0x3f, 0x0b, 0x50, 0x4d, 0x3f, 0x73, 0x74, 0x02, 0x85, 0x0e,
+	0x15, 0x28, 0xef, 0x6e, 0x9a, 0xde, 0x25, 0x75, 0x73, 0x99, 0x5b, 0x2b, 0xef, 0x40, 0x51, 0x3e,
+	0xd5, 0x79, 0xb8, 0x99, 0xdb, 0xa0, 0xbe, 0xbb, 0xd4, 0xaf, 0x89, 0x4e, 0xa1, 0xac, 0x4e, 0x0b,
+	0x6a, 0xe4, 0x40, 0xe7, 0x0e, 0x71, 0xfd, 0xa3, 0x1b, 0x10, 0x53, 0x3a, 0x35, 0xb5, 0xb9, 0x74,
+	0x73, 0x87, 0x29, 0x97, 0x6e, 0x61, 0xe4, 0x4f, 0xa1, 0xac, 0xa6, 0x27, 0x97, 0x6e, 0x6e, 0xa8,
+	0x73, 0xe9, 0x16, 0x46, 0xef, 0x09, 0x94, 0xe4, 0x00, 0xa0, 0xbc, 0xb6, 0xcc, 0xce, 0x56, 0xbd,
+	0xb1, 0x1c, 0xa0, 0xb8, 0xee, 0x19, 0x47, 0xfd, 0x17, 0x57, 0xa6, 0xf1, 0xd7, 0x95, 0xb9, 0xf6,
+	0xdf, 0x95, 0x69, 0xfc, 0x34, 0x31, 0x8d, 0x5f, 0x27, 0xa6, 0xf1, 0xdb, 0xc4, 0x5c, 0xfb, 0x7d,
+	0x62, 0x1a, 0x2f, 0x26, 0xa6, 0xf1, 0xc7, 0xc4, 0x34, 0xfe, 0x99, 0x98, 0xc6, 0x2f, 0xff, 0x9a,
+	0x6b, 0x5f, 0x1f, 0xbe, 0xfe, 0x9f, 0xf0, 0x6e, 0x59, 0xbe, 0x40, 0x07, 0xff, 0x07, 0x00, 0x00,
+	0xff, 0xff, 0x48, 0x35, 0xdf, 0xab, 0xc9, 0x0b, 0x00, 0x00,
 }
 
 func (this *TaskBook) Equal(that interface{}) bool {
@@ -1167,6 +1203,38 @@ func (this *TaskBook) Equal(that interface{}) bool {
 	}
 	if !this.Spec.Equal(that1.Spec) {
 		return false
+	}
+	return true
+}
+func (this *TaskBookList) Equal(that interface{}) bool {
+	if that == nil {
+		return this == nil
+	}
+
+	that1, ok := that.(*TaskBookList)
+	if !ok {
+		that2, ok := that.(TaskBookList)
+		if ok {
+			that1 = &that2
+		} else {
+			return false
+		}
+	}
+	if that1 == nil {
+		return this == nil
+	} else if this == nil {
+		return false
+	}
+	if !this.Metadata.Equal(that1.Metadata) {
+		return false
+	}
+	if len(this.Items) != len(that1.Items) {
+		return false
+	}
+	for i := range this.Items {
+		if !this.Items[i].Equal(that1.Items[i]) {
+			return false
+		}
 	}
 	return true
 }
@@ -1375,7 +1443,7 @@ func (this *GetRequest) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.GetOptions.Equal(that1.GetOptions) {
+	if !this.Options.Equal(that1.Options) {
 		return false
 	}
 	return true
@@ -1399,10 +1467,7 @@ func (this *GetResponse) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.Task.Equal(that1.Task) {
-		return false
-	}
-	if !this.Error.Equal(that1.Error) {
+	if !this.TaskBook.Equal(that1.TaskBook) {
 		return false
 	}
 	return true
@@ -1426,7 +1491,7 @@ func (this *ListRequest) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.ListOptions.Equal(that1.ListOptions) {
+	if !this.Options.Equal(that1.Options) {
 		return false
 	}
 	return true
@@ -1450,27 +1515,19 @@ func (this *ListResponse) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if len(this.Taskbooks) != len(that1.Taskbooks) {
-		return false
-	}
-	for i := range this.Taskbooks {
-		if !this.Taskbooks[i].Equal(that1.Taskbooks[i]) {
-			return false
-		}
-	}
-	if !this.Error.Equal(that1.Error) {
+	if !this.TaskBookList.Equal(that1.TaskBookList) {
 		return false
 	}
 	return true
 }
-func (this *AddRequest) Equal(that interface{}) bool {
+func (this *CreateRequest) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*AddRequest)
+	that1, ok := that.(*CreateRequest)
 	if !ok {
-		that2, ok := that.(AddRequest)
+		that2, ok := that.(CreateRequest)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1482,19 +1539,22 @@ func (this *AddRequest) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.Task.Equal(that1.Task) {
+	if !this.Options.Equal(that1.Options) {
+		return false
+	}
+	if !this.TaskBook.Equal(that1.TaskBook) {
 		return false
 	}
 	return true
 }
-func (this *AddResponse) Equal(that interface{}) bool {
+func (this *CreateResponse) Equal(that interface{}) bool {
 	if that == nil {
 		return this == nil
 	}
 
-	that1, ok := that.(*AddResponse)
+	that1, ok := that.(*CreateResponse)
 	if !ok {
-		that2, ok := that.(AddResponse)
+		that2, ok := that.(CreateResponse)
 		if ok {
 			that1 = &that2
 		} else {
@@ -1506,10 +1566,7 @@ func (this *AddResponse) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.Task.Equal(that1.Task) {
-		return false
-	}
-	if !this.Error.Equal(that1.Error) {
+	if !this.TaskBook.Equal(that1.TaskBook) {
 		return false
 	}
 	return true
@@ -1533,7 +1590,10 @@ func (this *UpdateRequest) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.Task.Equal(that1.Task) {
+	if !this.Options.Equal(that1.Options) {
+		return false
+	}
+	if !this.TaskBook.Equal(that1.TaskBook) {
 		return false
 	}
 	return true
@@ -1557,10 +1617,7 @@ func (this *UpdateResponse) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.Task.Equal(that1.Task) {
-		return false
-	}
-	if !this.Error.Equal(that1.Error) {
+	if !this.TaskBook.Equal(that1.TaskBook) {
 		return false
 	}
 	return true
@@ -1584,7 +1641,10 @@ func (this *DeleteRequest) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.Task.Equal(that1.Task) {
+	if !this.Options.Equal(that1.Options) {
+		return false
+	}
+	if !this.TaskBook.Equal(that1.TaskBook) {
 		return false
 	}
 	return true
@@ -1608,10 +1668,7 @@ func (this *DeleteResponse) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.Task.Equal(that1.Task) {
-		return false
-	}
-	if !this.Error.Equal(that1.Error) {
+	if !this.TaskBook.Equal(that1.TaskBook) {
 		return false
 	}
 	return true
@@ -1635,7 +1692,7 @@ func (this *WatchRequest) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
-	if !this.WatchOptions.Equal(that1.WatchOptions) {
+	if !this.Options.Equal(that1.Options) {
 		return false
 	}
 	return true
@@ -1662,10 +1719,7 @@ func (this *WatchResponse) Equal(that interface{}) bool {
 	if !this.Event.Equal(that1.Event) {
 		return false
 	}
-	if !this.Task.Equal(that1.Task) {
-		return false
-	}
-	if !this.Error.Equal(that1.Error) {
+	if !this.TaskBook.Equal(that1.TaskBook) {
 		return false
 	}
 	return true
@@ -1687,8 +1741,8 @@ type TaskBooksClient interface {
 	Get(ctx context.Context, in *GetRequest, opts ...grpc.CallOption) (*GetResponse, error)
 	// List TaskBooks.
 	List(ctx context.Context, in *ListRequest, opts ...grpc.CallOption) (*ListResponse, error)
-	// Add a TaskBook.
-	Add(ctx context.Context, in *AddRequest, opts ...grpc.CallOption) (*AddResponse, error)
+	// Create a TaskBook.
+	Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error)
 	// Update a TaskBook.
 	Update(ctx context.Context, in *UpdateRequest, opts ...grpc.CallOption) (*UpdateResponse, error)
 	// Delete a TaskBook.
@@ -1723,9 +1777,9 @@ func (c *taskBooksClient) List(ctx context.Context, in *ListRequest, opts ...grp
 	return out, nil
 }
 
-func (c *taskBooksClient) Add(ctx context.Context, in *AddRequest, opts ...grpc.CallOption) (*AddResponse, error) {
-	out := new(AddResponse)
-	err := c.cc.Invoke(ctx, "/taskbooks.v1alpha.TaskBooks/Add", in, out, opts...)
+func (c *taskBooksClient) Create(ctx context.Context, in *CreateRequest, opts ...grpc.CallOption) (*CreateResponse, error) {
+	out := new(CreateResponse)
+	err := c.cc.Invoke(ctx, "/taskbooks.v1alpha.TaskBooks/Create", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1788,8 +1842,8 @@ type TaskBooksServer interface {
 	Get(context.Context, *GetRequest) (*GetResponse, error)
 	// List TaskBooks.
 	List(context.Context, *ListRequest) (*ListResponse, error)
-	// Add a TaskBook.
-	Add(context.Context, *AddRequest) (*AddResponse, error)
+	// Create a TaskBook.
+	Create(context.Context, *CreateRequest) (*CreateResponse, error)
 	// Update a TaskBook.
 	Update(context.Context, *UpdateRequest) (*UpdateResponse, error)
 	// Delete a TaskBook.
@@ -1838,20 +1892,20 @@ func _TaskBooks_List_Handler(srv interface{}, ctx context.Context, dec func(inte
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TaskBooks_Add_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AddRequest)
+func _TaskBooks_Create_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TaskBooksServer).Add(ctx, in)
+		return srv.(TaskBooksServer).Create(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/taskbooks.v1alpha.TaskBooks/Add",
+		FullMethod: "/taskbooks.v1alpha.TaskBooks/Create",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TaskBooksServer).Add(ctx, req.(*AddRequest))
+		return srv.(TaskBooksServer).Create(ctx, req.(*CreateRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1926,8 +1980,8 @@ var _TaskBooks_serviceDesc = grpc.ServiceDesc{
 			Handler:    _TaskBooks_List_Handler,
 		},
 		{
-			MethodName: "Add",
-			Handler:    _TaskBooks_Add_Handler,
+			MethodName: "Create",
+			Handler:    _TaskBooks_Create_Handler,
 		},
 		{
 			MethodName: "Update",
@@ -1986,6 +2040,46 @@ func (m *TaskBook) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
+func (m *TaskBookList) Marshal() (dAtA []byte, err error) {
+	size := m.Size()
+	dAtA = make([]byte, size)
+	n, err := m.MarshalTo(dAtA)
+	if err != nil {
+		return nil, err
+	}
+	return dAtA[:n], nil
+}
+
+func (m *TaskBookList) MarshalTo(dAtA []byte) (int, error) {
+	var i int
+	_ = i
+	var l int
+	_ = l
+	if m.Metadata != nil {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintApi(dAtA, i, uint64(m.Metadata.Size()))
+		n3, err := m.Metadata.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n3
+	}
+	if len(m.Items) > 0 {
+		for _, msg := range m.Items {
+			dAtA[i] = 0x12
+			i++
+			i = encodeVarintApi(dAtA, i, uint64(msg.Size()))
+			n, err := msg.MarshalTo(dAtA[i:])
+			if err != nil {
+				return 0, err
+			}
+			i += n
+		}
+	}
+	return i, nil
+}
+
 func (m *TaskBookSpec) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
@@ -2005,11 +2099,11 @@ func (m *TaskBookSpec) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0xa
 		i++
 		i = encodeVarintApi(dAtA, i, uint64(m.RunOptions.Size()))
-		n3, err := m.RunOptions.MarshalTo(dAtA[i:])
+		n4, err := m.RunOptions.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n3
+		i += n4
 	}
 	if len(m.Steps) > 0 {
 		for _, msg := range m.Steps {
@@ -2051,11 +2145,11 @@ func (m *Step) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintApi(dAtA, i, uint64(m.Spec.Size()))
-		n4, err := m.Spec.MarshalTo(dAtA[i:])
+		n5, err := m.Spec.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n4
+		i += n5
 	}
 	return i, nil
 }
@@ -2089,21 +2183,21 @@ func (m *RunOptions) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintApi(dAtA, i, uint64(m.Serialize.Size()))
-		n5, err := m.Serialize.MarshalTo(dAtA[i:])
+		n6, err := m.Serialize.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n5
+		i += n6
 	}
 	if m.Target != nil {
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintApi(dAtA, i, uint64(m.Target.Size()))
-		n6, err := m.Target.MarshalTo(dAtA[i:])
+		n7, err := m.Target.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n6
+		i += n7
 	}
 	return i, nil
 }
@@ -2204,21 +2298,21 @@ func (m *Action) MarshalTo(dAtA []byte) (int, error) {
 		dAtA[i] = 0x12
 		i++
 		i = encodeVarintApi(dAtA, i, uint64(m.Conditions.Size()))
-		n7, err := m.Conditions.MarshalTo(dAtA[i:])
+		n8, err := m.Conditions.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n7
+		i += n8
 	}
 	if m.RunOptions != nil {
 		dAtA[i] = 0x1a
 		i++
 		i = encodeVarintApi(dAtA, i, uint64(m.RunOptions.Size()))
-		n8, err := m.RunOptions.MarshalTo(dAtA[i:])
+		n9, err := m.RunOptions.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n8
+		i += n9
 	}
 	if len(m.Parameters) > 0 {
 		for _, msg := range m.Parameters {
@@ -2250,15 +2344,15 @@ func (m *GetRequest) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.GetOptions != nil {
+	if m.Options != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.GetOptions.Size()))
-		n9, err := m.GetOptions.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Options.Size()))
+		n10, err := m.Options.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
-		i += n9
+		i += n10
 	}
 	return i, nil
 }
@@ -2278,21 +2372,11 @@ func (m *GetResponse) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.Task != nil {
+	if m.TaskBook != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Task.Size()))
-		n10, err := m.Task.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n10
-	}
-	if m.Error != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Error.Size()))
-		n11, err := m.Error.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.TaskBook.Size()))
+		n11, err := m.TaskBook.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -2316,11 +2400,11 @@ func (m *ListRequest) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.ListOptions != nil {
+	if m.Options != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.ListOptions.Size()))
-		n12, err := m.ListOptions.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Options.Size()))
+		n12, err := m.Options.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -2344,23 +2428,11 @@ func (m *ListResponse) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if len(m.Taskbooks) > 0 {
-		for _, msg := range m.Taskbooks {
-			dAtA[i] = 0xa
-			i++
-			i = encodeVarintApi(dAtA, i, uint64(msg.Size()))
-			n, err := msg.MarshalTo(dAtA[i:])
-			if err != nil {
-				return 0, err
-			}
-			i += n
-		}
-	}
-	if m.Error != nil {
-		dAtA[i] = 0x12
+	if m.TaskBookList != nil {
+		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Error.Size()))
-		n13, err := m.Error.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.TaskBookList.Size()))
+		n13, err := m.TaskBookList.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -2369,7 +2441,7 @@ func (m *ListResponse) MarshalTo(dAtA []byte) (int, error) {
 	return i, nil
 }
 
-func (m *AddRequest) Marshal() (dAtA []byte, err error) {
+func (m *CreateRequest) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalTo(dAtA)
@@ -2379,25 +2451,35 @@ func (m *AddRequest) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *AddRequest) MarshalTo(dAtA []byte) (int, error) {
+func (m *CreateRequest) MarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.Task != nil {
+	if m.Options != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Task.Size()))
-		n14, err := m.Task.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Options.Size()))
+		n14, err := m.Options.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
 		i += n14
 	}
+	if m.TaskBook != nil {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintApi(dAtA, i, uint64(m.TaskBook.Size()))
+		n15, err := m.TaskBook.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n15
+	}
 	return i, nil
 }
 
-func (m *AddResponse) Marshal() (dAtA []byte, err error) {
+func (m *CreateResponse) Marshal() (dAtA []byte, err error) {
 	size := m.Size()
 	dAtA = make([]byte, size)
 	n, err := m.MarshalTo(dAtA)
@@ -2407,26 +2489,16 @@ func (m *AddResponse) Marshal() (dAtA []byte, err error) {
 	return dAtA[:n], nil
 }
 
-func (m *AddResponse) MarshalTo(dAtA []byte) (int, error) {
+func (m *CreateResponse) MarshalTo(dAtA []byte) (int, error) {
 	var i int
 	_ = i
 	var l int
 	_ = l
-	if m.Task != nil {
+	if m.TaskBook != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Task.Size()))
-		n15, err := m.Task.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n15
-	}
-	if m.Error != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Error.Size()))
-		n16, err := m.Error.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.TaskBook.Size()))
+		n16, err := m.TaskBook.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -2450,15 +2522,25 @@ func (m *UpdateRequest) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.Task != nil {
+	if m.Options != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Task.Size()))
-		n17, err := m.Task.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Options.Size()))
+		n17, err := m.Options.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
 		i += n17
+	}
+	if m.TaskBook != nil {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintApi(dAtA, i, uint64(m.TaskBook.Size()))
+		n18, err := m.TaskBook.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n18
 	}
 	return i, nil
 }
@@ -2478,21 +2560,11 @@ func (m *UpdateResponse) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.Task != nil {
+	if m.TaskBook != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Task.Size()))
-		n18, err := m.Task.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n18
-	}
-	if m.Error != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Error.Size()))
-		n19, err := m.Error.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.TaskBook.Size()))
+		n19, err := m.TaskBook.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -2516,15 +2588,25 @@ func (m *DeleteRequest) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.Task != nil {
+	if m.Options != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Task.Size()))
-		n20, err := m.Task.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Options.Size()))
+		n20, err := m.Options.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
 		i += n20
+	}
+	if m.TaskBook != nil {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintApi(dAtA, i, uint64(m.TaskBook.Size()))
+		n21, err := m.TaskBook.MarshalTo(dAtA[i:])
+		if err != nil {
+			return 0, err
+		}
+		i += n21
 	}
 	return i, nil
 }
@@ -2544,21 +2626,11 @@ func (m *DeleteResponse) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.Task != nil {
+	if m.TaskBook != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Task.Size()))
-		n21, err := m.Task.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n21
-	}
-	if m.Error != nil {
-		dAtA[i] = 0x12
-		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Error.Size()))
-		n22, err := m.Error.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.TaskBook.Size()))
+		n22, err := m.TaskBook.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -2582,11 +2654,11 @@ func (m *WatchRequest) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
-	if m.WatchOptions != nil {
+	if m.Options != nil {
 		dAtA[i] = 0xa
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.WatchOptions.Size()))
-		n23, err := m.WatchOptions.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.Options.Size()))
+		n23, err := m.Options.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
@@ -2620,25 +2692,15 @@ func (m *WatchResponse) MarshalTo(dAtA []byte) (int, error) {
 		}
 		i += n24
 	}
-	if m.Task != nil {
+	if m.TaskBook != nil {
 		dAtA[i] = 0x12
 		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Task.Size()))
-		n25, err := m.Task.MarshalTo(dAtA[i:])
+		i = encodeVarintApi(dAtA, i, uint64(m.TaskBook.Size()))
+		n25, err := m.TaskBook.MarshalTo(dAtA[i:])
 		if err != nil {
 			return 0, err
 		}
 		i += n25
-	}
-	if m.Error != nil {
-		dAtA[i] = 0x1a
-		i++
-		i = encodeVarintApi(dAtA, i, uint64(m.Error.Size()))
-		n26, err := m.Error.MarshalTo(dAtA[i:])
-		if err != nil {
-			return 0, err
-		}
-		i += n26
 	}
 	return i, nil
 }
@@ -2665,15 +2727,32 @@ func NewPopulatedTaskBook(r randyApi, easy bool) *TaskBook {
 	return this
 }
 
+func NewPopulatedTaskBookList(r randyApi, easy bool) *TaskBookList {
+	this := &TaskBookList{}
+	if r.Intn(10) != 0 {
+		this.Metadata = v1.NewPopulatedObjectMetadata(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		v1 := r.Intn(5)
+		this.Items = make([]*TaskBook, v1)
+		for i := 0; i < v1; i++ {
+			this.Items[i] = NewPopulatedTaskBook(r, easy)
+		}
+	}
+	if !easy && r.Intn(10) != 0 {
+	}
+	return this
+}
+
 func NewPopulatedTaskBookSpec(r randyApi, easy bool) *TaskBookSpec {
 	this := &TaskBookSpec{}
 	if r.Intn(10) != 0 {
 		this.RunOptions = NewPopulatedRunOptions(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		v1 := r.Intn(5)
-		this.Steps = make([]*Step, v1)
-		for i := 0; i < v1; i++ {
+		v2 := r.Intn(5)
+		this.Steps = make([]*Step, v2)
+		for i := 0; i < v2; i++ {
 			this.Steps[i] = NewPopulatedStep(r, easy)
 		}
 	}
@@ -2721,9 +2800,9 @@ func NewPopulatedSerialize(r randyApi, easy bool) *Serialize {
 
 func NewPopulatedTarget(r randyApi, easy bool) *Target {
 	this := &Target{}
-	v2 := r.Intn(10)
-	this.Hosts = make([]string, v2)
-	for i := 0; i < v2; i++ {
+	v3 := r.Intn(10)
+	this.Hosts = make([]string, v3)
+	for i := 0; i < v3; i++ {
 		this.Hosts[i] = string(randStringApi(r))
 	}
 	this.Limit = int64(r.Int63())
@@ -2745,9 +2824,9 @@ func NewPopulatedAction(r randyApi, easy bool) *Action {
 		this.RunOptions = NewPopulatedRunOptions(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		v3 := r.Intn(5)
-		this.Parameters = make([]*types.Any, v3)
-		for i := 0; i < v3; i++ {
+		v4 := r.Intn(5)
+		this.Parameters = make([]*types.Any, v4)
+		for i := 0; i < v4; i++ {
 			this.Parameters[i] = types.NewPopulatedAny(r, easy)
 		}
 	}
@@ -2759,7 +2838,7 @@ func NewPopulatedAction(r randyApi, easy bool) *Action {
 func NewPopulatedGetRequest(r randyApi, easy bool) *GetRequest {
 	this := &GetRequest{}
 	if r.Intn(10) != 0 {
-		this.GetOptions = v1.NewPopulatedGetOptions(r, easy)
+		this.Options = v1.NewPopulatedGetOptions(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2769,10 +2848,7 @@ func NewPopulatedGetRequest(r randyApi, easy bool) *GetRequest {
 func NewPopulatedGetResponse(r randyApi, easy bool) *GetResponse {
 	this := &GetResponse{}
 	if r.Intn(10) != 0 {
-		this.Task = NewPopulatedTaskBook(r, easy)
-	}
-	if r.Intn(10) != 0 {
-		this.Error = v1.NewPopulatedError(r, easy)
+		this.TaskBook = NewPopulatedTaskBook(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2782,7 +2858,7 @@ func NewPopulatedGetResponse(r randyApi, easy bool) *GetResponse {
 func NewPopulatedListRequest(r randyApi, easy bool) *ListRequest {
 	this := &ListRequest{}
 	if r.Intn(10) != 0 {
-		this.ListOptions = v1.NewPopulatedListOptions(r, easy)
+		this.Options = v1.NewPopulatedListOptions(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2792,37 +2868,30 @@ func NewPopulatedListRequest(r randyApi, easy bool) *ListRequest {
 func NewPopulatedListResponse(r randyApi, easy bool) *ListResponse {
 	this := &ListResponse{}
 	if r.Intn(10) != 0 {
-		v4 := r.Intn(5)
-		this.Taskbooks = make([]*TaskBook, v4)
-		for i := 0; i < v4; i++ {
-			this.Taskbooks[i] = NewPopulatedTaskBook(r, easy)
-		}
-	}
-	if r.Intn(10) != 0 {
-		this.Error = v1.NewPopulatedError(r, easy)
+		this.TaskBookList = NewPopulatedTaskBookList(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
 }
 
-func NewPopulatedAddRequest(r randyApi, easy bool) *AddRequest {
-	this := &AddRequest{}
+func NewPopulatedCreateRequest(r randyApi, easy bool) *CreateRequest {
+	this := &CreateRequest{}
 	if r.Intn(10) != 0 {
-		this.Task = NewPopulatedTaskBook(r, easy)
+		this.Options = v1.NewPopulatedCreateOptions(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		this.TaskBook = NewPopulatedTaskBook(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
 }
 
-func NewPopulatedAddResponse(r randyApi, easy bool) *AddResponse {
-	this := &AddResponse{}
+func NewPopulatedCreateResponse(r randyApi, easy bool) *CreateResponse {
+	this := &CreateResponse{}
 	if r.Intn(10) != 0 {
-		this.Task = NewPopulatedTaskBook(r, easy)
-	}
-	if r.Intn(10) != 0 {
-		this.Error = v1.NewPopulatedError(r, easy)
+		this.TaskBook = NewPopulatedTaskBook(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2832,7 +2901,10 @@ func NewPopulatedAddResponse(r randyApi, easy bool) *AddResponse {
 func NewPopulatedUpdateRequest(r randyApi, easy bool) *UpdateRequest {
 	this := &UpdateRequest{}
 	if r.Intn(10) != 0 {
-		this.Task = NewPopulatedTaskBook(r, easy)
+		this.Options = v1.NewPopulatedUpdateOptions(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		this.TaskBook = NewPopulatedTaskBook(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2842,10 +2914,7 @@ func NewPopulatedUpdateRequest(r randyApi, easy bool) *UpdateRequest {
 func NewPopulatedUpdateResponse(r randyApi, easy bool) *UpdateResponse {
 	this := &UpdateResponse{}
 	if r.Intn(10) != 0 {
-		this.Task = NewPopulatedTaskBook(r, easy)
-	}
-	if r.Intn(10) != 0 {
-		this.Error = v1.NewPopulatedError(r, easy)
+		this.TaskBook = NewPopulatedTaskBook(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2855,7 +2924,10 @@ func NewPopulatedUpdateResponse(r randyApi, easy bool) *UpdateResponse {
 func NewPopulatedDeleteRequest(r randyApi, easy bool) *DeleteRequest {
 	this := &DeleteRequest{}
 	if r.Intn(10) != 0 {
-		this.Task = NewPopulatedTaskBook(r, easy)
+		this.Options = v1.NewPopulatedDeleteOptions(r, easy)
+	}
+	if r.Intn(10) != 0 {
+		this.TaskBook = NewPopulatedTaskBook(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2865,10 +2937,7 @@ func NewPopulatedDeleteRequest(r randyApi, easy bool) *DeleteRequest {
 func NewPopulatedDeleteResponse(r randyApi, easy bool) *DeleteResponse {
 	this := &DeleteResponse{}
 	if r.Intn(10) != 0 {
-		this.Task = NewPopulatedTaskBook(r, easy)
-	}
-	if r.Intn(10) != 0 {
-		this.Error = v1.NewPopulatedError(r, easy)
+		this.TaskBook = NewPopulatedTaskBook(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2878,7 +2947,7 @@ func NewPopulatedDeleteResponse(r randyApi, easy bool) *DeleteResponse {
 func NewPopulatedWatchRequest(r randyApi, easy bool) *WatchRequest {
 	this := &WatchRequest{}
 	if r.Intn(10) != 0 {
-		this.WatchOptions = v1.NewPopulatedWatchOptions(r, easy)
+		this.Options = v1.NewPopulatedWatchOptions(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2891,10 +2960,7 @@ func NewPopulatedWatchResponse(r randyApi, easy bool) *WatchResponse {
 		this.Event = v1alpha.NewPopulatedEvent(r, easy)
 	}
 	if r.Intn(10) != 0 {
-		this.Task = NewPopulatedTaskBook(r, easy)
-	}
-	if r.Intn(10) != 0 {
-		this.Error = v1.NewPopulatedError(r, easy)
+		this.TaskBook = NewPopulatedTaskBook(r, easy)
 	}
 	if !easy && r.Intn(10) != 0 {
 	}
@@ -2986,6 +3052,25 @@ func (m *TaskBook) Size() (n int) {
 	if m.Spec != nil {
 		l = m.Spec.Size()
 		n += 1 + l + sovApi(uint64(l))
+	}
+	return n
+}
+
+func (m *TaskBookList) Size() (n int) {
+	if m == nil {
+		return 0
+	}
+	var l int
+	_ = l
+	if m.Metadata != nil {
+		l = m.Metadata.Size()
+		n += 1 + l + sovApi(uint64(l))
+	}
+	if len(m.Items) > 0 {
+		for _, e := range m.Items {
+			l = e.Size()
+			n += 1 + l + sovApi(uint64(l))
+		}
 	}
 	return n
 }
@@ -3112,8 +3197,8 @@ func (m *GetRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.GetOptions != nil {
-		l = m.GetOptions.Size()
+	if m.Options != nil {
+		l = m.Options.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -3125,12 +3210,8 @@ func (m *GetResponse) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.Task != nil {
-		l = m.Task.Size()
-		n += 1 + l + sovApi(uint64(l))
-	}
-	if m.Error != nil {
-		l = m.Error.Size()
+	if m.TaskBook != nil {
+		l = m.TaskBook.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -3142,8 +3223,8 @@ func (m *ListRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.ListOptions != nil {
-		l = m.ListOptions.Size()
+	if m.Options != nil {
+		l = m.Options.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -3155,44 +3236,38 @@ func (m *ListResponse) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if len(m.Taskbooks) > 0 {
-		for _, e := range m.Taskbooks {
-			l = e.Size()
-			n += 1 + l + sovApi(uint64(l))
-		}
-	}
-	if m.Error != nil {
-		l = m.Error.Size()
+	if m.TaskBookList != nil {
+		l = m.TaskBookList.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
 }
 
-func (m *AddRequest) Size() (n int) {
+func (m *CreateRequest) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.Task != nil {
-		l = m.Task.Size()
+	if m.Options != nil {
+		l = m.Options.Size()
+		n += 1 + l + sovApi(uint64(l))
+	}
+	if m.TaskBook != nil {
+		l = m.TaskBook.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
 }
 
-func (m *AddResponse) Size() (n int) {
+func (m *CreateResponse) Size() (n int) {
 	if m == nil {
 		return 0
 	}
 	var l int
 	_ = l
-	if m.Task != nil {
-		l = m.Task.Size()
-		n += 1 + l + sovApi(uint64(l))
-	}
-	if m.Error != nil {
-		l = m.Error.Size()
+	if m.TaskBook != nil {
+		l = m.TaskBook.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -3204,8 +3279,12 @@ func (m *UpdateRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.Task != nil {
-		l = m.Task.Size()
+	if m.Options != nil {
+		l = m.Options.Size()
+		n += 1 + l + sovApi(uint64(l))
+	}
+	if m.TaskBook != nil {
+		l = m.TaskBook.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -3217,12 +3296,8 @@ func (m *UpdateResponse) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.Task != nil {
-		l = m.Task.Size()
-		n += 1 + l + sovApi(uint64(l))
-	}
-	if m.Error != nil {
-		l = m.Error.Size()
+	if m.TaskBook != nil {
+		l = m.TaskBook.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -3234,8 +3309,12 @@ func (m *DeleteRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.Task != nil {
-		l = m.Task.Size()
+	if m.Options != nil {
+		l = m.Options.Size()
+		n += 1 + l + sovApi(uint64(l))
+	}
+	if m.TaskBook != nil {
+		l = m.TaskBook.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -3247,12 +3326,8 @@ func (m *DeleteResponse) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.Task != nil {
-		l = m.Task.Size()
-		n += 1 + l + sovApi(uint64(l))
-	}
-	if m.Error != nil {
-		l = m.Error.Size()
+	if m.TaskBook != nil {
+		l = m.TaskBook.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -3264,8 +3339,8 @@ func (m *WatchRequest) Size() (n int) {
 	}
 	var l int
 	_ = l
-	if m.WatchOptions != nil {
-		l = m.WatchOptions.Size()
+	if m.Options != nil {
+		l = m.Options.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -3281,12 +3356,8 @@ func (m *WatchResponse) Size() (n int) {
 		l = m.Event.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
-	if m.Task != nil {
-		l = m.Task.Size()
-		n += 1 + l + sovApi(uint64(l))
-	}
-	if m.Error != nil {
-		l = m.Error.Size()
+	if m.TaskBook != nil {
+		l = m.TaskBook.Size()
 		n += 1 + l + sovApi(uint64(l))
 	}
 	return n
@@ -3312,6 +3383,17 @@ func (this *TaskBook) String() string {
 	s := strings.Join([]string{`&TaskBook{`,
 		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "ObjectMetadata", "v1.ObjectMetadata", 1) + `,`,
 		`Spec:` + strings.Replace(fmt.Sprintf("%v", this.Spec), "TaskBookSpec", "TaskBookSpec", 1) + `,`,
+		`}`,
+	}, "")
+	return s
+}
+func (this *TaskBookList) String() string {
+	if this == nil {
+		return "nil"
+	}
+	s := strings.Join([]string{`&TaskBookList{`,
+		`Metadata:` + strings.Replace(fmt.Sprintf("%v", this.Metadata), "ObjectMetadata", "v1.ObjectMetadata", 1) + `,`,
+		`Items:` + strings.Replace(fmt.Sprintf("%v", this.Items), "TaskBook", "TaskBook", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3390,7 +3472,7 @@ func (this *GetRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetRequest{`,
-		`GetOptions:` + strings.Replace(fmt.Sprintf("%v", this.GetOptions), "GetOptions", "v1.GetOptions", 1) + `,`,
+		`Options:` + strings.Replace(fmt.Sprintf("%v", this.Options), "GetOptions", "v1.GetOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3400,8 +3482,7 @@ func (this *GetResponse) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&GetResponse{`,
-		`Task:` + strings.Replace(fmt.Sprintf("%v", this.Task), "TaskBook", "TaskBook", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
+		`TaskBook:` + strings.Replace(fmt.Sprintf("%v", this.TaskBook), "TaskBook", "TaskBook", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3411,7 +3492,7 @@ func (this *ListRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ListRequest{`,
-		`ListOptions:` + strings.Replace(fmt.Sprintf("%v", this.ListOptions), "ListOptions", "v1.ListOptions", 1) + `,`,
+		`Options:` + strings.Replace(fmt.Sprintf("%v", this.Options), "ListOptions", "v1.ListOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3421,29 +3502,28 @@ func (this *ListResponse) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ListResponse{`,
-		`Taskbooks:` + strings.Replace(fmt.Sprintf("%v", this.Taskbooks), "TaskBook", "TaskBook", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
+		`TaskBookList:` + strings.Replace(fmt.Sprintf("%v", this.TaskBookList), "TaskBookList", "TaskBookList", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *AddRequest) String() string {
+func (this *CreateRequest) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&AddRequest{`,
-		`Task:` + strings.Replace(fmt.Sprintf("%v", this.Task), "TaskBook", "TaskBook", 1) + `,`,
+	s := strings.Join([]string{`&CreateRequest{`,
+		`Options:` + strings.Replace(fmt.Sprintf("%v", this.Options), "CreateOptions", "v1.CreateOptions", 1) + `,`,
+		`TaskBook:` + strings.Replace(fmt.Sprintf("%v", this.TaskBook), "TaskBook", "TaskBook", 1) + `,`,
 		`}`,
 	}, "")
 	return s
 }
-func (this *AddResponse) String() string {
+func (this *CreateResponse) String() string {
 	if this == nil {
 		return "nil"
 	}
-	s := strings.Join([]string{`&AddResponse{`,
-		`Task:` + strings.Replace(fmt.Sprintf("%v", this.Task), "TaskBook", "TaskBook", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
+	s := strings.Join([]string{`&CreateResponse{`,
+		`TaskBook:` + strings.Replace(fmt.Sprintf("%v", this.TaskBook), "TaskBook", "TaskBook", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3453,7 +3533,8 @@ func (this *UpdateRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&UpdateRequest{`,
-		`Task:` + strings.Replace(fmt.Sprintf("%v", this.Task), "TaskBook", "TaskBook", 1) + `,`,
+		`Options:` + strings.Replace(fmt.Sprintf("%v", this.Options), "UpdateOptions", "v1.UpdateOptions", 1) + `,`,
+		`TaskBook:` + strings.Replace(fmt.Sprintf("%v", this.TaskBook), "TaskBook", "TaskBook", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3463,8 +3544,7 @@ func (this *UpdateResponse) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&UpdateResponse{`,
-		`Task:` + strings.Replace(fmt.Sprintf("%v", this.Task), "TaskBook", "TaskBook", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
+		`TaskBook:` + strings.Replace(fmt.Sprintf("%v", this.TaskBook), "TaskBook", "TaskBook", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3474,7 +3554,8 @@ func (this *DeleteRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&DeleteRequest{`,
-		`Task:` + strings.Replace(fmt.Sprintf("%v", this.Task), "TaskBook", "TaskBook", 1) + `,`,
+		`Options:` + strings.Replace(fmt.Sprintf("%v", this.Options), "DeleteOptions", "v1.DeleteOptions", 1) + `,`,
+		`TaskBook:` + strings.Replace(fmt.Sprintf("%v", this.TaskBook), "TaskBook", "TaskBook", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3484,8 +3565,7 @@ func (this *DeleteResponse) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&DeleteResponse{`,
-		`Task:` + strings.Replace(fmt.Sprintf("%v", this.Task), "TaskBook", "TaskBook", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
+		`TaskBook:` + strings.Replace(fmt.Sprintf("%v", this.TaskBook), "TaskBook", "TaskBook", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3495,7 +3575,7 @@ func (this *WatchRequest) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&WatchRequest{`,
-		`WatchOptions:` + strings.Replace(fmt.Sprintf("%v", this.WatchOptions), "WatchOptions", "v1.WatchOptions", 1) + `,`,
+		`Options:` + strings.Replace(fmt.Sprintf("%v", this.Options), "WatchOptions", "v1.WatchOptions", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3506,8 +3586,7 @@ func (this *WatchResponse) String() string {
 	}
 	s := strings.Join([]string{`&WatchResponse{`,
 		`Event:` + strings.Replace(fmt.Sprintf("%v", this.Event), "Event", "v1alpha.Event", 1) + `,`,
-		`Task:` + strings.Replace(fmt.Sprintf("%v", this.Task), "TaskBook", "TaskBook", 1) + `,`,
-		`Error:` + strings.Replace(fmt.Sprintf("%v", this.Error), "Error", "v1.Error", 1) + `,`,
+		`TaskBook:` + strings.Replace(fmt.Sprintf("%v", this.TaskBook), "TaskBook", "TaskBook", 1) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -3612,6 +3691,120 @@ func (m *TaskBook) Unmarshal(dAtA []byte) error {
 				m.Spec = &TaskBookSpec{}
 			}
 			if err := m.Spec.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		default:
+			iNdEx = preIndex
+			skippy, err := skipApi(dAtA[iNdEx:])
+			if err != nil {
+				return err
+			}
+			if skippy < 0 {
+				return ErrInvalidLengthApi
+			}
+			if (iNdEx + skippy) > l {
+				return io.ErrUnexpectedEOF
+			}
+			iNdEx += skippy
+		}
+	}
+
+	if iNdEx > l {
+		return io.ErrUnexpectedEOF
+	}
+	return nil
+}
+func (m *TaskBookList) Unmarshal(dAtA []byte) error {
+	l := len(dAtA)
+	iNdEx := 0
+	for iNdEx < l {
+		preIndex := iNdEx
+		var wire uint64
+		for shift := uint(0); ; shift += 7 {
+			if shift >= 64 {
+				return ErrIntOverflowApi
+			}
+			if iNdEx >= l {
+				return io.ErrUnexpectedEOF
+			}
+			b := dAtA[iNdEx]
+			iNdEx++
+			wire |= (uint64(b) & 0x7F) << shift
+			if b < 0x80 {
+				break
+			}
+		}
+		fieldNum := int32(wire >> 3)
+		wireType := int(wire & 0x7)
+		if wireType == 4 {
+			return fmt.Errorf("proto: TaskBookList: wiretype end group for non-group")
+		}
+		if fieldNum <= 0 {
+			return fmt.Errorf("proto: TaskBookList: illegal tag %d (wire type %d)", fieldNum, wire)
+		}
+		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Metadata", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.Metadata == nil {
+				m.Metadata = &v1.ObjectMetadata{}
+			}
+			if err := m.Metadata.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Items", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Items = append(m.Items, &TaskBook{})
+			if err := m.Items[len(m.Items)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -4392,7 +4585,7 @@ func (m *GetRequest) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field GetOptions", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Options", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -4416,10 +4609,10 @@ func (m *GetRequest) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.GetOptions == nil {
-				m.GetOptions = &v1.GetOptions{}
+			if m.Options == nil {
+				m.Options = &v1.GetOptions{}
 			}
-			if err := m.GetOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Options.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -4475,7 +4668,7 @@ func (m *GetResponse) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Task", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field TaskBook", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -4499,43 +4692,10 @@ func (m *GetResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Task == nil {
-				m.Task = &TaskBook{}
+			if m.TaskBook == nil {
+				m.TaskBook = &TaskBook{}
 			}
-			if err := m.Task.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Error == nil {
-				m.Error = &v1.Error{}
-			}
-			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.TaskBook.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -4591,7 +4751,7 @@ func (m *ListRequest) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field ListOptions", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Options", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -4615,10 +4775,10 @@ func (m *ListRequest) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.ListOptions == nil {
-				m.ListOptions = &v1.ListOptions{}
+			if m.Options == nil {
+				m.Options = &v1.ListOptions{}
 			}
-			if err := m.ListOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Options.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -4674,7 +4834,7 @@ func (m *ListResponse) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Taskbooks", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field TaskBookList", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -4698,41 +4858,10 @@ func (m *ListResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			m.Taskbooks = append(m.Taskbooks, &TaskBook{})
-			if err := m.Taskbooks[len(m.Taskbooks)-1].Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
+			if m.TaskBookList == nil {
+				m.TaskBookList = &TaskBookList{}
 			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Error == nil {
-				m.Error = &v1.Error{}
-			}
-			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.TaskBookList.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -4757,7 +4886,7 @@ func (m *ListResponse) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *AddRequest) Unmarshal(dAtA []byte) error {
+func (m *CreateRequest) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -4780,15 +4909,15 @@ func (m *AddRequest) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: AddRequest: wiretype end group for non-group")
+			return fmt.Errorf("proto: CreateRequest: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: AddRequest: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: CreateRequest: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Task", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Options", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -4812,10 +4941,43 @@ func (m *AddRequest) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Task == nil {
-				m.Task = &TaskBook{}
+			if m.Options == nil {
+				m.Options = &v1.CreateOptions{}
 			}
-			if err := m.Task.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Options.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TaskBook", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.TaskBook == nil {
+				m.TaskBook = &TaskBook{}
+			}
+			if err := m.TaskBook.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -4840,7 +5002,7 @@ func (m *AddRequest) Unmarshal(dAtA []byte) error {
 	}
 	return nil
 }
-func (m *AddResponse) Unmarshal(dAtA []byte) error {
+func (m *CreateResponse) Unmarshal(dAtA []byte) error {
 	l := len(dAtA)
 	iNdEx := 0
 	for iNdEx < l {
@@ -4863,15 +5025,15 @@ func (m *AddResponse) Unmarshal(dAtA []byte) error {
 		fieldNum := int32(wire >> 3)
 		wireType := int(wire & 0x7)
 		if wireType == 4 {
-			return fmt.Errorf("proto: AddResponse: wiretype end group for non-group")
+			return fmt.Errorf("proto: CreateResponse: wiretype end group for non-group")
 		}
 		if fieldNum <= 0 {
-			return fmt.Errorf("proto: AddResponse: illegal tag %d (wire type %d)", fieldNum, wire)
+			return fmt.Errorf("proto: CreateResponse: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Task", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field TaskBook", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -4895,43 +5057,10 @@ func (m *AddResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Task == nil {
-				m.Task = &TaskBook{}
+			if m.TaskBook == nil {
+				m.TaskBook = &TaskBook{}
 			}
-			if err := m.Task.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Error == nil {
-				m.Error = &v1.Error{}
-			}
-			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.TaskBook.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -4987,7 +5116,7 @@ func (m *UpdateRequest) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Task", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Options", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -5011,10 +5140,43 @@ func (m *UpdateRequest) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Task == nil {
-				m.Task = &TaskBook{}
+			if m.Options == nil {
+				m.Options = &v1.UpdateOptions{}
 			}
-			if err := m.Task.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Options.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TaskBook", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.TaskBook == nil {
+				m.TaskBook = &TaskBook{}
+			}
+			if err := m.TaskBook.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -5070,7 +5232,7 @@ func (m *UpdateResponse) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Task", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field TaskBook", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -5094,43 +5256,10 @@ func (m *UpdateResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Task == nil {
-				m.Task = &TaskBook{}
+			if m.TaskBook == nil {
+				m.TaskBook = &TaskBook{}
 			}
-			if err := m.Task.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Error == nil {
-				m.Error = &v1.Error{}
-			}
-			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.TaskBook.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -5186,7 +5315,7 @@ func (m *DeleteRequest) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Task", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Options", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -5210,10 +5339,43 @@ func (m *DeleteRequest) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Task == nil {
-				m.Task = &TaskBook{}
+			if m.Options == nil {
+				m.Options = &v1.DeleteOptions{}
 			}
-			if err := m.Task.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Options.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+				return err
+			}
+			iNdEx = postIndex
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field TaskBook", wireType)
+			}
+			var msglen int
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				msglen |= (int(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			if msglen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + msglen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			if m.TaskBook == nil {
+				m.TaskBook = &TaskBook{}
+			}
+			if err := m.TaskBook.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -5269,7 +5431,7 @@ func (m *DeleteResponse) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Task", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field TaskBook", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -5293,43 +5455,10 @@ func (m *DeleteResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Task == nil {
-				m.Task = &TaskBook{}
+			if m.TaskBook == nil {
+				m.TaskBook = &TaskBook{}
 			}
-			if err := m.Task.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 2:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Error == nil {
-				m.Error = &v1.Error{}
-			}
-			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.TaskBook.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -5385,7 +5514,7 @@ func (m *WatchRequest) Unmarshal(dAtA []byte) error {
 		switch fieldNum {
 		case 1:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field WatchOptions", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field Options", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -5409,10 +5538,10 @@ func (m *WatchRequest) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.WatchOptions == nil {
-				m.WatchOptions = &v1.WatchOptions{}
+			if m.Options == nil {
+				m.Options = &v1.WatchOptions{}
 			}
-			if err := m.WatchOptions.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.Options.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
@@ -5501,7 +5630,7 @@ func (m *WatchResponse) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Task", wireType)
+				return fmt.Errorf("proto: wrong wireType = %d for field TaskBook", wireType)
 			}
 			var msglen int
 			for shift := uint(0); ; shift += 7 {
@@ -5525,43 +5654,10 @@ func (m *WatchResponse) Unmarshal(dAtA []byte) error {
 			if postIndex > l {
 				return io.ErrUnexpectedEOF
 			}
-			if m.Task == nil {
-				m.Task = &TaskBook{}
+			if m.TaskBook == nil {
+				m.TaskBook = &TaskBook{}
 			}
-			if err := m.Task.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
-				return err
-			}
-			iNdEx = postIndex
-		case 3:
-			if wireType != 2 {
-				return fmt.Errorf("proto: wrong wireType = %d for field Error", wireType)
-			}
-			var msglen int
-			for shift := uint(0); ; shift += 7 {
-				if shift >= 64 {
-					return ErrIntOverflowApi
-				}
-				if iNdEx >= l {
-					return io.ErrUnexpectedEOF
-				}
-				b := dAtA[iNdEx]
-				iNdEx++
-				msglen |= (int(b) & 0x7F) << shift
-				if b < 0x80 {
-					break
-				}
-			}
-			if msglen < 0 {
-				return ErrInvalidLengthApi
-			}
-			postIndex := iNdEx + msglen
-			if postIndex > l {
-				return io.ErrUnexpectedEOF
-			}
-			if m.Error == nil {
-				m.Error = &v1.Error{}
-			}
-			if err := m.Error.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
+			if err := m.TaskBook.Unmarshal(dAtA[iNdEx:postIndex]); err != nil {
 				return err
 			}
 			iNdEx = postIndex
