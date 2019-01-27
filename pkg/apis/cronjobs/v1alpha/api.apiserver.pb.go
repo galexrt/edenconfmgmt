@@ -41,6 +41,9 @@ func (this *CronJobsService) Get(ctx context.Context, req *GetRequest) (*GetResp
 	if err != nil {
 		return nil, err
 	}
+	if req.Options != nil {
+		req.Options.Namespace = ""
+	}
 	target := &CronJob{}
 	err = target.Unmarshal(out)
 	if err != nil {
@@ -56,6 +59,9 @@ func (this *CronJobsService) List(ctx context.Context, req *ListRequest) (*ListR
 	out, err := this.store.List(ctx, req.GetOptions())
 	if err != nil {
 		return nil, err
+	}
+	if req.Options != nil {
+		req.Options.Namespace = ""
 	}
 	list := &CronJobList{}
 	list.Items = make([]*CronJob, len(out))
@@ -76,11 +82,11 @@ func (this *CronJobsService) Create(ctx context.Context, req *CreateRequest) (*C
 	if err := req.GetCronJob().SetDefaults(); err != nil {
 		return nil, err
 	}
-	out, err := req.GetCronJob().Marshal()
-	if err != nil {
-		return nil, err
+	if req.Options != nil {
+		req.Options.Namespace = ""
 	}
-	if err = this.store.Create(ctx, out, req.GetOptions()); err != nil {
+	req.GetCronJob().GetMetadata().Namespace = ""
+	if err := this.store.Create(ctx, req.GetCronJob(), req.GetOptions()); err != nil {
 		return nil, err
 	}
 	return &CreateResponse{
@@ -93,11 +99,11 @@ func (this *CronJobsService) Update(ctx context.Context, req *UpdateRequest) (*U
 	if err := req.GetCronJob().SetDefaults(); err != nil {
 		return nil, err
 	}
-	out, err := req.GetCronJob().Marshal()
-	if err != nil {
-		return nil, err
+	if req.Options != nil {
+		req.Options.Namespace = ""
 	}
-	if err = this.store.Update(ctx, out, req.GetOptions()); err != nil {
+	req.GetCronJob().GetMetadata().Namespace = ""
+	if err := this.store.Update(ctx, req.GetCronJob(), req.GetOptions()); err != nil {
 		return nil, err
 	}
 	return &UpdateResponse{
@@ -107,21 +113,28 @@ func (this *CronJobsService) Update(ctx context.Context, req *UpdateRequest) (*U
 
 // Delete
 func (this *CronJobsService) Delete(ctx context.Context, req *DeleteRequest) (*DeleteResponse, error) {
-	return &DeleteResponse{}, this.store.Delete(ctx, req.GetOptions())
+	if req.Options != nil {
+		req.Options.Namespace = ""
+	}
+	return &DeleteResponse{}, this.store.Delete(ctx, req.GetCronJob(), req.GetOptions())
 }
 
 // Watch
 func (this *CronJobsService) Watch(req *WatchRequest, stream CronJobs_WatchServer) error {
+	req.GetOptions().Namespace = ""
 	watch, err := this.store.Watch(stream.Context(), req.GetOptions())
 	if err != nil {
 		return nil
 	}
 	for {
 		select {
-		case res := <-watch:
-			value := res.Value.(*CronJob)
+		case out := <-watch:
+			target := &CronJob{}
+			if err = target.Unmarshal(out.Value); err != nil {
+				return err
+			}
 			if err := stream.Send(&WatchResponse{
-				CronJob: value,
+				CronJob: target,
 			}); err != nil {
 				return err
 			}
@@ -129,5 +142,4 @@ func (this *CronJobsService) Watch(req *WatchRequest, stream CronJobs_WatchServe
 			return nil
 		}
 	}
-	return nil
 }

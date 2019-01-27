@@ -14,13 +14,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package utilsapi
+package api
 
-import "path"
+import (
+	"path"
+)
 
 const (
 	dataStoreNamespacesPath = "/%s/%s/%s"
 )
+
+// GetObjectPath return the correct object path for the given values.
+func GetObjectPath(dataStoreAPIPath string, namespace string, objectName string) string {
+	if namespace == "" {
+		return NamespacedObjectPath(dataStoreAPIPath, namespace, objectName)
+	}
+	return ObjectPath(dataStoreAPIPath, objectName)
+}
 
 // ObjectPath return data store path for a non namespaced object.
 func ObjectPath(dataStoreAPIPath string, objectName string) string {

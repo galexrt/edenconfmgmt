@@ -42,10 +42,12 @@ message ObjectMetadata {
     string uuid = 3;
     // Name of object.
     string name = 4;
+    // Namespace of object.
+    string namespace = 5;
     // Labels of object.
-    map<string, string> labels = 5;
+    map<string, string> labels = 6;
     // Annotations of object.
-    map<string, string> annotations = 6;
+    map<string, string> annotations = 7;
 }
 
 message VersionRequest {}
@@ -97,6 +99,8 @@ message GetOptions {
 }
 
 message ListOptions {
+    // Name used for listing.
+    string name = 1;
     // Namespace used for listing.
     string namespace = 2;
     // Label selector in string form.
@@ -104,12 +108,18 @@ message ListOptions {
 }
 
 message CreateOptions {
+    // Namespace used for listing.
+    string namespace = 2;
 }
 
 message UpdateOptions {
+    // Namespace used for listing.
+    string namespace = 2;
 }
 
 message DeleteOptions {
+    // Namespace used for listing.
+    string namespace = 2;
     // Label selector in string form.
     repeated string labelSelectors = 3;
 }
@@ -117,10 +127,12 @@ message DeleteOptions {
 message WatchOptions {
     // Name used for listing.
     string name = 1;
+    // Namespace used for listing.
+    string namespace = 2;
     // Label selector in string form.
-    repeated string labelSelectors = 2;
+    repeated string labelSelectors = 3;
     // Conditions to look for when watching Events on an object.
-    repeated string conitions = 3;
+    repeated string conitions = 4;
 }
 
 message Error {

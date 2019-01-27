@@ -41,6 +41,9 @@ func (this *AgentConfigsService) Get(ctx context.Context, req *GetRequest) (*Get
 	if err != nil {
 		return nil, err
 	}
+	if req.Options != nil {
+		req.Options.Namespace = ""
+	}
 	target := &AgentConfig{}
 	err = target.Unmarshal(out)
 	if err != nil {
@@ -56,6 +59,9 @@ func (this *AgentConfigsService) List(ctx context.Context, req *ListRequest) (*L
 	out, err := this.store.List(ctx, req.GetOptions())
 	if err != nil {
 		return nil, err
+	}
+	if req.Options != nil {
+		req.Options.Namespace = ""
 	}
 	list := &AgentConfigList{}
 	list.Items = make([]*AgentConfig, len(out))
@@ -76,11 +82,11 @@ func (this *AgentConfigsService) Create(ctx context.Context, req *CreateRequest)
 	if err := req.GetAgentConfig().SetDefaults(); err != nil {
 		return nil, err
 	}
-	out, err := req.GetAgentConfig().Marshal()
-	if err != nil {
-		return nil, err
+	if req.Options != nil {
+		req.Options.Namespace = ""
 	}
-	if err = this.store.Create(ctx, out, req.GetOptions()); err != nil {
+	req.GetAgentConfig().GetMetadata().Namespace = ""
+	if err := this.store.Create(ctx, req.GetAgentConfig(), req.GetOptions()); err != nil {
 		return nil, err
 	}
 	return &CreateResponse{
@@ -93,11 +99,11 @@ func (this *AgentConfigsService) Update(ctx context.Context, req *UpdateRequest)
 	if err := req.GetAgentConfig().SetDefaults(); err != nil {
 		return nil, err
 	}
-	out, err := req.GetAgentConfig().Marshal()
-	if err != nil {
-		return nil, err
+	if req.Options != nil {
+		req.Options.Namespace = ""
 	}
-	if err = this.store.Update(ctx, out, req.GetOptions()); err != nil {
+	req.GetAgentConfig().GetMetadata().Namespace = ""
+	if err := this.store.Update(ctx, req.GetAgentConfig(), req.GetOptions()); err != nil {
 		return nil, err
 	}
 	return &UpdateResponse{
@@ -107,21 +113,28 @@ func (this *AgentConfigsService) Update(ctx context.Context, req *UpdateRequest)
 
 // Delete
 func (this *AgentConfigsService) Delete(ctx context.Context, req *DeleteRequest) (*DeleteResponse, error) {
-	return &DeleteResponse{}, this.store.Delete(ctx, req.GetOptions())
+	if req.Options != nil {
+		req.Options.Namespace = ""
+	}
+	return &DeleteResponse{}, this.store.Delete(ctx, req.GetAgentConfig(), req.GetOptions())
 }
 
 // Watch
 func (this *AgentConfigsService) Watch(req *WatchRequest, stream AgentConfigs_WatchServer) error {
+	req.GetOptions().Namespace = ""
 	watch, err := this.store.Watch(stream.Context(), req.GetOptions())
 	if err != nil {
 		return nil
 	}
 	for {
 		select {
-		case res := <-watch:
-			value := res.Value.(*AgentConfig)
+		case out := <-watch:
+			target := &AgentConfig{}
+			if err = target.Unmarshal(out.Value); err != nil {
+				return err
+			}
 			if err := stream.Send(&WatchResponse{
-				AgentConfig: value,
+				AgentConfig: target,
 			}); err != nil {
 				return err
 			}
@@ -129,5 +142,4 @@ func (this *AgentConfigsService) Watch(req *WatchRequest, stream AgentConfigs_Wa
 			return nil
 		}
 	}
-	return nil
 }

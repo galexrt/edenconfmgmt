@@ -42,6 +42,9 @@ func (this *TriggersService) Get(ctx context.Context, req *GetRequest) (*GetResp
 	if err != nil {
 		return nil, err
 	}
+	if req.Options != nil {
+		req.Options.Namespace = ""
+	}
 	target := &Trigger{}
 	err = target.Unmarshal(out)
 	if err != nil {
@@ -57,6 +60,9 @@ func (this *TriggersService) List(ctx context.Context, req *ListRequest) (*ListR
 	out, err := this.store.List(ctx, req.GetOptions())
 	if err != nil {
 		return nil, err
+	}
+	if req.Options != nil {
+		req.Options.Namespace = ""
 	}
 	list := &TriggerList{}
 	list.Items = make([]*Trigger, len(out))
@@ -77,11 +83,11 @@ func (this *TriggersService) Create(ctx context.Context, req *CreateRequest) (*C
 	if err := req.GetTrigger().SetDefaults(); err != nil {
 		return nil, err
 	}
-	out, err := req.GetTrigger().Marshal()
-	if err != nil {
-		return nil, err
+	if req.Options != nil {
+		req.Options.Namespace = ""
 	}
-	if err = this.store.Create(ctx, out, req.GetOptions()); err != nil {
+	req.GetTrigger().GetMetadata().Namespace = ""
+	if err := this.store.Create(ctx, req.GetTrigger(), req.GetOptions()); err != nil {
 		return nil, err
 	}
 	return &CreateResponse{
@@ -94,11 +100,11 @@ func (this *TriggersService) Update(ctx context.Context, req *UpdateRequest) (*U
 	if err := req.GetTrigger().SetDefaults(); err != nil {
 		return nil, err
 	}
-	out, err := req.GetTrigger().Marshal()
-	if err != nil {
-		return nil, err
+	if req.Options != nil {
+		req.Options.Namespace = ""
 	}
-	if err = this.store.Update(ctx, out, req.GetOptions()); err != nil {
+	req.GetTrigger().GetMetadata().Namespace = ""
+	if err := this.store.Update(ctx, req.GetTrigger(), req.GetOptions()); err != nil {
 		return nil, err
 	}
 	return &UpdateResponse{
@@ -108,21 +114,28 @@ func (this *TriggersService) Update(ctx context.Context, req *UpdateRequest) (*U
 
 // Delete
 func (this *TriggersService) Delete(ctx context.Context, req *DeleteRequest) (*DeleteResponse, error) {
-	return &DeleteResponse{}, this.store.Delete(ctx, req.GetOptions())
+	if req.Options != nil {
+		req.Options.Namespace = ""
+	}
+	return &DeleteResponse{}, this.store.Delete(ctx, req.GetTrigger(), req.GetOptions())
 }
 
 // Watch
 func (this *TriggersService) Watch(req *WatchRequest, stream Triggers_WatchServer) error {
+	req.GetOptions().Namespace = ""
 	watch, err := this.store.Watch(stream.Context(), req.GetOptions())
 	if err != nil {
 		return nil
 	}
 	for {
 		select {
-		case res := <-watch:
-			value := res.Value.(*Trigger)
+		case out := <-watch:
+			target := &Trigger{}
+			if err = target.Unmarshal(out.Value); err != nil {
+				return err
+			}
 			if err := stream.Send(&WatchResponse{
-				Trigger: value,
+				Trigger: target,
 			}); err != nil {
 				return err
 			}
@@ -130,5 +143,4 @@ func (this *TriggersService) Watch(req *WatchRequest, stream Triggers_WatchServe
 			return nil
 		}
 	}
-	return nil
 }

@@ -75,7 +75,7 @@ func (inf *Informer) Start(stopCh chan struct{}) error {
 
 // DataStoreChExists return if a dataStoreCh exists in the system.
 func (inf *Informer) DataStoreChExists(key string) bool {
-	if st := inf.getDataStoreCh(key); st != nil {
+	if st := inf.getDataStoreCh(path.Join("/", key)); st != nil {
 		return true
 	}
 	return false
@@ -91,12 +91,11 @@ func (inf *Informer) getDataStoreCh(key string) *chanContainer {
 	currentPath := "/"
 	components := strings.Split(key, "/")
 	for _, c := range components {
-		currentPath = path.Join(currentPath, c) + "/"
+		currentPath = path.Join(currentPath, c)
 		if _, ok := inf.channel[currentPath]; ok {
 			return inf.channel[currentPath]
 		}
 	}
-
 	return nil
 }
 
@@ -129,24 +128,25 @@ func (inf *Informer) getReceiverChs(key string) []*receiverList {
 
 // Watch return a Watch for a given path (`key`).
 func (inf *Informer) Watch(ctx context.Context, key string, dataStoreCh clientv3.WatchChan) (chan *InformerResult, error) {
-	if _, ok := inf.channel[key]; !ok {
+	normKey := path.Join("/", key)
+	if _, ok := inf.channel[normKey]; !ok {
 		if dataStoreCh == nil {
 			return nil, fmt.Errorf("no dataStoreCh given and none in the dataStoreCh list ")
 		}
-		inf.channel[key] = &chanContainer{
+		inf.channel[normKey] = &chanContainer{
 			watch: dataStoreCh,
 		}
-		go inf.watch(ctx, key)
+		go inf.watch(ctx, normKey)
 	}
-	if _, ok := inf.receivers[key]; !ok {
-		inf.receivers[key] = &receiverList{
+	if _, ok := inf.receivers[normKey]; !ok {
+		inf.receivers[normKey] = &receiverList{
 			list: []chan *InformerResult{},
 		}
 	}
 	ch := make(chan *InformerResult)
-	inf.receivers[key].Lock()
-	inf.receivers[key].list = append(inf.receivers[key].list, ch)
-	inf.receivers[key].Unlock()
+	inf.receivers[normKey].Lock()
+	inf.receivers[normKey].list = append(inf.receivers[normKey].list, ch)
+	inf.receivers[normKey].Unlock()
 	return ch, nil
 }
 

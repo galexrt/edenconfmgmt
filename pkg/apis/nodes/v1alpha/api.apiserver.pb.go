@@ -41,6 +41,9 @@ func (this *NodesService) Get(ctx context.Context, req *GetRequest) (*GetRespons
 	if err != nil {
 		return nil, err
 	}
+	if req.Options != nil {
+		req.Options.Namespace = ""
+	}
 	target := &Node{}
 	err = target.Unmarshal(out)
 	if err != nil {
@@ -56,6 +59,9 @@ func (this *NodesService) List(ctx context.Context, req *ListRequest) (*ListResp
 	out, err := this.store.List(ctx, req.GetOptions())
 	if err != nil {
 		return nil, err
+	}
+	if req.Options != nil {
+		req.Options.Namespace = ""
 	}
 	list := &NodeList{}
 	list.Items = make([]*Node, len(out))
@@ -76,11 +82,11 @@ func (this *NodesService) Create(ctx context.Context, req *CreateRequest) (*Crea
 	if err := req.GetNode().SetDefaults(); err != nil {
 		return nil, err
 	}
-	out, err := req.GetNode().Marshal()
-	if err != nil {
-		return nil, err
+	if req.Options != nil {
+		req.Options.Namespace = ""
 	}
-	if err = this.store.Create(ctx, out, req.GetOptions()); err != nil {
+	req.GetNode().GetMetadata().Namespace = ""
+	if err := this.store.Create(ctx, req.GetNode(), req.GetOptions()); err != nil {
 		return nil, err
 	}
 	return &CreateResponse{
@@ -93,11 +99,11 @@ func (this *NodesService) Update(ctx context.Context, req *UpdateRequest) (*Upda
 	if err := req.GetNode().SetDefaults(); err != nil {
 		return nil, err
 	}
-	out, err := req.GetNode().Marshal()
-	if err != nil {
-		return nil, err
+	if req.Options != nil {
+		req.Options.Namespace = ""
 	}
-	if err = this.store.Update(ctx, out, req.GetOptions()); err != nil {
+	req.GetNode().GetMetadata().Namespace = ""
+	if err := this.store.Update(ctx, req.GetNode(), req.GetOptions()); err != nil {
 		return nil, err
 	}
 	return &UpdateResponse{
@@ -107,21 +113,28 @@ func (this *NodesService) Update(ctx context.Context, req *UpdateRequest) (*Upda
 
 // Delete
 func (this *NodesService) Delete(ctx context.Context, req *DeleteRequest) (*DeleteResponse, error) {
-	return &DeleteResponse{}, this.store.Delete(ctx, req.GetOptions())
+	if req.Options != nil {
+		req.Options.Namespace = ""
+	}
+	return &DeleteResponse{}, this.store.Delete(ctx, req.GetNode(), req.GetOptions())
 }
 
 // Watch
 func (this *NodesService) Watch(req *WatchRequest, stream Nodes_WatchServer) error {
+	req.GetOptions().Namespace = ""
 	watch, err := this.store.Watch(stream.Context(), req.GetOptions())
 	if err != nil {
 		return nil
 	}
 	for {
 		select {
-		case res := <-watch:
-			value := res.Value.(*Node)
+		case out := <-watch:
+			target := &Node{}
+			if err = target.Unmarshal(out.Value); err != nil {
+				return err
+			}
 			if err := stream.Send(&WatchResponse{
-				Node: value,
+				Node: target,
 			}); err != nil {
 				return err
 			}
@@ -129,5 +142,4 @@ func (this *NodesService) Watch(req *WatchRequest, stream Nodes_WatchServer) err
 			return nil
 		}
 	}
-	return nil
 }

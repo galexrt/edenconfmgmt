@@ -41,6 +41,9 @@ func (this *EventsService) Get(ctx context.Context, req *GetRequest) (*GetRespon
 	if err != nil {
 		return nil, err
 	}
+	if req.Options != nil {
+		req.Options.Namespace = ""
+	}
 	target := &Event{}
 	err = target.Unmarshal(out)
 	if err != nil {
@@ -56,6 +59,9 @@ func (this *EventsService) List(ctx context.Context, req *ListRequest) (*ListRes
 	out, err := this.store.List(ctx, req.GetOptions())
 	if err != nil {
 		return nil, err
+	}
+	if req.Options != nil {
+		req.Options.Namespace = ""
 	}
 	list := &EventList{}
 	list.Items = make([]*Event, len(out))
@@ -76,11 +82,11 @@ func (this *EventsService) Create(ctx context.Context, req *CreateRequest) (*Cre
 	if err := req.GetEvent().SetDefaults(); err != nil {
 		return nil, err
 	}
-	out, err := req.GetEvent().Marshal()
-	if err != nil {
-		return nil, err
+	if req.Options != nil {
+		req.Options.Namespace = ""
 	}
-	if err = this.store.Create(ctx, out, req.GetOptions()); err != nil {
+	req.GetEvent().GetMetadata().Namespace = ""
+	if err := this.store.Create(ctx, req.GetEvent(), req.GetOptions()); err != nil {
 		return nil, err
 	}
 	return &CreateResponse{
@@ -93,11 +99,11 @@ func (this *EventsService) Update(ctx context.Context, req *UpdateRequest) (*Upd
 	if err := req.GetEvent().SetDefaults(); err != nil {
 		return nil, err
 	}
-	out, err := req.GetEvent().Marshal()
-	if err != nil {
-		return nil, err
+	if req.Options != nil {
+		req.Options.Namespace = ""
 	}
-	if err = this.store.Update(ctx, out, req.GetOptions()); err != nil {
+	req.GetEvent().GetMetadata().Namespace = ""
+	if err := this.store.Update(ctx, req.GetEvent(), req.GetOptions()); err != nil {
 		return nil, err
 	}
 	return &UpdateResponse{
@@ -107,21 +113,28 @@ func (this *EventsService) Update(ctx context.Context, req *UpdateRequest) (*Upd
 
 // Delete
 func (this *EventsService) Delete(ctx context.Context, req *DeleteRequest) (*DeleteResponse, error) {
-	return &DeleteResponse{}, this.store.Delete(ctx, req.GetOptions())
+	if req.Options != nil {
+		req.Options.Namespace = ""
+	}
+	return &DeleteResponse{}, this.store.Delete(ctx, req.GetEvent(), req.GetOptions())
 }
 
 // Watch
 func (this *EventsService) Watch(req *WatchRequest, stream Events_WatchServer) error {
+	req.GetOptions().Namespace = ""
 	watch, err := this.store.Watch(stream.Context(), req.GetOptions())
 	if err != nil {
 		return nil
 	}
 	for {
 		select {
-		case res := <-watch:
-			value := res.Value.(*Event)
+		case out := <-watch:
+			target := &Event{}
+			if err = target.Unmarshal(out.Value); err != nil {
+				return err
+			}
 			if err := stream.Send(&WatchResponse{
-				Event: value,
+				Event: target,
 			}); err != nil {
 				return err
 			}
@@ -129,5 +142,4 @@ func (this *EventsService) Watch(req *WatchRequest, stream Events_WatchServer) e
 			return nil
 		}
 	}
-	return nil
 }

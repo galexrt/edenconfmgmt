@@ -42,6 +42,9 @@ func (this *VariablesService) Get(ctx context.Context, req *GetRequest) (*GetRes
 	if err != nil {
 		return nil, err
 	}
+	if req.Options != nil {
+		req.Options.Namespace = ""
+	}
 	target := &Variable{}
 	err = target.Unmarshal(out)
 	if err != nil {
@@ -57,6 +60,9 @@ func (this *VariablesService) List(ctx context.Context, req *ListRequest) (*List
 	out, err := this.store.List(ctx, req.GetOptions())
 	if err != nil {
 		return nil, err
+	}
+	if req.Options != nil {
+		req.Options.Namespace = ""
 	}
 	list := &VariableList{}
 	list.Items = make([]*Variable, len(out))
@@ -77,11 +83,11 @@ func (this *VariablesService) Create(ctx context.Context, req *CreateRequest) (*
 	if err := req.GetVariable().SetDefaults(); err != nil {
 		return nil, err
 	}
-	out, err := req.GetVariable().Marshal()
-	if err != nil {
-		return nil, err
+	if req.Options != nil {
+		req.Options.Namespace = ""
 	}
-	if err = this.store.Create(ctx, out, req.GetOptions()); err != nil {
+	req.GetVariable().GetMetadata().Namespace = ""
+	if err := this.store.Create(ctx, req.GetVariable(), req.GetOptions()); err != nil {
 		return nil, err
 	}
 	return &CreateResponse{
@@ -94,11 +100,11 @@ func (this *VariablesService) Update(ctx context.Context, req *UpdateRequest) (*
 	if err := req.GetVariable().SetDefaults(); err != nil {
 		return nil, err
 	}
-	out, err := req.GetVariable().Marshal()
-	if err != nil {
-		return nil, err
+	if req.Options != nil {
+		req.Options.Namespace = ""
 	}
-	if err = this.store.Update(ctx, out, req.GetOptions()); err != nil {
+	req.GetVariable().GetMetadata().Namespace = ""
+	if err := this.store.Update(ctx, req.GetVariable(), req.GetOptions()); err != nil {
 		return nil, err
 	}
 	return &UpdateResponse{
@@ -108,21 +114,28 @@ func (this *VariablesService) Update(ctx context.Context, req *UpdateRequest) (*
 
 // Delete
 func (this *VariablesService) Delete(ctx context.Context, req *DeleteRequest) (*DeleteResponse, error) {
-	return &DeleteResponse{}, this.store.Delete(ctx, req.GetOptions())
+	if req.Options != nil {
+		req.Options.Namespace = ""
+	}
+	return &DeleteResponse{}, this.store.Delete(ctx, req.GetVariable(), req.GetOptions())
 }
 
 // Watch
 func (this *VariablesService) Watch(req *WatchRequest, stream Variables_WatchServer) error {
+	req.GetOptions().Namespace = ""
 	watch, err := this.store.Watch(stream.Context(), req.GetOptions())
 	if err != nil {
 		return nil
 	}
 	for {
 		select {
-		case res := <-watch:
-			value := res.Value.(*Variable)
+		case out := <-watch:
+			target := &Variable{}
+			if err = target.Unmarshal(out.Value); err != nil {
+				return err
+			}
 			if err := stream.Send(&WatchResponse{
-				Variable: value,
+				Variable: target,
 			}); err != nil {
 				return err
 			}
@@ -130,5 +143,4 @@ func (this *VariablesService) Watch(req *WatchRequest, stream Variables_WatchSer
 			return nil
 		}
 	}
-	return nil
 }

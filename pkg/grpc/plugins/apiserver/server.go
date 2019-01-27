@@ -86,6 +86,11 @@ func (p *plugin) Generate(file *generator.FileDescriptor) {
 			continue
 		}
 
+		objectIsNamespaced := false
+		if extOptsCasted.Namespaced != nil && *extOptsCasted.Namespaced {
+			objectIsNamespaced = true
+		}
+
 		p.NewImport("context").Use()
 		p.P(`// `, ccTypeName, `sService !!WARNING!! This client must only be used by internal code!`)
 		p.P(`// All "external" clients must use the actual GRPC API Client.`)
@@ -126,6 +131,13 @@ func (p *plugin) Generate(file *generator.FileDescriptor) {
 		p.P(`return nil, err`)
 		p.Out()
 		p.P(`}`)
+		if !objectIsNamespaced {
+			p.P(`if req.Options != nil {`)
+			p.In()
+			p.P(`req.Options.Namespace = ""`)
+			p.Out()
+			p.P(`}`)
+		}
 		p.P(`target := &`, ccTypeName, `{}`)
 		p.P(`err = target.Unmarshal(out)`)
 		p.P(`if err != nil {`)
@@ -152,6 +164,13 @@ func (p *plugin) Generate(file *generator.FileDescriptor) {
 		p.P(`return nil, err`)
 		p.Out()
 		p.P(`}`)
+		if !objectIsNamespaced {
+			p.P(`if req.Options != nil {`)
+			p.In()
+			p.P(`req.Options.Namespace = ""`)
+			p.Out()
+			p.P(`}`)
+		}
 		p.P(`list := &`, ccTypeName, `List{}`)
 		p.P(`list.Items = make([]*`, ccTypeName, `, len(out))`)
 		p.P(`for k := range out {`)
@@ -183,15 +202,16 @@ func (p *plugin) Generate(file *generator.FileDescriptor) {
 		p.P(`return nil, err`)
 		p.Out()
 		p.P(`}`)
-		// Marshal
-		p.P(`out, err := req.Get`, ccTypeName, `().Marshal()`)
-		p.P(`if err != nil {`)
-		p.In()
-		p.P(`return nil, err`)
-		p.Out()
-		p.P(`}`)
+		if !objectIsNamespaced {
+			p.P(`if req.Options != nil {`)
+			p.In()
+			p.P(`req.Options.Namespace = ""`)
+			p.Out()
+			p.P(`}`)
+			p.P(`req.Get`, ccTypeName, `().GetMetadata().Namespace = ""`)
+		}
 		// Store
-		p.P(`if err = this.store.Create(ctx, out, req.GetOptions()); err != nil {`)
+		p.P(`if err := this.store.Create(ctx, req.Get`, ccTypeName, `(), req.GetOptions()); err != nil {`)
 		p.In()
 		p.P(`return nil, err`)
 		p.Out()
@@ -214,15 +234,16 @@ func (p *plugin) Generate(file *generator.FileDescriptor) {
 		p.P(`return nil, err`)
 		p.Out()
 		p.P(`}`)
-		// Marshal
-		p.P(`out, err := req.Get`, ccTypeName, `().Marshal()`)
-		p.P(`if err != nil {`)
-		p.In()
-		p.P(`return nil, err`)
-		p.Out()
-		p.P(`}`)
+		if !objectIsNamespaced {
+			p.P(`if req.Options != nil {`)
+			p.In()
+			p.P(`req.Options.Namespace = ""`)
+			p.Out()
+			p.P(`}`)
+			p.P(`req.Get`, ccTypeName, `().GetMetadata().Namespace = ""`)
+		}
 		// Store
-		p.P(`if err = this.store.Update(ctx, out, req.GetOptions()); err != nil {`)
+		p.P(`if err := this.store.Update(ctx, req.Get`, ccTypeName, `(), req.GetOptions()); err != nil {`)
 		p.In()
 		p.P(`return nil, err`)
 		p.Out()
@@ -240,7 +261,14 @@ func (p *plugin) Generate(file *generator.FileDescriptor) {
 		p.P(`// Delete`)
 		p.P(`func (this *`, ccTypeName, `sService) Delete(ctx context.Context, req *DeleteRequest) (*DeleteResponse, error) {`)
 		p.In()
-		p.P(`return &DeleteResponse{}, this.store.Delete(ctx, req.GetOptions())`)
+		if !objectIsNamespaced {
+			p.P(`if req.Options != nil {`)
+			p.In()
+			p.P(`req.Options.Namespace = ""`)
+			p.Out()
+			p.P(`}`)
+		}
+		p.P(`return &DeleteResponse{}, this.store.Delete(ctx, req.Get`, ccTypeName, `(), req.GetOptions())`)
 		p.Out()
 		p.P(`}`)
 
@@ -248,6 +276,9 @@ func (p *plugin) Generate(file *generator.FileDescriptor) {
 		p.P(`// Watch`)
 		p.P(`func (this *`, ccTypeName, `sService) Watch(req *WatchRequest, stream `, ccTypeName, `s_WatchServer) error {`)
 		p.In()
+		if !objectIsNamespaced {
+			p.P(`req.GetOptions().Namespace = ""`)
+		}
 		p.P(`watch, err := this.store.Watch(stream.Context(), req.GetOptions())`)
 		p.P(`if err != nil {`)
 		p.In()
@@ -257,12 +288,18 @@ func (p *plugin) Generate(file *generator.FileDescriptor) {
 		p.P(`for {`)
 		p.In()
 		p.P(`select {`)
-		p.P(`case res := <-watch:`)
+		p.P(`case out := <-watch:`)
 		p.In()
-		p.P(`value := res.Value.(*`, ccTypeName, `)`)
+		// TODO Make use of other values from the cache.InformerResult besides `Value`
+		p.P(`target := &`, ccTypeName, `{}`)
+		p.P(`if err = target.Unmarshal(out.Value); err != nil {`)
+		p.In()
+		p.P(`return err`)
+		p.Out()
+		p.P(`}`)
 		p.P(`if err := stream.Send(&WatchResponse{`)
 		p.In()
-		p.P(ccTypeName, `: value,`)
+		p.P(ccTypeName, `: target,`)
 		p.Out()
 		p.P(`}); err != nil {`)
 		p.In()
@@ -277,7 +314,6 @@ func (p *plugin) Generate(file *generator.FileDescriptor) {
 		p.P(`}`)
 		p.Out()
 		p.P(`}`)
-		p.P(`return nil`)
 		p.Out()
 		p.P(`}`)
 	}

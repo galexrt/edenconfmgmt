@@ -42,6 +42,9 @@ func (this *TaskBooksService) Get(ctx context.Context, req *GetRequest) (*GetRes
 	if err != nil {
 		return nil, err
 	}
+	if req.Options != nil {
+		req.Options.Namespace = ""
+	}
 	target := &TaskBook{}
 	err = target.Unmarshal(out)
 	if err != nil {
@@ -57,6 +60,9 @@ func (this *TaskBooksService) List(ctx context.Context, req *ListRequest) (*List
 	out, err := this.store.List(ctx, req.GetOptions())
 	if err != nil {
 		return nil, err
+	}
+	if req.Options != nil {
+		req.Options.Namespace = ""
 	}
 	list := &TaskBookList{}
 	list.Items = make([]*TaskBook, len(out))
@@ -77,11 +83,11 @@ func (this *TaskBooksService) Create(ctx context.Context, req *CreateRequest) (*
 	if err := req.GetTaskBook().SetDefaults(); err != nil {
 		return nil, err
 	}
-	out, err := req.GetTaskBook().Marshal()
-	if err != nil {
-		return nil, err
+	if req.Options != nil {
+		req.Options.Namespace = ""
 	}
-	if err = this.store.Create(ctx, out, req.GetOptions()); err != nil {
+	req.GetTaskBook().GetMetadata().Namespace = ""
+	if err := this.store.Create(ctx, req.GetTaskBook(), req.GetOptions()); err != nil {
 		return nil, err
 	}
 	return &CreateResponse{
@@ -94,11 +100,11 @@ func (this *TaskBooksService) Update(ctx context.Context, req *UpdateRequest) (*
 	if err := req.GetTaskBook().SetDefaults(); err != nil {
 		return nil, err
 	}
-	out, err := req.GetTaskBook().Marshal()
-	if err != nil {
-		return nil, err
+	if req.Options != nil {
+		req.Options.Namespace = ""
 	}
-	if err = this.store.Update(ctx, out, req.GetOptions()); err != nil {
+	req.GetTaskBook().GetMetadata().Namespace = ""
+	if err := this.store.Update(ctx, req.GetTaskBook(), req.GetOptions()); err != nil {
 		return nil, err
 	}
 	return &UpdateResponse{
@@ -108,21 +114,28 @@ func (this *TaskBooksService) Update(ctx context.Context, req *UpdateRequest) (*
 
 // Delete
 func (this *TaskBooksService) Delete(ctx context.Context, req *DeleteRequest) (*DeleteResponse, error) {
-	return &DeleteResponse{}, this.store.Delete(ctx, req.GetOptions())
+	if req.Options != nil {
+		req.Options.Namespace = ""
+	}
+	return &DeleteResponse{}, this.store.Delete(ctx, req.GetTaskBook(), req.GetOptions())
 }
 
 // Watch
 func (this *TaskBooksService) Watch(req *WatchRequest, stream TaskBooks_WatchServer) error {
+	req.GetOptions().Namespace = ""
 	watch, err := this.store.Watch(stream.Context(), req.GetOptions())
 	if err != nil {
 		return nil
 	}
 	for {
 		select {
-		case res := <-watch:
-			value := res.Value.(*TaskBook)
+		case out := <-watch:
+			target := &TaskBook{}
+			if err = target.Unmarshal(out.Value); err != nil {
+				return err
+			}
 			if err := stream.Send(&WatchResponse{
-				TaskBook: value,
+				TaskBook: target,
 			}); err != nil {
 				return err
 			}
@@ -130,5 +143,4 @@ func (this *TaskBooksService) Watch(req *WatchRequest, stream TaskBooks_WatchSer
 			return nil
 		}
 	}
-	return nil
 }

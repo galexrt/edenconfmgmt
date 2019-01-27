@@ -52,6 +52,7 @@ service Nodes {
 
 message Node {
     option (apiserver.options).generate = true;
+    option (apiserver.options).namespaced = false;
     // Metadata for Node object.
     core.v1.ObjectMetadata metadata = 1 [(validator.field) = {msg_exists : true}];
     // Spec for Node.

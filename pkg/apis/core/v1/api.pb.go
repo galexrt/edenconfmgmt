@@ -35,10 +35,12 @@ type ObjectMetadata struct {
 	Uuid string `protobuf:"bytes,3,opt,name=uuid,proto3" json:"uuid,omitempty"`
 	// Name of object.
 	Name string `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
+	// Namespace of object.
+	Namespace string `protobuf:"bytes,5,opt,name=namespace,proto3" json:"namespace,omitempty"`
 	// Labels of object.
-	Labels map[string]string `protobuf:"bytes,5,rep,name=labels,proto3" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Labels map[string]string `protobuf:"bytes,6,rep,name=labels,proto3" json:"labels,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	// Annotations of object.
-	Annotations          map[string]string `protobuf:"bytes,6,rep,name=annotations,proto3" json:"annotations,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Annotations          map[string]string `protobuf:"bytes,7,rep,name=annotations,proto3" json:"annotations,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
 	XXX_NoUnkeyedLiteral struct{}          `json:"-"`
 	XXX_sizecache        int32             `json:"-"`
 }
@@ -99,6 +101,13 @@ func (m *ObjectMetadata) GetUuid() string {
 func (m *ObjectMetadata) GetName() string {
 	if m != nil {
 		return m.Name
+	}
+	return ""
+}
+
+func (m *ObjectMetadata) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
 	}
 	return ""
 }
@@ -517,6 +526,8 @@ func (m *GetOptions) GetLabelSelectors() []string {
 }
 
 type ListOptions struct {
+	// Name used for listing.
+	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
 	// Namespace used for listing.
 	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
 	// Label selector in string form.
@@ -557,6 +568,13 @@ func (m *ListOptions) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_ListOptions proto.InternalMessageInfo
 
+func (m *ListOptions) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
 func (m *ListOptions) GetNamespace() string {
 	if m != nil {
 		return m.Namespace
@@ -572,6 +590,8 @@ func (m *ListOptions) GetLabelSelectors() []string {
 }
 
 type CreateOptions struct {
+	// Namespace used for listing.
+	Namespace            string   `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
@@ -608,7 +628,16 @@ func (m *CreateOptions) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_CreateOptions proto.InternalMessageInfo
 
+func (m *CreateOptions) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
 type UpdateOptions struct {
+	// Namespace used for listing.
+	Namespace            string   `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
@@ -645,7 +674,16 @@ func (m *UpdateOptions) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_UpdateOptions proto.InternalMessageInfo
 
+func (m *UpdateOptions) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
 type DeleteOptions struct {
+	// Namespace used for listing.
+	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
 	// Label selector in string form.
 	LabelSelectors       []string `protobuf:"bytes,3,rep,name=labelSelectors,proto3" json:"labelSelectors,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
@@ -684,6 +722,13 @@ func (m *DeleteOptions) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_DeleteOptions proto.InternalMessageInfo
 
+func (m *DeleteOptions) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
+	}
+	return ""
+}
+
 func (m *DeleteOptions) GetLabelSelectors() []string {
 	if m != nil {
 		return m.LabelSelectors
@@ -694,10 +739,12 @@ func (m *DeleteOptions) GetLabelSelectors() []string {
 type WatchOptions struct {
 	// Name used for listing.
 	Name string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	// Namespace used for listing.
+	Namespace string `protobuf:"bytes,2,opt,name=namespace,proto3" json:"namespace,omitempty"`
 	// Label selector in string form.
-	LabelSelectors []string `protobuf:"bytes,2,rep,name=labelSelectors,proto3" json:"labelSelectors,omitempty"`
+	LabelSelectors []string `protobuf:"bytes,3,rep,name=labelSelectors,proto3" json:"labelSelectors,omitempty"`
 	// Conditions to look for when watching Events on an object.
-	Conitions            []string `protobuf:"bytes,3,rep,name=conitions,proto3" json:"conitions,omitempty"`
+	Conitions            []string `protobuf:"bytes,4,rep,name=conitions,proto3" json:"conitions,omitempty"`
 	XXX_NoUnkeyedLiteral struct{} `json:"-"`
 	XXX_sizecache        int32    `json:"-"`
 }
@@ -737,6 +784,13 @@ var xxx_messageInfo_WatchOptions proto.InternalMessageInfo
 func (m *WatchOptions) GetName() string {
 	if m != nil {
 		return m.Name
+	}
+	return ""
+}
+
+func (m *WatchOptions) GetNamespace() string {
+	if m != nil {
+		return m.Namespace
 	}
 	return ""
 }
@@ -834,52 +888,52 @@ func init() {
 }
 
 var fileDescriptor_abac09fa3cd911be = []byte{
-	// 705 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x54, 0xcf, 0x6e, 0xd3, 0x4e,
-	0x10, 0xae, 0xe3, 0xa6, 0xf9, 0x65, 0xf2, 0x6b, 0x5a, 0xad, 0x38, 0x98, 0xa8, 0xb2, 0x2a, 0x83,
-	0xaa, 0x1e, 0xc0, 0xa1, 0xad, 0x2a, 0xa0, 0x48, 0x48, 0xd0, 0x56, 0x08, 0x54, 0x54, 0xc9, 0xe5,
-	0x8f, 0xc4, 0x01, 0x69, 0x63, 0x6f, 0x1d, 0xb7, 0xce, 0xae, 0xd9, 0x5d, 0x07, 0x7a, 0x43, 0xe2,
-	0x05, 0x78, 0x0c, 0x1e, 0x81, 0x23, 0xc7, 0x1e, 0x39, 0x72, 0xa4, 0xe1, 0x05, 0x38, 0x72, 0x44,
-	0xbb, 0x6b, 0x3b, 0x69, 0x29, 0x88, 0x4a, 0x9c, 0x3c, 0xdf, 0xb7, 0x33, 0xdf, 0xcc, 0xce, 0xcc,
-	0x1a, 0x36, 0xe2, 0x44, 0xf6, 0xf3, 0x9e, 0x1f, 0xb2, 0x41, 0x37, 0xc6, 0x29, 0x79, 0xc3, 0x65,
-	0x97, 0x44, 0x84, 0x86, 0x8c, 0xee, 0x0f, 0xe2, 0x81, 0xec, 0x66, 0x87, 0x71, 0x17, 0x67, 0x89,
-	0xe8, 0x86, 0x8c, 0x93, 0xee, 0x70, 0x45, 0x01, 0x3f, 0xe3, 0x4c, 0x32, 0xd4, 0x50, 0x94, 0x3f,
-	0x5c, 0xe9, 0x5c, 0x9f, 0x14, 0x61, 0x31, 0xeb, 0xea, 0xf3, 0x5e, 0xbe, 0xaf, 0x91, 0x06, 0xda,
-	0x32, 0x71, 0x1d, 0x37, 0x66, 0x2c, 0x4e, 0xc9, 0xd8, 0x2b, 0xca, 0x39, 0x96, 0x09, 0xa3, 0xe6,
-	0xdc, 0xfb, 0x5e, 0x83, 0xf6, 0x6e, 0xef, 0x80, 0x84, 0xf2, 0x31, 0x91, 0x38, 0xc2, 0x12, 0x23,
-	0x17, 0x00, 0x67, 0xc9, 0x33, 0xc2, 0x45, 0xc2, 0xa8, 0x63, 0x2d, 0x5a, 0xcb, 0xcd, 0x60, 0x82,
-	0x41, 0x08, 0xa6, 0x0f, 0x13, 0x1a, 0x39, 0x35, 0x7d, 0xa2, 0x6d, 0xc5, 0xe5, 0x79, 0x12, 0x39,
-	0xb6, 0xe1, 0x94, 0xad, 0x38, 0x8a, 0x07, 0xc4, 0x99, 0x36, 0x9c, 0xb2, 0xd1, 0x1d, 0x98, 0x49,
-	0x71, 0x8f, 0xa4, 0xc2, 0xa9, 0x2f, 0xda, 0xcb, 0xad, 0xd5, 0x2b, 0x7e, 0x71, 0x2f, 0xff, 0x74,
-	0x11, 0xfe, 0x8e, 0xf6, 0xda, 0xa6, 0x92, 0x1f, 0x05, 0x45, 0x08, 0x7a, 0x04, 0x2d, 0x4c, 0x29,
-	0x93, 0xba, 0x7e, 0xe1, 0xcc, 0x68, 0x85, 0xe5, 0xdf, 0x29, 0xdc, 0x1b, 0xbb, 0x1a, 0x99, 0xc9,
-	0xe0, 0xce, 0x6d, 0x68, 0x4d, 0xa4, 0x40, 0xf3, 0x60, 0x1f, 0x92, 0xa3, 0xe2, 0xb2, 0xca, 0x44,
-	0x97, 0xa0, 0x3e, 0xc4, 0x69, 0x4e, 0x8a, 0x6b, 0x1a, 0xb0, 0x51, 0xbb, 0x65, 0x75, 0xee, 0xc2,
-	0xfc, 0x59, 0xed, 0x8b, 0xc4, 0x7b, 0xf3, 0xd0, 0x2e, 0x5a, 0x19, 0x90, 0x57, 0x39, 0x11, 0xd2,
-	0x7b, 0x67, 0xc1, 0x5c, 0x45, 0x89, 0x8c, 0x51, 0x41, 0x90, 0x03, 0x8d, 0xe1, 0xa9, 0x11, 0x94,
-	0x50, 0x29, 0x0f, 0xf0, 0x01, 0xe3, 0x5a, 0xd9, 0x0e, 0x0c, 0xd0, 0x6c, 0x42, 0x19, 0xd7, 0x23,
-	0x50, 0xac, 0x02, 0x8a, 0xcd, 0xb0, 0x0c, 0xfb, 0x7a, 0x08, 0x76, 0x60, 0x80, 0x62, 0x85, 0xc4,
-	0x92, 0x38, 0x75, 0x53, 0x9b, 0x06, 0xde, 0x1a, 0x34, 0x1e, 0xd2, 0x30, 0xcd, 0x23, 0x52, 0x8d,
-	0xce, 0x9a, 0x18, 0x9d, 0x91, 0xea, 0x0b, 0xa7, 0xb6, 0x68, 0xab, 0x20, 0x0d, 0xbc, 0x1e, 0xc0,
-	0x26, 0xa3, 0x51, 0xa2, 0x7b, 0x81, 0x96, 0x60, 0xfa, 0x75, 0x9f, 0x98, 0x8a, 0x5b, 0xab, 0xa8,
-	0x1a, 0x4d, 0xe5, 0x12, 0xe8, 0x73, 0x74, 0x0d, 0x1a, 0x22, 0x0f, 0x43, 0x22, 0x84, 0xbe, 0xc4,
-	0xf9, 0xae, 0xa5, 0x8b, 0xb7, 0x0b, 0xcd, 0x8a, 0x45, 0x0b, 0xd0, 0x0c, 0x4b, 0x50, 0xd4, 0x37,
-	0x26, 0xd0, 0x55, 0xa8, 0x73, 0x22, 0xf9, 0x51, 0x21, 0xdb, 0xae, 0x64, 0x03, 0xc5, 0x06, 0xe6,
-	0xd0, 0x7b, 0x02, 0x75, 0x8d, 0xd1, 0x3a, 0xfc, 0x97, 0x50, 0x49, 0xf8, 0x10, 0xa7, 0x45, 0xcd,
-	0x97, 0x7d, 0xf3, 0x60, 0xfc, 0xf2, 0xc1, 0xf8, 0x5b, 0xc5, 0x83, 0x09, 0x2a, 0x57, 0xd5, 0x8a,
-	0x34, 0x19, 0x24, 0xb2, 0x9c, 0x80, 0x06, 0xde, 0x3e, 0xc0, 0x03, 0x22, 0x77, 0x33, 0xd3, 0x8a,
-	0xf3, 0x5a, 0xb8, 0x00, 0x4d, 0xf5, 0x15, 0x19, 0x0e, 0xcb, 0xbd, 0x18, 0x13, 0x68, 0x09, 0xda,
-	0x7a, 0xd1, 0xf7, 0x48, 0x4a, 0x42, 0xc9, 0xb8, 0x70, 0x6c, 0xdd, 0xe9, 0x33, 0xac, 0xb7, 0x07,
-	0xad, 0x9d, 0x44, 0x54, 0x89, 0xfe, 0x8d, 0xe8, 0x1c, 0xcc, 0x6e, 0x72, 0x82, 0x25, 0x29, 0x64,
-	0x15, 0xf1, 0x34, 0x8b, 0x26, 0x88, 0x9b, 0x30, 0xbb, 0x45, 0x52, 0x52, 0x11, 0x7f, 0x2d, 0xdd,
-	0x87, 0xff, 0x9f, 0xab, 0xb5, 0xfb, 0x53, 0x67, 0x7e, 0xd5, 0xaa, 0x9d, 0xa7, 0x55, 0x4c, 0xdf,
-	0x6c, 0x5b, 0x91, 0x6e, 0x4c, 0x78, 0xeb, 0x50, 0xdf, 0xe6, 0x9c, 0x71, 0x95, 0x22, 0x64, 0x91,
-	0x49, 0x61, 0x07, 0xda, 0x56, 0x0f, 0x6a, 0x40, 0x84, 0xc0, 0x71, 0xd9, 0xa5, 0x12, 0xde, 0x7f,
-	0x79, 0x7c, 0xe2, 0x5a, 0x5f, 0x4e, 0xdc, 0xa9, 0x1f, 0x27, 0xae, 0xf5, 0x76, 0xe4, 0x5a, 0x1f,
-	0x46, 0xae, 0xf5, 0x71, 0xe4, 0x4e, 0x7d, 0x1a, 0xb9, 0xd6, 0xf1, 0xc8, 0xb5, 0x3e, 0x8f, 0x5c,
-	0xeb, 0xeb, 0xc8, 0xb5, 0xde, 0x7f, 0x73, 0xa7, 0x5e, 0xdc, 0xb8, 0xe8, 0x5f, 0xbc, 0x37, 0xa3,
-	0x77, 0x69, 0xed, 0x67, 0x00, 0x00, 0x00, 0xff, 0xff, 0x54, 0x3e, 0xa2, 0x62, 0x00, 0x06, 0x00,
-	0x00,
+	// 712 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xbc, 0x55, 0xcf, 0x6f, 0xd3, 0x48,
+	0x14, 0xae, 0xe3, 0xa4, 0xd9, 0xbe, 0x6c, 0xb3, 0xd5, 0x68, 0x0f, 0xde, 0x68, 0x65, 0x55, 0xde,
+	0x55, 0xd5, 0xc3, 0xd6, 0xd9, 0xb6, 0xaa, 0x04, 0x45, 0x42, 0x82, 0xb6, 0x42, 0xa0, 0xa2, 0x4a,
+	0x86, 0x82, 0xc4, 0x01, 0x69, 0x62, 0xbf, 0x3a, 0x6e, 0x1d, 0x8f, 0x99, 0x19, 0x07, 0x7a, 0x43,
+	0x42, 0xe2, 0x88, 0xf8, 0x33, 0xf8, 0x13, 0x38, 0x72, 0xec, 0x91, 0x23, 0x47, 0x1a, 0xfe, 0x09,
+	0x8e, 0x68, 0x66, 0xec, 0x24, 0xad, 0x0a, 0x6a, 0x0f, 0x70, 0xca, 0x7c, 0xdf, 0xfb, 0xe6, 0x9b,
+	0xe7, 0xf7, 0x43, 0x81, 0xcd, 0x38, 0x91, 0xfd, 0xa2, 0xe7, 0x87, 0x6c, 0xd0, 0x8d, 0x69, 0x8a,
+	0x2f, 0xb8, 0xec, 0x62, 0x84, 0x59, 0xc8, 0xb2, 0x83, 0x41, 0x3c, 0x90, 0xdd, 0xfc, 0x28, 0xee,
+	0xd2, 0x3c, 0x11, 0xdd, 0x90, 0x71, 0xec, 0x0e, 0x57, 0x15, 0xf0, 0x73, 0xce, 0x24, 0x23, 0x4d,
+	0x45, 0xf9, 0xc3, 0xd5, 0xce, 0xca, 0xb4, 0x09, 0x8b, 0x59, 0x57, 0xc7, 0x7b, 0xc5, 0x81, 0x46,
+	0x1a, 0xe8, 0x93, 0xb9, 0xd7, 0x71, 0x63, 0xc6, 0xe2, 0x14, 0x27, 0xaa, 0xa8, 0xe0, 0x54, 0x26,
+	0x2c, 0x33, 0x71, 0xef, 0x8d, 0x0d, 0xed, 0xbd, 0xde, 0x21, 0x86, 0xf2, 0x3e, 0x4a, 0x1a, 0x51,
+	0x49, 0x89, 0x0b, 0x40, 0xf3, 0xe4, 0x11, 0x72, 0x91, 0xb0, 0xcc, 0xb1, 0x16, 0xad, 0xe5, 0xb9,
+	0x60, 0x8a, 0x21, 0x04, 0xea, 0x47, 0x49, 0x16, 0x39, 0x35, 0x1d, 0xd1, 0x67, 0xc5, 0x15, 0x45,
+	0x12, 0x39, 0xb6, 0xe1, 0xd4, 0x59, 0x71, 0x19, 0x1d, 0xa0, 0x53, 0x37, 0x9c, 0x3a, 0x93, 0xbf,
+	0x61, 0x4e, 0xfd, 0x8a, 0x9c, 0x86, 0xe8, 0x34, 0x74, 0x60, 0x42, 0x90, 0x1b, 0x30, 0x9b, 0xd2,
+	0x1e, 0xa6, 0xc2, 0x99, 0x5d, 0xb4, 0x97, 0x5b, 0x6b, 0xff, 0xf8, 0xe5, 0x57, 0xfb, 0x67, 0x53,
+	0xf4, 0x77, 0xb5, 0x6a, 0x27, 0x93, 0xfc, 0x38, 0x28, 0xaf, 0x90, 0x7b, 0xd0, 0xa2, 0x59, 0xc6,
+	0xa4, 0xfe, 0x3a, 0xe1, 0x34, 0xb5, 0xc3, 0xf2, 0xf7, 0x1c, 0x6e, 0x4d, 0xa4, 0xc6, 0x66, 0xfa,
+	0x72, 0xe7, 0x3a, 0xb4, 0xa6, 0x9e, 0x20, 0x0b, 0x60, 0x1f, 0xe1, 0x71, 0x59, 0x0a, 0x75, 0x24,
+	0x7f, 0x42, 0x63, 0x48, 0xd3, 0x02, 0xcb, 0x22, 0x18, 0xb0, 0x59, 0xbb, 0x66, 0x75, 0x6e, 0xc2,
+	0xc2, 0x79, 0xef, 0xab, 0xdc, 0xf7, 0x16, 0xa0, 0x5d, 0x16, 0x3a, 0xc0, 0x67, 0x05, 0x0a, 0xe9,
+	0xbd, 0xb2, 0xe0, 0x8f, 0x31, 0x25, 0x72, 0x96, 0x09, 0x24, 0x0e, 0x34, 0x87, 0x67, 0x1a, 0x54,
+	0x41, 0xe5, 0x3c, 0xa0, 0x87, 0x8c, 0x6b, 0x67, 0x3b, 0x30, 0x40, 0xb3, 0x49, 0xc6, 0xb8, 0x6e,
+	0x90, 0x62, 0x15, 0x50, 0x6c, 0x4e, 0x65, 0xd8, 0xd7, 0x2d, 0xb2, 0x03, 0x03, 0x14, 0x2b, 0x24,
+	0x95, 0x55, 0x7f, 0x0c, 0xf0, 0xd6, 0xa1, 0x79, 0x37, 0x0b, 0xd3, 0x22, 0xc2, 0x71, 0x63, 0xad,
+	0xa9, 0xc6, 0x1a, 0xab, 0xbe, 0x70, 0x6a, 0x8b, 0xb6, 0xba, 0xa4, 0x81, 0xd7, 0x03, 0xd8, 0x62,
+	0x59, 0x94, 0xe8, 0x5a, 0x90, 0x25, 0xa8, 0x3f, 0xef, 0xa3, 0xc9, 0xb8, 0xb5, 0x46, 0xc6, 0xad,
+	0x19, 0x4b, 0x02, 0x1d, 0x27, 0xff, 0x41, 0x53, 0x14, 0x61, 0x88, 0x42, 0xe8, 0x8f, 0xb8, 0x58,
+	0x5a, 0x49, 0xbc, 0x3d, 0x98, 0x1b, 0xb3, 0x6a, 0xbe, 0xc2, 0x0a, 0x94, 0xf9, 0x4d, 0x08, 0xf2,
+	0x2f, 0x34, 0x38, 0x4a, 0x7e, 0x5c, 0xda, 0xb6, 0xc7, 0xb6, 0x81, 0x62, 0x03, 0x13, 0xf4, 0x1e,
+	0x42, 0x43, 0x63, 0xb2, 0x01, 0xbf, 0x25, 0x99, 0x44, 0x3e, 0xa4, 0x69, 0x99, 0xf3, 0x5f, 0xbe,
+	0x59, 0x27, 0xbf, 0x5a, 0x27, 0x7f, 0xbb, 0x5c, 0xa7, 0x60, 0x2c, 0x55, 0xa5, 0x48, 0x93, 0x41,
+	0x22, 0xab, 0x0e, 0x68, 0xe0, 0x1d, 0x00, 0xdc, 0x41, 0xb9, 0x97, 0x9b, 0x52, 0x5c, 0x54, 0xc2,
+	0x33, 0xbb, 0x51, 0x3b, 0xbf, 0x1b, 0x4b, 0xd0, 0xd6, 0x83, 0xfe, 0x00, 0x53, 0x0c, 0x25, 0xe3,
+	0xc2, 0xb1, 0x75, 0xa5, 0xcf, 0xb1, 0x5e, 0x0c, 0xad, 0xdd, 0x44, 0xfc, 0x82, 0x87, 0x56, 0x60,
+	0x7e, 0x8b, 0x23, 0x95, 0x58, 0x3d, 0xf5, 0x43, 0x5b, 0x25, 0xdf, 0xcf, 0xa3, 0x4b, 0xcb, 0xf7,
+	0x61, 0x7e, 0x1b, 0x53, 0xbc, 0xa4, 0xfc, 0xd2, 0x49, 0xbf, 0xb6, 0xe0, 0xf7, 0xc7, 0x6a, 0xca,
+	0x7f, 0x7a, 0x7d, 0xca, 0x51, 0x34, 0xa3, 0xef, 0xd4, 0xb5, 0x64, 0x42, 0x78, 0x1b, 0xd0, 0xd8,
+	0xe1, 0x9c, 0x71, 0x95, 0x40, 0xc8, 0x22, 0x93, 0x80, 0x1d, 0xe8, 0xb3, 0xda, 0xee, 0x01, 0x0a,
+	0x41, 0xe3, 0xea, 0xf9, 0x0a, 0xde, 0x7e, 0x7a, 0x72, 0xea, 0x5a, 0x9f, 0x4e, 0xdd, 0x99, 0xaf,
+	0xa7, 0xae, 0xf5, 0x72, 0xe4, 0x5a, 0xef, 0x46, 0xae, 0xf5, 0x7e, 0xe4, 0xce, 0x7c, 0x18, 0xb9,
+	0xd6, 0xc9, 0xc8, 0xb5, 0x3e, 0x8e, 0x5c, 0xeb, 0xf3, 0xc8, 0xb5, 0xde, 0x7e, 0x71, 0x67, 0x9e,
+	0xfc, 0x7f, 0xd5, 0x3f, 0x9c, 0xde, 0xac, 0x1e, 0xec, 0xf5, 0x6f, 0x01, 0x00, 0x00, 0xff, 0xff,
+	0x12, 0xb2, 0x65, 0x31, 0xab, 0x06, 0x00, 0x00,
 }
 
 func (this *ObjectMetadata) Equal(that interface{}) bool {
@@ -911,6 +965,9 @@ func (this *ObjectMetadata) Equal(that interface{}) bool {
 		return false
 	}
 	if this.Name != that1.Name {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
 		return false
 	}
 	if len(this.Labels) != len(that1.Labels) {
@@ -1155,6 +1212,9 @@ func (this *ListOptions) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
+	if this.Name != that1.Name {
+		return false
+	}
 	if this.Namespace != that1.Namespace {
 		return false
 	}
@@ -1187,6 +1247,9 @@ func (this *CreateOptions) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
 	return true
 }
 func (this *UpdateOptions) Equal(that interface{}) bool {
@@ -1208,6 +1271,9 @@ func (this *UpdateOptions) Equal(that interface{}) bool {
 	} else if this == nil {
 		return false
 	}
+	if this.Namespace != that1.Namespace {
+		return false
+	}
 	return true
 }
 func (this *DeleteOptions) Equal(that interface{}) bool {
@@ -1227,6 +1293,9 @@ func (this *DeleteOptions) Equal(that interface{}) bool {
 	if that1 == nil {
 		return this == nil
 	} else if this == nil {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
 		return false
 	}
 	if len(this.LabelSelectors) != len(that1.LabelSelectors) {
@@ -1259,6 +1328,9 @@ func (this *WatchOptions) Equal(that interface{}) bool {
 		return false
 	}
 	if this.Name != that1.Name {
+		return false
+	}
+	if this.Namespace != that1.Namespace {
 		return false
 	}
 	if len(this.LabelSelectors) != len(that1.LabelSelectors) {
@@ -1345,9 +1417,15 @@ func (m *ObjectMetadata) MarshalTo(dAtA []byte) (int, error) {
 		i = encodeVarintApi(dAtA, i, uint64(len(m.Name)))
 		i += copy(dAtA[i:], m.Name)
 	}
+	if len(m.Namespace) > 0 {
+		dAtA[i] = 0x2a
+		i++
+		i = encodeVarintApi(dAtA, i, uint64(len(m.Namespace)))
+		i += copy(dAtA[i:], m.Namespace)
+	}
 	if len(m.Labels) > 0 {
 		for k, _ := range m.Labels {
-			dAtA[i] = 0x2a
+			dAtA[i] = 0x32
 			i++
 			v := m.Labels[k]
 			mapSize := 1 + len(k) + sovApi(uint64(len(k))) + 1 + len(v) + sovApi(uint64(len(v)))
@@ -1364,7 +1442,7 @@ func (m *ObjectMetadata) MarshalTo(dAtA []byte) (int, error) {
 	}
 	if len(m.Annotations) > 0 {
 		for k, _ := range m.Annotations {
-			dAtA[i] = 0x32
+			dAtA[i] = 0x3a
 			i++
 			v := m.Annotations[k]
 			mapSize := 1 + len(k) + sovApi(uint64(len(k))) + 1 + len(v) + sovApi(uint64(len(v)))
@@ -1649,6 +1727,12 @@ func (m *ListOptions) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.Name) > 0 {
+		dAtA[i] = 0xa
+		i++
+		i = encodeVarintApi(dAtA, i, uint64(len(m.Name)))
+		i += copy(dAtA[i:], m.Name)
+	}
 	if len(m.Namespace) > 0 {
 		dAtA[i] = 0x12
 		i++
@@ -1688,6 +1772,12 @@ func (m *CreateOptions) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.Namespace) > 0 {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintApi(dAtA, i, uint64(len(m.Namespace)))
+		i += copy(dAtA[i:], m.Namespace)
+	}
 	return i, nil
 }
 
@@ -1706,6 +1796,12 @@ func (m *UpdateOptions) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.Namespace) > 0 {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintApi(dAtA, i, uint64(len(m.Namespace)))
+		i += copy(dAtA[i:], m.Namespace)
+	}
 	return i, nil
 }
 
@@ -1724,6 +1820,12 @@ func (m *DeleteOptions) MarshalTo(dAtA []byte) (int, error) {
 	_ = i
 	var l int
 	_ = l
+	if len(m.Namespace) > 0 {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintApi(dAtA, i, uint64(len(m.Namespace)))
+		i += copy(dAtA[i:], m.Namespace)
+	}
 	if len(m.LabelSelectors) > 0 {
 		for _, s := range m.LabelSelectors {
 			dAtA[i] = 0x1a
@@ -1763,9 +1865,15 @@ func (m *WatchOptions) MarshalTo(dAtA []byte) (int, error) {
 		i = encodeVarintApi(dAtA, i, uint64(len(m.Name)))
 		i += copy(dAtA[i:], m.Name)
 	}
+	if len(m.Namespace) > 0 {
+		dAtA[i] = 0x12
+		i++
+		i = encodeVarintApi(dAtA, i, uint64(len(m.Namespace)))
+		i += copy(dAtA[i:], m.Namespace)
+	}
 	if len(m.LabelSelectors) > 0 {
 		for _, s := range m.LabelSelectors {
-			dAtA[i] = 0x12
+			dAtA[i] = 0x1a
 			i++
 			l = len(s)
 			for l >= 1<<7 {
@@ -1780,7 +1888,7 @@ func (m *WatchOptions) MarshalTo(dAtA []byte) (int, error) {
 	}
 	if len(m.Conitions) > 0 {
 		for _, s := range m.Conitions {
-			dAtA[i] = 0x1a
+			dAtA[i] = 0x22
 			i++
 			l = len(s)
 			for l >= 1<<7 {
@@ -1840,6 +1948,7 @@ func NewPopulatedObjectMetadata(r randyApi, easy bool) *ObjectMetadata {
 	this.Kind = string(randStringApi(r))
 	this.Uuid = string(randStringApi(r))
 	this.Name = string(randStringApi(r))
+	this.Namespace = string(randStringApi(r))
 	if r.Intn(10) != 0 {
 		v1 := r.Intn(10)
 		this.Labels = make(map[string]string)
@@ -1954,6 +2063,7 @@ func NewPopulatedGetOptions(r randyApi, easy bool) *GetOptions {
 
 func NewPopulatedListOptions(r randyApi, easy bool) *ListOptions {
 	this := &ListOptions{}
+	this.Name = string(randStringApi(r))
 	this.Namespace = string(randStringApi(r))
 	v5 := r.Intn(10)
 	this.LabelSelectors = make([]string, v5)
@@ -1967,6 +2077,7 @@ func NewPopulatedListOptions(r randyApi, easy bool) *ListOptions {
 
 func NewPopulatedCreateOptions(r randyApi, easy bool) *CreateOptions {
 	this := &CreateOptions{}
+	this.Namespace = string(randStringApi(r))
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
@@ -1974,6 +2085,7 @@ func NewPopulatedCreateOptions(r randyApi, easy bool) *CreateOptions {
 
 func NewPopulatedUpdateOptions(r randyApi, easy bool) *UpdateOptions {
 	this := &UpdateOptions{}
+	this.Namespace = string(randStringApi(r))
 	if !easy && r.Intn(10) != 0 {
 	}
 	return this
@@ -1981,6 +2093,7 @@ func NewPopulatedUpdateOptions(r randyApi, easy bool) *UpdateOptions {
 
 func NewPopulatedDeleteOptions(r randyApi, easy bool) *DeleteOptions {
 	this := &DeleteOptions{}
+	this.Namespace = string(randStringApi(r))
 	v6 := r.Intn(10)
 	this.LabelSelectors = make([]string, v6)
 	for i := 0; i < v6; i++ {
@@ -1994,6 +2107,7 @@ func NewPopulatedDeleteOptions(r randyApi, easy bool) *DeleteOptions {
 func NewPopulatedWatchOptions(r randyApi, easy bool) *WatchOptions {
 	this := &WatchOptions{}
 	this.Name = string(randStringApi(r))
+	this.Namespace = string(randStringApi(r))
 	v7 := r.Intn(10)
 	this.LabelSelectors = make([]string, v7)
 	for i := 0; i < v7; i++ {
@@ -2112,6 +2226,10 @@ func (m *ObjectMetadata) Size() (n int) {
 		n += 1 + l + sovApi(uint64(l))
 	}
 	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovApi(uint64(l))
+	}
+	l = len(m.Namespace)
 	if l > 0 {
 		n += 1 + l + sovApi(uint64(l))
 	}
@@ -2267,6 +2385,10 @@ func (m *ListOptions) Size() (n int) {
 	}
 	var l int
 	_ = l
+	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovApi(uint64(l))
+	}
 	l = len(m.Namespace)
 	if l > 0 {
 		n += 1 + l + sovApi(uint64(l))
@@ -2286,6 +2408,10 @@ func (m *CreateOptions) Size() (n int) {
 	}
 	var l int
 	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovApi(uint64(l))
+	}
 	return n
 }
 
@@ -2295,6 +2421,10 @@ func (m *UpdateOptions) Size() (n int) {
 	}
 	var l int
 	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovApi(uint64(l))
+	}
 	return n
 }
 
@@ -2304,6 +2434,10 @@ func (m *DeleteOptions) Size() (n int) {
 	}
 	var l int
 	_ = l
+	l = len(m.Namespace)
+	if l > 0 {
+		n += 1 + l + sovApi(uint64(l))
+	}
 	if len(m.LabelSelectors) > 0 {
 		for _, s := range m.LabelSelectors {
 			l = len(s)
@@ -2320,6 +2454,10 @@ func (m *WatchOptions) Size() (n int) {
 	var l int
 	_ = l
 	l = len(m.Name)
+	if l > 0 {
+		n += 1 + l + sovApi(uint64(l))
+	}
+	l = len(m.Namespace)
 	if l > 0 {
 		n += 1 + l + sovApi(uint64(l))
 	}
@@ -2396,6 +2534,7 @@ func (this *ObjectMetadata) String() string {
 		`Kind:` + fmt.Sprintf("%v", this.Kind) + `,`,
 		`Uuid:` + fmt.Sprintf("%v", this.Uuid) + `,`,
 		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
 		`Labels:` + mapStringForLabels + `,`,
 		`Annotations:` + mapStringForAnnotations + `,`,
 		`}`,
@@ -2486,6 +2625,7 @@ func (this *ListOptions) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&ListOptions{`,
+		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
 		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
 		`LabelSelectors:` + fmt.Sprintf("%v", this.LabelSelectors) + `,`,
 		`}`,
@@ -2497,6 +2637,7 @@ func (this *CreateOptions) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&CreateOptions{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2506,6 +2647,7 @@ func (this *UpdateOptions) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&UpdateOptions{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
 		`}`,
 	}, "")
 	return s
@@ -2515,6 +2657,7 @@ func (this *DeleteOptions) String() string {
 		return "nil"
 	}
 	s := strings.Join([]string{`&DeleteOptions{`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
 		`LabelSelectors:` + fmt.Sprintf("%v", this.LabelSelectors) + `,`,
 		`}`,
 	}, "")
@@ -2526,6 +2669,7 @@ func (this *WatchOptions) String() string {
 	}
 	s := strings.Join([]string{`&WatchOptions{`,
 		`Name:` + fmt.Sprintf("%v", this.Name) + `,`,
+		`Namespace:` + fmt.Sprintf("%v", this.Namespace) + `,`,
 		`LabelSelectors:` + fmt.Sprintf("%v", this.LabelSelectors) + `,`,
 		`Conitions:` + fmt.Sprintf("%v", this.Conitions) + `,`,
 		`}`,
@@ -2698,6 +2842,35 @@ func (m *ObjectMetadata) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 5:
 			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 6:
+			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Labels", wireType)
 			}
 			var msglen int
@@ -2814,7 +2987,7 @@ func (m *ObjectMetadata) Unmarshal(dAtA []byte) error {
 			}
 			m.Labels[mapkey] = mapvalue
 			iNdEx = postIndex
-		case 6:
+		case 7:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Annotations", wireType)
 			}
@@ -3772,6 +3945,35 @@ func (m *ListOptions) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: ListOptions: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
+		case 1:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Name", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Name = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
@@ -3880,6 +4082,35 @@ func (m *CreateOptions) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: CreateOptions: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipApi(dAtA[iNdEx:])
@@ -3930,6 +4161,35 @@ func (m *UpdateOptions) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: UpdateOptions: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
 		default:
 			iNdEx = preIndex
 			skippy, err := skipApi(dAtA[iNdEx:])
@@ -3980,6 +4240,35 @@ func (m *DeleteOptions) Unmarshal(dAtA []byte) error {
 			return fmt.Errorf("proto: DeleteOptions: illegal tag %d (wire type %d)", fieldNum, wire)
 		}
 		switch fieldNum {
+		case 2:
+			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
 		case 3:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field LabelSelectors", wireType)
@@ -4090,6 +4379,35 @@ func (m *WatchOptions) Unmarshal(dAtA []byte) error {
 			iNdEx = postIndex
 		case 2:
 			if wireType != 2 {
+				return fmt.Errorf("proto: wrong wireType = %d for field Namespace", wireType)
+			}
+			var stringLen uint64
+			for shift := uint(0); ; shift += 7 {
+				if shift >= 64 {
+					return ErrIntOverflowApi
+				}
+				if iNdEx >= l {
+					return io.ErrUnexpectedEOF
+				}
+				b := dAtA[iNdEx]
+				iNdEx++
+				stringLen |= (uint64(b) & 0x7F) << shift
+				if b < 0x80 {
+					break
+				}
+			}
+			intStringLen := int(stringLen)
+			if intStringLen < 0 {
+				return ErrInvalidLengthApi
+			}
+			postIndex := iNdEx + intStringLen
+			if postIndex > l {
+				return io.ErrUnexpectedEOF
+			}
+			m.Namespace = string(dAtA[iNdEx:postIndex])
+			iNdEx = postIndex
+		case 3:
+			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field LabelSelectors", wireType)
 			}
 			var stringLen uint64
@@ -4117,7 +4435,7 @@ func (m *WatchOptions) Unmarshal(dAtA []byte) error {
 			}
 			m.LabelSelectors = append(m.LabelSelectors, string(dAtA[iNdEx:postIndex]))
 			iNdEx = postIndex
-		case 3:
+		case 4:
 			if wireType != 2 {
 				return fmt.Errorf("proto: wrong wireType = %d for field Conitions", wireType)
 			}

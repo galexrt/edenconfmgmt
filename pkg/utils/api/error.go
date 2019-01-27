@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package utilsapi
+package api
 
 import (
 	core_v1 "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1"

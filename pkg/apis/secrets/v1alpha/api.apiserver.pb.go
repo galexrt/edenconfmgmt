@@ -42,6 +42,9 @@ func (this *SecretsService) Get(ctx context.Context, req *GetRequest) (*GetRespo
 	if err != nil {
 		return nil, err
 	}
+	if req.Options != nil {
+		req.Options.Namespace = ""
+	}
 	target := &Secret{}
 	err = target.Unmarshal(out)
 	if err != nil {
@@ -57,6 +60,9 @@ func (this *SecretsService) List(ctx context.Context, req *ListRequest) (*ListRe
 	out, err := this.store.List(ctx, req.GetOptions())
 	if err != nil {
 		return nil, err
+	}
+	if req.Options != nil {
+		req.Options.Namespace = ""
 	}
 	list := &SecretList{}
 	list.Items = make([]*Secret, len(out))
@@ -77,11 +83,11 @@ func (this *SecretsService) Create(ctx context.Context, req *CreateRequest) (*Cr
 	if err := req.GetSecret().SetDefaults(); err != nil {
 		return nil, err
 	}
-	out, err := req.GetSecret().Marshal()
-	if err != nil {
-		return nil, err
+	if req.Options != nil {
+		req.Options.Namespace = ""
 	}
-	if err = this.store.Create(ctx, out, req.GetOptions()); err != nil {
+	req.GetSecret().GetMetadata().Namespace = ""
+	if err := this.store.Create(ctx, req.GetSecret(), req.GetOptions()); err != nil {
 		return nil, err
 	}
 	return &CreateResponse{
@@ -94,11 +100,11 @@ func (this *SecretsService) Update(ctx context.Context, req *UpdateRequest) (*Up
 	if err := req.GetSecret().SetDefaults(); err != nil {
 		return nil, err
 	}
-	out, err := req.GetSecret().Marshal()
-	if err != nil {
-		return nil, err
+	if req.Options != nil {
+		req.Options.Namespace = ""
 	}
-	if err = this.store.Update(ctx, out, req.GetOptions()); err != nil {
+	req.GetSecret().GetMetadata().Namespace = ""
+	if err := this.store.Update(ctx, req.GetSecret(), req.GetOptions()); err != nil {
 		return nil, err
 	}
 	return &UpdateResponse{
@@ -108,21 +114,28 @@ func (this *SecretsService) Update(ctx context.Context, req *UpdateRequest) (*Up
 
 // Delete
 func (this *SecretsService) Delete(ctx context.Context, req *DeleteRequest) (*DeleteResponse, error) {
-	return &DeleteResponse{}, this.store.Delete(ctx, req.GetOptions())
+	if req.Options != nil {
+		req.Options.Namespace = ""
+	}
+	return &DeleteResponse{}, this.store.Delete(ctx, req.GetSecret(), req.GetOptions())
 }
 
 // Watch
 func (this *SecretsService) Watch(req *WatchRequest, stream Secrets_WatchServer) error {
+	req.GetOptions().Namespace = ""
 	watch, err := this.store.Watch(stream.Context(), req.GetOptions())
 	if err != nil {
 		return nil
 	}
 	for {
 		select {
-		case res := <-watch:
-			value := res.Value.(*Secret)
+		case out := <-watch:
+			target := &Secret{}
+			if err = target.Unmarshal(out.Value); err != nil {
+				return err
+			}
 			if err := stream.Send(&WatchResponse{
-				Secret: value,
+				Secret: target,
 			}); err != nil {
 				return err
 			}
@@ -130,5 +143,4 @@ func (this *SecretsService) Watch(req *WatchRequest, stream Secrets_WatchServer)
 			return nil
 		}
 	}
-	return nil
 }

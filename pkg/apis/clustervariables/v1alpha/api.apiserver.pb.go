@@ -42,6 +42,9 @@ func (this *ClusterVariablesService) Get(ctx context.Context, req *GetRequest) (
 	if err != nil {
 		return nil, err
 	}
+	if req.Options != nil {
+		req.Options.Namespace = ""
+	}
 	target := &ClusterVariable{}
 	err = target.Unmarshal(out)
 	if err != nil {
@@ -57,6 +60,9 @@ func (this *ClusterVariablesService) List(ctx context.Context, req *ListRequest)
 	out, err := this.store.List(ctx, req.GetOptions())
 	if err != nil {
 		return nil, err
+	}
+	if req.Options != nil {
+		req.Options.Namespace = ""
 	}
 	list := &ClusterVariableList{}
 	list.Items = make([]*ClusterVariable, len(out))
@@ -77,11 +83,11 @@ func (this *ClusterVariablesService) Create(ctx context.Context, req *CreateRequ
 	if err := req.GetClusterVariable().SetDefaults(); err != nil {
 		return nil, err
 	}
-	out, err := req.GetClusterVariable().Marshal()
-	if err != nil {
-		return nil, err
+	if req.Options != nil {
+		req.Options.Namespace = ""
 	}
-	if err = this.store.Create(ctx, out, req.GetOptions()); err != nil {
+	req.GetClusterVariable().GetMetadata().Namespace = ""
+	if err := this.store.Create(ctx, req.GetClusterVariable(), req.GetOptions()); err != nil {
 		return nil, err
 	}
 	return &CreateResponse{
@@ -94,11 +100,11 @@ func (this *ClusterVariablesService) Update(ctx context.Context, req *UpdateRequ
 	if err := req.GetClusterVariable().SetDefaults(); err != nil {
 		return nil, err
 	}
-	out, err := req.GetClusterVariable().Marshal()
-	if err != nil {
-		return nil, err
+	if req.Options != nil {
+		req.Options.Namespace = ""
 	}
-	if err = this.store.Update(ctx, out, req.GetOptions()); err != nil {
+	req.GetClusterVariable().GetMetadata().Namespace = ""
+	if err := this.store.Update(ctx, req.GetClusterVariable(), req.GetOptions()); err != nil {
 		return nil, err
 	}
 	return &UpdateResponse{
@@ -108,21 +114,28 @@ func (this *ClusterVariablesService) Update(ctx context.Context, req *UpdateRequ
 
 // Delete
 func (this *ClusterVariablesService) Delete(ctx context.Context, req *DeleteRequest) (*DeleteResponse, error) {
-	return &DeleteResponse{}, this.store.Delete(ctx, req.GetOptions())
+	if req.Options != nil {
+		req.Options.Namespace = ""
+	}
+	return &DeleteResponse{}, this.store.Delete(ctx, req.GetClusterVariable(), req.GetOptions())
 }
 
 // Watch
 func (this *ClusterVariablesService) Watch(req *WatchRequest, stream ClusterVariables_WatchServer) error {
+	req.GetOptions().Namespace = ""
 	watch, err := this.store.Watch(stream.Context(), req.GetOptions())
 	if err != nil {
 		return nil
 	}
 	for {
 		select {
-		case res := <-watch:
-			value := res.Value.(*ClusterVariable)
+		case out := <-watch:
+			target := &ClusterVariable{}
+			if err = target.Unmarshal(out.Value); err != nil {
+				return err
+			}
 			if err := stream.Send(&WatchResponse{
-				ClusterVariable: value,
+				ClusterVariable: target,
 			}); err != nil {
 				return err
 			}
@@ -130,5 +143,4 @@ func (this *ClusterVariablesService) Watch(req *WatchRequest, stream ClusterVari
 			return nil
 		}
 	}
-	return nil
 }

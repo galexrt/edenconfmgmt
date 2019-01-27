@@ -1757,6 +1757,10 @@ Watch
 ### CreateOptions
 
 
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| namespace | [string](#string) |  | Namespace used for listing. |
 <a name="core.v1.DeleteOptions"></a>
 
 ### DeleteOptions
@@ -1765,6 +1769,7 @@ Watch
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
+| namespace | [string](#string) |  | Namespace used for listing. |
 | labelSelectors | [string](#string) | repeated | Label selector in string form. |
 <a name="core.v1.Error"></a>
 
@@ -1805,6 +1810,7 @@ Watch
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
+| name | [string](#string) |  | Name used for listing. |
 | namespace | [string](#string) |  | Namespace used for listing. |
 | labelSelectors | [string](#string) | repeated | Label selector in string form. |
 <a name="core.v1.ObjectMetadata"></a>
@@ -1819,6 +1825,7 @@ Watch
 | kind | [string](#string) |  | Kind of object. |
 | uuid | [string](#string) |  | UUID of object. |
 | name | [string](#string) |  | Name of object. |
+| namespace | [string](#string) |  | Namespace of object. |
 | labels | [ObjectMetadata.LabelsEntry](#core.v1.ObjectMetadata.LabelsEntry) | repeated | Labels of object. |
 | annotations | [ObjectMetadata.AnnotationsEntry](#core.v1.ObjectMetadata.AnnotationsEntry) | repeated | Annotations of object. |
 <a name="core.v1.ObjectMetadata.AnnotationsEntry"></a>
@@ -1856,6 +1863,10 @@ Watch
 ### UpdateOptions
 
 
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| namespace | [string](#string) |  | Namespace used for listing. |
 <a name="core.v1.VersionRequest"></a>
 
 ### VersionRequest
@@ -1883,6 +1894,7 @@ Watch
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | name | [string](#string) |  | Name used for listing. |
+| namespace | [string](#string) |  | Namespace used for listing. |
 | labelSelectors | [string](#string) | repeated | Label selector in string form. |
 | conitions | [string](#string) | repeated | Conditions to look for when watching Events on an object. |
 <!-- end messages -->

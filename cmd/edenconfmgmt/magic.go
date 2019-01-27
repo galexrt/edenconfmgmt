@@ -18,7 +18,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"io"
 	"log"
 	"os"
@@ -54,19 +53,26 @@ func magicRun(stopCh chan struct{}, store *object.Store) error {
 		grpcClient.Close()
 	}()
 
+	// TODO add logic to refresh hostname every once in a while
+	hostname, err := os.Hostname()
+	if err != nil {
+		logger.Error("failed to get hostname", zap.Error(err))
+		return err
+	}
+
 	go func() {
 		for {
 			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 			defer cancel()
 
-			fmt.Printf("---> store.PUT NOW TEST\n")
+			logger.Info("---> store.PUT NOW TEST")
 			obj := &nodes_v1alpha.Node{
 				Metadata: &core_v1.ObjectMetadata{
-					Name: "my-cool-node",
+					Name: hostname,
 				},
 				Spec: &nodes_v1alpha.Spec{
 					Network: &nodes_v1alpha.Network{
-						Fqdn: "my-cool-node.example.com",
+						Fqdn: hostname + ".example.com",
 					},
 				},
 			}
@@ -74,21 +80,21 @@ func magicRun(stopCh chan struct{}, store *object.Store) error {
 				Node: obj,
 			})
 			if err != nil {
-				fmt.Printf("---> store.Put ERROR: %+v\n", err)
+				logger.Error("---> store.Put ERROR", zap.Error(err))
 				time.Sleep(5 * time.Second)
 				return
 			}
-			fmt.Printf("---> store.Put Done\n")
+			logger.Info("---> store.Put Done")
 			resp, err := nodesClient.Get(ctx, &nodes_v1alpha.GetRequest{
 				Options: &core_v1.GetOptions{
-					Name: "my-cool-node",
+					Name: hostname,
 				}})
 			if err != nil {
-				fmt.Printf("---> store.Get ERROR: %+v\n", err)
+				logger.Info("---> store.Get", zap.Error(err))
 				time.Sleep(5 * time.Second)
 				return
 			}
-			fmt.Printf("---> store.Get TEST: RESULT: %+v\n", resp)
+			logger.Info("---> store.Get TEST RESULT", zap.Any("result", resp))
 			time.Sleep(5 * time.Second)
 		}
 	}()
@@ -97,23 +103,16 @@ func magicRun(stopCh chan struct{}, store *object.Store) error {
 	defer cancel()
 	watcher, err := nodesClient.Watch(ctx, &nodes_v1alpha.WatchRequest{
 		Options: &core_v1.WatchOptions{
-			Name: "my-cool-node",
+			Name: hostname,
 		}})
-	fmt.Printf("---> WATCH ERROR: %+v\n", err)
+	logger.Info("---> WATCH ERROR", zap.Error(err))
 
 	for {
 		res, err := watcher.Recv()
-		fmt.Printf("---> WATCH RESULT: %+v, err: %+v\n", res, err)
+		logger.Info("---> WATCH RESULT", zap.Any("result", res), zap.Error(err))
 		if err != nil && err != grpc.ErrServerStopped {
 			return err
 		}
-	}
-
-	// TODO add logic to refresh hostname every once in a while
-	hostname, err := os.Hostname()
-	if err != nil {
-		logger.Error("failed to get hostname", zap.Error(err))
-		return err
 	}
 
 	wg := &sync.WaitGroup{}

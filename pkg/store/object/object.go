@@ -23,11 +23,21 @@ import (
 
 	core_v1 "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1"
 	"github.com/galexrt/edenconfmgmt/pkg/store/cache"
+	"github.com/galexrt/edenconfmgmt/pkg/utils/api"
+	"github.com/gogo/protobuf/proto"
 	"go.uber.org/zap"
 )
 
+// MetadataUnmarshalerAndMarshaler GetMetadata func proto.Unmarshaler and proto.Marshaler in one interface
+type MetadataUnmarshalerAndMarshaler interface {
+	GetMetadata() *core_v1.ObjectMetadata
+	proto.Marshaler
+	proto.Unmarshaler
+}
+
 // Store object to hold objects and info about these objects.
 type Store struct {
+	prefix string
 	cache  *cache.Store
 	wg     sync.WaitGroup
 	logger *zap.Logger
@@ -45,6 +55,16 @@ func New(store *cache.Store, logger *zap.Logger) *Store {
 	return &Store{
 		cache:  store,
 		logger: logger.Named("pkg/store/object:Store"),
+		prefix: "",
+	}
+}
+
+// Prefixed return a prefixed Store instance.
+func (s *Store) Prefixed(prefix string) *Store {
+	return &Store{
+		cache:  s.cache,
+		logger: s.logger.Named("pkg/store/object:Store"),
+		prefix: prefix,
 	}
 }
 
@@ -91,38 +111,73 @@ func (s *Store) Get(ctx context.Context, opts *core_v1.GetOptions) ([]byte, erro
 	namespace := opts.Namespace
 	_ = namespace
 	if opts.Name != "" {
-		resp, err := s.cache.Get(ctx, "/"+opts.Name)
+		resp, err := s.cache.Get(ctx, api.GetObjectPath(s.prefix, opts.GetNamespace(), opts.GetName()))
 		if err != nil {
 			return nil, err
 		}
+		if len(resp) == 0 {
+			return nil, ErrNotFound
+		}
 		return resp, nil
 	} else if opts.LabelSelectors != nil {
-		//
+		// TODO Implement label selector
 	}
 	return nil, fmt.Errorf("no name nor label selector set")
 }
 
 // List
 func (s *Store) List(ctx context.Context, opts *core_v1.ListOptions) ([][]byte, error) {
+	if len(opts.LabelSelectors) == 0 {
+		resp, err := s.cache.List(ctx, api.GetObjectPath(s.prefix, opts.GetNamespace(), opts.GetName()))
+		if err != nil {
+			return nil, err
+		}
+		if len(resp) == 0 {
+			return nil, ErrNotFound
+		}
+		ret := make([][]byte, len(resp))
+		for k := range resp {
+			ret = append(ret, resp[k])
+		}
+		return ret, nil
+	} else {
+		// TODO Implement label selector
+	}
 	return nil, nil
 }
 
 // Create
-func (s *Store) Create(ctx context.Context, obj []byte, opts *core_v1.CreateOptions) error {
-	return s.cache.Put(ctx, "/my-cool-node", obj)
+func (s *Store) Create(ctx context.Context, obj MetadataUnmarshalerAndMarshaler, opts *core_v1.CreateOptions) error {
+	// TODO First get and then put if it does not exist.
+	_, err := s.Get(ctx, &core_v1.GetOptions{
+		Name:      obj.GetMetadata().GetName(),
+		Namespace: obj.GetMetadata().GetNamespace(),
+	})
+	if err != nil && err != ErrNotFound {
+		return err
+	}
+	out, err := obj.Marshal()
+	if err != nil {
+		return nil
+	}
+	return s.cache.Put(ctx, api.GetObjectPath(s.prefix, obj.GetMetadata().GetNamespace(), obj.GetMetadata().GetName()), out)
 }
 
 // Update
-func (s *Store) Update(ctx context.Context, obj []byte, opts *core_v1.UpdateOptions) error {
-	return nil
+func (s *Store) Update(ctx context.Context, obj MetadataUnmarshalerAndMarshaler, opts *core_v1.UpdateOptions) error {
+	out, err := obj.Marshal()
+	if err != nil {
+		return nil
+	}
+	return s.cache.Put(ctx, api.GetObjectPath(s.prefix, obj.GetMetadata().GetNamespace(), obj.GetMetadata().GetName()), out)
 }
 
 // Delete
-func (s *Store) Delete(ctx context.Context, opts *core_v1.DeleteOptions) error {
-	return nil
+func (s *Store) Delete(ctx context.Context, obj MetadataUnmarshalerAndMarshaler, opts *core_v1.DeleteOptions) error {
+	return s.cache.Delete(ctx, api.GetObjectPath(s.prefix, obj.GetMetadata().GetNamespace(), obj.GetMetadata().GetName()))
 }
 
 // Watch
-func (s *Store) Watch(ctx context.Context, opts *core_v1.WatchOptions) (chan *InformerResult, error) {
-	return nil, nil
+func (s *Store) Watch(ctx context.Context, opts *core_v1.WatchOptions) (chan *cache.InformerResult, error) {
+	return s.cache.Watch(ctx, api.GetObjectPath(s.prefix, opts.GetNamespace(), opts.GetName()))
 }
