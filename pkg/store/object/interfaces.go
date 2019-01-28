@@ -16,15 +16,20 @@ limitations under the License.
 
 package object
 
-import "fmt"
-
-var (
-	// ErrNotFound error that is returned when an object is not found.
-	ErrNotFound = fmt.Errorf("object not found")
-	// ErrAlreadyExists error that an object with that name already exists.
-	ErrAlreadyExists = fmt.Errorf("object with name already exists")
-	// ErrNoSelector no name nor label selector had been given.
-	ErrNoSelector = fmt.Errorf("no name nor label selector set")
-	// ErrNoLabelsInformer no labels were in the selector when given to the `object.Informer`.
-	ErrNoLabelsInformer = fmt.Errorf("no labels in selector (object.Informer)")
+import (
+	core_v1 "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1"
+	"github.com/gogo/protobuf/proto"
 )
+
+// MetadataUnmarshalerAndMarshaler GetMetadata() proto.Unmarshaler and proto.Marshaler in an interface.
+type MetadataUnmarshalerAndMarshaler interface {
+	GetMetadata() *core_v1.ObjectMetadata
+	proto.Marshaler
+	proto.Unmarshaler
+}
+
+// GetNameAndNamespaceOptions GetName() and GetNamespace() in an interface.
+type GetNameAndNamespaceOptions interface {
+	GetName() string
+	GetNamespace() string
+}

@@ -26,18 +26,15 @@ const (
 
 // GetObjectPath return the correct object path for the given values.
 func GetObjectPath(dataStoreAPIPath string, namespace string, objectName string) string {
-	if namespace == "" {
-		return NamespacedObjectPath(dataStoreAPIPath, namespace, objectName)
-	}
-	return ObjectPath(dataStoreAPIPath, objectName)
+	return NamespacedObjectPath(dataStoreAPIPath, namespace, objectName)
 }
 
-// ObjectPath return data store path for a non namespaced object.
+// ObjectPath return data store path for a non namespaced object (DEPRECATED).
 func ObjectPath(dataStoreAPIPath string, objectName string) string {
 	return NamespacedObjectPath(dataStoreAPIPath, "", objectName)
 }
 
 // NamespacedObjectPath return data store  path for a namespaced object.
 func NamespacedObjectPath(dataStoreAPIPath string, namespace string, objectName string) string {
-	return path.Join(dataStoreAPIPath, namespace, objectName)
+	return path.Join("/", dataStoreAPIPath, namespace, objectName)
 }

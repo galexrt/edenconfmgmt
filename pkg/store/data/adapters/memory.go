@@ -45,9 +45,6 @@ func NewMemory(flagPrefix string) (data.Store, error) {
 	}, nil
 }
 
-// SetKeyPrefix set the prefix to prefix all given keys with.
-func (st *Memory) SetKeyPrefix(prefix string) { /* Noop for Memory */ }
-
 // Get get a value for a key.
 func (st *Memory) Get(ctx context.Context, key string) ([]byte, error) {
 	valueLoaded, ok := st.cache.Load(key)

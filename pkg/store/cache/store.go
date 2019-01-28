@@ -20,6 +20,7 @@ import (
 	"context"
 	"sync"
 
+	storecommon "github.com/galexrt/edenconfmgmt/pkg/store/common"
 	"github.com/galexrt/edenconfmgmt/pkg/store/data"
 	"github.com/galexrt/edenconfmgmt/pkg/utils/errors"
 	"go.etcd.io/etcd/clientv3"
@@ -64,13 +65,6 @@ func (st *Store) Start(stopCh chan struct{}) error {
 			return errors.Concat(errs...)
 		}
 	}
-}
-
-// SetKeyPrefix set the prefix to prefix all given keys with.
-func (st *Store) SetKeyPrefix(prefix string) {
-	st.dataStore.SetKeyPrefix(prefix)
-	st.cacheStore.SetKeyPrefix(prefix)
-	st.prefix = prefix
 }
 
 // Get get a value for a key.
@@ -135,7 +129,7 @@ func (st *Store) Delete(ctx context.Context, key string) error {
 }
 
 // Watch watch a key or directory for creation, changes and deletion.
-func (st *Store) Watch(ctx context.Context, key string) (chan *InformerResult, error) {
+func (st *Store) Watch(ctx context.Context, key string) (chan *storecommon.InformerResult, error) {
 	var watch clientv3.WatchChan
 	if !st.informer.DataStoreChExists(key) {
 		var err error

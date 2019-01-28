@@ -23,9 +23,10 @@ import (
 	"strings"
 	"sync"
 
+	storecommon "github.com/galexrt/edenconfmgmt/pkg/store/common"
 	"github.com/galexrt/edenconfmgmt/pkg/store/data"
+	utilsetcd "github.com/galexrt/edenconfmgmt/pkg/utils/etcd"
 	"go.etcd.io/etcd/clientv3"
-	"go.etcd.io/etcd/mvcc/mvccpb"
 	"go.uber.org/zap"
 )
 
@@ -45,7 +46,7 @@ type chanContainer struct {
 }
 
 type receiverList struct {
-	list       []chan *InformerResult
+	list       []chan *storecommon.InformerResult
 	usageCount uint64
 	sync.RWMutex
 }
@@ -127,7 +128,7 @@ func (inf *Informer) getReceiverChs(key string) []*receiverList {
 }
 
 // Watch return a Watch for a given path (`key`).
-func (inf *Informer) Watch(ctx context.Context, key string, dataStoreCh clientv3.WatchChan) (chan *InformerResult, error) {
+func (inf *Informer) Watch(ctx context.Context, key string, dataStoreCh clientv3.WatchChan) (chan *storecommon.InformerResult, error) {
 	normKey := path.Join("/", key)
 	if _, ok := inf.channel[normKey]; !ok {
 		if dataStoreCh == nil {
@@ -140,10 +141,10 @@ func (inf *Informer) Watch(ctx context.Context, key string, dataStoreCh clientv3
 	}
 	if _, ok := inf.receivers[normKey]; !ok {
 		inf.receivers[normKey] = &receiverList{
-			list: []chan *InformerResult{},
+			list: []chan *storecommon.InformerResult{},
 		}
 	}
-	ch := make(chan *InformerResult)
+	ch := make(chan *storecommon.InformerResult)
 	inf.receivers[normKey].Lock()
 	inf.receivers[normKey].list = append(inf.receivers[normKey].list, ch)
 	inf.receivers[normKey].Unlock()
@@ -164,18 +165,18 @@ func (inf *Informer) watch(ctx context.Context, key string) {
 			}
 			for _, event := range resp.Events {
 				key := string(event.Kv.Key)
-				state := convertETCDtoResultState(event)
+				state := utilsetcd.ConvertETCDtoResultState(event)
 				value := event.Kv.Value
 				version := event.Kv.Version
 				inf.wg.Add(1)
-				go func(key string, state ResultState, value []byte) {
+				go func(key string, state storecommon.ResultState, value []byte) {
 					defer inf.wg.Done()
 					switch state {
-					case ResultStateCreated:
+					case storecommon.ResultStateCreated:
 						fallthrough
-					case ResultStateUpdated:
+					case storecommon.ResultStateUpdated:
 						inf.cacheStore.Put(ctx, key, value)
-					case ResultStateDeleted:
+					case storecommon.ResultStateDeleted:
 						inf.cacheStore.Delete(ctx, key)
 					default:
 						inf.logger.Warn("got dataStore event with no or unknown ResultState", zap.String("key", key), zap.Int64("keyVersion", version), zap.Any("resultState", state))
@@ -195,8 +196,8 @@ func (inf *Informer) watch(ctx context.Context, key string) {
 	}
 }
 
-func (inf *Informer) sendInformerResult(errs []error, key string, canceled bool, state ResultState, value []byte, version int64) {
-	result := &InformerResult{
+func (inf *Informer) sendInformerResult(errs []error, key string, canceled bool, state storecommon.ResultState, value []byte, version int64) {
+	result := &storecommon.InformerResult{
 		Errors:  errs,
 		Closed:  canceled,
 		Key:     key,
@@ -213,17 +214,4 @@ func (inf *Informer) sendInformerResult(errs []error, key string, canceled bool,
 		}
 		rcvs.RUnlock()
 	}
-}
-
-func convertETCDtoResultState(event *clientv3.Event) ResultState {
-	if event.Type == mvccpb.DELETE {
-		return ResultStateDeleted
-	}
-	if event.Type == mvccpb.PUT {
-		if event.Kv.CreateRevision == event.Kv.Version {
-			return ResultStateUpdated
-		}
-		return ResultStateCreated
-	}
-	return ResultStateUnknown
 }

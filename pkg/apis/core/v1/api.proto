@@ -108,16 +108,22 @@ message ListOptions {
 }
 
 message CreateOptions {
+    // Name used for listing.
+    string name = 1;
     // Namespace used for listing.
     string namespace = 2;
 }
 
 message UpdateOptions {
+    // Name used for listing.
+    string name = 1;
     // Namespace used for listing.
     string namespace = 2;
 }
 
 message DeleteOptions {
+    // Name used for listing.
+    string name = 1;
     // Namespace used for listing.
     string namespace = 2;
     // Label selector in string form.

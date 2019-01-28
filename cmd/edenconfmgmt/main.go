@@ -196,7 +196,10 @@ func Run(cmd *cobra.Command, args []string) error {
 		logger.Fatal("failed to create store handler", zap.String("storehandler", cacheStoreHandlerName), zap.Error(err))
 	}
 	cacheStore := cache.New(dataStoreAdapter, cacheStoreAdapter, logger)
-	objectStore := object.New(cacheStore, logger)
+
+	informerCtx, informerCancel := context.WithCancel(context.Background())
+	informer := object.NewInformer(informerCtx, cacheStore, logger)
+	objectStore := object.New(cacheStore, informer, logger)
 
 	var tracer opentracing.Tracer
 	if false {
@@ -243,7 +246,7 @@ func Run(cmd *cobra.Command, args []string) error {
 	grpc_zap.ReplaceGrpcLogger(logger)
 
 	// Register APIs to grpc server
-	registerGRPCAPIs(grpcServer, objectStore)
+	registerGRPCAPIs(grpcServer, objectStore, informer)
 
 	// Initialize Prometheus GRPC metrics.
 	grpcMetrics.InitializeMetrics(grpcServer)
@@ -265,6 +268,16 @@ func Run(cmd *cobra.Command, args []string) error {
 
 	// TODO Create a "mesh" proxy.
 	// Would be cool if each daemon can tell other servers where the masters are or UnaryServerInterceptor(),even proxy to them.
+
+	wg.Add(1)
+	go func() {
+		defer informerCancel()
+		defer wg.Done()
+		if err := informer.Start(stopCh); err != nil {
+			logger.Error("failed to start/run informer", zap.Error(err))
+			closer.Close(stopCh)
+		}
+	}()
 
 	wg.Add(1)
 	go func() {
@@ -315,7 +328,7 @@ func Run(cmd *cobra.Command, args []string) error {
 	return nil
 }
 
-func registerGRPCAPIs(srv *grpc.Server, objectStore *object.Store) {
+func registerGRPCAPIs(srv *grpc.Server, objectStore *object.Store, informer *object.Informer) {
 	// Beacons
 	beaconsServer := beacons_v1alpha.NewBeaconsService(objectStore.Prefixed(beacons_v1alpha.APIPath))
 	beacons_v1alpha.RegisterBeaconsServer(srv, beaconsServer)
@@ -342,6 +355,7 @@ func registerGRPCAPIs(srv *grpc.Server, objectStore *object.Store) {
 	taskbooks_v1alpha.RegisterTaskBooksServer(srv, taskBooksServer)
 	// Triggers
 	triggersServer := triggers_v1alpha.NewTriggersService(objectStore.Prefixed(triggers_v1alpha.APIPath))
+	informer.Register(triggers_v1alpha.APIPath)
 	triggers_v1alpha.RegisterTriggersServer(srv, triggersServer)
 	// Variables
 	variablesServer := variables_v1alpha.NewVariablesService(objectStore.Prefixed(variables_v1alpha.APIPath))

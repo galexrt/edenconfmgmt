@@ -80,21 +80,21 @@ func magicRun(stopCh chan struct{}, store *object.Store) error {
 				Node: obj,
 			})
 			if err != nil {
-				logger.Error("---> store.Put ERROR", zap.Error(err))
+				logger.Error("---> store.CREATE ERROR", zap.Error(err))
 				time.Sleep(5 * time.Second)
 				return
 			}
-			logger.Info("---> store.Put Done")
+			logger.Info("---> store.CREATE Done")
 			resp, err := nodesClient.Get(ctx, &nodes_v1alpha.GetRequest{
 				Options: &core_v1.GetOptions{
 					Name: hostname,
 				}})
 			if err != nil {
-				logger.Info("---> store.Get", zap.Error(err))
+				logger.Info("---> store.GET", zap.Error(err))
 				time.Sleep(5 * time.Second)
 				return
 			}
-			logger.Info("---> store.Get TEST RESULT", zap.Any("result", resp))
+			logger.Info("---> store.GET TEST RESULT", zap.Any("result", resp))
 			time.Sleep(5 * time.Second)
 		}
 	}()

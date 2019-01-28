@@ -24,9 +24,6 @@ import (
 
 // Store Interface to abstract get, put, del, watch actions to etcd datastore.
 type Store interface {
-	// SetKeyPrefix set the prefix to prefix all given keys with.
-	SetKeyPrefix(prefix string)
-
 	// Get return a specific key value pair.
 	Get(ctx context.Context, key string) ([]byte, error)
 	// GetRecursive return a list of keys with values at the given key arg.

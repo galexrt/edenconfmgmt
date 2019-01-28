@@ -26,7 +26,6 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"go.etcd.io/etcd/clientv3"
-	"go.etcd.io/etcd/clientv3/namespace"
 )
 
 const (
@@ -123,14 +122,6 @@ func NewETCD(flagPrefix string) (data.Store, error) {
 	// See https://godoc.org/go.etcd.io/etcd/clientv3#Maintenance
 
 	return etcd, err
-}
-
-// SetKeyPrefix set the prefix to prefix all given keys with.
-func (st *ETCD) SetKeyPrefix(prefix string) {
-	// Use namespaced KV client
-	st.cli.KV = namespace.NewKV(st.cli.KV, prefix)
-	st.cli.Watcher = namespace.NewWatcher(st.cli.Watcher, prefix)
-	st.cli.Lease = namespace.NewLease(st.cli.Lease, prefix)
 }
 
 // Get return a specific key.
