@@ -9,6 +9,7 @@ import (
 	_ "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1"
 	_ "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha"
 	_ "github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/apiserver"
+	github_com_galexrt_edenconfmgmt_pkg_grpc_plugins_apiserver "github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/apiserver"
 	github_com_galexrt_edenconfmgmt_pkg_store_object "github.com/galexrt/edenconfmgmt/pkg/store/object"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
@@ -80,7 +81,7 @@ func (this *ClusterVariablesService) List(ctx context.Context, req *ListRequest)
 
 // Create
 func (this *ClusterVariablesService) Create(ctx context.Context, req *CreateRequest) (*CreateResponse, error) {
-	if err := req.GetClusterVariable().SetDefaults(); err != nil {
+	if err := req.GetClusterVariable().SetDefaults(github_com_galexrt_edenconfmgmt_pkg_grpc_plugins_apiserver.MethodCreate); err != nil {
 		return nil, err
 	}
 	if req.Options != nil {
@@ -97,7 +98,7 @@ func (this *ClusterVariablesService) Create(ctx context.Context, req *CreateRequ
 
 // Update
 func (this *ClusterVariablesService) Update(ctx context.Context, req *UpdateRequest) (*UpdateResponse, error) {
-	if err := req.GetClusterVariable().SetDefaults(); err != nil {
+	if err := req.GetClusterVariable().SetDefaults(github_com_galexrt_edenconfmgmt_pkg_grpc_plugins_apiserver.MethodUpdate); err != nil {
 		return nil, err
 	}
 	if req.Options != nil {
@@ -134,13 +135,13 @@ func (this *ClusterVariablesService) Watch(req *WatchRequest, stream ClusterVari
 			if err = target.Unmarshal(out.Value); err != nil {
 				return err
 			}
-			if err := stream.Send(&WatchResponse{
+			if err = stream.Send(&WatchResponse{
 				ClusterVariable: target,
 			}); err != nil {
 				return err
 			}
 		case <-stream.Context().Done():
-			return nil
+			return stream.Context().Err()
 		}
 	}
 }

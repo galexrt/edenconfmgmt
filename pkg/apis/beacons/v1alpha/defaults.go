@@ -16,8 +16,12 @@ limitations under the License.
 
 package v1alpha
 
+import (
+	"github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/apiserver"
+)
+
 // SetDefaults set defaults on object (called through grpc plugin magic code generation).
-func (o *Beacon) SetDefaults() error {
+func (o *Beacon) SetDefaults(method apiserver.Method) error {
 	// TODO Set defaults for object.
 
 	return nil

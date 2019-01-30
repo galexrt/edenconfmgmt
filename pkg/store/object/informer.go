@@ -20,6 +20,7 @@ import (
 	"context"
 	"fmt"
 	"path"
+	"sort"
 	"strings"
 	"sync"
 
@@ -42,11 +43,16 @@ type receiverList struct {
 	sync.RWMutex
 }
 
+type labelReceivers struct {
+	labels    map[string]*labelReceivers
+	receivers *receiverList
+}
+
 // Informer keeps track of watches and the receivers of those watches.
 type Informer struct {
 	channel         map[string]*chanContainer
 	receiversName   map[string]*receiverList
-	receiversLabels map[string]*receiverList
+	receiversLabels map[string]*labelReceivers
 	dataStore       *cache.Store
 	wg              sync.WaitGroup
 	logger          *zap.Logger
@@ -58,14 +64,14 @@ func NewInformer(ctx context.Context, dataStore *cache.Store, logger *zap.Logger
 	return &Informer{
 		channel:         map[string]*chanContainer{},
 		receiversName:   map[string]*receiverList{},
-		receiversLabels: map[string]*receiverList{},
+		receiversLabels: map[string]*labelReceivers{},
 		dataStore:       dataStore,
 		logger:          logger.Named("pkg/store/object:Informer"),
 		globalContext:   ctx,
 	}
 }
 
-// Start
+// Start start cleanup/compaction logics.
 func (inf *Informer) Start(stopCh chan struct{}) error {
 	select {
 	case <-stopCh:
@@ -88,6 +94,14 @@ func (inf *Informer) Register(apiBasePath string) error {
 			watch: dataStoreCh,
 		}
 		go inf.watch(inf.globalContext, watchKey)
+	}
+	if _, ok := inf.receiversLabels[watchKey]; !ok {
+		inf.receiversLabels[watchKey] = &labelReceivers{
+			labels: map[string]*labelReceivers{},
+			receivers: &receiverList{
+				list: []chan *storecommon.InformerResult{},
+			},
+		}
 	}
 	return nil
 }
@@ -119,20 +133,13 @@ func (inf *Informer) getDataStoreCh(key string) *chanContainer {
 	return nil
 }
 
-// getReceiverLabels
-func (inf *Informer) getReceiverLabels(key string) []*receiverList {
-	receivers := []*receiverList{}
-
-	return receivers
-}
-
-// getReceiverByName
+// getReceiversForName
 // Example `inf.receivers` keys:
 // * /registry/myapi/
 // * /registry/otherapi/
 // When asked for `key: /registry/otherapi/my-object`, the second key's
 // value would get returned.
-func (inf *Informer) getReceiverByName(key string) []*receiverList {
+func (inf *Informer) getReceiversForName(key string) []*receiverList {
 	receivers := []*receiverList{}
 
 	for recvPath := range inf.receiversName {
@@ -148,6 +155,35 @@ func (inf *Informer) getReceiverByName(key string) []*receiverList {
 				}
 			}
 		}
+	}
+
+	return receivers
+}
+
+// getReceiversForLabels
+func (inf *Informer) getReceiversForLabels(labels map[string]string) []*receiverList {
+	receivers := []*receiverList{}
+
+	var keys []string
+	for k := range labels {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	// TODO Build api name
+	apiName := "/nodes/v1alpha"
+	recvLabelList, ok := inf.receiversLabels[apiName]
+	if !ok {
+		return nil
+	}
+
+	for _, k := range keys {
+		label := strings.Join([]string{k, labels[k]}, "=")
+		if _, ok = recvLabelList.labels[label]; !ok {
+			return nil
+		}
+		recvLabelList = recvLabelList.labels[label]
+		receivers = append(receivers, recvLabelList.receivers)
 	}
 
 	return receivers
@@ -174,16 +210,28 @@ func (inf *Informer) WatchOnLabels(ctx context.Context, labels []string) (chan *
 		return nil, ErrNoLabelsInformer
 	}
 	ch := make(chan *storecommon.InformerResult)
+
+	// TODO Build api name
+	apiName := "/nodes/v1alpha"
+	recvLabelList, ok := inf.receiversLabels[apiName]
+	if !ok {
+		return nil, fmt.Errorf("something went wrong, no api found in our receivers list")
+	}
+
+	resultLabelList := recvLabelList
 	for _, label := range labels {
-		if _, ok := inf.receiversLabels[label]; !ok {
-			inf.receiversLabels[label] = &receiverList{
-				list: []chan *storecommon.InformerResult{},
+		if _, ok = resultLabelList.labels[label]; !ok {
+			resultLabelList.labels[label] = &labelReceivers{
+				labels: map[string]*labelReceivers{},
+				receivers: &receiverList{
+					list: []chan *storecommon.InformerResult{},
+				},
 			}
 		}
-		inf.receiversLabels[label].Lock()
-		inf.receiversLabels[label].list = append(inf.receiversLabels[label].list, ch)
-		inf.receiversLabels[label].Unlock()
+		resultLabelList = resultLabelList.labels[label]
 	}
+	resultLabelList.receivers.list = append(resultLabelList.receivers.list, ch)
+
 	return ch, nil
 }
 
@@ -240,6 +288,7 @@ func (inf *Informer) objectCreatedOrChanged(result *storecommon.InformerResult) 
 	if err != nil {
 		return err
 	}
+
 	if obj.GetMetadata() == nil {
 		return nil
 	}
@@ -248,15 +297,18 @@ func (inf *Informer) objectCreatedOrChanged(result *storecommon.InformerResult) 
 	name := obj.GetMetadata().GetName()
 	wg.Add(1)
 	go func() {
-		// TODO Get receivers
-		inf.getReceiverByName(name)
-		inf.sendInformerResult(result, receivers)
+		defer wg.Done()
+		// TODO build path for name
+		inf.sendInformerResult(result, inf.getReceiversForName(name))
 	}()
-	labels := obj.GetMetadata().GetLabels()
-	for k, v := range labels {
-		_ = k
-		_ = v
-	}
+
+	wg.Add(1)
+	go func() {
+		defer wg.Done()
+		inf.sendInformerResult(result, inf.getReceiversForLabels(obj.GetMetadata().GetLabels()))
+	}()
+
+	wg.Wait()
 	return nil
 }
 

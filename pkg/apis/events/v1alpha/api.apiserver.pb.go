@@ -8,6 +8,7 @@ import (
 	fmt "fmt"
 	_ "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1"
 	_ "github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/apiserver"
+	github_com_galexrt_edenconfmgmt_pkg_grpc_plugins_apiserver "github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/apiserver"
 	github_com_galexrt_edenconfmgmt_pkg_store_object "github.com/galexrt/edenconfmgmt/pkg/store/object"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
@@ -79,7 +80,7 @@ func (this *EventsService) List(ctx context.Context, req *ListRequest) (*ListRes
 
 // Create
 func (this *EventsService) Create(ctx context.Context, req *CreateRequest) (*CreateResponse, error) {
-	if err := req.GetEvent().SetDefaults(); err != nil {
+	if err := req.GetEvent().SetDefaults(github_com_galexrt_edenconfmgmt_pkg_grpc_plugins_apiserver.MethodCreate); err != nil {
 		return nil, err
 	}
 	if req.Options != nil {
@@ -96,7 +97,7 @@ func (this *EventsService) Create(ctx context.Context, req *CreateRequest) (*Cre
 
 // Update
 func (this *EventsService) Update(ctx context.Context, req *UpdateRequest) (*UpdateResponse, error) {
-	if err := req.GetEvent().SetDefaults(); err != nil {
+	if err := req.GetEvent().SetDefaults(github_com_galexrt_edenconfmgmt_pkg_grpc_plugins_apiserver.MethodUpdate); err != nil {
 		return nil, err
 	}
 	if req.Options != nil {
@@ -133,13 +134,13 @@ func (this *EventsService) Watch(req *WatchRequest, stream Events_WatchServer) e
 			if err = target.Unmarshal(out.Value); err != nil {
 				return err
 			}
-			if err := stream.Send(&WatchResponse{
+			if err = stream.Send(&WatchResponse{
 				Event: target,
 			}); err != nil {
 				return err
 			}
 		case <-stream.Context().Done():
-			return nil
+			return stream.Context().Err()
 		}
 	}
 }

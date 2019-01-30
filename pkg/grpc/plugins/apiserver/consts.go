@@ -14,18 +14,22 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package v1alpha
+package apiserver
 
-import (
-	"github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/apiserver"
+// Method "name" for the calls that are "supported" by the apiserver grpc plugin.
+type Method int
+
+const (
+	// MethodGet method "name" for `Get()`
+	MethodGet Method = iota + 1
+	// MethodList method "name" for `List()`
+	MethodList
+	// MethodCreate method "name" for `Create()`
+	MethodCreate
+	// MethodUpdate method "name" for `Update()`
+	MethodUpdate
+	// MethodDelete method "name" for `Delete()`
+	MethodDelete
+	// MethodWatch method "name" for `Watch()`
+	MethodWatch
 )
-
-// SetDefaults set defaults on object (called through grpc plugin magic code generation).
-func (o *Node) SetDefaults(method apiserver.Method) error {
-	// TODO Set defaults for object.
-	if o.Spec != nil {
-		if o.Spec.Network != nil {
-		}
-	}
-	return nil
-}

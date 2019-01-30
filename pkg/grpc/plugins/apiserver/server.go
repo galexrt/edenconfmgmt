@@ -30,12 +30,12 @@ const protoClientGenerateOptionID = 1337
 type plugin struct {
 	*generator.Generator
 	generator.PluginImports
-	useGogoImport  bool
-	validatorPkg   generator.Single
-	cacheStorePkg  generator.Single
-	objectStorePkg generator.Single
-	utilsAPIPkg    generator.Single
-	packagesUsed   map[string]generator.Single
+	useGogoImport      bool
+	apiserverPluginPkg generator.Single
+	cacheStorePkg      generator.Single
+	objectStorePkg     generator.Single
+	utilsAPIPkg        generator.Single
+	packagesUsed       map[string]generator.Single
 }
 
 // NewPlugin return a GRPC generator plugin, see `plugin` struct.
@@ -62,7 +62,7 @@ func (p *plugin) Generate(file *generator.FileDescriptor) {
 	p.cacheStorePkg = p.NewImport("github.com/galexrt/edenconfmgmt/pkg/store/cache")
 	p.objectStorePkg = p.NewImport("github.com/galexrt/edenconfmgmt/pkg/store/object")
 	p.utilsAPIPkg = p.NewImport("github.com/galexrt/edenconfmgmt/pkg/utils/api")
-	p.validatorPkg = p.NewImport("github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/apiserver")
+	p.apiserverPluginPkg = p.NewImport("github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/apiserver")
 
 	for _, msg := range file.Messages() {
 		ccTypeName := generator.CamelCaseSlice(msg.TypeName())
@@ -197,7 +197,7 @@ func (p *plugin) Generate(file *generator.FileDescriptor) {
 		p.P(`// Create`)
 		p.P(`func (this *`, ccTypeName, `sService) Create(ctx context.Context, req *CreateRequest) (*CreateResponse, error) {`)
 		p.In()
-		p.P(`if err := req.Get`, ccTypeName, `().SetDefaults(); err != nil {`)
+		p.P(`if err := req.Get`, ccTypeName, `().SetDefaults(`, p.apiserverPluginPkg.Use(), `.MethodCreate); err != nil {`)
 		p.In()
 		p.P(`return nil, err`)
 		p.Out()
@@ -229,7 +229,7 @@ func (p *plugin) Generate(file *generator.FileDescriptor) {
 		p.P(`// Update`)
 		p.P(`func (this *`, ccTypeName, `sService) Update(ctx context.Context, req *UpdateRequest) (*UpdateResponse, error) {`)
 		p.In()
-		p.P(`if err := req.Get`, ccTypeName, `().SetDefaults(); err != nil {`)
+		p.P(`if err := req.Get`, ccTypeName, `().SetDefaults(`, p.apiserverPluginPkg.Use(), `.MethodUpdate); err != nil {`)
 		p.In()
 		p.P(`return nil, err`)
 		p.Out()
@@ -297,7 +297,7 @@ func (p *plugin) Generate(file *generator.FileDescriptor) {
 		p.P(`return err`)
 		p.Out()
 		p.P(`}`)
-		p.P(`if err := stream.Send(&WatchResponse{`)
+		p.P(`if err = stream.Send(&WatchResponse{`)
 		p.In()
 		p.P(ccTypeName, `: target,`)
 		p.Out()
@@ -309,7 +309,7 @@ func (p *plugin) Generate(file *generator.FileDescriptor) {
 		p.Out()
 		p.P(`case <-stream.Context().Done():`)
 		p.In()
-		p.P(`return nil`)
+		p.P(`return stream.Context().Err()`)
 		p.Out()
 		p.P(`}`)
 		p.Out()

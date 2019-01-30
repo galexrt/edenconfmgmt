@@ -24,6 +24,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/davecgh/go-spew/spew"
 	core_v1 "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1"
 	nodes_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/nodes/v1alpha"
 	"github.com/galexrt/edenconfmgmt/pkg/store/object"
@@ -60,50 +61,71 @@ func magicRun(stopCh chan struct{}, store *object.Store) error {
 		return err
 	}
 
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	logger.Info("---> store.PUT NOW TEST")
+	obj := &nodes_v1alpha.Node{
+		Metadata: &core_v1.ObjectMetadata{
+			Name: hostname,
+			Labels: map[string]string{
+				"app":  "node",
+				"nope": "123",
+			},
+		},
+		Spec: &nodes_v1alpha.Spec{
+			Network: &nodes_v1alpha.Network{
+				Fqdn: hostname + ".example.com",
+			},
+		},
+	}
+	_, err = nodesClient.Create(ctx, &nodes_v1alpha.CreateRequest{
+		Node: obj,
+	})
+	if err != nil && err != object.ErrAlreadyExists {
+		logger.Error("---> store.CREATE ERROR", zap.Error(err))
+		time.Sleep(5 * time.Second)
+		return err
+	}
+	logger.Info("---> store.CREATE Done")
+
 	go func() {
 		for {
-			ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-			defer cancel()
-
-			logger.Info("---> store.PUT NOW TEST")
-			obj := &nodes_v1alpha.Node{
-				Metadata: &core_v1.ObjectMetadata{
-					Name: hostname,
-				},
-				Spec: &nodes_v1alpha.Spec{
-					Network: &nodes_v1alpha.Network{
-						Fqdn: hostname + ".example.com",
+			ctx1, cancel1 := context.WithTimeout(context.Background(), 10*time.Second)
+			defer cancel1()
+			_, err = nodesClient.Update(ctx1, &nodes_v1alpha.UpdateRequest{
+				Options: &core_v1.UpdateOptions{},
+				Node: &nodes_v1alpha.Node{
+					Metadata: &core_v1.ObjectMetadata{
+						Name: hostname,
+						Labels: map[string]string{
+							"app":  "node",
+							"nope": "123",
+						},
 					},
-				},
-			}
-			_, err = nodesClient.Create(ctx, &nodes_v1alpha.CreateRequest{
-				Node: obj,
-			})
-			if err != nil {
-				logger.Error("---> store.CREATE ERROR", zap.Error(err))
-				time.Sleep(5 * time.Second)
-				return
-			}
-			logger.Info("---> store.CREATE Done")
-			resp, err := nodesClient.Get(ctx, &nodes_v1alpha.GetRequest{
-				Options: &core_v1.GetOptions{
-					Name: hostname,
+					Spec: &nodes_v1alpha.Spec{
+						Network: &nodes_v1alpha.Network{
+							Fqdn: time.Now().String(),
+						},
+					},
 				}})
 			if err != nil {
-				logger.Info("---> store.GET", zap.Error(err))
+				logger.Info("---> store.GET ERROR", zap.Error(err))
 				time.Sleep(5 * time.Second)
 				return
 			}
-			logger.Info("---> store.GET TEST RESULT", zap.Any("result", resp))
 			time.Sleep(5 * time.Second)
 		}
 	}()
 
-	ctx, cancel := context.WithCancel(context.Background())
-	defer cancel()
-	watcher, err := nodesClient.Watch(ctx, &nodes_v1alpha.WatchRequest{
+	ctx2, cancel2 := context.WithCancel(context.Background())
+	defer cancel2()
+	watcher, err := nodesClient.Watch(ctx2, &nodes_v1alpha.WatchRequest{
 		Options: &core_v1.WatchOptions{
-			Name: hostname,
+			LabelSelectors: []string{
+				"app=node",
+				"nope=123",
+			},
 		}})
 	logger.Info("---> WATCH ERROR", zap.Error(err))
 
@@ -113,6 +135,7 @@ func magicRun(stopCh chan struct{}, store *object.Store) error {
 		if err != nil && err != grpc.ErrServerStopped {
 			return err
 		}
+		spew.Dump(res)
 	}
 
 	wg := &sync.WaitGroup{}

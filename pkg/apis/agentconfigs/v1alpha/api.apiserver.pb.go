@@ -9,6 +9,7 @@ import (
 	_ "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1"
 	_ "github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha"
 	_ "github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/apiserver"
+	github_com_galexrt_edenconfmgmt_pkg_grpc_plugins_apiserver "github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/apiserver"
 	github_com_galexrt_edenconfmgmt_pkg_store_object "github.com/galexrt/edenconfmgmt/pkg/store/object"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
@@ -79,7 +80,7 @@ func (this *AgentConfigsService) List(ctx context.Context, req *ListRequest) (*L
 
 // Create
 func (this *AgentConfigsService) Create(ctx context.Context, req *CreateRequest) (*CreateResponse, error) {
-	if err := req.GetAgentConfig().SetDefaults(); err != nil {
+	if err := req.GetAgentConfig().SetDefaults(github_com_galexrt_edenconfmgmt_pkg_grpc_plugins_apiserver.MethodCreate); err != nil {
 		return nil, err
 	}
 	if req.Options != nil {
@@ -96,7 +97,7 @@ func (this *AgentConfigsService) Create(ctx context.Context, req *CreateRequest)
 
 // Update
 func (this *AgentConfigsService) Update(ctx context.Context, req *UpdateRequest) (*UpdateResponse, error) {
-	if err := req.GetAgentConfig().SetDefaults(); err != nil {
+	if err := req.GetAgentConfig().SetDefaults(github_com_galexrt_edenconfmgmt_pkg_grpc_plugins_apiserver.MethodUpdate); err != nil {
 		return nil, err
 	}
 	if req.Options != nil {
@@ -133,13 +134,13 @@ func (this *AgentConfigsService) Watch(req *WatchRequest, stream AgentConfigs_Wa
 			if err = target.Unmarshal(out.Value); err != nil {
 				return err
 			}
-			if err := stream.Send(&WatchResponse{
+			if err = stream.Send(&WatchResponse{
 				AgentConfig: target,
 			}); err != nil {
 				return err
 			}
 		case <-stream.Context().Done():
-			return nil
+			return stream.Context().Err()
 		}
 	}
 }
