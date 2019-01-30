@@ -18,6 +18,8 @@ package core.v1;
 option go_package = "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1";
 
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/apiserver/server.proto";
+import "github.com/mwitkow/go-proto-validators/validator.proto";
 import "google/protobuf/duration.proto";
 
 option (gogoproto.goproto_stringer_all) = false;
@@ -48,6 +50,11 @@ message ObjectMetadata {
     map<string, string> labels = 6;
     // Annotations of object.
     map<string, string> annotations = 7;
+}
+
+message GenericObject {
+    // Metadata for object.
+    ObjectMetadata metadata = 1 [(validator.field) = {msg_exists : true}];
 }
 
 message VersionRequest {}

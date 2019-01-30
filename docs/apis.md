@@ -114,6 +114,7 @@
         * [CreateOptions](#core.v1.CreateOptions)
         * [DeleteOptions](#core.v1.DeleteOptions)
         * [Error](#core.v1.Error)
+        * [GenericObject](#core.v1.GenericObject)
         * [GetOptions](#core.v1.GetOptions)
         * [Include](#core.v1.Include)
         * [ListOptions](#core.v1.ListOptions)
@@ -1198,6 +1199,15 @@ Watch
 | ----- | ---- | ----- | ----------- |
 | code | [int64](#int64) |  | Code status code. |
 | message | [string](#string) |  | Message error message (can be empty). |
+<a name="core.v1.GenericObject"></a>
+
+### GenericObject
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| metadata | [ObjectMetadata](#core.v1.ObjectMetadata) |  | Metadata for object. |
 <a name="core.v1.GetOptions"></a>
 
 ### GetOptions

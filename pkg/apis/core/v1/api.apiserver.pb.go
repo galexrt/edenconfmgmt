@@ -5,9 +5,11 @@ package v1
 
 import (
 	fmt "fmt"
+	_ "github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/apiserver"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
 	_ "github.com/golang/protobuf/ptypes/duration"
+	_ "github.com/mwitkow/go-proto-validators"
 	math "math"
 )
 

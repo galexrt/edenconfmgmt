@@ -5,10 +5,12 @@ package v1
 
 import (
 	fmt "fmt"
+	_ "github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/apiserver"
 	_ "github.com/gogo/protobuf/gogoproto"
 	github_com_gogo_protobuf_proto "github.com/gogo/protobuf/proto"
 	proto "github.com/gogo/protobuf/proto"
 	_ "github.com/gogo/protobuf/types"
+	_ "github.com/mwitkow/go-proto-validators"
 	math "math"
 	math_rand "math/rand"
 	testing "testing"
@@ -49,6 +51,46 @@ func BenchmarkObjectMetadataProtoUnmarshal(b *testing.B) {
 		datas[i] = dAtA
 	}
 	msg := &ObjectMetadata{}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		total += len(datas[i%10000])
+		if err := github_com_gogo_protobuf_proto.Unmarshal(datas[i%10000], msg); err != nil {
+			panic(err)
+		}
+	}
+	b.SetBytes(int64(total / b.N))
+}
+
+func BenchmarkGenericObjectProtoMarshal(b *testing.B) {
+	popr := math_rand.New(math_rand.NewSource(616))
+	total := 0
+	pops := make([]*GenericObject, 10000)
+	for i := 0; i < 10000; i++ {
+		pops[i] = NewPopulatedGenericObject(popr, false)
+	}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		dAtA, err := github_com_gogo_protobuf_proto.Marshal(pops[i%10000])
+		if err != nil {
+			panic(err)
+		}
+		total += len(dAtA)
+	}
+	b.SetBytes(int64(total / b.N))
+}
+
+func BenchmarkGenericObjectProtoUnmarshal(b *testing.B) {
+	popr := math_rand.New(math_rand.NewSource(616))
+	total := 0
+	datas := make([][]byte, 10000)
+	for i := 0; i < 10000; i++ {
+		dAtA, err := github_com_gogo_protobuf_proto.Marshal(NewPopulatedGenericObject(popr, false))
+		if err != nil {
+			panic(err)
+		}
+		datas[i] = dAtA
+	}
+	msg := &GenericObject{}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
 		total += len(datas[i%10000])
@@ -585,6 +627,20 @@ func BenchmarkObjectMetadataSize(b *testing.B) {
 	pops := make([]*ObjectMetadata, 1000)
 	for i := 0; i < 1000; i++ {
 		pops[i] = NewPopulatedObjectMetadata(popr, false)
+	}
+	b.ResetTimer()
+	for i := 0; i < b.N; i++ {
+		total += pops[i%1000].Size()
+	}
+	b.SetBytes(int64(total / b.N))
+}
+
+func BenchmarkGenericObjectSize(b *testing.B) {
+	popr := math_rand.New(math_rand.NewSource(616))
+	total := 0
+	pops := make([]*GenericObject, 1000)
+	for i := 0; i < 1000; i++ {
+		pops[i] = NewPopulatedGenericObject(popr, false)
 	}
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {

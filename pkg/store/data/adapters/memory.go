@@ -127,8 +127,13 @@ func (st *Memory) Delete(ctx context.Context, key string) error {
 	return nil
 }
 
-// Watch watch a key or directory for creation, changes and deletion.
+// Watch watch a key for creation, changes and deletion.
 func (st *Memory) Watch(ctx context.Context, key string) (clientv3.WatchChan, error) {
+	return nil, nil
+}
+
+// WatchRecursively watch a directory for creation, changes and deletion.
+func (st *Memory) WatchRecursively(ctx context.Context, key string) (clientv3.WatchChan, error) {
 	return nil, nil
 }
 

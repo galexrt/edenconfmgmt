@@ -128,12 +128,25 @@ func (st *Store) Delete(ctx context.Context, key string) error {
 	return st.cacheStore.Delete(ctx, key)
 }
 
-// Watch watch a key or directory for creation, changes and deletion.
+// Watch watch a key for creation, changes and deletion.
 func (st *Store) Watch(ctx context.Context, key string) (chan *storecommon.InformerResult, error) {
 	var watch clientv3.WatchChan
 	if !st.informer.DataStoreChExists(key) {
 		var err error
 		watch, err = st.dataStore.Watch(ctx, key)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return st.informer.Watch(ctx, key, watch)
+}
+
+// WatchRecursively watch a directory for creation, changes and deletion.
+func (st *Store) WatchRecursively(ctx context.Context, key string) (chan *storecommon.InformerResult, error) {
+	var watch clientv3.WatchChan
+	if !st.informer.DataStoreChExists(key) {
+		var err error
+		watch, err = st.dataStore.WatchRecursively(ctx, key)
 		if err != nil {
 			return nil, err
 		}

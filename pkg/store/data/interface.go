@@ -32,8 +32,10 @@ type Store interface {
 	Put(ctx context.Context, key string, value []byte) error
 	// Delete delete a key value pair.
 	Delete(ctx context.Context, key string) error
-	// Watch watch a key or directory for creation, changes and deletion.
+	// Watch watch a key for creation, changes and deletion.
 	Watch(ctx context.Context, key string) (clientv3.WatchChan, error)
+	// WatchRecursively watch a directory for creation, changes and deletion.
+	WatchRecursively(ctx context.Context, key string) (clientv3.WatchChan, error)
 	// Close closes the store and cancels all watches (if supported).
 	Close() error
 

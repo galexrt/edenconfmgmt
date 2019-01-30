@@ -167,14 +167,14 @@ func (st *ETCD) Delete(ctx context.Context, key string) error {
 }
 
 // Watch watch a key or directory for creation, changes and deletion.
-// If the `key` ends in `/` it will be a recursive watch.
 func (st *ETCD) Watch(ctx context.Context, key string) (clientv3.WatchChan, error) {
-	opts := []clientv3.OpOption{}
-	if key[len(key)-1:] == "/" {
-		opts = append(opts, clientv3.WithPrefix())
-	}
-	watch := st.cli.Watch(ctx, key, opts...)
-	return watch, nil
+	return st.cli.Watch(ctx, key), nil
+}
+
+// WatchRecursively watch a directory for creation, changes and deletion.
+// If the `key` ends in `/` it will be a recursive watch.
+func (st *ETCD) WatchRecursively(ctx context.Context, key string) (clientv3.WatchChan, error) {
+	return st.cli.Watch(ctx, key, []clientv3.OpOption{clientv3.WithPrefix()}...), nil
 }
 
 // Close closes the store and cancels all watches (if supported).

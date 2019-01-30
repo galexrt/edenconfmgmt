@@ -23,6 +23,7 @@ import (
 	"strings"
 	"sync"
 
+	core_v1 "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1"
 	"github.com/galexrt/edenconfmgmt/pkg/store/cache"
 	storecommon "github.com/galexrt/edenconfmgmt/pkg/store/common"
 	"github.com/galexrt/edenconfmgmt/pkg/utils/errors"
@@ -74,14 +75,14 @@ func (inf *Informer) Start(stopCh chan struct{}) error {
 
 // Register register a watch path.
 func (inf *Informer) Register(apiBasePath string) error {
-	watchKey := path.Join("/", apiBasePath)
-	dataStoreCh, err := inf.dataStore.Watch(inf.globalContext, watchKey)
+	watchKey := path.Join("/", apiBasePath, "/")
+	dataStoreCh, err := inf.dataStore.WatchRecursively(inf.globalContext, watchKey)
 	if err != nil {
 		return err
 	}
 	if _, ok := inf.channel[watchKey]; !ok {
 		if dataStoreCh == nil {
-			return fmt.Errorf("no dataStoreCh given and none in the dataStoreCh list ")
+			return fmt.Errorf("no dataStoreCh given and none in the dataStoreCh list")
 		}
 		inf.channel[watchKey] = &chanContainer{
 			watch: dataStoreCh,
@@ -125,13 +126,13 @@ func (inf *Informer) getReceiverLabels(key string) []*receiverList {
 	return receivers
 }
 
-// getReceiverNames
+// getReceiverByName
 // Example `inf.receivers` keys:
 // * /registry/myapi/
 // * /registry/otherapi/
 // When asked for `key: /registry/otherapi/my-object`, the second key's
 // value would get returned.
-func (inf *Informer) getReceiverNames(key string) []*receiverList {
+func (inf *Informer) getReceiverByName(key string) []*receiverList {
 	receivers := []*receiverList{}
 
 	for recvPath := range inf.receiversName {
@@ -201,9 +202,15 @@ func (inf *Informer) watch(ctx context.Context, key string) {
 				case storecommon.ResultStateCreated:
 					fallthrough
 				case storecommon.ResultStateUpdated:
-					inf.objectCreatedOrChanged(resp)
+					err := inf.objectCreatedOrChanged(resp)
+					if err != nil {
+						inf.logger.Error("error in informer notification for created or updated event", zap.Error(err))
+					}
 				case storecommon.ResultStateDeleted:
-					inf.objectDelete(resp)
+					err := inf.objectDelete(resp)
+					if err != nil {
+						inf.logger.Error("error in informer notification for deletion event", zap.Error(err))
+					}
 				default:
 					inf.logger.Warn("got dataStore event with no or unknown ResultState", zap.String("key", key), zap.Int64("keyVersion", resp.Version), zap.Any("resultState", resp.State))
 				}
@@ -228,22 +235,38 @@ func (inf *Informer) sendInformerResult(result *storecommon.InformerResult, rece
 }
 
 func (inf *Informer) objectCreatedOrChanged(result *storecommon.InformerResult) error {
-	obj := &struct {
-		proto.Message
-		MetadataUnmarshalerAndMarshaler
-	}{}
+	obj := &core_v1.GenericObject{}
 	err := proto.Unmarshal(result.Value, obj)
 	if err != nil {
 		return err
 	}
-	fmt.Printf("OBJECT CREATED OR CHANGED: %+v\n", obj)
-
+	if obj.GetMetadata() == nil {
+		return nil
+	}
 	// TODO Get all receiivers for name and labels, then send InformerResult
-	//inf.sendInformerResult(result, receivers)
+	wg := sync.WaitGroup{}
+	name := obj.GetMetadata().GetName()
+	wg.Add(1)
+	go func() {
+		// TODO Get receivers
+		inf.getReceiverByName(name)
+		inf.sendInformerResult(result, receivers)
+	}()
+	labels := obj.GetMetadata().GetLabels()
+	for k, v := range labels {
+		_ = k
+		_ = v
+	}
 	return nil
 }
 
-func (inf *Informer) objectDelete(result *storecommon.InformerResult) {
-	// TODO Delete labels and so on for given object.
+func (inf *Informer) objectDelete(result *storecommon.InformerResult) error {
+	obj := &core_v1.GenericObject{}
+	err := proto.Unmarshal(result.Value, obj)
+	if err != nil {
+		return err
+	}
+	// TODO Inform about an object deletion.
 
+	return nil
 }

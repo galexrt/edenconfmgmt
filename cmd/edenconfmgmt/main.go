@@ -330,34 +330,43 @@ func Run(cmd *cobra.Command, args []string) error {
 
 func registerGRPCAPIs(srv *grpc.Server, objectStore *object.Store, informer *object.Informer) {
 	// Beacons
+	informer.Register(beacons_v1alpha.APIPath)
 	beaconsServer := beacons_v1alpha.NewBeaconsService(objectStore.Prefixed(beacons_v1alpha.APIPath))
 	beacons_v1alpha.RegisterBeaconsServer(srv, beaconsServer)
 	// ClusterVariables
+	informer.Register(clustervariables_v1alpha.APIPath)
 	clusterVariablesServer := clustervariables_v1alpha.NewClusterVariablesService(objectStore.Prefixed(clustervariables_v1alpha.APIPath))
 	clustervariables_v1alpha.RegisterClusterVariablesServer(srv, clusterVariablesServer)
 	// Configs (AgentConfigs)
+	informer.Register(configs_v1alpha.APIPath)
 	configsServer := configs_v1alpha.NewAgentConfigsService(objectStore.Prefixed(configs_v1alpha.APIPath))
 	configs_v1alpha.RegisterAgentConfigsServer(srv, configsServer)
 	// CronJobs
+	informer.Register(cronjobs_v1alpha.APIPath)
 	cronJobsServer := cronjobs_v1alpha.NewCronJobsService(objectStore.Prefixed(cronjobs_v1alpha.APIPath))
 	cronjobs_v1alpha.RegisterCronJobsServer(srv, cronJobsServer)
 	// Events
+	informer.Register(events_v1alpha.APIPath)
 	eventsServer := events_v1alpha.NewEventsService(objectStore.Prefixed(events_v1alpha.APIPath))
 	events_v1alpha.RegisterEventsServer(srv, eventsServer)
 	// Nodes
+	informer.Register(nodes_v1alpha.APIPath)
 	nodesServer := nodes_v1alpha.NewNodesService(objectStore.Prefixed(nodes_v1alpha.APIPath))
 	nodes_v1alpha.RegisterNodesServer(srv, nodesServer)
 	// Secrets
+	informer.Register(secrets_v1alpha.APIPath)
 	secretsServer := secrets_v1alpha.NewSecretsService(objectStore.Prefixed(secrets_v1alpha.APIPath))
 	secrets_v1alpha.RegisterSecretsServer(srv, secretsServer)
 	// TaskBooks
+	informer.Register(taskbooks_v1alpha.APIPath)
 	taskBooksServer := taskbooks_v1alpha.NewTaskBooksService(objectStore.Prefixed(taskbooks_v1alpha.APIPath))
 	taskbooks_v1alpha.RegisterTaskBooksServer(srv, taskBooksServer)
 	// Triggers
-	triggersServer := triggers_v1alpha.NewTriggersService(objectStore.Prefixed(triggers_v1alpha.APIPath))
 	informer.Register(triggers_v1alpha.APIPath)
+	triggersServer := triggers_v1alpha.NewTriggersService(objectStore.Prefixed(triggers_v1alpha.APIPath))
 	triggers_v1alpha.RegisterTriggersServer(srv, triggersServer)
 	// Variables
+	informer.Register(variables_v1alpha.APIPath)
 	variablesServer := variables_v1alpha.NewVariablesService(objectStore.Prefixed(variables_v1alpha.APIPath))
 	variables_v1alpha.RegisterVariablesServer(srv, variablesServer)
 }
