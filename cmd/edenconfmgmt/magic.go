@@ -18,10 +18,10 @@ package main
 
 import (
 	"context"
-	"io"
+	"fmt"
 	"log"
+	"math/rand"
 	"os"
-	"sync"
 	"time"
 
 	"github.com/davecgh/go-spew/spew"
@@ -97,7 +97,7 @@ func magicRun(stopCh chan struct{}, store *object.Store) error {
 				Options: &core_v1.UpdateOptions{},
 				Node: &nodes_v1alpha.Node{
 					Metadata: &core_v1.ObjectMetadata{
-						Name: hostname,
+						Name: hostname + fmt.Sprintf("%d", rand.Int()),
 						Labels: map[string]string{
 							"app":  "node",
 							"nope": "123",
@@ -136,76 +136,5 @@ func magicRun(stopCh chan struct{}, store *object.Store) error {
 			return err
 		}
 		spew.Dump(res)
-	}
-
-	wg := &sync.WaitGroup{}
-
-	for {
-		opts := []grpc.DialOption{
-			grpc.WithInsecure(),
-		}
-		// TODO Move this logic to it's own package and init it in the cmd part using the neighbors flag
-		grpcClient, err := grpc.Dial("127.0.0.1:1337", opts...)
-		if err != nil {
-			log.Fatalf("fail to dial: %v", err)
-			return err
-		}
-		defer grpcClient.Close()
-
-		for {
-			nodesClient := nodes_v1alpha.NewNodesClient(grpcClient)
-
-			wg.Add(1)
-			go func() {
-				defer wg.Done()
-				select {
-				case <-stopCh:
-					// TODO Move this to own code which is just for maintaining GRPC connection
-					err := grpcClient.Close()
-					if err != nil {
-						logger.Error("grpc client closing conncetion failed ", zap.Error(err))
-					} else {
-						logger.Info("grpc client closed")
-					}
-				}
-			}()
-
-			/*maxTry := 3
-			for try := 1; try <= maxTry; try++ {
-				if _, err := registerNode(nodesClient, hostname); err != nil {
-					logger.Error(fmt.Sprintf("failed to register node (try %d of %d)", try, maxTry), zap.Error(err))
-					if try >= maxTry {
-						logger.Error(fmt.Sprintf("failed to register node after %d tries", maxTry))
-						return err
-					}
-					continue
-				}
-				break
-			}*/
-
-			in := &nodes_v1alpha.WatchRequest{
-				Options: &core_v1.WatchOptions{
-					Name: hostname,
-				},
-			}
-			nodesWatcher, err := nodesClient.Watch(context.Background(), in)
-			if err != nil && err != grpc.ErrClientConnClosing {
-				logger.Error("failed to watch nodes", zap.Error(err))
-				return err
-			}
-
-			for {
-				nodeResp, err := nodesWatcher.Recv()
-				if err == io.EOF {
-					logger.Warn("watch closed, restarting watch")
-					break
-				}
-				if err != nil {
-					logger.Error("failed to watch nodes", zap.Error(err))
-					return err
-				}
-				logger.Info("TEST", zap.Any("nodeResp", nodeResp))
-			}
-		}
 	}
 }

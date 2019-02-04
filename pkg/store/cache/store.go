@@ -102,8 +102,8 @@ func (st *Store) List(ctx context.Context, key string) (map[string][]byte, error
 	if err != nil {
 		return nil, err
 	}
-	for rk := range result {
 
+	for rk := range result {
 		err = st.cacheStore.Put(ctx, "", result[rk])
 		if err != nil {
 			return nil, err

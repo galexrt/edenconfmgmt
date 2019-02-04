@@ -14,16 +14,16 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package informer
+package parallimiter
 
-func runMiddlewares(middlewares []InformerMiddleware, result *Result) {
-	for _, mware := range middlewares {
-		done, err := mware(result)
-		if err != nil {
-			result.Errors = append(result.Errors, err)
-		}
-		if done {
-			return
-		}
-	}
+import "sync"
+
+// Limiter sync.WaitGroup with simple "rate limit" support in point of having a maximum that can run at the same time.
+type Limiter struct {
+	wg sync.WaitGroup
+}
+
+// New return a new Limiter object.
+func New() *Limiter {
+	return &Limiter{}
 }
