@@ -9,7 +9,7 @@ import (
 	"strconv"
 	"strings"
 
-	apiserver_plugin "github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/apiserver"
+	apiserver_plugin "github.com/galexrt/edenrun/pkg/grpc/plugins/apiserver"
 	"github.com/gogo/protobuf/proto"
 	"github.com/gogo/protobuf/protoc-gen-gogo/generator"
 )

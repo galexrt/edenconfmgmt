@@ -17,7 +17,7 @@ limitations under the License.
 package auth
 
 import (
-	"github.com/galexrt/edenconfmgmt/pkg/auth/handlers"
+	"github.com/galexrt/edenrun/pkg/auth/handlers"
 )
 
 // Auth auth handler

@@ -1,0 +1,107 @@
+{{- range $key, $value := .Paths }}
+{{- range $ := $value -}}
+'/apis/{{ $key | ToLower }}':
+  get:
+    description: Return one or more {{ $.ObjectName }}s.
+    operationId: 'get{{ $.ObjectName }}s'
+    parameters:
+      - $ref: '#/parameters/objectName'
+      - $ref: '#/parameters/namespaceName'
+      - $ref: '#/parameters/labelSelector'
+    responses:
+      '200':
+        description: List of matching {{ $.ObjectName }} objects.
+        schema:
+          type: array
+          items:
+            $ref: '#/definitions/{{ $.ObjectName | ToLower }}'
+      '204':
+        description: No matching {{ $.ObjectName }} object(s) found.
+      '404':
+        description: None are found (when requesting a specific {{ $.ObjectName }} object by name).
+      '500':
+        $ref: '#/responses/500'
+      default:
+        description: Default error sample response
+    tags:
+      - {{ $key | ToLower }}
+      - {{ $key | ToLower }}/{{ $.ObjectName | ToLower }}
+  post:
+    description: Create a {{ $.ObjectName }}.
+    operationId: 'create{{ $.ObjectName }}'
+    responses:
+      '201':
+        description: Successfully created a {{ $.ObjectName }} object.
+        schema:
+          $ref: '#/definitions/{{ $.ObjectName | ToLower }}'
+      '500':
+        $ref: '#/responses/500'
+      default:
+        description: Default error sample response
+    tags:
+      - {{ $key | ToLower }}
+      - {{ $key | ToLower }}/{{ $.ObjectName | ToLower }}
+  put:
+    description: Update/Replace a {{ $.ObjectName }}.
+    operationId: 'update{{ $.ObjectName }}'
+    parameters:
+      - $ref: '#/parameters/objectName'
+    responses:
+      '200':
+        description: Successfully updated/replaced a {{ $.ObjectName }} object.
+        schema:
+          $ref: '#/definitions/{{ $.ObjectName | ToLower }}'
+      '500':
+        $ref: '#/responses/500'
+      default:
+        description: Default error sample response
+    tags:
+      - {{ $key | ToLower }}
+      - {{ $key | ToLower }}/{{ $.ObjectName | ToLower }}
+  patch:
+    description: Patch a {{ $.ObjectName }}.
+    operationId: 'patch{{ $.ObjectName }}'
+    parameters:
+      - $ref: '#/parameters/objectName'
+    responses:
+      '200':
+        description: Successfully patched a {{ $.ObjectName }} object.
+        schema:
+          $ref: '#/definitions/{{ $.ObjectName | ToLower }}'
+      '500':
+        $ref: '#/responses/500'
+      default:
+        description: Default error sample response
+    tags:
+      - {{ $key | ToLower }}
+      - {{ $key | ToLower }}/{{ $.ObjectName | ToLower }}
+  delete:
+    description: Delete a {{ $.ObjectName }}.
+    operationId: 'delete{{ $.ObjectName }}'
+    responses:
+      '200':
+        description: Successfully deleted one or more {{ $.ObjectName }} objects.
+      '404':
+        description: None are found (when requesting a specific {{ $.ObjectName }} object by name).
+      '500':
+        $ref: '#/responses/500'
+      default:
+        description: Default error sample response
+    tags:
+      - {{ $key | ToLower }}
+      - {{ $key | ToLower }}/{{ $.ObjectName | ToLower }}
+'/apis/{{ $key | ToLower }}/watch/{{ $.ObjectName | ToLower }}':
+  get:
+    description: Watch {{ $.ObjectName }} objects.
+    operationId: 'watch{{ $.ObjectName }}'
+    parameters:
+      - $ref: '#/parameters/objectName'
+      - $ref: '#/parameters/labelSelector'
+    responses:
+      default:
+        description: Default error sample response
+    tags:
+      - {{ $key | ToLower }}
+      - {{ $key | ToLower }}/{{ $.ObjectName | ToLower }}
+{{ end -}}
+{{ end -}}

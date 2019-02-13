@@ -17,7 +17,7 @@ limitations under the License.
 package api
 
 import (
-	core_v1 "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1"
+	core_v1 "github.com/galexrt/edenrun/pkg/grpcapi/core/v1"
 )
 
 // ErrorToErrorResponse translates a Golang error to an error core object

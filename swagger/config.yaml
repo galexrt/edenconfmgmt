@@ -1,0 +1,23 @@
+info:
+  version: 0.0.1
+  title: edenrun
+  license:
+    name: Apache 2.0
+paths:
+  daemons.eden.run/v1alpha:
+    - objectName: Config
+  core.eden.run/v1alpha:
+    - objectName: Event
+    - objectName: Node
+  runny.eden.run/v1alpha:
+    - objectName: Runbook
+  trigger.eden.run/v1alpha:
+    - objectName: Trigger
+    - objectName: Beacon
+  scheduled.runny.eden.run/v1alpha:
+    - objectName: CronJob
+  data.eden.run/v1alpha:
+    - objectName: Variable
+    - objectName: ClusterVariable
+  config.eden.run/v1alpha:
+    - objectName: Secret

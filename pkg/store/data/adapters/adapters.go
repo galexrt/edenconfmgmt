@@ -19,7 +19,7 @@ package adapters
 import (
 	"fmt"
 
-	"github.com/galexrt/edenconfmgmt/pkg/store/data"
+	"github.com/galexrt/edenrun/pkg/store/data"
 	"github.com/spf13/cobra"
 )
 

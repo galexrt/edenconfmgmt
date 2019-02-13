@@ -1,0 +1,189 @@
+// Copyright 2019 Alexander Trost. All rights reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = 'proto3';
+
+package configs.v1alpha;
+option go_package = "github.com/galexrt/edenrun/pkg/grpcapi/configs/v1alpha";
+
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "github.com/galexrt/edenrun/pkg/grpc/plugins/apiserver/server.proto";
+import "github.com/mwitkow/go-proto-validators/validator.proto";
+import "github.com/galexrt/edenrun/pkg/grpcapi/core/v1/api.proto";
+import "github.com/galexrt/edenrun/pkg/grpcapi/events/v1alpha/api.proto";
+
+option (gogoproto.goproto_stringer_all) = false;
+option (gogoproto.stringer_all) =  true;
+option (gogoproto.goproto_getters_all) = true;
+option (gogoproto.marshaler_all) = true;
+option (gogoproto.sizer_all) = true;
+option (gogoproto.unmarshaler_all) = true;
+option (gogoproto.goproto_unrecognized_all) = false;
+option (gogoproto.populate_all) = true; // Needed for testgen
+option (gogoproto.equal_all) = true;  // Needed for testgen
+option (gogoproto.testgen_all) = false;
+option (gogoproto.benchgen_all) = true;
+
+service Configs {
+    // Get a Config.
+    rpc Get (GetRequest) returns (GetResponse);
+    // List Configs.
+    rpc List (ListRequest) returns (ListResponse);
+    // Create a Config.
+    rpc Create (CreateRequest) returns (CreateResponse);
+    // Update a Config.
+    rpc Update (UpdateRequest) returns (UpdateResponse);
+    // Delete a Config.
+    rpc Delete (DeleteRequest) returns (DeleteResponse);
+    // Watch Config.
+    rpc Watch (WatchRequest) returns (stream WatchResponse);
+}
+
+// Config object base.
+message Config {
+    option (apiserver.options).generate = true;
+    // Metadata for Config object.
+    core.v1.ObjectMetadata metadata = 1;
+    // Spec for Config.
+    ConfigSpec spec = 2;
+}
+
+message ConfigList {
+    // Metadata for ConfigList object.
+    core.v1.ObjectMetadata metadata = 1 [(validator.field) = {msg_exists : true}];
+    // List of Config objects.
+    repeated Config items = 2;
+}
+
+message ConfigSpec {
+    // Logging
+    Logging logging = 1;
+    // DataStore.
+    DataStore dataStore = 2;
+    // Listen.
+    Listen listen = 3;
+}
+
+message Logging {
+    // Mode
+    string mode = 1;
+    // LogLevel
+    enum LogLevel {
+        DEBUG = 0;
+        INFO = 1;
+        WARN = 2;
+        ERROR = 3;
+        FATAL = 4;
+        PANIC = 5;
+    }
+    LogLevel level = 2;
+}
+
+// DataStore config for the data store
+message DataStore {
+    // Memory store config options.
+    Memory memory = 1;
+    // ETCD config options.
+    ETCD etcd = 2;
+}
+
+// Listen
+message Listen {
+    // HTTP Port
+    string httpAddress = 1;
+    // gRPC Port
+    string grpcAddress = 2;
+}
+
+message Memory {
+}
+
+message ETCD {
+    // List of endpoints if running your own ETCD server (should only be used for testing).
+    string endpoints = 1;
+}
+
+// Get
+message GetRequest {
+    // core_v1.GetOptions
+    core.v1.GetOptions options = 1;
+}
+
+message GetResponse {
+    // Config object.
+    Config config = 1;
+}
+
+// List
+message ListRequest {
+    // core_v1.ListOptions
+    core.v1.ListOptions options = 1;
+}
+
+message ListResponse {
+    // Config list.
+    ConfigList configList = 1;
+}
+
+// Create
+message CreateRequest {
+    // core_v1.CreateOptions
+    core.v1.CreateOptions options = 1;
+    // Config object.
+    Config config = 2;
+}
+
+message CreateResponse {
+    // Config object.
+    Config config = 1;
+}
+
+// Update
+message UpdateRequest {
+    // core_v1.UpdateOptions
+    core.v1.UpdateOptions options = 1;
+    // Config object.
+    Config config = 2;
+}
+
+message UpdateResponse {
+    // Config object.
+    Config config = 1;
+}
+
+// Delete
+message DeleteRequest {
+    // core_v1.DeleteOptions
+    core.v1.DeleteOptions options = 1;
+    // Config object.
+    Config config = 2;
+}
+
+message DeleteResponse {
+    // Config object.
+    Config config = 1;
+}
+
+// Watch
+message WatchRequest {
+    // core_v1.WatchOptions
+    core.v1.WatchOptions options = 1;
+}
+
+message WatchResponse {
+    // Event info for watch response.
+    events.v1alpha.Event event = 1;
+    // Config object.
+    Config config = 2;
+}

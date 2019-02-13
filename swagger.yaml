@@ -1,0 +1,191 @@
+swagger: "2.0"
+info:
+  version: 0.0.1
+  title: edenrun
+  description: ''
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0.html
+parameters:
+  namespacePath:
+    in: path
+    name: namespace
+    type: string
+    required: true
+    description: Namespace name
+  namespaceName:
+    in: query
+    name: namespace
+    type: string
+    required: false
+    description: Namespace name
+  objectName:
+    in: query
+    name: name
+    type: string
+    required: false
+    description: Object name
+  labelSelector:
+    in: query
+    name: labelSelector
+    type: string
+    required: false
+    description: >-
+      Selector to restrict list of returned objects by their labels. Default
+      is everything. The format of each label selector is `KEY=VALUE` (separated by comma).
+responses:
+  '500':
+    description: Internal server error.
+  '503':
+    description: Service unavailable.
+definitions:
+  networkAddress:
+    type: object
+    properties:
+      ver:
+        type: string
+      address:
+        type: string
+  objectMetadata:
+    type: object
+    required:
+      - name
+    properties:
+      name:
+        type: string
+        minLength: 1
+        maxLength: 63
+      namespace:
+        type: string
+      uuid:
+        type: integer
+        format: int64
+        readOnly: true
+  node:
+    type: object
+    required:
+      - metadata
+    properties:
+      metadata:
+        $ref: '#/definitions/objectMetadata'
+      spec:
+        type: object
+        properties:
+          network:
+            type: object
+            properties:
+              fqdn:
+                type: string
+                minLength: 1
+                maxLength: 255
+              addresses:
+                type: array
+                items:
+                  $ref: '#/definitions/networkAddress'
+      status:
+        $ref: '#/definitions/nodeStatus'
+  nodeStatus:
+    type: object
+  event:
+    type: object
+    properties:
+      metadata:
+        $ref: '#/definitions/objectMetadata'
+paths:
+  '/version':
+    get:
+      description: Return version.
+      responses:
+        default:
+          description: Return version info.
+      tags:
+        - core
+  '/apis/daemons.eden.run/v1alpha':
+    get:
+      description: Return one or more Configs.
+      operationId: 'getConfigs'
+      parameters:
+        - $ref: '#/parameters/objectName'
+        - $ref: '#/parameters/namespaceName'
+        - $ref: '#/parameters/labelSelector'
+      responses:
+        '200':
+          description: List of matching Config objects.
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/node'
+        '204':
+          description: No matching Config object(s) found.
+        '404':
+          description: None are found (when requesting a specific Config object by name).
+        '500':
+          $ref: '#/responses/500'
+        default:
+          description: Default error sample response
+      tags:
+        - daemons.eden.run/v1alpha/config
+    post:
+      description: Create a Config.
+      operationId: 'createConfig'
+      responses:
+        '201':
+          description: Successfully created a Config object.
+        '500':
+          $ref: '#/responses/500'
+        default:
+          description: Default error sample response
+      tags:
+        - daemons.eden.run/v1alpha/config
+    put:
+      description: Update/Replace a Config.
+      operationId: 'updateConfig'
+      parameters:
+        - $ref: '#/parameters/objectName'
+      responses:
+        '200':
+          description: Successfully updated/replaced a Config object.
+        '500':
+          $ref: '#/responses/500'
+        default:
+          description: Default error sample response
+      tags:
+        - daemons.eden.run/v1alpha/config
+    patch:
+      description: Patch a Config.
+      operationId: 'patchConfig'
+      parameters:
+        - $ref: '#/parameters/objectName'
+      responses:
+        '200':
+          description: Successfully patched a Config object.
+        '500':
+          $ref: '#/responses/500'
+        default:
+          description: Default error sample response
+      tags:
+        - daemons.eden.run/v1alpha/config
+    delete:
+      description: Delete a Config.
+      operationId: 'deleteConfig'
+      responses:
+        '200':
+          description: Successfully deleted one or more Config objects.
+        '500':
+          $ref: '#/responses/500'
+        default:
+          description: Default error sample response
+      tags:
+        - daemons.eden.run/v1alpha/config
+  '/apis/daemons.eden.run/v1alpha/watch/config':
+    get:
+      description: Watch Config objects.
+      operationId: 'watchConfig'
+      parameters:
+        - $ref: '#/parameters/objectName'
+        - $ref: '#/parameters/labelSelector'
+      responses:
+        default:
+          description: Default error sample response
+      tags:
+        - daemons.eden.run/v1alpha/config

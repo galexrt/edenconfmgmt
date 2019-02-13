@@ -19,8 +19,8 @@ package object
 import (
 	"sync"
 
-	"github.com/galexrt/edenconfmgmt/pkg/store/cache"
-	"github.com/galexrt/edenconfmgmt/pkg/store/data"
+	"github.com/galexrt/edenrun/pkg/store/cache"
+	"github.com/galexrt/edenrun/pkg/store/data"
 	"go.etcd.io/etcd/clientv3"
 	"go.uber.org/zap"
 )

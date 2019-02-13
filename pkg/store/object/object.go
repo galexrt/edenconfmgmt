@@ -21,9 +21,9 @@ import (
 	"fmt"
 	"sync"
 
-	core_v1 "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1"
-	"github.com/galexrt/edenconfmgmt/pkg/store/cache"
-	"github.com/galexrt/edenconfmgmt/pkg/utils/api"
+	core_v1 "github.com/galexrt/edenrun/pkg/grpcapi/core/v1"
+	"github.com/galexrt/edenrun/pkg/store/cache"
+	"github.com/galexrt/edenrun/pkg/utils/api"
 	"github.com/gogo/protobuf/proto"
 	"go.uber.org/zap"
 )

@@ -1,0 +1,37 @@
+node:
+  type: object
+  required:
+    - metadata
+  properties:
+    metadata:
+      $ref: '#/definitions/objectMetadata'
+    spec:
+      type: object
+      properties:
+        network:
+          type: object
+          properties:
+            fqdn:
+              type: string
+              minLength: 1
+              maxLength: 255
+            addresses:
+              type: array
+              items:
+                $ref: '#/definitions/networkAddress'
+    status:
+      $ref: '#/definitions/nodeStatus'
+nodeStatus:
+  type: object
+event:
+  type: object
+  properties:
+    metadata:
+      $ref: '#/definitions/objectMetadata'
+networkAddress:
+  type: object
+  properties:
+    ver:
+      type: string
+    address:
+      type: string

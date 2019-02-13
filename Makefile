@@ -25,7 +25,7 @@ protoc-gen-govalidators:
 	$(GO) get $(GO_GET_FLAGS) github.com/mwitkow/go-proto-validators/protoc-gen-govalidators
 
 protoc-gen-apiserver:
-	$(GO) get $(GO_GET_FLAGS) github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/apiserver/protoc-gen-apiserver
+	$(GO) get $(GO_GET_FLAGS) github.com/galexrt/edenrun/pkg/grpc/plugins/apiserver/protoc-gen-apiserver
 
 protoc-gen-doc:
 	$(GO) get $(GO_GET_FLAGS) github.com/pseudomuto/protoc-gen-doc/cmd/protoc-gen-doc
@@ -35,8 +35,8 @@ license-bill-of-materials:
 
 bill-of-materials.json: license-bill-of-materials FORCE
 	license-bill-of-materials \
-		github.com/galexrt/edenconfmgmt/cmd/edenconfmgmt \
-		github.com/galexrt/edenconfmgmt/cmd/edenctl \
+		github.com/galexrt/edenrun/cmd/edenrun \
+		github.com/galexrt/edenrun/cmd/edenctl \
 		> bill-of-materials.json
 
 license-header-check:
@@ -61,8 +61,8 @@ Mgoogle/protobuf/struct.proto=github.com/gogo/protobuf/types,\
 Mgoogle/protobuf/timestamp.proto=github.com/gogo/protobuf/types,\
 Mgoogle/protobuf/wrappers.proto=github.com/gogo/protobuf/types,\
 plugins=grpc:$$GOPATH/src/ \
-		github.com/galexrt/edenconfmgmt/$^
-	go fmt github.com/galexrt/edenconfmgmt/$(dir $^)...
+		github.com/galexrt/edenrun/$^
+	go fmt github.com/galexrt/edenrun/$(dir $^)...
 
 proto-gen: $(GOPROTOFILES) docs/apis.md
 
@@ -79,8 +79,8 @@ Mgoogle/protobuf/wrappers.proto=github.com/gogo/protobuf/types,\
 plugins=grpc:$$GOPATH/src/ \
 		--govalidators_out=gogoimport=true:$$GOPATH/src/ \
 		--apiserver_out=gogoimport=true:$$GOPATH/src/ \
-		github.com/galexrt/edenconfmgmt/$^
-	go fmt github.com/galexrt/edenconfmgmt/$(dir $^)...
+		github.com/galexrt/edenrun/$^
+	go fmt github.com/galexrt/edenrun/$(dir $^)...
 
 proto-gen-plugins: $(patsubst %.proto,%.pb.go,$(shell find -type f -name '*.proto' -path "./pkg/grpc/plugins/*" | sed 's~\.\/~~g'))
 
@@ -94,7 +94,7 @@ docs/apis.md: $(GOPROTOFILES)
 		-I $$GOPATH/src/ \
 		--doc_out=$(DIR)docs/ \
 		--doc_opt=$(DIR)build/docs/proto-doc-template.tmpl,apis.md \
-		$(addprefix github.com/galexrt/edenconfmgmt/,$(PROTOFILES))
+		$(addprefix github.com/galexrt/edenrun/,$(PROTOFILES))
 
 proto-clean:
 	rm -f $(shell find -type f -name '*.pb.go' | sed 's~\.\/~~g')
@@ -116,3 +116,24 @@ test-env:
 		--initial-cluster node1=http://0.0.0.0:2380
 
 .PHONY: all protoc-gen-gogofast protoc-gen-doc proto-clean proto-gen-doc proto-gen test-env
+
+swagger:
+	$(GO) get $(GO_GET_FLAGS) github.com/go-swagger/go-swagger/cmd/swagger
+
+swagger-serve:
+	swagger serve ./swagger.yaml
+
+swagger-generate-server:
+	swagger generate server \
+		--spec ./swagger.yaml \
+		--target ./pkg/
+
+swagger-generate-client:
+	swagger generate client \
+		--spec ./swagger.yaml \
+		--target ./pkg/
+
+
+edenrun-swagger-gen:
+	$(GO) run ./build/swagger-gen/swagger-gen.go \
+		--config ./swagger/config.yaml

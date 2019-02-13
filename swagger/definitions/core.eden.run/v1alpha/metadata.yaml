@@ -1,0 +1,21 @@
+objectMetadata:
+  type: object
+  required:
+    - name
+  properties:
+    apiVersion:
+      type: string
+      minLength: 1
+    kind:
+      type: string
+      minLength: 1
+    name:
+      type: string
+      minLength: 1
+      maxLength: 63
+    namespace:
+      type: string
+    uuid:
+      type: integer
+      format: int64
+      readOnly: true

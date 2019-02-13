@@ -23,7 +23,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/galexrt/edenconfmgmt/pkg/store/data"
+	"github.com/galexrt/edenrun/pkg/store/data"
 	"go.etcd.io/etcd/clientv3"
 	"go.etcd.io/etcd/mvcc/mvccpb"
 	"go.uber.org/zap"

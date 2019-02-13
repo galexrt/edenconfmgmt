@@ -3,7 +3,7 @@
 
 ## Table of Contents
 
-* [github.com/galexrt/edenconfmgmt/pkg/apis/clustervariables/v1alpha/api.proto](#github.com/galexrt/edenconfmgmt/pkg/apis/clustervariables/v1alpha/api.proto)
+* [github.com/galexrt/edenrun/pkg/grpcapi/clustervariables/v1alpha/api.proto](#github.com/galexrt/edenrun/pkg/grpcapi/clustervariables/v1alpha/api.proto)
     * Description: 
     * Services
         * [ClusterVariables](#clustervariables.v1alpha.ClusterVariables)
@@ -24,7 +24,33 @@
         * [VariableSpec.ClustervariablesEntry](#clustervariables.v1alpha.VariableSpec.ClustervariablesEntry)
         * [WatchRequest](#clustervariables.v1alpha.WatchRequest)
         * [WatchResponse](#clustervariables.v1alpha.WatchResponse)
-* [github.com/galexrt/edenconfmgmt/pkg/apis/secrets/v1alpha/api.proto](#github.com/galexrt/edenconfmgmt/pkg/apis/secrets/v1alpha/api.proto)
+* [github.com/galexrt/edenrun/pkg/grpcapi/configs/v1alpha/api.proto](#github.com/galexrt/edenrun/pkg/grpcapi/configs/v1alpha/api.proto)
+    * Description: 
+    * Services
+        * [Configs](#configs.v1alpha.Configs)
+    * Messages
+        * [Config](#configs.v1alpha.Config)
+        * [ConfigList](#configs.v1alpha.ConfigList)
+        * [ConfigSpec](#configs.v1alpha.ConfigSpec)
+        * [CreateRequest](#configs.v1alpha.CreateRequest)
+        * [CreateResponse](#configs.v1alpha.CreateResponse)
+        * [DataStore](#configs.v1alpha.DataStore)
+        * [DeleteRequest](#configs.v1alpha.DeleteRequest)
+        * [DeleteResponse](#configs.v1alpha.DeleteResponse)
+        * [ETCD](#configs.v1alpha.ETCD)
+        * [GetRequest](#configs.v1alpha.GetRequest)
+        * [GetResponse](#configs.v1alpha.GetResponse)
+        * [ListRequest](#configs.v1alpha.ListRequest)
+        * [ListResponse](#configs.v1alpha.ListResponse)
+        * [Listen](#configs.v1alpha.Listen)
+        * [Logging](#configs.v1alpha.Logging)
+        * [UpdateRequest](#configs.v1alpha.UpdateRequest)
+        * [UpdateResponse](#configs.v1alpha.UpdateResponse)
+        * [WatchRequest](#configs.v1alpha.WatchRequest)
+        * [WatchResponse](#configs.v1alpha.WatchResponse)
+    * Enums
+        * [Logging.LogLevel](#configs.v1alpha.Logging.LogLevel)
+* [github.com/galexrt/edenrun/pkg/grpcapi/secrets/v1alpha/api.proto](#github.com/galexrt/edenrun/pkg/grpcapi/secrets/v1alpha/api.proto)
     * Description: 
     * Services
         * [Secrets](#secrets.v1alpha.Secrets)
@@ -45,7 +71,7 @@
         * [UpdateResponse](#secrets.v1alpha.UpdateResponse)
         * [WatchRequest](#secrets.v1alpha.WatchRequest)
         * [WatchResponse](#secrets.v1alpha.WatchResponse)
-* [github.com/galexrt/edenconfmgmt/pkg/apis/beacons/v1alpha/api.proto](#github.com/galexrt/edenconfmgmt/pkg/apis/beacons/v1alpha/api.proto)
+* [github.com/galexrt/edenrun/pkg/grpcapi/beacons/v1alpha/api.proto](#github.com/galexrt/edenrun/pkg/grpcapi/beacons/v1alpha/api.proto)
     * Description: 
     * Services
         * [Beacons](#beacons.v1alpha.Beacons)
@@ -65,7 +91,7 @@
         * [UpdateResponse](#beacons.v1alpha.UpdateResponse)
         * [WatchRequest](#beacons.v1alpha.WatchRequest)
         * [WatchResponse](#beacons.v1alpha.WatchResponse)
-* [github.com/galexrt/edenconfmgmt/pkg/apis/cronjobs/v1alpha/api.proto](#github.com/galexrt/edenconfmgmt/pkg/apis/cronjobs/v1alpha/api.proto)
+* [github.com/galexrt/edenrun/pkg/grpcapi/cronjobs/v1alpha/api.proto](#github.com/galexrt/edenrun/pkg/grpcapi/cronjobs/v1alpha/api.proto)
     * Description: 
     * Services
         * [CronJobs](#cronjobs.v1alpha.CronJobs)
@@ -86,7 +112,7 @@
         * [UpdateResponse](#cronjobs.v1alpha.UpdateResponse)
         * [WatchRequest](#cronjobs.v1alpha.WatchRequest)
         * [WatchResponse](#cronjobs.v1alpha.WatchResponse)
-* [github.com/galexrt/edenconfmgmt/pkg/apis/nodes/v1alpha/api.proto](#github.com/galexrt/edenconfmgmt/pkg/apis/nodes/v1alpha/api.proto)
+* [github.com/galexrt/edenrun/pkg/grpcapi/nodes/v1alpha/api.proto](#github.com/galexrt/edenrun/pkg/grpcapi/nodes/v1alpha/api.proto)
     * Description: 
     * Services
         * [Nodes](#nodes.v1alpha.Nodes)
@@ -109,7 +135,7 @@
         * [UpdateResponse](#nodes.v1alpha.UpdateResponse)
         * [WatchRequest](#nodes.v1alpha.WatchRequest)
         * [WatchResponse](#nodes.v1alpha.WatchResponse)
-* [github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha/api.proto](#github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha/api.proto)
+* [github.com/galexrt/edenrun/pkg/grpcapi/events/v1alpha/api.proto](#github.com/galexrt/edenrun/pkg/grpcapi/events/v1alpha/api.proto)
     * Description: 
     * Services
         * [Events](#events.v1alpha.Events)
@@ -129,29 +155,7 @@
         * [UpdateResponse](#events.v1alpha.UpdateResponse)
         * [WatchRequest](#events.v1alpha.WatchRequest)
         * [WatchResponse](#events.v1alpha.WatchResponse)
-* [github.com/galexrt/edenconfmgmt/pkg/apis/agentconfigs/v1alpha/api.proto](#github.com/galexrt/edenconfmgmt/pkg/apis/agentconfigs/v1alpha/api.proto)
-    * Description: 
-    * Services
-        * [AgentConfigs](#agentagentconfigs.v1alpha.AgentConfigs)
-    * Messages
-        * [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig)
-        * [AgentConfigList](#agentagentconfigs.v1alpha.AgentConfigList)
-        * [AgentConfigSpec](#agentagentconfigs.v1alpha.AgentConfigSpec)
-        * [CreateRequest](#agentagentconfigs.v1alpha.CreateRequest)
-        * [CreateResponse](#agentagentconfigs.v1alpha.CreateResponse)
-        * [DataStore](#agentagentconfigs.v1alpha.DataStore)
-        * [DeleteRequest](#agentagentconfigs.v1alpha.DeleteRequest)
-        * [DeleteResponse](#agentagentconfigs.v1alpha.DeleteResponse)
-        * [ETCD](#agentagentconfigs.v1alpha.ETCD)
-        * [GetRequest](#agentagentconfigs.v1alpha.GetRequest)
-        * [GetResponse](#agentagentconfigs.v1alpha.GetResponse)
-        * [ListRequest](#agentagentconfigs.v1alpha.ListRequest)
-        * [ListResponse](#agentagentconfigs.v1alpha.ListResponse)
-        * [UpdateRequest](#agentagentconfigs.v1alpha.UpdateRequest)
-        * [UpdateResponse](#agentagentconfigs.v1alpha.UpdateResponse)
-        * [WatchRequest](#agentagentconfigs.v1alpha.WatchRequest)
-        * [WatchResponse](#agentagentconfigs.v1alpha.WatchResponse)
-* [github.com/galexrt/edenconfmgmt/pkg/apis/variables/v1alpha/api.proto](#github.com/galexrt/edenconfmgmt/pkg/apis/variables/v1alpha/api.proto)
+* [github.com/galexrt/edenrun/pkg/grpcapi/variables/v1alpha/api.proto](#github.com/galexrt/edenrun/pkg/grpcapi/variables/v1alpha/api.proto)
     * Description: 
     * Services
         * [Variables](#variables.v1alpha.Variables)
@@ -172,7 +176,7 @@
         * [VariableSpec.VariablesEntry](#variables.v1alpha.VariableSpec.VariablesEntry)
         * [WatchRequest](#variables.v1alpha.WatchRequest)
         * [WatchResponse](#variables.v1alpha.WatchResponse)
-* [github.com/galexrt/edenconfmgmt/pkg/apis/core/v1/api.proto](#github.com/galexrt/edenconfmgmt/pkg/apis/core/v1/api.proto)
+* [github.com/galexrt/edenrun/pkg/grpcapi/core/v1/api.proto](#github.com/galexrt/edenrun/pkg/grpcapi/core/v1/api.proto)
     * Description: 
     * Messages
         * [Condition](#core.v1.Condition)
@@ -191,7 +195,7 @@
         * [VersionRequest](#core.v1.VersionRequest)
         * [VersionResponse](#core.v1.VersionResponse)
         * [WatchOptions](#core.v1.WatchOptions)
-* [github.com/galexrt/edenconfmgmt/pkg/apis/triggers/v1alpha/api.proto](#github.com/galexrt/edenconfmgmt/pkg/apis/triggers/v1alpha/api.proto)
+* [github.com/galexrt/edenrun/pkg/grpcapi/triggers/v1alpha/api.proto](#github.com/galexrt/edenrun/pkg/grpcapi/triggers/v1alpha/api.proto)
     * Description: 
     * Services
         * [Triggers](#triggers.v1alpha.Triggers)
@@ -216,7 +220,7 @@
         * [UpdateResponse](#triggers.v1alpha.UpdateResponse)
         * [WatchRequest](#triggers.v1alpha.WatchRequest)
         * [WatchResponse](#triggers.v1alpha.WatchResponse)
-* [github.com/galexrt/edenconfmgmt/pkg/apis/taskbooks/v1alpha/api.proto](#github.com/galexrt/edenconfmgmt/pkg/apis/taskbooks/v1alpha/api.proto)
+* [github.com/galexrt/edenrun/pkg/grpcapi/taskbooks/v1alpha/api.proto](#github.com/galexrt/edenrun/pkg/grpcapi/taskbooks/v1alpha/api.proto)
     * Description: 
     * Services
         * [TaskBooks](#taskbooks.v1alpha.TaskBooks)
@@ -242,10 +246,10 @@
         * [WatchRequest](#taskbooks.v1alpha.WatchRequest)
         * [WatchResponse](#taskbooks.v1alpha.WatchResponse)* [Scalar Value Types](#scalar-value-types)
 
-<a name="github.com/galexrt/edenconfmgmt/pkg/apis/clustervariables/v1alpha/api.proto"></a>
+<a name="github.com/galexrt/edenrun/pkg/grpcapi/clustervariables/v1alpha/api.proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
-## github.com/galexrt/edenconfmgmt/pkg/apis/clustervariables/v1alpha/api.proto
+## github.com/galexrt/edenrun/pkg/grpcapi/clustervariables/v1alpha/api.proto
 
 
 
@@ -427,10 +431,243 @@ Watch
 
 
 
-<a name="github.com/galexrt/edenconfmgmt/pkg/apis/secrets/v1alpha/api.proto"></a>
+<a name="github.com/galexrt/edenrun/pkg/grpcapi/configs/v1alpha/api.proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
-## github.com/galexrt/edenconfmgmt/pkg/apis/secrets/v1alpha/api.proto
+## github.com/galexrt/edenrun/pkg/grpcapi/configs/v1alpha/api.proto
+
+
+
+<a name="configs.v1alpha.Config"></a>
+
+### Config
+
+Config object base.
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| metadata | [core.v1.ObjectMetadata](#core.v1.ObjectMetadata) |  | Metadata for Config object. |
+| spec | [ConfigSpec](#configs.v1alpha.ConfigSpec) |  | Spec for Config. |
+<a name="configs.v1alpha.ConfigList"></a>
+
+### ConfigList
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| metadata | [core.v1.ObjectMetadata](#core.v1.ObjectMetadata) |  | Metadata for ConfigList object. |
+| items | [Config](#configs.v1alpha.Config) | repeated | List of Config objects. |
+<a name="configs.v1alpha.ConfigSpec"></a>
+
+### ConfigSpec
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| logging | [Logging](#configs.v1alpha.Logging) |  | Logging |
+| dataStore | [DataStore](#configs.v1alpha.DataStore) |  | DataStore. |
+| listen | [Listen](#configs.v1alpha.Listen) |  | Listen. |
+<a name="configs.v1alpha.CreateRequest"></a>
+
+### CreateRequest
+
+Create
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.CreateOptions](#core.v1.CreateOptions) |  | core_v1.CreateOptions |
+| config | [Config](#configs.v1alpha.Config) |  | Config object. |
+<a name="configs.v1alpha.CreateResponse"></a>
+
+### CreateResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| config | [Config](#configs.v1alpha.Config) |  | Config object. |
+<a name="configs.v1alpha.DataStore"></a>
+
+### DataStore
+
+DataStore config for the data store
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| type | [string](#string) |  | Type. |
+| count | [int64](#int64) |  | Count. |
+| etcd | [ETCD](#configs.v1alpha.ETCD) |  | ETCD config options. |
+<a name="configs.v1alpha.DeleteRequest"></a>
+
+### DeleteRequest
+
+Delete
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.DeleteOptions](#core.v1.DeleteOptions) |  | core_v1.DeleteOptions |
+| config | [Config](#configs.v1alpha.Config) |  | Config object. |
+<a name="configs.v1alpha.DeleteResponse"></a>
+
+### DeleteResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| config | [Config](#configs.v1alpha.Config) |  | Config object. |
+<a name="configs.v1alpha.ETCD"></a>
+
+### ETCD
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| endpoints | [string](#string) |  | List of endpoints if running your own ETCD server (should only be used for testing). |
+<a name="configs.v1alpha.GetRequest"></a>
+
+### GetRequest
+
+Get
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.GetOptions](#core.v1.GetOptions) |  | core_v1.GetOptions |
+<a name="configs.v1alpha.GetResponse"></a>
+
+### GetResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| config | [Config](#configs.v1alpha.Config) |  | Config object. |
+<a name="configs.v1alpha.ListRequest"></a>
+
+### ListRequest
+
+List
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.ListOptions](#core.v1.ListOptions) |  | core_v1.ListOptions |
+<a name="configs.v1alpha.ListResponse"></a>
+
+### ListResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| configList | [ConfigList](#configs.v1alpha.ConfigList) |  | Config list. |
+<a name="configs.v1alpha.Listen"></a>
+
+### Listen
+
+Listen
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| httpAddress | [string](#string) |  | HTTP Port |
+| grpcAddress | [string](#string) |  | gRPC Port |
+<a name="configs.v1alpha.Logging"></a>
+
+### Logging
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| mode | [string](#string) |  | Mode |
+| level | [Logging.LogLevel](#configs.v1alpha.Logging.LogLevel) |  |  |
+<a name="configs.v1alpha.UpdateRequest"></a>
+
+### UpdateRequest
+
+Update
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.UpdateOptions](#core.v1.UpdateOptions) |  | core_v1.UpdateOptions |
+| config | [Config](#configs.v1alpha.Config) |  | Config object. |
+<a name="configs.v1alpha.UpdateResponse"></a>
+
+### UpdateResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| config | [Config](#configs.v1alpha.Config) |  | Config object. |
+<a name="configs.v1alpha.WatchRequest"></a>
+
+### WatchRequest
+
+Watch
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| options | [core.v1.WatchOptions](#core.v1.WatchOptions) |  | core_v1.WatchOptions |
+<a name="configs.v1alpha.WatchResponse"></a>
+
+### WatchResponse
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| event | [events.v1alpha.Event](#events.v1alpha.Event) |  | Event info for watch response. |
+| config | [Config](#configs.v1alpha.Config) |  | Config object. |
+<!-- end messages -->
+
+
+<a name="configs.v1alpha.Logging.LogLevel"></a>
+
+### Logging.LogLevel
+
+LogLevel
+
+| Name | Number | Description |
+| ---- | ------ | ----------- |
+| DEBUG | 0 |  |
+| INFO | 1 |  |
+| WARN | 2 |  |
+| ERROR | 3 |  |
+| FATAL | 4 |  |
+| PANIC | 5 |  |
+
+
+<!-- end enums -->
+
+ <!-- end HasExtensions -->
+
+
+<a name="configs.v1alpha.Configs"></a>
+
+### Configs
+
+
+
+| Method Name | Request Type | Response Type | Description |
+| ----------- | ------------ | ------------- | ------------|
+| Get | [GetRequest](#configs.v1alpha.GetRequest) | [GetResponse](#configs.v1alpha.GetResponse) | Get a Config. |
+| List | [ListRequest](#configs.v1alpha.ListRequest) | [ListResponse](#configs.v1alpha.ListResponse) | List Configs. |
+| Create | [CreateRequest](#configs.v1alpha.CreateRequest) | [CreateResponse](#configs.v1alpha.CreateResponse) | Create a Config. |
+| Update | [UpdateRequest](#configs.v1alpha.UpdateRequest) | [UpdateResponse](#configs.v1alpha.UpdateResponse) | Update a Config. |
+| Delete | [DeleteRequest](#configs.v1alpha.DeleteRequest) | [DeleteResponse](#configs.v1alpha.DeleteResponse) | Delete a Config. |
+| Watch | [WatchRequest](#configs.v1alpha.WatchRequest) | [WatchResponse](#configs.v1alpha.WatchResponse) stream | Watch Config. |
+
+ <!-- end services -->
+
+
+
+<a name="github.com/galexrt/edenrun/pkg/grpcapi/secrets/v1alpha/api.proto"></a>
+<p align="right"><a href="#top">Top</a></p>
+
+## github.com/galexrt/edenrun/pkg/grpcapi/secrets/v1alpha/api.proto
 
 
 
@@ -612,10 +849,10 @@ Watch
 
 
 
-<a name="github.com/galexrt/edenconfmgmt/pkg/apis/beacons/v1alpha/api.proto"></a>
+<a name="github.com/galexrt/edenrun/pkg/grpcapi/beacons/v1alpha/api.proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
-## github.com/galexrt/edenconfmgmt/pkg/apis/beacons/v1alpha/api.proto
+## github.com/galexrt/edenrun/pkg/grpcapi/beacons/v1alpha/api.proto
 
 
 
@@ -782,10 +1019,10 @@ Watch
 
 
 
-<a name="github.com/galexrt/edenconfmgmt/pkg/apis/cronjobs/v1alpha/api.proto"></a>
+<a name="github.com/galexrt/edenrun/pkg/grpcapi/cronjobs/v1alpha/api.proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
-## github.com/galexrt/edenconfmgmt/pkg/apis/cronjobs/v1alpha/api.proto
+## github.com/galexrt/edenrun/pkg/grpcapi/cronjobs/v1alpha/api.proto
 
 
 
@@ -965,10 +1202,10 @@ Watch
 
 
 
-<a name="github.com/galexrt/edenconfmgmt/pkg/apis/nodes/v1alpha/api.proto"></a>
+<a name="github.com/galexrt/edenrun/pkg/grpcapi/nodes/v1alpha/api.proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
-## github.com/galexrt/edenconfmgmt/pkg/apis/nodes/v1alpha/api.proto
+## github.com/galexrt/edenrun/pkg/grpcapi/nodes/v1alpha/api.proto
 
 
 
@@ -1054,7 +1291,7 @@ List
 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
-| daemonPorts | [Port](#nodes.v1alpha.Port) | repeated | Ports of edenconfmgmt daemon (should only be two right now, 1. GRPC, 2. HTTP). |
+| daemonPorts | [Port](#nodes.v1alpha.Port) | repeated | Ports of edenrun daemon (should only be two right now, 1. GRPC, 2. HTTP). |
 | fqdn | [string](#string) |  | FQDN of Node. |
 | addresses | [string](#string) | repeated | IP addresses of Node. |
 <a name="nodes.v1alpha.Node"></a>
@@ -1171,10 +1408,10 @@ Watch
 
 
 
-<a name="github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha/api.proto"></a>
+<a name="github.com/galexrt/edenrun/pkg/grpcapi/events/v1alpha/api.proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
-## github.com/galexrt/edenconfmgmt/pkg/apis/events/v1alpha/api.proto
+## github.com/galexrt/edenrun/pkg/grpcapi/events/v1alpha/api.proto
 
 
 
@@ -1346,204 +1583,10 @@ Watch
 
 
 
-<a name="github.com/galexrt/edenconfmgmt/pkg/apis/agentconfigs/v1alpha/api.proto"></a>
+<a name="github.com/galexrt/edenrun/pkg/grpcapi/variables/v1alpha/api.proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
-## github.com/galexrt/edenconfmgmt/pkg/apis/agentconfigs/v1alpha/api.proto
-
-
-
-<a name="agentagentconfigs.v1alpha.AgentConfig"></a>
-
-### AgentConfig
-
-AgentConfig object base.
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| metadata | [core.v1.ObjectMetadata](#core.v1.ObjectMetadata) |  | Metadata for AgentConfig object. |
-| spec | [AgentConfigSpec](#agentagentconfigs.v1alpha.AgentConfigSpec) |  | Spec for AgentConfig. |
-<a name="agentagentconfigs.v1alpha.AgentConfigList"></a>
-
-### AgentConfigList
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| metadata | [core.v1.ObjectMetadata](#core.v1.ObjectMetadata) |  | Metadata for AgentConfigList object. |
-| items | [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig) | repeated | List of AgentConfig objects. |
-<a name="agentagentconfigs.v1alpha.AgentConfigSpec"></a>
-
-### AgentConfigSpec
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| dataStore | [DataStore](#agentagentconfigs.v1alpha.DataStore) |  | DataStore. |
-<a name="agentagentconfigs.v1alpha.CreateRequest"></a>
-
-### CreateRequest
-
-Create
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| options | [core.v1.CreateOptions](#core.v1.CreateOptions) |  | core_v1.CreateOptions |
-| agentConfig | [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig) |  | AgentConfig object. |
-<a name="agentagentconfigs.v1alpha.CreateResponse"></a>
-
-### CreateResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| agentConfig | [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig) |  | AgentConfig object. |
-<a name="agentagentconfigs.v1alpha.DataStore"></a>
-
-### DataStore
-
-DataStore config for the data store
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| type | [string](#string) |  | Type. |
-| count | [int64](#int64) |  | Count. |
-| etcd | [ETCD](#agentagentconfigs.v1alpha.ETCD) |  | ETCD config options. |
-<a name="agentagentconfigs.v1alpha.DeleteRequest"></a>
-
-### DeleteRequest
-
-Delete
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| options | [core.v1.DeleteOptions](#core.v1.DeleteOptions) |  | core_v1.DeleteOptions |
-| agentConfig | [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig) |  | AgentConfig object. |
-<a name="agentagentconfigs.v1alpha.DeleteResponse"></a>
-
-### DeleteResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| agentConfig | [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig) |  | AgentConfig object. |
-<a name="agentagentconfigs.v1alpha.ETCD"></a>
-
-### ETCD
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| endpoints | [string](#string) |  | List of endpoints if running your own ETCD server (should only be used for testing). |
-<a name="agentagentconfigs.v1alpha.GetRequest"></a>
-
-### GetRequest
-
-Get
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| options | [core.v1.GetOptions](#core.v1.GetOptions) |  | core_v1.GetOptions |
-<a name="agentagentconfigs.v1alpha.GetResponse"></a>
-
-### GetResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| agentConfig | [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig) |  | AgentConfig object. |
-<a name="agentagentconfigs.v1alpha.ListRequest"></a>
-
-### ListRequest
-
-List
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| options | [core.v1.ListOptions](#core.v1.ListOptions) |  | core_v1.ListOptions |
-<a name="agentagentconfigs.v1alpha.ListResponse"></a>
-
-### ListResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| agentConfigList | [AgentConfigList](#agentagentconfigs.v1alpha.AgentConfigList) |  | AgentConfig list. |
-<a name="agentagentconfigs.v1alpha.UpdateRequest"></a>
-
-### UpdateRequest
-
-Update
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| options | [core.v1.UpdateOptions](#core.v1.UpdateOptions) |  | core_v1.UpdateOptions |
-| agentConfig | [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig) |  | AgentConfig object. |
-<a name="agentagentconfigs.v1alpha.UpdateResponse"></a>
-
-### UpdateResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| agentConfig | [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig) |  | AgentConfig object. |
-<a name="agentagentconfigs.v1alpha.WatchRequest"></a>
-
-### WatchRequest
-
-Watch
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| options | [core.v1.WatchOptions](#core.v1.WatchOptions) |  | core_v1.WatchOptions |
-<a name="agentagentconfigs.v1alpha.WatchResponse"></a>
-
-### WatchResponse
-
-
-
-| Field | Type | Label | Description |
-| ----- | ---- | ----- | ----------- |
-| event | [events.v1alpha.Event](#events.v1alpha.Event) |  | Event info for watch response. |
-| agentConfig | [AgentConfig](#agentagentconfigs.v1alpha.AgentConfig) |  | AgentConfig object. |
-<!-- end messages -->
-
-<!-- end enums -->
-
- <!-- end HasExtensions -->
-
-
-<a name="agentagentconfigs.v1alpha.AgentConfigs"></a>
-
-### AgentConfigs
-
-
-
-| Method Name | Request Type | Response Type | Description |
-| ----------- | ------------ | ------------- | ------------|
-| Get | [GetRequest](#agentagentconfigs.v1alpha.GetRequest) | [GetResponse](#agentagentconfigs.v1alpha.GetResponse) | Get a AgentConfig. |
-| List | [ListRequest](#agentagentconfigs.v1alpha.ListRequest) | [ListResponse](#agentagentconfigs.v1alpha.ListResponse) | List AgentConfigs. |
-| Create | [CreateRequest](#agentagentconfigs.v1alpha.CreateRequest) | [CreateResponse](#agentagentconfigs.v1alpha.CreateResponse) | Create a AgentConfig. |
-| Update | [UpdateRequest](#agentagentconfigs.v1alpha.UpdateRequest) | [UpdateResponse](#agentagentconfigs.v1alpha.UpdateResponse) | Update a AgentConfig. |
-| Delete | [DeleteRequest](#agentagentconfigs.v1alpha.DeleteRequest) | [DeleteResponse](#agentagentconfigs.v1alpha.DeleteResponse) | Delete a AgentConfig. |
-| Watch | [WatchRequest](#agentagentconfigs.v1alpha.WatchRequest) | [WatchResponse](#agentagentconfigs.v1alpha.WatchResponse) stream | Watch AgentConfig. |
-
- <!-- end services -->
-
-
-
-<a name="github.com/galexrt/edenconfmgmt/pkg/apis/variables/v1alpha/api.proto"></a>
-<p align="right"><a href="#top">Top</a></p>
-
-## github.com/galexrt/edenconfmgmt/pkg/apis/variables/v1alpha/api.proto
+## github.com/galexrt/edenrun/pkg/grpcapi/variables/v1alpha/api.proto
 
 
 
@@ -1725,10 +1768,10 @@ Watch
 
 
 
-<a name="github.com/galexrt/edenconfmgmt/pkg/apis/core/v1/api.proto"></a>
+<a name="github.com/galexrt/edenrun/pkg/grpcapi/core/v1/api.proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
-## github.com/galexrt/edenconfmgmt/pkg/apis/core/v1/api.proto
+## github.com/galexrt/edenrun/pkg/grpcapi/core/v1/api.proto
 
 
 
@@ -1907,10 +1950,10 @@ Watch
 
 
 
-<a name="github.com/galexrt/edenconfmgmt/pkg/apis/triggers/v1alpha/api.proto"></a>
+<a name="github.com/galexrt/edenrun/pkg/grpcapi/triggers/v1alpha/api.proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
-## github.com/galexrt/edenconfmgmt/pkg/apis/triggers/v1alpha/api.proto
+## github.com/galexrt/edenrun/pkg/grpcapi/triggers/v1alpha/api.proto
 
 
 
@@ -2135,10 +2178,10 @@ Watch
 
 
 
-<a name="github.com/galexrt/edenconfmgmt/pkg/apis/taskbooks/v1alpha/api.proto"></a>
+<a name="github.com/galexrt/edenrun/pkg/grpcapi/taskbooks/v1alpha/api.proto"></a>
 <p align="right"><a href="#top">Top</a></p>
 
-## github.com/galexrt/edenconfmgmt/pkg/apis/taskbooks/v1alpha/api.proto
+## github.com/galexrt/edenrun/pkg/grpcapi/taskbooks/v1alpha/api.proto
 
 
 

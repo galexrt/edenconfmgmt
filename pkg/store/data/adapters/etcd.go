@@ -22,7 +22,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/galexrt/edenconfmgmt/pkg/store/data"
+	"github.com/galexrt/edenrun/pkg/store/data"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"go.etcd.io/etcd/clientv3"

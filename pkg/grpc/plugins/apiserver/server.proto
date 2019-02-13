@@ -15,7 +15,7 @@
 syntax = 'proto2';
 
 package apiserver;
-option go_package = "github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/apiserver";
+option go_package = "github.com/galexrt/edenrun/pkg/grpc/plugins/apiserver";
 
 import "github.com/gogo/protobuf/gogoproto/gogo.proto";
 import "google/protobuf/descriptor.proto";

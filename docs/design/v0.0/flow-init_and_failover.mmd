@@ -8,21 +8,21 @@ sequenceDiagram
     User-->User: generate new SSH CA key
     alt Server 1 setup
     User->>Server 1: Copy SSH CA key
-    User->>Server 1: Install edenconfmgmt
-    User->>Server 1: Start edenconfmgmt
-    Server 1->>Server 1: Generate certificate and key for edenconfmgmt cluster
-    Server 1->>Server 1: Generate CA for edenconfmgmt cluster
+    User->>Server 1: Install edenrun
+    User->>Server 1: Start edenrun
+    Server 1->>Server 1: Generate certificate and key for edenrun cluster
+    Server 1->>Server 1: Generate CA for edenrun cluster
     end
     alt Server 1 setup
-    User->>Server 2: Install edenconfmgmt
-    User->>Server 2: Instruct edenconfmgmt to talk to Server 1 (CA cert pining)
+    User->>Server 2: Install edenrun
+    User->>Server 2: Instruct edenrun to talk to Server 1 (CA cert pining)
     Server 2->>Server 2: Generate certificate and key
     Server 2->>Server 1: Send join request using API port
     Server 1->>Server 2: SSH to verify key and place master CA
     end
     alt Server 3 setup
-    User->>Server 3: Install edenconfmgmt
-    User->>Server 3: Instruct edenconfmgmt to talk to Server 1 and/or 2 (CA cert pining)
+    User->>Server 3: Install edenrun
+    User->>Server 3: Instruct edenrun to talk to Server 1 and/or 2 (CA cert pining)
     end
     Note over Server 1,Server n: Server 1-3 are eligible to be a datastore host
     alt Server 1 is first
@@ -39,8 +39,8 @@ sequenceDiagram
         Server 1-->Server 2: Just datastore things
         Server 1-->Server 3: Just datastore things
     end
-    User->>Server n: Install edenconfmgmt
-    User->>Server n: Instruct edenconfmgmt to talk to Server 1-3 (CA cert pining)
+    User->>Server n: Install edenrun
+    User->>Server n: Instruct edenrun to talk to Server 1-3 (CA cert pining)
     Server n->>Server 2: agent talks to one of the existing servers
     alt Server 1 is first
         Server n->>Server 1: Send join request using API port

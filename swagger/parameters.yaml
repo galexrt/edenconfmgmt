@@ -1,0 +1,26 @@
+  namespacePath:
+    in: path
+    name: namespace
+    type: string
+    required: true
+    description: Namespace name
+  namespaceName:
+    in: query
+    name: namespace
+    type: string
+    required: false
+    description: Namespace name
+  objectName:
+    in: query
+    name: name
+    type: string
+    required: false
+    description: Object name
+  labelSelector:
+    in: query
+    name: labelSelector
+    type: string
+    required: false
+    description: >-
+      Selector to restrict list of returned objects by their labels. Default
+      is everything. The format of each label selector is `KEY=VALUE` (separated by comma).
