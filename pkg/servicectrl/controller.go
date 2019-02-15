@@ -16,10 +16,22 @@ limitations under the License.
 
 package servicectrl
 
+// Service service which takes a stopCh.
+type Service interface {
+	Start(stopCh chan struct{}) error
+}
+
+// ReloadableService service which allows for Reloads
+type ReloadableService interface {
+	Service
+	Reload() error
+}
+
 // Controller to control, e.g., internal "Service" restarts
 // Example: If a config change occurs to the datastore part, it will call a given
 // function to reload the dataStore.
 type Controller struct {
+	services map[string]Service
 }
 
 // New return new Controller instance.
