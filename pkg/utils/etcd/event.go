@@ -17,7 +17,7 @@ limitations under the License.
 package etcd
 
 import (
-	storecommon "github.com/galexrt/edenconfmgmt/pkg/store/common"
+	storecommon "github.com/galexrt/edenrun/pkg/store/common"
 	"go.etcd.io/etcd/clientv3"
 	"go.etcd.io/etcd/mvcc/mvccpb"
 )

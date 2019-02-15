@@ -20,9 +20,9 @@ import (
 	"context"
 	"sync"
 
-	storecommon "github.com/galexrt/edenconfmgmt/pkg/store/common"
-	"github.com/galexrt/edenconfmgmt/pkg/store/data"
-	"github.com/galexrt/edenconfmgmt/pkg/utils/errors"
+	storecommon "github.com/galexrt/edenrun/pkg/store/common"
+	"github.com/galexrt/edenrun/pkg/store/data"
+	"github.com/galexrt/edenrun/pkg/utils/errors"
 	"go.etcd.io/etcd/clientv3"
 	"go.uber.org/zap"
 )

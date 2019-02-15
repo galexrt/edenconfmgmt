@@ -23,9 +23,9 @@ import (
 	"strings"
 	"sync"
 
-	storecommon "github.com/galexrt/edenconfmgmt/pkg/store/common"
-	"github.com/galexrt/edenconfmgmt/pkg/store/data"
-	utilsetcd "github.com/galexrt/edenconfmgmt/pkg/utils/etcd"
+	storecommon "github.com/galexrt/edenrun/pkg/store/common"
+	"github.com/galexrt/edenrun/pkg/store/data"
+	utilsetcd "github.com/galexrt/edenrun/pkg/utils/etcd"
 	"go.etcd.io/etcd/clientv3"
 	"go.uber.org/zap"
 )

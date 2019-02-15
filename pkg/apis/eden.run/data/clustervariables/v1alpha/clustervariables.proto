@@ -1,0 +1,150 @@
+// Copyright 2019 Alexander Trost. All rights reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = 'proto3';
+
+package data.clustervariables.v1alpha;
+option go_package = "github.com/galexrt/edenrun/pkg/apis/eden.run/data/clustervariables/v1alpha";
+
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "github.com/galexrt/edenrun/pkg/grpc/plugins/apiserver/server.proto";
+import "github.com/mwitkow/go-proto-validators/validator.proto";
+import "github.com/galexrt/edenrun/pkg/apis/eden.run/core/meta/v1/meta.proto";
+import "github.com/galexrt/edenrun/pkg/apis/eden.run/data/variables/v1alpha/variables.proto";
+
+option (gogoproto.goproto_stringer_all) = false;
+option (gogoproto.stringer_all) =  true;
+option (gogoproto.goproto_getters_all) = true;
+option (gogoproto.marshaler_all) = true;
+option (gogoproto.sizer_all) = true;
+option (gogoproto.unmarshaler_all) = true;
+option (gogoproto.goproto_unrecognized_all) = false;
+option (gogoproto.populate_all) = true; // Needed for testgen
+option (gogoproto.equal_all) = true;  // Needed for testgen
+option (gogoproto.testgen_all) = false;
+option (gogoproto.benchgen_all) = true;
+
+service ClusterVariables {
+    // Get a ClusterVariable.
+    rpc Get (GetRequest) returns (GetResponse);
+    // List ClusterVariable.
+    rpc List (ListRequest) returns (ListResponse);
+    // Create a ClusterVariable.
+    rpc Create (CreateRequest) returns (CreateResponse);
+    // Update a ClusterVariable.
+    rpc Update (UpdateRequest) returns (UpdateResponse);
+    // Delete a ClusterVariable.
+    rpc Delete (DeleteRequest) returns (DeleteResponse);
+    // Watch ClusterVariable.
+    rpc Watch (WatchRequest) returns (stream WatchResponse);
+}
+
+message ClusterVariable {
+    option (apiserver.options).generate = true;
+    // Metadata for ClusterVariable object.
+    core.meta.v1.ObjectMetadata metadata = 1;
+    // Spec for ClusterVariable.
+    ClusterVariableSpec spec = 2;
+}
+
+message ClusterVariableList {
+    // Metadata for ClusterVariableList object.
+    core.meta.v1.ObjectMetadata metadata = 1 [(validator.field) = {msg_exists : true}];
+    // List of ClusterVariable objects.
+    repeated ClusterVariable items = 2;
+}
+
+// ClusterVariables clustervariables file structure. This covers the "ClusterVariables File" and "'From Host' Static ClusterVariable File".
+message ClusterVariableSpec {
+    // Scope of ClusterVariable.
+    Scope scope = 1;
+    // Variables.
+    repeated data.variables.v1alpha.VariableKVPair clustervariables = 2;
+}
+
+message Scope {
+
+}
+
+// Get
+message GetRequest {
+    // core_v1.GetOptions
+    core.meta.v1.GetOptions options = 1;
+}
+
+message GetResponse {
+    // ClusterVariable object.
+    ClusterVariable clusterVariable = 1;
+}
+
+// List
+message ListRequest {
+    // core_v1.ListOptions
+    core.meta.v1.ListOptions options = 1;
+}
+
+message ListResponse {
+    // ClusterVariable list.
+    ClusterVariableList clusterVariableList = 1;
+}
+
+// Create
+message CreateRequest {
+    // core_v1.CreateOptions
+    core.meta.v1.CreateOptions options = 1;
+    // ClusterVariable object.
+    ClusterVariable clusterVariable = 2;
+}
+
+message CreateResponse {
+    // ClusterVariable object.
+    ClusterVariable clusterVariable = 1;
+}
+
+// Update
+message UpdateRequest {
+    // core_v1.UpdateOptions
+    core.meta.v1.UpdateOptions options = 1;
+    // ClusterVariable object.
+    ClusterVariable clusterVariable = 2;
+}
+
+message UpdateResponse {
+    // ClusterVariable object.
+    ClusterVariable clusterVariable = 1;
+}
+
+// Delete
+message DeleteRequest {
+    // core_v1.DeleteOptions
+    core.meta.v1.DeleteOptions options = 1;
+    // ClusterVariable object.
+    ClusterVariable clusterVariable = 2;
+}
+
+message DeleteResponse {
+    // ClusterVariable object.
+    ClusterVariable clusterVariable = 1;
+}
+
+// Watch
+message WatchRequest {
+    // core_v1.WatchOptions
+    core.meta.v1.WatchOptions options = 1;
+}
+
+message WatchResponse {
+    // ClusterVariable for watch response.
+    ClusterVariable clusterVariable = 1;
+}

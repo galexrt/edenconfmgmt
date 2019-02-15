@@ -36,7 +36,7 @@
 		]
 	},
 	{
-		"project": "github.com/galexrt/edenconfmgmt",
+		"project": "github.com/galexrt/edenrun",
 		"licenses": [
 			{
 				"type": "Apache License 2.0",

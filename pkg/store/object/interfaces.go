@@ -17,7 +17,7 @@ limitations under the License.
 package object
 
 import (
-	core_v1 "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1"
+	core_v1 "github.com/galexrt/edenrun/pkg/apis/eden.run/core/meta/v1"
 	"github.com/gogo/protobuf/proto"
 )
 

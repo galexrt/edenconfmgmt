@@ -24,10 +24,10 @@ import (
 	"strings"
 	"sync"
 
-	core_v1 "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1"
-	"github.com/galexrt/edenconfmgmt/pkg/store/cache"
-	storecommon "github.com/galexrt/edenconfmgmt/pkg/store/common"
-	"github.com/galexrt/edenconfmgmt/pkg/utils/errors"
+	core_v1 "github.com/galexrt/edenrun/pkg/apis/eden.run/core/meta/v1"
+	"github.com/galexrt/edenrun/pkg/store/cache"
+	storecommon "github.com/galexrt/edenrun/pkg/store/common"
+	"github.com/galexrt/edenrun/pkg/utils/errors"
 	"github.com/gogo/protobuf/proto"
 	"go.uber.org/zap"
 )

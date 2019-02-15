@@ -1,0 +1,168 @@
+// Copyright 2019 Alexander Trost. All rights reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+// http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+syntax = 'proto3';
+
+package nodes.v1alpha;
+option go_package = "github.com/galexrt/edenrun/pkg/apis/eden.run/core/nodes/v1alpha";
+
+import "github.com/gogo/protobuf/gogoproto/gogo.proto";
+import "github.com/galexrt/edenrun/pkg/grpc/plugins/apiserver/server.proto";
+import "github.com/mwitkow/go-proto-validators/validator.proto";
+import "github.com/galexrt/edenrun/pkg/apis/eden.run/core/meta/v1/meta.proto";
+
+option (gogoproto.goproto_stringer_all) = false;
+option (gogoproto.stringer_all) =  true;
+option (gogoproto.goproto_getters_all) = true;
+option (gogoproto.marshaler_all) = true;
+option (gogoproto.sizer_all) = true;
+option (gogoproto.unmarshaler_all) = true;
+option (gogoproto.goproto_unrecognized_all) = false;
+option (gogoproto.populate_all) = true; // Needed for testgen
+option (gogoproto.equal_all) = true;  // Needed for testgen
+option (gogoproto.testgen_all) = false;
+option (gogoproto.benchgen_all) = true;
+
+service Nodes {
+    // Get a Node.
+    rpc Get (GetRequest) returns (GetResponse);
+    // List Nodes.
+    rpc List (ListRequest) returns (ListResponse);
+    // Create a Node.
+    rpc Create (CreateRequest) returns (CreateResponse);
+    // Update a Node.
+    rpc Update (UpdateRequest) returns (UpdateResponse);
+    // Delete a Node.
+    rpc Delete (DeleteRequest) returns (DeleteResponse);
+    // Watch a Node(s).
+    rpc Watch (WatchRequest) returns (stream WatchResponse);
+}
+
+message Node {
+    option (apiserver.options).generate = true;
+    option (apiserver.options).namespaced = false;
+    // Metadata for Node object.
+    core.meta.v1.ObjectMetadata metadata = 1 [(validator.field) = {msg_exists : true}];
+    // Spec for Node.
+    Spec spec = 2 [(validator.field) = {msg_exists : true}];
+    // Status for Node.
+    Status status = 3;
+}
+
+message NodeList {
+    // Metadata for NodeList object.
+    core.meta.v1.ObjectMetadata metadata = 1 [(validator.field) = {msg_exists : true}];
+    // List of Node objects.
+    repeated Node items = 2;
+}
+
+message Spec {
+    // Network specifications of Node.
+    Network network = 1;
+}
+
+message Network {
+    // Ports of edenrun daemon (should only be two right now, 1. GRPC, 2. HTTP).
+    repeated Port daemonPorts = 1;
+    // FQDN of Node.
+    string fqdn = 2;
+    // IP addresses of Node.
+    repeated string addresses = 3;
+}
+
+message Port {
+    // Name of port.
+    string name = 1;
+    // Port number.
+    int32 port = 2;
+    // Protocol name.
+    string protocol = 3;
+}
+
+message Status {
+    // State of Node.
+    string state = 1;
+}
+
+// Get
+message GetRequest {
+    // GetOptions options for a GetRequest.
+    core.meta.v1.GetOptions options = 1;
+}
+
+message GetResponse {
+    // Node object.
+    Node node = 1;
+}
+
+// List
+message ListRequest {
+    // core_v1.ListOptions
+    core.meta.v1.ListOptions options = 1;
+}
+
+message ListResponse {
+    // Node list.
+    NodeList nodeList = 1;
+}
+
+// Create
+message CreateRequest {
+    // core_v1.CreateOptions
+    core.meta.v1.CreateOptions options = 1;
+    // Node object.
+    Node node = 2 [(validator.field) = {msg_exists : true}];
+}
+
+message CreateResponse {
+    // Node object.
+    Node node = 1;
+}
+
+// Update
+message UpdateRequest {
+    // core_v1.UpdateOptions
+    core.meta.v1.UpdateOptions options = 1;
+    // Node object.
+    Node node = 2;
+}
+
+message UpdateResponse {
+    // Node object.
+    Node node = 1;
+}
+
+// Delete
+message DeleteRequest {
+    // core_v1.DeleteOptions
+    core.meta.v1.DeleteOptions options = 1;
+    // Node object.
+    Node node = 2;
+}
+
+message DeleteResponse {
+    // Node object.
+    Node node = 1;
+}
+
+// Watch
+message WatchRequest {
+    // core_v1.WatchOptions
+    core.meta.v1.WatchOptions options = 1;
+}
+
+message WatchResponse {
+    // Node for watch response.
+    Node node = 1;
+}

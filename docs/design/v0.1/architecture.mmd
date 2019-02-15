@@ -26,7 +26,7 @@ graph LR
             NodeStatus-->|Watch Nodes|dataStoreStoreInt
             VariablesUpdater-->|Reconciliation Loop|VariablesUpdater
             VariablesUpdater-->|Watch Variables, ClusterVariables + CVarsBindings|dataStoreStoreInt
-            TaskBookController-->|Watch TaskBooks|dataStoreStoreInt
+            PlayBookController-->|Watch PlayBooks|dataStoreStoreInt
         end
         subgraph Scheduler
             Scheduler-->|Watch|dataStoreStoreInt

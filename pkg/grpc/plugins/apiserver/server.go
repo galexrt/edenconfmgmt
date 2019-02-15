@@ -59,10 +59,10 @@ func (p *plugin) Generate(file *generator.FileDescriptor) {
 	p.PluginImports = generator.NewPluginImports(p.Generator)
 	p.NewImport("fmt")
 	p.NewImport("math")
-	p.cacheStorePkg = p.NewImport("github.com/galexrt/edenconfmgmt/pkg/store/cache")
-	p.objectStorePkg = p.NewImport("github.com/galexrt/edenconfmgmt/pkg/store/object")
-	p.utilsAPIPkg = p.NewImport("github.com/galexrt/edenconfmgmt/pkg/utils/api")
-	p.apiserverPluginPkg = p.NewImport("github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/apiserver")
+	p.cacheStorePkg = p.NewImport("github.com/galexrt/edenrun/pkg/store/cache")
+	p.objectStorePkg = p.NewImport("github.com/galexrt/edenrun/pkg/store/object")
+	p.utilsAPIPkg = p.NewImport("github.com/galexrt/edenrun/pkg/utils/api")
+	p.apiserverPluginPkg = p.NewImport("github.com/galexrt/edenrun/pkg/grpc/plugins/apiserver")
 
 	for _, msg := range file.Messages() {
 		ccTypeName := generator.CamelCaseSlice(msg.TypeName())
@@ -113,7 +113,7 @@ func (p *plugin) Generate(file *generator.FileDescriptor) {
 		p.P(`}`)
 		p.P(``)
 
-		coreAPIPkg := "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1"
+		coreAPIPkg := "github.com/galexrt/edenrun/pkg/apis/eden.run/core/meta/v1"
 		if extOptsCasted.CoreAPIPkg != nil && *extOptsCasted.CoreAPIPkg != "" {
 			coreAPIPkg = *extOptsCasted.CoreAPIPkg
 		}

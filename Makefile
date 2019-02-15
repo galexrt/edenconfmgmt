@@ -25,7 +25,7 @@ protoc-gen-govalidators:
 	$(GO) get $(GO_GET_FLAGS) github.com/mwitkow/go-proto-validators/protoc-gen-govalidators
 
 protoc-gen-apiserver:
-	$(GO) get $(GO_GET_FLAGS) github.com/galexrt/edenconfmgmt/pkg/grpc/plugins/apiserver/protoc-gen-apiserver
+	$(GO) get $(GO_GET_FLAGS) github.com/galexrt/edenrun/pkg/grpc/plugins/apiserver/protoc-gen-apiserver
 
 protoc-gen-doc:
 	$(GO) get $(GO_GET_FLAGS) github.com/pseudomuto/protoc-gen-doc/cmd/protoc-gen-doc
@@ -35,9 +35,9 @@ license-bill-of-materials:
 
 bill-of-materials.json: license-bill-of-materials FORCE
 	license-bill-of-materials \
-		github.com/galexrt/edenconfmgmt/cmd/edenconfmgmt \
-		github.com/galexrt/edenconfmgmt/cmd/edenctl \
-		> bill-of-materials.json
+		github.com/galexrt/edenrun/cmd/edenrun \
+		github.com/galexrt/edenrun/cmd/edenctl \
+	> bill-of-materials.json
 
 license-header-check:
 	@noHeaderError=false; \
@@ -61,8 +61,8 @@ Mgoogle/protobuf/struct.proto=github.com/gogo/protobuf/types,\
 Mgoogle/protobuf/timestamp.proto=github.com/gogo/protobuf/types,\
 Mgoogle/protobuf/wrappers.proto=github.com/gogo/protobuf/types,\
 plugins=grpc:$$GOPATH/src/ \
-		github.com/galexrt/edenconfmgmt/$^
-	go fmt github.com/galexrt/edenconfmgmt/$(dir $^)...
+		github.com/galexrt/edenrun/$^
+	$(GO) fmt github.com/galexrt/edenrun/$(dir $^)...
 
 proto-gen: $(GOPROTOFILES) docs/apis.md
 
@@ -79,8 +79,8 @@ Mgoogle/protobuf/wrappers.proto=github.com/gogo/protobuf/types,\
 plugins=grpc:$$GOPATH/src/ \
 		--govalidators_out=gogoimport=true:$$GOPATH/src/ \
 		--apiserver_out=gogoimport=true:$$GOPATH/src/ \
-		github.com/galexrt/edenconfmgmt/$^
-	go fmt github.com/galexrt/edenconfmgmt/$(dir $^)...
+		github.com/galexrt/edenrun/$^
+	$(GO) fmt github.com/galexrt/edenrun/$(dir $^)...
 
 proto-gen-plugins: $(patsubst %.proto,%.pb.go,$(shell find -type f -name '*.proto' -path "./pkg/grpc/plugins/*" | sed 's~\.\/~~g'))
 
@@ -94,11 +94,13 @@ docs/apis.md: $(GOPROTOFILES)
 		-I $$GOPATH/src/ \
 		--doc_out=$(DIR)docs/ \
 		--doc_opt=$(DIR)build/docs/proto-doc-template.tmpl,apis.md \
-		$(addprefix github.com/galexrt/edenconfmgmt/,$(PROTOFILES))
+		$(addprefix github.com/galexrt/edenrun/,$(PROTOFILES))
 
 proto-clean:
 	rm -f $(shell find -type f -name '*.pb.go' | sed 's~\.\/~~g')
 
+proto-clean-tests:
+	rm -f $(shell find -type f -name '*pb_test.go' | sed 's~\.\/~~g')
 test-env:
 	docker run \
 		-d \

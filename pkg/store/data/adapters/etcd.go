@@ -22,7 +22,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/galexrt/edenconfmgmt/pkg/store/data"
+	"github.com/galexrt/edenrun/pkg/store/data"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"go.etcd.io/etcd/clientv3"
@@ -91,7 +91,7 @@ func init() {
 }
 
 // NewETCD create new ETCD
-func NewETCD(flagPrefix string) (data.Store, error) {
+func NewETCD(ctx context.Context, flagPrefix string) (data.Store, error) {
 	etcd := &ETCD{}
 	user := viper.GetString(flagPrefix + flagETCDUser)
 	password := ""
@@ -120,6 +120,7 @@ func NewETCD(flagPrefix string) (data.Store, error) {
 
 	// TODO Should a etcd.Status() call be made to one or more given endpoints?
 	// See https://godoc.org/go.etcd.io/etcd/clientv3#Maintenance
+	//etcd.cli.Status(ctx, endpoint)
 
 	return etcd, err
 }

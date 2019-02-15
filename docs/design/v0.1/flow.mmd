@@ -4,7 +4,7 @@ sequenceDiagram
     participant CLI
     participant ConfigManagement
     participant TargetedServers
-    Note over git,User: contains/has TaskBook object yamls
+    Note over git,User: contains/has PlayBook object yamls
     git->ConfigManagement: notify about changes
     loop reconciliation
         ConfigManagement->ConfigManagement: create events with task info
@@ -23,6 +23,6 @@ sequenceDiagram
     end
     User->CLI: trigger run
     Note left of CLI: CLI: Will only work if<br/>files are in a git repo
-    CLI->ConfigManagement: create new version TaskBook object
-    Note over CLI,TargetedServers: TaskBook object when created is "always" in a suspended state<br/>(toggleable by flag) A) apply the TaskBook to TargetedServers or<br/>B) apply TaskBook later
+    CLI->ConfigManagement: create new version PlayBook object
+    Note over CLI,TargetedServers: PlayBook object when created is "always" in a suspended state<br/>(toggleable by flag) A) apply the PlayBook to TargetedServers or<br/>B) apply PlayBook later
     ConfigManagement->ConfigManagement: go to reconciliation loop

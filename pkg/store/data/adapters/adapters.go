@@ -17,9 +17,10 @@ limitations under the License.
 package adapters
 
 import (
+	"context"
 	"fmt"
 
-	"github.com/galexrt/edenconfmgmt/pkg/store/data"
+	"github.com/galexrt/edenrun/pkg/store/data"
 	"github.com/spf13/cobra"
 )
 
@@ -28,7 +29,7 @@ var (
 	flagRegisters = map[string]func(prefix string, cmd *cobra.Command){}
 
 	// adapters list of available data adapters.
-	adapters = map[string]func(flagPrefix string) (data.Store, error){}
+	adapters = map[string]func(ctx context.Context, flagPrefix string) (data.Store, error){}
 )
 
 // RegisterFlags register flags using the function provided in flagRegisters var.
@@ -42,10 +43,10 @@ func RegisterFlags(prefix string, cmd *cobra.Command) {
 }
 
 // Get return a newly created data handler.
-func Get(handlerName string, flagPrefix string) (data.Store, error) {
+func Get(ctx context.Context, handlerName string, flagPrefix string) (data.Store, error) {
 	newFunc, ok := adapters[handlerName]
 	if !ok {
 		return nil, fmt.Errorf("no handler with name %s found in adapters list", handlerName)
 	}
-	return newFunc(flagPrefix)
+	return newFunc(ctx, flagPrefix)
 }

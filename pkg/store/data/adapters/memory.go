@@ -22,7 +22,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/galexrt/edenconfmgmt/pkg/store/data"
+	"github.com/galexrt/edenrun/pkg/store/data"
 	"go.etcd.io/etcd/clientv3"
 )
 
@@ -39,7 +39,7 @@ func init() {
 }
 
 // NewMemory return new Memory store.
-func NewMemory(flagPrefix string) (data.Store, error) {
+func NewMemory(ctx context.Context, flagPrefix string) (data.Store, error) {
 	return &Memory{
 		cache: sync.Map{},
 	}, nil

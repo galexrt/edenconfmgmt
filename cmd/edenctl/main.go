@@ -23,9 +23,9 @@ import (
 	"os"
 	"time"
 
-	core_v1 "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1"
-	nodes_v1alpha "github.com/galexrt/edenconfmgmt/pkg/apis/nodes/v1alpha"
-	"github.com/galexrt/edenconfmgmt/pkg/common"
+	core_v1 "github.com/galexrt/edenrun/pkg/apis/eden.run/core/meta/v1"
+	nodes_v1alpha "github.com/galexrt/edenrun/pkg/apis/eden.run/core/nodes/v1alpha"
+	"github.com/galexrt/edenrun/pkg/common"
 	"github.com/spf13/cobra"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"

@@ -1,4 +1,4 @@
-# edenconfmgmt
+# edenrun
 
 WIP Configuration management with automatic clustering, events and stuff.
 

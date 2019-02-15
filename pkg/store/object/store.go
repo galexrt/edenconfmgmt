@@ -20,10 +20,10 @@ import (
 	"context"
 	"sync"
 
-	core_v1 "github.com/galexrt/edenconfmgmt/pkg/apis/core/v1"
-	"github.com/galexrt/edenconfmgmt/pkg/store/cache"
-	storecommon "github.com/galexrt/edenconfmgmt/pkg/store/common"
-	"github.com/galexrt/edenconfmgmt/pkg/utils/api"
+	core_v1 "github.com/galexrt/edenrun/pkg/apis/eden.run/core/meta/v1"
+	"github.com/galexrt/edenrun/pkg/store/cache"
+	storecommon "github.com/galexrt/edenrun/pkg/store/common"
+	"github.com/galexrt/edenrun/pkg/utils/api"
 	"go.uber.org/zap"
 )
 

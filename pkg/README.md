@@ -4,7 +4,7 @@
 | --------------------------- | ----- | -------------------------------------------------- |
 | `pkg/apis/beacons`          | WIP   | .                                                  |
 | `pkg/apis/clustervariables` | WIP   | .                                                  |
-| `pkg/apis/agentconfigs`     | WIP   | .                                                  |
+| `pkg/apis/configs`     | WIP   | .                                                  |
 | `pkg/apis/core`             | WIP   | .                                                  |
 | `pkg/apis/cronjobs`         | WIP   | .                                                  |
 | `pkg/apis/events`           | WIP   | .                                                  |
@@ -12,7 +12,7 @@
 | `pkg/apis/nodes`            | WIP   | .                                                  |
 | `pkg/apis/nodegroups`       | WIP   | .                                                  |
 | `pkg/apis/secrets`          | WIP   | .                                                  |
-| `pkg/apis/taskbooks`        | WIP   | .                                                  |
+| `pkg/apis/playbooks`        | WIP   | .                                                  |
 | `pkg/apis/triggers`         | WIP   | .                                                  |
 | `pkg/apis/variables`        | WIP   | .                                                  |
 | `pkg/auth`                  | WIP   | .                                                  |
