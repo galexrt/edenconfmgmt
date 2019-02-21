@@ -27,3 +27,8 @@ type Limiter struct {
 func New() *Limiter {
 	return &Limiter{}
 }
+
+// Start
+func (l *Limiter) Start(stopCh chan struct{}) {
+
+}

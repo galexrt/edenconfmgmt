@@ -27,6 +27,7 @@ import (
 	"syscall"
 	"time"
 
+	"github.com/coreos/go-systemd/daemon"
 	events_v1alpha "github.com/galexrt/edenrun/pkg/apis/eden.run/core/events/v1alpha"
 	nodes_v1alpha "github.com/galexrt/edenrun/pkg/apis/eden.run/core/nodes/v1alpha"
 	configs_v1alpha "github.com/galexrt/edenrun/pkg/apis/eden.run/daemons/configs/v1alpha"
@@ -142,13 +143,27 @@ func Execute() {
 // Run runs all routines to start the work of edenrun application.
 func Run(cmd *cobra.Command, args []string) error {
 	defer logger.Sync()
-	logger.Info("starting", zap.String("command", os.Args[0]), zap.String("versionInfo", version.Info()))
-
 	sigCh := make(chan os.Signal)
 	signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM)
 	logger.Debug("signal handler installed")
-
 	stopCh := make(chan struct{})
+
+	go func() {
+		interval, err := daemon.SdWatchdogEnabled(false)
+		if err != nil || interval == 0 {
+			return
+		}
+		for {
+			select {
+			case <-time.After(interval / 2):
+				daemon.SdNotify(false, daemon.SdNotifyWatchdog)
+			case <-stopCh:
+				return
+			}
+		}
+	}()
+
+	logger.Info("starting", zap.String("command", os.Args[0]), zap.String("versionInfo", version.Info()))
 
 	ctx, cancel := context.WithCancel(context.Background())
 
@@ -263,6 +278,8 @@ func Run(cmd *cobra.Command, args []string) error {
 		}
 	}()
 
+	daemon.SdNotify(true, daemon.SdNotifyReady)
+
 	select {
 	case <-sigCh:
 		logger.Info("signal received, shutting down ...")
@@ -272,6 +289,8 @@ func Run(cmd *cobra.Command, args []string) error {
 
 	closer.Close(stopCh)
 	cancel()
+
+	daemon.SdNotify(true, daemon.SdNotifyStopping)
 
 	// Shutdown grpc server
 	grpcServer.GracefulStop()
