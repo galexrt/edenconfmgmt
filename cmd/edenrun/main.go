@@ -28,16 +28,7 @@ import (
 	"time"
 
 	"github.com/coreos/go-systemd/daemon"
-	events_v1alpha "github.com/galexrt/edenrun/pkg/apis/eden.run/core/events/v1alpha"
-	nodes_v1alpha "github.com/galexrt/edenrun/pkg/apis/eden.run/core/nodes/v1alpha"
-	configs_v1alpha "github.com/galexrt/edenrun/pkg/apis/eden.run/daemons/configs/v1alpha"
-	clustervariables_v1alpha "github.com/galexrt/edenrun/pkg/apis/eden.run/data/clustervariables/v1alpha"
-	secrets_v1alpha "github.com/galexrt/edenrun/pkg/apis/eden.run/data/secrets/v1alpha"
-	variables_v1alpha "github.com/galexrt/edenrun/pkg/apis/eden.run/data/variables/v1alpha"
-	cronjobs_v1alpha "github.com/galexrt/edenrun/pkg/apis/eden.run/jobs/cronjobs/v1alpha"
-	playbooks_v1alpha "github.com/galexrt/edenrun/pkg/apis/eden.run/runny/playbooks/v1alpha"
-	beacons_v1alpha "github.com/galexrt/edenrun/pkg/apis/eden.run/trigger/beacons/v1alpha"
-	triggers_v1alpha "github.com/galexrt/edenrun/pkg/apis/eden.run/trigger/triggers/v1alpha"
+	"github.com/galexrt/edenrun/pkg/apis"
 	"github.com/galexrt/edenrun/pkg/store/cache"
 	"github.com/galexrt/edenrun/pkg/tracer"
 	"github.com/galexrt/edenrun/pkg/utils"
@@ -198,7 +189,7 @@ func Run(cmd *cobra.Command, args []string) error {
 		logger.Fatal("failed to init auth", zap.Error(err))
 	}
 
-	opts := []grpc.ServerOption{
+	grpcServer := grpc.NewServer([]grpc.ServerOption{
 		grpc.StreamInterceptor(grpc_middleware.ChainStreamServer(
 			grpc_ctxtags.StreamServerInterceptor(),
 			grpc_opentracing.StreamServerInterceptor(),
@@ -217,12 +208,11 @@ func Run(cmd *cobra.Command, args []string) error {
 			grpc_validator.UnaryServerInterceptor(),
 			grpc_recovery.UnaryServerInterceptor(),
 		)),
-	}
-	grpcServer := grpc.NewServer(opts...)
+	}...)
 	grpc_zap.ReplaceGrpcLogger(logger)
 
 	// Register APIs to grpc server
-	registerGRPCAPIs(grpcServer, objectStore, informer)
+	apis.Register(grpcServer, objectStore, informer)
 
 	// Initialize Prometheus GRPC metrics.
 	grpcMetrics.InitializeMetrics(grpcServer)
@@ -305,47 +295,4 @@ func Run(cmd *cobra.Command, args []string) error {
 	// Wait for all routines to have exited
 	wg.Wait()
 	return nil
-}
-
-func registerGRPCAPIs(srv *grpc.Server, objectStore *object.Store, informer *object.Informer) {
-	// Beacons
-	informer.Register(beacons_v1alpha.APIPath)
-	beaconsServer := beacons_v1alpha.NewBeaconsService(objectStore.Prefixed(beacons_v1alpha.APIPath))
-	beacons_v1alpha.RegisterBeaconsServer(srv, beaconsServer)
-	// ClusterVariables
-	informer.Register(clustervariables_v1alpha.APIPath)
-	clusterVariablesServer := clustervariables_v1alpha.NewClusterVariablesService(objectStore.Prefixed(clustervariables_v1alpha.APIPath))
-	clustervariables_v1alpha.RegisterClusterVariablesServer(srv, clusterVariablesServer)
-	// Configs (Configs)
-	informer.Register(configs_v1alpha.APIPath)
-	configsServer := configs_v1alpha.NewConfigsService(objectStore.Prefixed(configs_v1alpha.APIPath))
-	configs_v1alpha.RegisterConfigsServer(srv, configsServer)
-	// CronJobs
-	informer.Register(cronjobs_v1alpha.APIPath)
-	cronJobsServer := cronjobs_v1alpha.NewCronJobsService(objectStore.Prefixed(cronjobs_v1alpha.APIPath))
-	cronjobs_v1alpha.RegisterCronJobsServer(srv, cronJobsServer)
-	// Events
-	informer.Register(events_v1alpha.APIPath)
-	eventsServer := events_v1alpha.NewEventsService(objectStore.Prefixed(events_v1alpha.APIPath))
-	events_v1alpha.RegisterEventsServer(srv, eventsServer)
-	// Nodes
-	informer.Register(nodes_v1alpha.APIPath)
-	nodesServer := nodes_v1alpha.NewNodesService(objectStore.Prefixed(nodes_v1alpha.APIPath))
-	nodes_v1alpha.RegisterNodesServer(srv, nodesServer)
-	// Secrets
-	informer.Register(secrets_v1alpha.APIPath)
-	secretsServer := secrets_v1alpha.NewSecretsService(objectStore.Prefixed(secrets_v1alpha.APIPath))
-	secrets_v1alpha.RegisterSecretsServer(srv, secretsServer)
-	// PlayBooks
-	informer.Register(playbooks_v1alpha.APIPath)
-	playBooksServer := playbooks_v1alpha.NewPlayBooksService(objectStore.Prefixed(playbooks_v1alpha.APIPath))
-	playbooks_v1alpha.RegisterPlayBooksServer(srv, playBooksServer)
-	// Triggers
-	informer.Register(triggers_v1alpha.APIPath)
-	triggersServer := triggers_v1alpha.NewTriggersService(objectStore.Prefixed(triggers_v1alpha.APIPath))
-	triggers_v1alpha.RegisterTriggersServer(srv, triggersServer)
-	// Variables
-	informer.Register(variables_v1alpha.APIPath)
-	variablesServer := variables_v1alpha.NewVariablesService(objectStore.Prefixed(variables_v1alpha.APIPath))
-	variables_v1alpha.RegisterVariablesServer(srv, variablesServer)
 }

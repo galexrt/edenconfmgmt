@@ -14,21 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package parallimiter
+package apis
 
-import "sync"
+import (
+	"github.com/galexrt/edenrun/pkg/store/object"
+	"google.golang.org/grpc"
+	// TODO Add APIs here and add API Path const to apis trigger.go, runny/runny.go and so on.
+)
 
-// Limiter sync.WaitGroup with simple "rate limit" support in point of having a maximum that can run at the same time.
-type Limiter struct {
-	wg sync.WaitGroup
-}
+var (
+	APIs = map[string]func(srv *grpc.Server, objectStore *object.Store, informer *object.Informer){}
+)
 
-// New return a new Limiter object.
-func New() *Limiter {
-	return &Limiter{}
-}
-
-// Start
-func (l *Limiter) Start(stopCh chan struct{}) {
-
+// Register
+func Register(srv *grpc.Server, objectStore *object.Store, informer *object.Informer) {
+	for path, api := range APIs {
+		api(srv, objectStore.Prefixed(path), informer)
+	}
 }
