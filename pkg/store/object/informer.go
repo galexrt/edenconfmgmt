@@ -56,18 +56,21 @@ type Informer struct {
 	dataStore       *cache.Store
 	wg              sync.WaitGroup
 	logger          *zap.Logger
-	globalContext   context.Context
+	ctx             context.Context
+	ctxCancel       context.CancelFunc
 }
 
 // NewInformer returns a new Informer.
-func NewInformer(ctx context.Context, dataStore *cache.Store, logger *zap.Logger) *Informer {
+func NewInformer(dataStore *cache.Store, logger *zap.Logger) *Informer {
+	ctx, cancel := context.WithCancel(context.Background())
 	return &Informer{
 		channel:         map[string]*chanContainer{},
 		receiversName:   map[string]*receiverList{},
 		receiversLabels: map[string]*labelReceivers{},
 		dataStore:       dataStore,
 		logger:          logger.Named("pkg/store/object:Informer"),
-		globalContext:   ctx,
+		ctx:             ctx,
+		ctxCancel:       cancel,
 	}
 }
 
@@ -75,6 +78,7 @@ func NewInformer(ctx context.Context, dataStore *cache.Store, logger *zap.Logger
 func (inf *Informer) Start(stopCh chan struct{}) error {
 	select {
 	case <-stopCh:
+		inf.ctxCancel()
 		return nil
 	}
 }
@@ -82,7 +86,7 @@ func (inf *Informer) Start(stopCh chan struct{}) error {
 // Register register a watch path.
 func (inf *Informer) Register(apiBasePath string) error {
 	watchKey := path.Join("/", apiBasePath, "/")
-	dataStoreCh, err := inf.dataStore.WatchRecursively(inf.globalContext, watchKey)
+	dataStoreCh, err := inf.dataStore.WatchRecursively(inf.ctx, watchKey)
 	if err != nil {
 		return err
 	}
@@ -93,7 +97,7 @@ func (inf *Informer) Register(apiBasePath string) error {
 		inf.channel[watchKey] = &chanContainer{
 			watch: dataStoreCh,
 		}
-		go inf.watch(inf.globalContext, watchKey)
+		go inf.watch(inf.ctx, watchKey)
 	}
 	if _, ok := inf.receiversLabels[watchKey]; !ok {
 		inf.receiversLabels[watchKey] = &labelReceivers{

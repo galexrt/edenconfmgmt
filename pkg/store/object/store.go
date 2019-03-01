@@ -42,8 +42,8 @@ type apiInfo struct {
 	labels map[string]string
 }
 
-// New return a new object Store
-func New(store *cache.Store, informer *Informer, logger *zap.Logger) *Store {
+// NewStore return a new object Store
+func NewStore(store *cache.Store, informer *Informer, logger *zap.Logger) *Store {
 	return &Store{
 		cache:    store,
 		informer: informer,

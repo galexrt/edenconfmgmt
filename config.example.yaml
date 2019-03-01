@@ -1,0 +1,20 @@
+metadata:
+  apiVersion: eden.run/daemons/v1alpha
+  kind: Config
+spec:
+  logging:
+    logLevel: DEBUG
+  master:
+    store:
+      data:
+        type: ETCDV3
+        etcd:
+          endpoints:
+            - 'http://127.0.0.1:2379'
+      cache:
+        type: memory
+  node:
+    directories:
+      # Will be read from `TMP` variable if set, otherwise `/tmp` will be assumed.
+      #tmp: /tmp
+      cache:

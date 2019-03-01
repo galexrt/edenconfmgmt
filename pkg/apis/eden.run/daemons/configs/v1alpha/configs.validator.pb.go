@@ -56,14 +56,51 @@ func (this *ConfigSpec) Validate() error {
 			return github_com_mwitkow_go_proto_validators.FieldError("Logging", err)
 		}
 	}
-	if this.Store != nil {
-		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Store); err != nil {
-			return github_com_mwitkow_go_proto_validators.FieldError("Store", err)
+	if this.Listener != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Listener); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("Listener", err)
+		}
+	}
+	if this.Master != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Master); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("Master", err)
+		}
+	}
+	if this.Node != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Node); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("Node", err)
 		}
 	}
 	return nil
 }
 func (this *Logging) Validate() error {
+	return nil
+}
+func (this *HTTP) Validate() error {
+	return nil
+}
+func (this *TLS) Validate() error {
+	return nil
+}
+func (this *GRPC) Validate() error {
+	if this.Tls != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Tls); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("Tls", err)
+		}
+	}
+	return nil
+}
+func (this *Listener) Validate() error {
+	if this.Http != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Http); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("Http", err)
+		}
+	}
+	if this.Grpc != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Grpc); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("Grpc", err)
+		}
+	}
 	return nil
 }
 func (this *Store) Validate() error {
@@ -91,6 +128,17 @@ func (this *Cache) Validate() error {
 	return nil
 }
 func (this *ETCD) Validate() error {
+	return nil
+}
+func (this *Master) Validate() error {
+	if this.Store != nil {
+		if err := github_com_mwitkow_go_proto_validators.CallValidatorIfExists(this.Store); err != nil {
+			return github_com_mwitkow_go_proto_validators.FieldError("Store", err)
+		}
+	}
+	return nil
+}
+func (this *Node) Validate() error {
 	return nil
 }
 func (this *GetRequest) Validate() error {

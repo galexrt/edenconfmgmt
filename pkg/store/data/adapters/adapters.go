@@ -21,32 +21,18 @@ import (
 	"fmt"
 
 	"github.com/galexrt/edenrun/pkg/store/data"
-	"github.com/spf13/cobra"
 )
 
 var (
-	// flagRegisters list of available data adapters flag register functions.
-	flagRegisters = map[string]func(prefix string, cmd *cobra.Command){}
-
 	// adapters list of available data adapters.
-	adapters = map[string]func(ctx context.Context, flagPrefix string) (data.Store, error){}
+	adapters = map[string]func(ctx context.Context) (data.Store, error){}
 )
 
-// RegisterFlags register flags using the function provided in flagRegisters var.
-func RegisterFlags(prefix string, cmd *cobra.Command) {
-	if prefix != "" {
-		prefix = prefix + "-"
-	}
-	for _, register := range flagRegisters {
-		register(prefix, cmd)
-	}
-}
-
 // Get return a newly created data handler.
-func Get(ctx context.Context, handlerName string, flagPrefix string) (data.Store, error) {
+func Get(ctx context.Context, handlerName string) (data.Store, error) {
 	newFunc, ok := adapters[handlerName]
 	if !ok {
 		return nil, fmt.Errorf("no handler with name %s found in adapters list", handlerName)
 	}
-	return newFunc(ctx, flagPrefix)
+	return newFunc(ctx)
 }

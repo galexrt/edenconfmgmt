@@ -169,12 +169,18 @@
         * [DeleteRequest](#daemons.configs.v1alpha.DeleteRequest)
         * [DeleteResponse](#daemons.configs.v1alpha.DeleteResponse)
         * [ETCD](#daemons.configs.v1alpha.ETCD)
+        * [GRPC](#daemons.configs.v1alpha.GRPC)
         * [GetRequest](#daemons.configs.v1alpha.GetRequest)
         * [GetResponse](#daemons.configs.v1alpha.GetResponse)
+        * [HTTP](#daemons.configs.v1alpha.HTTP)
         * [ListRequest](#daemons.configs.v1alpha.ListRequest)
         * [ListResponse](#daemons.configs.v1alpha.ListResponse)
+        * [Listener](#daemons.configs.v1alpha.Listener)
         * [Logging](#daemons.configs.v1alpha.Logging)
+        * [Master](#daemons.configs.v1alpha.Master)
+        * [Node](#daemons.configs.v1alpha.Node)
         * [Store](#daemons.configs.v1alpha.Store)
+        * [TLS](#daemons.configs.v1alpha.TLS)
         * [UpdateRequest](#daemons.configs.v1alpha.UpdateRequest)
         * [UpdateResponse](#daemons.configs.v1alpha.UpdateResponse)
         * [WatchRequest](#daemons.configs.v1alpha.WatchRequest)
@@ -1533,7 +1539,7 @@ Secrets secrets file structure. This covers the "Secrets File" and "'From Host' 
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | key | [string](#string) |  |  |
-| value | [google.protobuf.Any](#google.protobuf.Any) |  |  |
+| value | [string](#string) |  |  |
 <a name="data.secrets.v1alpha.UpdateRequest"></a>
 
 ### UpdateRequest
@@ -1642,7 +1648,9 @@ Config object base.
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | logging | [Logging](#daemons.configs.v1alpha.Logging) |  | Logging configuration |
-| store | [Store](#daemons.configs.v1alpha.Store) |  | Data and Cache store options. |
+| listener | [Listener](#daemons.configs.v1alpha.Listener) |  |  |
+| master | [Master](#daemons.configs.v1alpha.Master) |  |  |
+| node | [Node](#daemons.configs.v1alpha.Node) |  |  |
 <a name="daemons.configs.v1alpha.CreateRequest"></a>
 
 ### CreateRequest
@@ -1671,7 +1679,6 @@ DataStore config for the data store
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | type | [DataStoreType](#daemons.configs.v1alpha.DataStoreType) |  | Type. |
-| count | [int64](#int64) |  | Count. |
 | etcd | [ETCD](#daemons.configs.v1alpha.ETCD) |  | ETCD config options. |
 <a name="daemons.configs.v1alpha.DeleteRequest"></a>
 
@@ -1701,6 +1708,16 @@ Delete
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | endpoints | [string](#string) |  | List of endpoints if running your own ETCD server (should only be used for testing). |
+<a name="daemons.configs.v1alpha.GRPC"></a>
+
+### GRPC
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| address | [string](#string) |  |  |
+| tls | [TLS](#daemons.configs.v1alpha.TLS) |  |  |
 <a name="daemons.configs.v1alpha.GetRequest"></a>
 
 ### GetRequest
@@ -1719,6 +1736,15 @@ Get
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | config | [Config](#daemons.configs.v1alpha.Config) |  | Config object. |
+<a name="daemons.configs.v1alpha.HTTP"></a>
+
+### HTTP
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| address | [string](#string) |  |  |
 <a name="daemons.configs.v1alpha.ListRequest"></a>
 
 ### ListRequest
@@ -1737,6 +1763,16 @@ List
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | configList | [ConfigList](#daemons.configs.v1alpha.ConfigList) |  | Config list. |
+<a name="daemons.configs.v1alpha.Listener"></a>
+
+### Listener
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| http | [HTTP](#daemons.configs.v1alpha.HTTP) |  |  |
+| grpc | [GRPC](#daemons.configs.v1alpha.GRPC) |  |  |
 <a name="daemons.configs.v1alpha.Logging"></a>
 
 ### Logging
@@ -1746,6 +1782,20 @@ Logging configuration
 | Field | Type | Label | Description |
 | ----- | ---- | ----- | ----------- |
 | logLevel | [LogLevel](#daemons.configs.v1alpha.LogLevel) |  |  |
+<a name="daemons.configs.v1alpha.Master"></a>
+
+### Master
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| store | [Store](#daemons.configs.v1alpha.Store) |  |  |
+<a name="daemons.configs.v1alpha.Node"></a>
+
+### Node
+
+
 <a name="daemons.configs.v1alpha.Store"></a>
 
 ### Store
@@ -1756,6 +1806,16 @@ Store
 | ----- | ---- | ----- | ----------- |
 | data | [Data](#daemons.configs.v1alpha.Data) |  |  |
 | cache | [Cache](#daemons.configs.v1alpha.Cache) |  |  |
+<a name="daemons.configs.v1alpha.TLS"></a>
+
+### TLS
+
+
+
+| Field | Type | Label | Description |
+| ----- | ---- | ----- | ----------- |
+| Certificate | [string](#string) |  |  |
+| Key | [string](#string) |  |  |
 <a name="daemons.configs.v1alpha.UpdateRequest"></a>
 
 ### UpdateRequest

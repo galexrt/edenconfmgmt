@@ -39,7 +39,7 @@ func init() {
 }
 
 // NewMemory return new Memory store.
-func NewMemory(ctx context.Context, flagPrefix string) (data.Store, error) {
+func NewMemory(ctx context.Context) (data.Store, error) {
 	return &Memory{
 		cache: sync.Map{},
 	}, nil

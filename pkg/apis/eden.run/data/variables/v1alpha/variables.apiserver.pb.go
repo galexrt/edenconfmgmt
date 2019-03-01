@@ -12,7 +12,6 @@ import (
 	github_com_galexrt_edenrun_pkg_store_object "github.com/galexrt/edenrun/pkg/store/object"
 	_ "github.com/gogo/protobuf/gogoproto"
 	proto "github.com/gogo/protobuf/proto"
-	_ "github.com/golang/protobuf/ptypes/any"
 	_ "github.com/mwitkow/go-proto-validators"
 	math "math"
 )

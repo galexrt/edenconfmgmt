@@ -23,19 +23,33 @@ import (
 	opentracing "github.com/opentracing/opentracing-go"
 )
 
+var tracer opentracing.Tracer
+var closer io.Closer
+
 // Init inits the Tracer using the provided configuration
-func Init() (opentracing.Tracer, io.Closer, error) {
-	var tracer opentracing.Tracer
+func Init() error {
 	var err error
-	var closer io.Closer
 	if false {
 		tracer, closer, err = initJaeger("edenrun")
 		if err != nil {
-			return nil, nil, fmt.Errorf("failed to init jaeger. %+v", err)
+			return fmt.Errorf("failed to init jaeger. %+v", err)
 		}
 	} else {
 		tracer = opentracing.NoopTracer{}
 	}
 
-	return tracer, closer, nil
+	// grpc_opentracing automatically uses the global tracer so we set it.
+	opentracing.SetGlobalTracer(tracer)
+
+	return nil
+}
+
+func Start(stopCh chan struct{}) error {
+	select {
+	case <-stopCh:
+		if err := closer.Close(); err != nil {
+			return err
+		}
+	}
+	return nil
 }

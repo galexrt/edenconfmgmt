@@ -23,26 +23,7 @@ import (
 	"time"
 
 	"github.com/galexrt/edenrun/pkg/store/data"
-	"github.com/spf13/cobra"
-	"github.com/spf13/viper"
 	"go.etcd.io/etcd/clientv3"
-)
-
-const (
-	flagETCDCACert                = "etcd-cacert"
-	flagETCDCert                  = "etcd-cert"
-	flagETCDCommandTimeout        = "etcd-command-timeout"
-	flagETCDDebug                 = "etcd-debug"
-	flagETCDDialTimeout           = "etcd-dial-timeout"
-	flagETCDDiscoverySRV          = "etcd-discovery-srv"
-	flagETCDEndpoints             = "etcd-endpoints"
-	flagETCDInsecureDiscovery     = "etcd-insecure-discovery"
-	flagETCDInsecureSkipTLSVerify = "etcd-insecure-skip-tls-verify"
-	flagETCDInsecureTransport     = "etcd-insecure-transport"
-	flagETCDKeepaliveTime         = "etcd-keepalive-time"
-	flagETCDKeepaliveTimeout      = "etcd-keepalive-timeout"
-	flagETCDKey                   = "etcd-key"
-	flagETCDUser                  = "etcd-user"
 )
 
 // ETCD implementation of Handler interface for ETCD.
@@ -71,29 +52,13 @@ type ETCDOptions struct {
 }
 
 func init() {
-	flagRegisters["etcd"] = func(prefix string, cmd *cobra.Command) {
-		cmd.PersistentFlags().String(prefix+flagETCDCACert, "", "ETCD: verify certificates of TLS-enabled secure servers using this CA bundle")
-		cmd.PersistentFlags().String(prefix+flagETCDCert, "", "ETCD: identify secure client using this TLS certificate file")
-		cmd.PersistentFlags().Duration(prefix+flagETCDCommandTimeout, 5*time.Second, "ETCD: timeout for short running command (excluding dial timeout)")
-		cmd.PersistentFlags().Bool(prefix+flagETCDDebug, false, "ETCD: enable client-side debug logging")
-		cmd.PersistentFlags().Duration(prefix+flagETCDDialTimeout, 2*time.Second, "ETCD: dial timeout for client connections")
-		cmd.PersistentFlags().String(prefix+flagETCDDiscoverySRV, "", "ETCD: domain name to query for SRV records describing cluster endpoints")
-		cmd.PersistentFlags().StringSlice(prefix+flagETCDEndpoints, []string{"127.0.0.1:2379"}, "ETCD: gRPC endpoints")
-		cmd.PersistentFlags().Bool(prefix+flagETCDInsecureDiscovery, true, "ETCD: accept insecure SRV records describing cluster endpoints")
-		cmd.PersistentFlags().Bool(prefix+flagETCDInsecureSkipTLSVerify, false, "ETCD: skip server certificate verification")
-		cmd.PersistentFlags().Bool(prefix+flagETCDInsecureTransport, true, "ETCD: disable transport security for client connections")
-		cmd.PersistentFlags().Duration(prefix+flagETCDKeepaliveTime, 30*time.Second, "ETCD: keepalive time for client connections")
-		cmd.PersistentFlags().Duration(prefix+flagETCDKeepaliveTimeout, 30*time.Second, "ETCD: keepalive timeout for client connections")
-		cmd.PersistentFlags().String(prefix+flagETCDKey, "", "ETCD: identify secure client using this TLS key file")
-		cmd.PersistentFlags().String(prefix+flagETCDUser, "", "ETCD: username[:password] for authentication (prompt if password is not supplied)")
-	}
 	adapters["etcd"] = NewETCD
 }
 
 // NewETCD create new ETCD
-func NewETCD(ctx context.Context, flagPrefix string) (data.Store, error) {
+func NewETCD(ctx context.Context) (data.Store, error) {
 	etcd := &ETCD{}
-	user := viper.GetString(flagPrefix + flagETCDUser)
+	user := ""
 	password := ""
 	if user != "" {
 		splitUserInfo := strings.Split(user, ":")
@@ -106,10 +71,10 @@ func NewETCD(ctx context.Context, flagPrefix string) (data.Store, error) {
 	// TODO look at etcdctl for better client and/or transport config "generation"
 	// because currently most flags defined here are not used..
 	cfg := clientv3.Config{
-		Endpoints:   viper.GetStringSlice(flagPrefix + flagETCDEndpoints),
+		Endpoints:   []string{"127.0.0.1:2379"},
 		Username:    user,
 		Password:    password,
-		DialTimeout: viper.GetDuration(flagPrefix + flagETCDDialTimeout),
+		DialTimeout: 2 * time.Second,
 	}
 
 	cli, err := clientv3.New(cfg)

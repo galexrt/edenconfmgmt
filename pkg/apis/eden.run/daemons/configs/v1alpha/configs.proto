@@ -31,7 +31,7 @@ option (gogoproto.unmarshaler_all) = true;
 option (gogoproto.goproto_unrecognized_all) = false;
 option (gogoproto.populate_all) = true; // Needed for testgen
 option (gogoproto.equal_all) = true;  // Needed for testgen
-option (gogoproto.testgen_all) = false;
+option (gogoproto.testgen_all) = true;
 option (gogoproto.benchgen_all) = true;
 
 service Configs {
@@ -68,8 +68,12 @@ message ConfigList {
 message ConfigSpec {
     // Logging configuration
     Logging logging = 1;
-    // Data and Cache store options.
-    Store store = 2;
+    //
+    Listener listener = 2;
+    //
+    Master master = 3;
+    //
+    Node node = 4;
 }
 
 enum LogLevel {
@@ -82,6 +86,25 @@ enum LogLevel {
 // Logging configuration
 message Logging {
     LogLevel logLevel = 1;
+}
+
+message HTTP {
+    string address = 1;
+}
+
+message TLS {
+    string Certificate = 1;
+    string Key = 2;
+}
+
+message GRPC {
+    string address = 1;
+    TLS tls = 2;
+}
+
+message Listener {
+    HTTP http = 1;
+    GRPC grpc = 2;
 }
 
 // Store
@@ -98,10 +121,8 @@ enum DataStoreType {
 message Data {
     // Type.
     DataStoreType type = 1;
-    // Count.
-    int64 count = 2;
     // ETCD config options.
-    ETCD etcd = 3;
+    ETCD etcd = 2;
 }
 
 enum CacheStoreType {
@@ -116,6 +137,13 @@ message Cache {
 message ETCD {
     // List of endpoints if running your own ETCD server (should only be used for testing).
     string endpoints = 1;
+}
+
+message Master {
+    Store store = 1;
+}
+
+message Node {
 }
 
 // Get

@@ -92,6 +92,7 @@ func (p *plugin) Generate(file *generator.FileDescriptor) {
 		}
 
 		p.NewImport("context").Use()
+
 		p.P(`// `, ccTypeName, `sService !!WARNING!! This client must only be used by internal code!`)
 		p.P(`// All "external" clients must use the actual GRPC API Client.`)
 		p.P(`type `, ccTypeName, `sService struct {`)
